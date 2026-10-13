@@ -1,0 +1,25 @@
+  <!-- POWER UP — in-app key setup. Dev-server only: src/keySetup.js removes
+       both the chip and this dialog outright when /api/setup/status is not
+       there to answer (prod builds, LAN visitors). Rows are rendered from
+       that payload, so the key registry lives in src/keySetupCore.mjs alone. -->
+  <button id="key-setup-chip" type="button" hidden aria-haspopup="dialog" aria-controls="key-setup">
+    <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
+    <span data-key-setup-chip-label>接入数据</span>
+  </button>
+  <aside id="key-setup" role="dialog" aria-labelledby="key-setup-title" aria-describedby="key-setup-description" hidden>
+    <div class="key-setup-scanline" aria-hidden="true"></div>
+    <header class="key-setup-header">
+      <span class="key-setup-kicker">地面站 · 数据源设置</span>
+      <button type="button" class="key-setup-close" data-key-setup-close aria-label="关闭密钥设置">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </header>
+    <h2 id="key-setup-title">为地球接通更多数据</h2>
+    <p id="key-setup-description">无需任何密钥即可浏览地球。下面每个密钥都会接通一路真实数据：粘贴后保存到本机配置，服务器随即自动重启。服务端密钥（天地图、高德、百炼等）只留在本机；Google Maps 与 Cesium ion 在浏览器中使用，必须在服务商后台设置来源限制。在别处配置的密钥只显示，不会被改动。</p>
+    <div class="key-setup-rows" data-key-setup-rows></div>
+    <div class="key-setup-footer">
+      <button type="button" class="key-setup-apply" data-key-setup-apply>保存密钥</button>
+      <span class="key-setup-hint">按 ESC 关闭</span>
+    </div>
+    <p class="key-setup-note" data-key-setup-status role="status" aria-live="polite">天地图令牌带来国内影像底图；高德 Key 开启国内检索、路径与路况；百炼 Key 开启中文语音。</p>
+  </aside>

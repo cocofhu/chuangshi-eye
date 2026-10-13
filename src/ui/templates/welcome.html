@@ -1,0 +1,64 @@
+  <!-- Explicit mission choice on a fresh session. Live feeds are not auto-enabled
+       until the visitor asks; shared links skip this surface entirely. It returns
+       every session until "Don't show this again" is ticked — see
+       src/firstRunExperience.js for the full show policy. -->
+  <aside id="first-run-launcher" role="dialog" aria-labelledby="first-run-title" aria-describedby="first-run-description" hidden>
+    <div class="first-run-scanline" aria-hidden="true"></div>
+    <header class="first-run-header">
+      <span class="first-run-kicker">创世之眼 · 任务控制台</span>
+    </header>
+    <h2 id="first-run-title">选择你的第一个视角</h2>
+    <p id="first-run-description">像是闯进了不该进入的指挥舱——然后你会发现，所有来源都是公开的，数据都是真实的。</p>
+    <div class="first-run-choices">
+      <button type="button" data-first-run-choice="china">
+        <span class="material-symbols-outlined" aria-hidden="true">public</span>
+        <span><strong>全国态势</strong><small>中国地震台网速报、风云四号云图与台风路径</small></span>
+        <span class="material-symbols-outlined first-run-arrow" aria-hidden="true">arrow_forward</span>
+      </button>
+      <button type="button" data-first-run-choice="jingjinji-flights">
+        <span class="material-symbols-outlined" aria-hidden="true">flight</span>
+        <span><strong>京津冀航班</strong><small>首都与大兴机场周边的实时 ADS-B 航迹</small></span>
+        <span class="material-symbols-outlined first-run-arrow" aria-hidden="true">arrow_forward</span>
+      </button>
+      <button type="button" data-first-run-choice="sanxia">
+        <span class="material-symbols-outlined" aria-hidden="true">water</span>
+        <span><strong>三峡大坝</strong><small>大坝、船闸与库区的三维俯瞰</small></span>
+        <span class="material-symbols-outlined first-run-arrow" aria-hidden="true">arrow_forward</span>
+      </button>
+      <button type="button" data-first-run-choice="typhoon">
+        <span class="material-symbols-outlined" aria-hidden="true">cyclone</span>
+        <span><strong>南海与西太台风</strong><small>中央气象台台风网路径、预报与风云云图</small></span>
+        <span class="material-symbols-outlined first-run-arrow" aria-hidden="true">arrow_forward</span>
+      </button>
+      <button type="button" data-first-run-choice="tiangong">
+        <span class="material-symbols-outlined" aria-hidden="true">satellite_alt</span>
+        <span><strong>天宫过境</strong><small>中国空间站、北斗、风云与高分卫星实时轨道</small></span>
+        <span class="material-symbols-outlined first-run-arrow" aria-hidden="true">arrow_forward</span>
+      </button>
+      <button type="button" data-first-run-choice="beijing-traffic">
+        <span class="material-symbols-outlined" aria-hidden="true">traffic</span>
+        <span><strong>北京路况</strong><small>高德实时路况（需在「接入数据」中配置高德 Key）</small></span>
+        <span class="material-symbols-outlined first-run-arrow" aria-hidden="true">arrow_forward</span>
+      </button>
+      <button type="button" data-first-run-choice="contacts">
+        <span class="material-symbols-outlined" aria-hidden="true">radar</span>
+        <span><strong>实时目标</strong><small>飞机、船舶与周边情报</small></span>
+        <span class="material-symbols-outlined first-run-arrow" aria-hidden="true">arrow_forward</span>
+      </button>
+      <button type="button" class="first-run-explore" data-first-run-choice="explore">
+        <span class="material-symbols-outlined" aria-hidden="true">explore</span>
+        <span><strong>自由探索</strong><small>从干净的地球开始</small></span>
+        <span class="material-symbols-outlined first-run-arrow" aria-hidden="true">arrow_forward</span>
+      </button>
+    </div>
+    <div class="first-run-footer">
+      <label class="first-run-suppress">
+        <input type="checkbox" data-first-run-suppress />
+        <span>不再显示</span>
+      </label>
+      <span>按 ESC 关闭</span>
+    </div>
+    <!-- Kept out of the footer row: it swaps to mission progress and errors, and
+         a live region that also holds layout makes the row jump as it speaks. -->
+    <p class="first-run-note" data-first-run-status role="status" aria-live="polite">提示：点击底部的 GEV MIC 按钮即可用语音操控地图。</p>
+  </aside>
