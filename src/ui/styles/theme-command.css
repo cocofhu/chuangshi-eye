@@ -49,17 +49,6 @@ body {
   scrollbar-color: rgba(62, 224, 255, 0.35) transparent;
 }
 
-/* 全局暗角 + 极细扫描线，营造指挥舱氛围（不拦截指针） */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    radial-gradient(130% 100% at 50% 50%, transparent 62%, rgba(2, 4, 10, 0.55) 100%),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 3px);
-}
 
 /* ── 首启任务面板 ───────────────────────────── */
 #first-run-launcher {
@@ -68,7 +57,7 @@ body::after {
     linear-gradient(135deg, rgba(62, 224, 255, 0.55), rgba(124, 92, 255, 0.25) 40%, rgba(62, 224, 255, 0.08) 70%, rgba(255, 181, 71, 0.35)) border-box;
   border: 1px solid transparent;
   border-radius: 18px;
-  box-shadow: var(--hud-shadow), 0 0 80px -20px rgba(124, 92, 255, 0.35);
+  box-shadow: var(--hud-shadow);
   backdrop-filter: blur(var(--glass-blur, 12px)) saturate(140%);
   -webkit-backdrop-filter: blur(var(--glass-blur, 12px)) saturate(140%);
 }
@@ -207,18 +196,15 @@ input[type='range'] {
   }
 }
 
-/* 低端/小屏设备：关闭开销较大的模糊与扫描线 */
+/* 低端/小屏设备：关闭开销较大的模糊 */
 @media (max-width: 620px) {
-  body::after {
-    background: radial-gradient(130% 100% at 50% 50%, transparent 65%, rgba(2, 4, 10, 0.5) 100%);
-  }
   #first-run-launcher {
     backdrop-filter: blur(var(--glass-blur, 12px));
     -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
   }
 }
 
-/* ── 方案补全：语义色、字体、面板、顶栏、开机扫描、角标 ── */
+/* ── 方案补全：语义色、字体、面板、顶栏、角标 ── */
 
 :root {
   /* 与设计方案对齐：主青 + 鎏金辅色 + 告警语义 */
@@ -300,7 +286,7 @@ body,
     linear-gradient(var(--accent), var(--accent)) bottom left / 1px 8px no-repeat,
     linear-gradient(var(--accent), var(--accent)) bottom right / 8px 1px no-repeat,
     linear-gradient(var(--accent), var(--accent)) bottom right / 1px 8px no-repeat;
-  opacity: 0.55;
+  opacity: 0.28;
 }
 
 /* 标题与关键数字用鎏金 */
@@ -371,33 +357,6 @@ body,
   box-shadow: 0 0 8px rgba(255, 77, 94, 0.55);
 }
 
-/* 首屏开机扫描线（工程师挂 .cs-boot-scan） */
-.cs-boot-scan {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(62, 230, 255, 0.12) 48%,
-    rgba(245, 196, 107, 0.08) 52%,
-    transparent 100%
-  );
-  background-size: 100% 28%;
-  animation: cse-boot-scan 1.1s var(--ease-out-expo) both;
-}
-
-@keyframes cse-boot-scan {
-  from {
-    background-position: 0 -30%;
-    opacity: 0.9;
-  }
-  to {
-    background-position: 0 130%;
-    opacity: 0;
-  }
-}
 
 /* 面板入场 */
 .panel,
@@ -417,30 +376,12 @@ body,
   }
 }
 
-/* 数据闪烁（新告警） */
-@keyframes cse-gold-flash {
-  0%,
-  100% {
-    color: inherit;
-    text-shadow: none;
-  }
-  40% {
-    color: var(--accent-gold);
-    text-shadow: 0 0 12px rgba(245, 196, 107, 0.65);
-  }
-}
-
-.is-data-flash {
-  animation: cse-gold-flash 600ms ease;
-}
 
 /* 减弱动态：关动画与毛玻璃 */
 @media (prefers-reduced-motion: reduce) {
   .panel,
   .cyber-panel,
-  .cockpit-side-panel,
-  .cs-boot-scan,
-  .is-data-flash {
+  .cockpit-side-panel {
     animation: none !important;
   }
 
@@ -455,13 +396,9 @@ body,
     -webkit-backdrop-filter: none !important;
     background: rgba(8, 14, 22, 0.92);
   }
-
-  body::after {
-    display: none;
-  }
 }
 
-/* 小屏：进一步关掉模糊与扫描线 */
+/* 小屏：关掉模糊 */
 @media (max-width: 620px) {
   .panel,
   .cyber-panel,
@@ -475,7 +412,4 @@ body,
     background: rgba(8, 14, 22, 0.92);
   }
 
-  body::after {
-    display: none;
-  }
 }
