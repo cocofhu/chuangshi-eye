@@ -431,3 +431,23 @@ body,
   }
 
 }
+
+/* ── 首屏深底：地球未画出前避免透出默认灰绿画布 ── */
+#cesiumContainer,
+#cesiumContainer canvas,
+#loading-screen {
+  background: #05070d !important;
+  background-color: #05070d !important;
+}
+
+#loading-screen {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #0b1730 0%, #05070d 60%) !important;
+}
+
+/* 顶栏附近旧品牌字标：与鎏金体系统一（克制，不加光效花活） */
+.title-glow,
+.brand-logo,
+.title-accent {
+  color: var(--accent-gold);
+}
