@@ -421,16 +421,16 @@ export function presentLoadingFeedback(state, summary, nowMs) {
   if (state.phase === 'terminal') {
     const labels = {
       complete: '加载完成',
-      cancelled: 'LOAD CANCELLED',
-      error: 'LOAD FAILED',
+      cancelled: '加载已取消',
+      error: '加载失败',
     };
     const label =
       state.operation === 'disabling' && state.terminal === 'complete'
-        ? 'LIVE DATA OFF'
+        ? '实时数据已关闭'
         : state.terminal === 'complete' &&
             state.activeIds?.length === 1 &&
             state.activeIds[0] === 'military-installations'
-          ? 'MAPPED SITES LOADED'
+          ? '已加载标注站点'
           : labels[state.terminal] || '加载完成';
     return { state: state.terminal, label, detail: '' };
   }
@@ -439,8 +439,8 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     return {
       state: 'loading',
       label: active[0].cameraRetry.retrying
-        ? 'RETRYING ALPR CAMERAS'
-        : 'FETCHING ALPR CAMERAS',
+        ? '正在重试监控摄像头'
+        : '正在获取监控摄像头',
       detail: 'OpenStreetMap · Overpass',
     };
   }
@@ -453,16 +453,16 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     return {
       state: 'loading',
       label: active[0].installationRetry.retrying
-        ? 'RETRYING MAPPED SITES'
-        : 'FETCHING MAPPED SITES',
+        ? '正在重试标注站点'
+        : '正在获取标注站点',
       detail: 'OpenStreetMap · Overpass',
     };
   }
   const elapsed = Math.max(0, nowMs - state.startedAt);
   const label = summary.disabling
-    ? 'TURNING OFF LIVE DATA'
+    ? '正在关闭实时数据'
     : summary.refresh
-      ? 'REFRESHING LIVE DATA'
+      ? '正在刷新实时数据'
       : '正在加载实时数据';
   const names = active
     .slice(0, 2)

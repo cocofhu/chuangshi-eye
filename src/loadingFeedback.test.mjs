@@ -19,19 +19,19 @@ test('installation retry remains visible after failure dwell without a false spi
 test('an installation retry never conceals another participant failure', () => {
   const state = { visible: true, phase: 'terminal', terminal: 'error', activeIds: ['military-installations', 'flights'] };
   const summary = aggregateLayerLoading([retrySite(), { id: 'flights', enabled: true, stats: { error: 'Failed' } }]);
-  assert.equal(presentLoadingFeedback(state, summary, 100).label, 'LOAD FAILED');
+  assert.equal(presentLoadingFeedback(state, summary, 100).label, '加载失败');
   const healthyNow = aggregateLayerLoading([retrySite()]);
-  assert.equal(presentLoadingFeedback({ ...state, failedEventIds: ['flights'] }, healthyNow, 100).label, 'LOAD FAILED');
+  assert.equal(presentLoadingFeedback({ ...state, failedEventIds: ['flights'] }, healthyNow, 100).label, '加载失败');
 });
 test('a fresh installation retry can finish successfully without inheriting the old error', () => {
   let state = { ...createLoadingFeedbackState(), phase: 'terminal', terminal: 'error', visible: true, activeIds: ['military-installations'] };
   const loading = aggregateLayerLoading([retrySite({ status: 'loading', error: null, loading: true, retryAt: 0, retrying: true })]);
   state = reduceLoadingFeedback(state, loading, 1000);
   state = reduceLoadingFeedback(state, loading, 1200);
-  assert.equal(presentLoadingFeedback(state, loading, 1200).label, 'RETRYING MAPPED SITES');
+  assert.equal(presentLoadingFeedback(state, loading, 1200).label, '正在重试标注站点');
   const done = aggregateLayerLoading([retrySite({ status: 'ready', error: null, loading: false, retryAt: 0, retrying: false, count: 3 })]);
   state = reduceLoadingFeedback(state, done, 1500);
-  assert.equal(presentLoadingFeedback(state, done, 1500).label, 'MAPPED SITES LOADED');
+  assert.equal(presentLoadingFeedback(state, done, 1500).label, '已加载标注站点');
 });
 test('turning off a retrying installation layer does not report the old fetch failure as a disable failure', () => {
   const stopping = aggregateLayerLoading([{ ...retrySite(), lifecycleState: 'disabling' }]);
@@ -39,7 +39,7 @@ test('turning off a retrying installation layer does not report the old fetch fa
   state = reduceLoadingFeedback(state, stopping, 1200);
   const off = aggregateLayerLoading([{ ...retrySite({ status: 'idle', error: null, retryAt: 0 }), enabled: false }]);
   state = reduceLoadingFeedback(state, off, 1400);
-  assert.equal(presentLoadingFeedback(state, off, 1400).label, 'LIVE DATA OFF');
+  assert.equal(presentLoadingFeedback(state, off, 1400).label, '实时数据已关闭');
 });
 import {
   aggregateLayerLoading,
@@ -132,7 +132,7 @@ test('terminal failure preempts a finite notice, whose full dwell starts afterwa
 
   assert.equal(
     presentGlobalLoadingStatus(notice, loading, aggregateLayerLoading([]), 401).label,
-    'LOAD FAILED',
+    '加载失败',
   );
   assert.equal(notice.hideAt, null, 'masked finite notice has not started its dwell');
   loading = reduceLoadingFeedback(loading, aggregateLayerLoading([]), 5300);
@@ -166,12 +166,12 @@ test('persistent acquisition never hides an unrelated manager failure', () => {
 
   assert.deepEqual(presentGlobalLoadingStatus(acquiring, loading, idle, 301), {
     state: 'error',
-    label: 'LOAD FAILED',
+    label: '加载失败',
     detail: '',
   });
   assert.equal(
     presentGlobalLoadingStatus(acquiring, loading, idle, 300 + LOADING_FAILURE_DWELL_MS - 1).label,
-    'LOAD FAILED',
+    '加载失败',
   );
   loading = reduceLoadingFeedback(loading, idle, 300 + LOADING_FAILURE_DWELL_MS);
   assert.equal(
@@ -280,11 +280,11 @@ test('surfaces manager-owned refresh failure and recovery through the shared ban
     type: 'refresh-transition', layerId: 'satellites', refreshEpoch: 1,
   });
   state = reduceLoadingFeedback(state, refreshing, 200);
-  assert.equal(presentLoadingFeedback(state, refreshing, 200).label, 'REFRESHING LIVE DATA');
+  assert.equal(presentLoadingFeedback(state, refreshing, 200).label, '正在刷新实时数据');
   state = reduceLoadingFeedback(state, aggregateLayerLoading([]), 250, {
     type: 'refresh-failed', layerId: 'satellites', error: new Error('offline'), refreshEpoch: 1,
   });
-  assert.equal(presentLoadingFeedback(state, aggregateLayerLoading([]), 250).label, 'LOAD FAILED');
+  assert.equal(presentLoadingFeedback(state, aggregateLayerLoading([]), 250).label, '加载失败');
 
   const recovered = reduceLoadingFeedback(state, refreshing, 6000, {
     type: 'refresh-transition', layerId: 'satellites', refreshEpoch: 2,
@@ -322,7 +322,7 @@ test('AIS first-connect grace expiry reports failure even without a terminal man
   state = reduceLoadingFeedback(state, unavailable, 300);
 
   assert.equal(state.terminal, 'error');
-  assert.equal(presentLoadingFeedback(state, unavailable, 300).label, 'LOAD FAILED');
+  assert.equal(presentLoadingFeedback(state, unavailable, 300).label, '加载失败');
 });
 
 test('participant stats failure outranks a simultaneous visibility completion', () => {
@@ -373,7 +373,7 @@ test('retains the worst terminal outcome until every concurrent load drains', ()
     type: 'visibility', layerId: 'b', enabled: true,
   });
   assert.equal(state.terminal, 'error');
-  assert.equal(presentLoadingFeedback(state, aggregateLayerLoading([]), 350).label, 'LOAD FAILED');
+  assert.equal(presentLoadingFeedback(state, aggregateLayerLoading([]), 350).label, '加载失败');
 });
 
 test('retains cancellation across overlapping success and resets it for a later epoch', () => {
@@ -438,9 +438,9 @@ test('describes disable work without reporting it as a completed load', () => {
   }]);
   const pending = reduceLoadingFeedback(createLoadingFeedbackState(), summary, 0);
   const visible = reduceLoadingFeedback(pending, summary, 200);
-  assert.equal(presentLoadingFeedback(visible, summary, 200).label, 'TURNING OFF LIVE DATA');
+  assert.equal(presentLoadingFeedback(visible, summary, 200).label, '正在关闭实时数据');
   const complete = reduceLoadingFeedback(visible, aggregateLayerLoading([]), 250);
-  assert.equal(presentLoadingFeedback(complete, aggregateLayerLoading([]), 250).label, 'LIVE DATA OFF');
+  assert.equal(presentLoadingFeedback(complete, aggregateLayerLoading([]), 250).label, '实时数据已关闭');
 });
 
 test('a flow failure landing after the roads settle still ends the batch as LOAD FAILED', () => {
@@ -472,7 +472,7 @@ test('a flow failure landing after the roads settle still ends the batch as LOAD
   assert.equal(state.terminal, 'error');
   assert.equal(
     presentLoadingFeedback(state, flowFailed, 900).label,
-    'LOAD FAILED',
+    '加载失败',
     'a late flow failure must not be announced as LOAD COMPLETE',
   );
 });
@@ -614,7 +614,7 @@ test('aggregates Mapped Installations refresh beside CCTV without changing eithe
   const visible = reduceLoadingFeedback(pending, summary, 200);
   assert.deepEqual(
     presentLoadingFeedback(visible, summary, 200),
-    { state: 'refresh', label: 'REFRESHING LIVE DATA', detail: 'CCTV · Mapped Installations' },
+    { state: 'refresh', label: '正在刷新实时数据', detail: 'CCTV · Mapped Installations' },
   );
 });
 
@@ -700,7 +700,7 @@ test('a guidance status such as zoom-in never counts as a participant failure', 
   const settled = aggregateLayerLoading([{ ...zoomIn, stats: { ...zoomIn.stats, loading: false } }]);
   state = reduceLoadingFeedback(state, settled, 1500);
   assert.equal(state.terminal, 'complete');
-  assert.equal(presentLoadingFeedback(state, settled, 1500).label, 'MAPPED SITES LOADED');
+  assert.equal(presentLoadingFeedback(state, settled, 1500).label, '已加载标注站点');
 });
 
 
@@ -723,8 +723,8 @@ test('ALPR retries show a countdown, preserve other failures, and clear when dis
   assert.match(view.detail, /ALPR cameras · retrying in 30s/);
   const failed = { visible: true, phase: 'terminal', terminal: 'error', activeIds: ['alpr-cameras', 'flights'] };
   const otherFailure = aggregateLayerLoading([camera, { id: 'flights', enabled: true, stats: { error: 'Failed' } }]);
-  assert.equal(presentLoadingFeedback(failed, otherFailure, 0).label, 'LOAD FAILED');
-  assert.equal(presentLoadingFeedback({ ...failed, failedEventIds: ['flights'] }, summary, 0).label, 'LOAD FAILED');
+  assert.equal(presentLoadingFeedback(failed, otherFailure, 0).label, '加载失败');
+  assert.equal(presentLoadingFeedback({ ...failed, failedEventIds: ['flights'] }, summary, 0).label, '加载失败');
   assert.equal(presentLoadingFeedback(createLoadingFeedbackState(), aggregateLayerLoading([{ ...camera, enabled: false }]), 0), null);
 });
 
@@ -733,7 +733,7 @@ test('ALPR retry success does not inherit its prior error, including turning the
   const loading = aggregateLayerLoading([camera({ status: 'loading', loading: true, retrying: true })]);
   let state = reduceLoadingFeedback(createLoadingFeedbackState(), loading, 0);
   state = reduceLoadingFeedback(state, loading, 200);
-  assert.equal(presentLoadingFeedback(state, loading, 200).label, 'RETRYING ALPR CAMERAS');
+  assert.equal(presentLoadingFeedback(state, loading, 200).label, '正在重试监控摄像头');
   const done = aggregateLayerLoading([camera({ status: 'ready', count: 3 })]);
   state = reduceLoadingFeedback(state, done, 300);
   assert.equal(presentLoadingFeedback(state, done, 300).label, '加载完成');

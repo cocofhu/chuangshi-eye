@@ -93,11 +93,11 @@ test('Cockpit vision cycle exposes every map preset exactly once', () => {
   );
   assert.match(
     setVisionMode.toString(),
-    /const labels = \{\s*optical: 'NORMAL',\s*crt: 'CRT',\s*nvg: 'NVG',\s*thermal: 'FLIR',\s*anime: 'ANIME',\s*noir: 'NOIR',\s*snow: 'SNOW',?\s*\};/,
+    /const labels = \{\s*optical: '标准',\s*crt: 'CRT',\s*nvg: 'NVG',\s*thermal: 'FLIR',\s*anime: 'ANIME',\s*noir: 'NOIR',\s*snow: 'SNOW',?\s*\};/,
   );
   assert.doesNotMatch(setVisionMode.toString(), /none: 'NONE'/);
   assert.doesNotMatch(ui, /getInheritedVisionLabel/);
-  assert.match(html, /id="cockpit-vision-current-label"[^>]*>NORMAL<\/strong>/);
+  assert.match(html, /id="cockpit-vision-current-label"[^>]*>标准<\/strong>/);
   assert.match(
     cockpitEnter.toString(),
     /this\.setVisionMode\(this\.getInitialVisionMode\(\)\)/,
@@ -761,9 +761,9 @@ test('cockpit weather control is off before JavaScript restores an explicit opt-
     /<button\s+id="cockpit-weather-toggle"[\s\S]*?<\/button>/,
   );
   assert.ok(match, 'cockpit weather toggle markup is missing');
-  assert.match(match[0], /aria-label="Enable cockpit weather effects"/);
+  assert.match(match[0], /aria-label="开启驾驶舱天气效果"/);
   assert.match(match[0], /aria-pressed="false"/);
-  assert.match(match[0], /id="cockpit-weather-state">OFF</);
+  assert.match(match[0], /id="cockpit-weather-state">关</);
 });
 
 test('cockpit summary presents the focused item as Contact', () => {
@@ -771,14 +771,14 @@ test('cockpit summary presents the focused item as Contact', () => {
     /<aside id="cockpit-context"[\s\S]*?<\/aside>/,
   );
   assert.ok(match, 'cockpit Contact summary is missing');
-  assert.match(match[0], /aria-label="Contact cockpit summary"/);
-  assert.match(match[0], /class="cockpit-context-kicker">CONTACT</);
-  assert.match(match[0], /aria-label="Contact navigation"/);
-  assert.match(match[0], /aria-label="Previous — prior visited contact in the 250 km window"/);
-  assert.match(match[0], /aria-label="Next — nearest unvisited contact in the 250 km window"/);
-  assert.match(match[0], /aria-label="Collapse Contact panel"/);
+  assert.match(match[0], /aria-label="目标驾驶舱摘要"/);
+  assert.match(match[0], /class="cockpit-context-kicker">目标</);
+  assert.match(match[0], /aria-label="目标导航"/);
+  assert.match(match[0], /aria-label="上一个 — 250 公里窗口内已访问目标"/);
+  assert.match(match[0], /aria-label="下一个 — 250 公里窗口内最近未访问目标"/);
+  assert.match(match[0], /aria-label="收起目标面板"/);
   assert.doesNotMatch(match[0], />GLOBAL CONTEXT</);
-  assert.match(setContextCollapsed.toString(), /`\$\{expanded \? 'Collapse' : 'Expand'\} Contact panel`/);
+  assert.match(setContextCollapsed.toString(), /`\$\{expanded \? '收起' : '展开'\}目标面板`/);
 });
 
 test('Cockpit Contact navigation omits the redundant Focus camera action', () => {
@@ -794,8 +794,8 @@ test('Global Context names its mixed contact cycle without changing the stable m
   );
   assert.ok(match, 'Global Context contacts button is missing');
   assert.match(match[0], />目标</);
-  assert.match(match[0], /aria-label="CONTACTS"/);
-  assert.match(match[0], /title="Cycles the nearest contacts of whatever type you select — planes, vessels, installations\. Satellites track independently\."/);
+  assert.match(match[0], /aria-label="目标"/);
+  assert.match(match[0], /title="循环切换所选类型的最近目标 — 飞机、船舶、站点。卫星独立跟踪。"/);
   assert.doesNotMatch(match[0], />FLIGHTS</);
 });
 
@@ -826,7 +826,7 @@ test('cockpit briefing cycle control keeps its state as the accessible name', ()
   assert.match(match[0], /aria-label="循环 关"/);
   assert.match(match[0], /aria-pressed="false"/);
   assert.match(match[0], />循环 关<\/button>/);
-  assert.match(match[0], /title="Cycle briefing pages automatically every 9 seconds \(Signals → News → Local\)\./);
+  assert.match(match[0], /title="每 9 秒自动循环简报页（信号 → 新闻 → 本地）。/);
 
   const update = setBriefAutoRotate.toString();
   assert.ok(update, 'cockpit briefing cycle state updater is missing');

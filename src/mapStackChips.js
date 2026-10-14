@@ -44,7 +44,7 @@ export function mapStackChipModel(stack, activeId) {
   const requiresIon = stack?.requiresIon === true;
   const fallbackReason = requiresIon
     ? keySetupRequirement('cesium-ion')
-    : `${label || 'This map stack'} is unavailable`;
+    : `${label || '此地图栈'}不可用`;
   const unavailableHint = available
     ? ''
     : String(stack?.unavailableReason || fallbackReason);

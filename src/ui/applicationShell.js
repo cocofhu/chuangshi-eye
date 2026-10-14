@@ -1029,7 +1029,7 @@ export class StyleManager extends ShellFacade {
     const { cctvLayer } = this.services;
     if (this._disposed) return false;
     if (!this._dataManager || !this._dataManager.layers?.has('cctv')) {
-      this._showToast('CCTV layer unavailable');
+      this._showToast('监控图层不可用');
       return false;
     }
     const enabled = this._dataManager.isEnabled('cctv');
@@ -1186,7 +1186,7 @@ export class StyleManager extends ShellFacade {
    */
   async setMapStack(stackId) {
     if (!this.mapStackController) {
-      return { ok: false, error: 'Map stack controller unavailable' };
+      return { ok: false, error: '地图栈控制器不可用' };
     }
     const stacks = this.mapStackController.getStacks();
     const target = stacks.find((stack) => stack.id === stackId);
@@ -1210,7 +1210,7 @@ export class StyleManager extends ShellFacade {
     return {
       ok: landed,
       activeStack: state.activeId,
-      error: landed ? null : state.lastError || 'Map stack did not switch',
+      error: landed ? null : state.lastError || '地图栈未切换',
     };
   }
 
@@ -1478,7 +1478,7 @@ export class StyleManager extends ShellFacade {
     this._lifetime.listen(this._shareBtn, 'click', async () => {
       const success = await this.shareLinkManager.copyLink();
       if (!this._disposed)
-        this._showToast(success ? 'Link copied!' : 'Copy failed');
+        this._showToast(success ? '链接已复制' : '复制失败');
     });
   }
 
