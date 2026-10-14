@@ -51,7 +51,7 @@ export function _renderCctvState(state) {
 
   if (this._cctvEnableBtn) {
     this._cctvEnableBtn.classList.toggle('active', enabled);
-    this._cctvEnableBtn.textContent = enabled ? 'CCTV ON' : 'CCTV OFF';
+    this._cctvEnableBtn.textContent = enabled ? '监控 开' : '监控 关';
   }
 
   if (this._cctvSelect) {
@@ -101,15 +101,15 @@ export function _renderCctvState(state) {
       mode === 'viewshed'
         ? 'VIEWSHED ON'
         : mode === 'on'
-          ? 'COVERAGE ON'
-          : 'COVERAGE OFF';
+          ? '覆盖 开'
+          : '覆盖 关';
     this._cctvCoverageBtn.disabled = !enabled;
   }
 
   if (this._cctvAutoHopBtn) {
     const autoHop = !!state?.autoHop;
     this._cctvAutoHopBtn.classList.toggle('active', autoHop);
-    this._cctvAutoHopBtn.textContent = autoHop ? 'AUTO HOP ON' : 'AUTO HOP OFF';
+    this._cctvAutoHopBtn.textContent = autoHop ? '自动跳转 开' : '自动跳转 关';
     this._cctvAutoHopBtn.disabled = !enabled;
   }
 
@@ -117,8 +117,8 @@ export function _renderCctvState(state) {
     const showProjection = state?.showProjection !== false;
     this._cctvProjectionBtn.classList.toggle('active', showProjection);
     this._cctvProjectionBtn.textContent = showProjection
-      ? 'PROJECTION ON'
-      : 'PROJECTION OFF';
+      ? '投影 开'
+      : '投影 关';
     this._cctvProjectionBtn.disabled = !enabled;
   }
 
@@ -161,7 +161,7 @@ export function _renderCctvState(state) {
         ? `${cameras.length} cameras loaded · click a camera to activate`
         : `${cameras.length} cameras loaded · enable CCTV to activate`;
     } else {
-      this._cctvMeta.textContent = 'Enable CCTV to load camera intersections';
+      this._cctvMeta.textContent = '开启监控以加载路口摄像头';
     }
   }
 
@@ -211,7 +211,7 @@ export function _renderCctvState(state) {
   this._syncCctvSourceBadge(activeCamera, enabled);
   this._typeCctvSummary(
     state?.summary ||
-      'Enable CCTV to start camera-linked intelligence summaries.',
+      '开启监控后可生成镜头关联情报摘要。',
   );
 }
 

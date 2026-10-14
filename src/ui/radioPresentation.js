@@ -176,7 +176,7 @@ export function renderRadioState(state) {
 
   if (this._radioStationName)
     this._radioStationName.textContent =
-      selected?.name || 'NO STATION SELECTED';
+      selected?.name || '未选择电台';
   if (this._radioStationMeta) {
     const place = selected
       ? [selected.state, selected.countryCode].filter(Boolean).join(' · ')
@@ -296,7 +296,7 @@ export function renderRadioState(state) {
   if (this._contextRadioMiniStation) {
     this._contextRadioMiniStation.textContent = uncertain
       ? 'RADIO STATE UNCERTAIN'
-      : selected?.name || (state.loading ? 'SYNCING DIRECTORY' : 'RADIO READY');
+      : selected?.name || (state.loading ? '正在同步目录' : '电台就绪');
   }
   if (this._cockpitRadioStation) {
     this._cockpitRadioStation.textContent = uncertain

@@ -343,7 +343,7 @@ export class StreetLevelControls {
       const icon = button.querySelector('.sl-btn-icon');
       const text = button.querySelector('.sl-btn-text');
       if (icon) icon.textContent = on ? '⤡' : '⤢';
-      if (text) text.textContent = on ? 'SHRINK' : 'EXPAND';
+      if (text) text.textContent = on ? '缩小' : '放大';
       button.setAttribute('aria-pressed', String(on));
       button.setAttribute('aria-label', on ? 'Shrink' : 'Expand');
     }

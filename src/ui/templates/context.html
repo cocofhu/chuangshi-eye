@@ -37,7 +37,7 @@
             <div id="context-radio-mini" class="context-radio-mini" role="group" aria-label="Compact Radio controls" hidden>
               <div class="context-radio-mini-heading">
                 <span>RADIO</span>
-                <strong id="context-radio-mini-station">RADIO READY</strong>
+                <strong id="context-radio-mini-station">电台就绪</strong>
                 <span class="context-radio-mini-actions">
                   <button id="context-radio-details-btn" type="button" aria-label="Open detailed Radio controls" aria-expanded="false" aria-controls="radio-panel" title="Open detailed Radio controls">
                     <span class="material-symbols-outlined" aria-hidden="true">open_in_full</span>
@@ -70,11 +70,11 @@
           </button>
           <button id="global-context-missions-btn" class="context-mode-button" type="button" role="tab" tabindex="0" aria-selected="false" aria-controls="context-missions-view">
             <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
-            <span>SPACE MISSIONS</span>
+            <span>航天任务</span>
           </button>
         </div>
         <div id="context-mode-standby" class="context-mode-standby">
-          <strong>SELECT CONTEXT</strong>
+          <strong>选择情境</strong>
           <span>CONTACTS — nearest planes · vessels · sites<br>SPACE MISSIONS — launches &amp; orbital assets</span>
         </div>
         <section id="context-flights-view" class="context-mode-view" role="tabpanel" aria-labelledby="global-context-flights-btn" hidden>
@@ -83,12 +83,12 @@
               <span class="material-symbols-outlined" aria-hidden="true">flight</span>
               <span>COCKPIT</span>
             </button>
-            <button id="installations-search-btn" class="panel-layer-toggle" type="button">SEARCH NEARBY SITES</button>
+            <button id="installations-search-btn" class="panel-layer-toggle" type="button">搜索附近站点</button>
             <button id="tr3b-toggle" class="tr3b-toggle" type="button" aria-pressed="false" hidden aria-label="Reclassify tracked contact as TR-3B" title="Reclassify as TR-3B">🛸</button>
           </div>
           <aside id="military-awareness-panel">
             <div class="military-awareness-standby">
-              <strong>CONTACTS CONTEXT OFF</strong>
+              <strong>目标情境 关</strong>
               <span>SELECT CONTACTS TO LOAD OBSERVED / MAPPED PROXIMITY</span>
             </div>
           </aside>
@@ -98,8 +98,8 @@
             <div id="space-mission-roster" class="space-mission-roster" aria-label="Available Space Missions">
               <div class="space-mission-roster-header">
                 <div>
-                  <strong>AVAILABLE MISSIONS</strong>
-                  <span>SELECT A MISSION TO INSPECT</span>
+                  <strong>可用任务</strong>
+                  <span>选择任务以查看</span>
                 </div>
                 <output data-mission-roster-count>—</output>
               </div>
@@ -120,20 +120,20 @@
             </div>
             <div class="radio-directory-row">
               <button id="radio-enable-btn" class="panel-layer-toggle" type="button" aria-pressed="false">ENABLE</button>
-              <label class="radio-filter-label" for="radio-filter">STATION TAG</label>
+              <label class="radio-filter-label" for="radio-filter">电台标签</label>
               <select id="radio-filter" aria-label="Filter stations by station tag" disabled>
                 <option value="all">All</option>
               </select>
             </div>
             <div id="radio-station-card" class="radio-station-card" aria-live="polite">
-              <strong id="radio-station-name">NO STATION SELECTED</strong>
+              <strong id="radio-station-name">未选择电台</strong>
               <span id="radio-station-meta">Enable Radio, then choose a globe marker or use next.</span>
               <span id="radio-station-tags"></span>
             </div>
             <div id="radio-tuner" class="radio-tuner" hidden>
               <div class="radio-tuner-header">
-                <span id="radio-tuner-band-label">DIRECTORY BAND</span>
-                <output id="radio-tuner-value" for="radio-tuner-slider">DRAG TO TUNE</output>
+                <span id="radio-tuner-band-label">目录波段</span>
+                <output id="radio-tuner-value" for="radio-tuner-slider">拖动调谐</output>
               </div>
               <div class="radio-tuner-dial">
                 <div class="radio-tuner-scale" aria-hidden="true"></div>
@@ -143,7 +143,7 @@
               </div>
               <div class="radio-tuner-readout">
                 <span id="radio-tuner-station">ALL · DRAG THE NEEDLE</span>
-                <span>SNAPS TO AVAILABLE STATIONS</span>
+                <span>吸附到可用电台</span>
               </div>
             </div>
             <div class="radio-transport" role="group" aria-label="Radio playback">
@@ -157,9 +157,9 @@
               <input id="radio-volume" class="gev-quantitative-slider" type="range" min="0" max="100" value="80" aria-label="Radio volume" />
               <output id="radio-volume-value" class="gev-slider-value" for="radio-volume">80%</output>
             </label>
-            <div id="radio-playback-state" class="radio-playback-state" role="status" aria-live="polite">Radio off</div>
+            <div id="radio-playback-state" class="radio-playback-state" role="status" aria-live="polite">电台关闭</div>
             <div class="radio-links">
-              <a id="radio-station-homepage" href="#" target="_blank" rel="noopener noreferrer" hidden>STATION SITE</a>
+              <a id="radio-station-homepage" href="#" target="_blank" rel="noopener noreferrer" hidden>电台主页</a>
               <a href="https://www.radio-browser.info/" target="_blank" rel="noopener noreferrer">DIRECTORY: RADIO BROWSER</a>
             </div>
             <p class="radio-privacy">Audio connects directly to the broadcaster after you press play. Your IP is visible to that broadcaster.</p>
@@ -172,7 +172,7 @@
               <div class="sdr-radio-actions">
                 <button id="sdr-connect-btn" class="panel-layer-toggle" type="button" aria-pressed="false">CONNECT</button>
                 <button id="sdr-locate-btn" type="button" title="Use your location for faster ADS-B position decoding">LOCATE</button>
-                <button id="sdr-change-device-btn" type="button" title="Choose a different RTL-SDR or receiver channel">CHANGE DEVICE</button>
+                <button id="sdr-change-device-btn" type="button" title="选择其他 RTL-SDR 或接收通道">更换设备</button>
               </div>
               <div class="sdr-mode-row" role="group" aria-label="RTL-SDR receiver mode">
                 <button id="sdr-mode-fm-btn" class="active" type="button" aria-pressed="true">FM</button>
