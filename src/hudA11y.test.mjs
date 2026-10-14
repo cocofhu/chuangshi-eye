@@ -13,7 +13,7 @@ test('HUD sliders and location search have descriptive explicit names', () => {
     ['scope-feather-slider', 'Scope edge feather'],
     ['bloom-intensity-slider', 'Bloom intensity'],
     ['sharpen-intensity-slider', 'Sharpen intensity'],
-    ['location-search', 'Search location by name or coordinates'],
+    ['location-search', '按名称或坐标搜索位置'],
   ]) {
     const input = html.match(new RegExp(`<input\\b[^>]*\\bid="${id}"[^>]*>`))?.[0];
     assert.ok(input, `${id} exists`);

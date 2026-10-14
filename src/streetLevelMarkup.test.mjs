@@ -121,8 +121,8 @@ test('the expanded viewer is a modal dialog that restores focus', () => {
 
 test('labels say what the buttons do', () => {
   for (const label of [
-    'aria-label="Camera follows view"',
-    'PROVIDERS',
+    'aria-label="相机跟随视图"',
+    '来源',
     'SINCE',
   ])
     assert.ok(html.includes(label), label);

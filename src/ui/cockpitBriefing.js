@@ -49,7 +49,7 @@ export function setBriefAutoRotate(enabled) {
       'aria-pressed',
       String(this.briefAutoRotateEnabled),
     );
-    const label = this.briefAutoRotateEnabled ? 'CYCLE ON' : 'CYCLE OFF';
+    const label = this.briefAutoRotateEnabled ? '循环 开' : '循环 关';
     this.briefAutoToggle.textContent = label;
     const help = this.briefAutoRotateEnabled
       ? COCKPIT_BRIEF_CYCLE_ON_HELP

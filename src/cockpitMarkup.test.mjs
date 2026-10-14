@@ -41,7 +41,7 @@ test('Cockpit has one reset action beside its bottom exit path', () => {
   assert.doesNotMatch(html, /id="cockpit-exit"/);
   assert.match(
     html,
-    /id="map-view-switch"[^>]*aria-label="Exit cockpit view"[^>]*aria-keyshortcuts="Escape C"[\s\S]*?close_fullscreen[\s\S]*?EXIT COCKPIT/,
+    /id="map-view-switch"[^>]*aria-label="退出驾驶舱"[^>]*aria-keyshortcuts="Escape C"[\s\S]*?close_fullscreen[\s\S]*?退出驾驶舱/,
   );
   const topCenterActions = html.match(/<nav id="top-center-actions"[\s\S]*?<\/nav>/);
   assert.ok(topCenterActions, 'Top-center globe actions are missing');
@@ -261,8 +261,8 @@ test('Cockpit owns a focused shared Display portal and compact Radio controls', 
   assert.match(html, /data-cockpit-display-slot="hud"/);
   assert.match(html, /data-cockpit-display-slot="detection"[\s\S]*?data-cockpit-display-slot="parameters"[\s\S]*?data-cockpit-display-slot="models3d"/);
   assert.doesNotMatch(html, /data-cockpit-display-slot="presets"/);
-  assert.match(html, /id="clear-selected-layers"[^>]*aria-label="Clear selected data layers"/);
-  assert.match(html, /id="reset-globe-view"[^>]*aria-label="Reset to full globe view"/);
+  assert.match(html, /id="clear-selected-layers"[^>]*aria-label="关闭已选图层"/);
+  assert.match(html, /id="reset-globe-view"[^>]*aria-label="重置为全球视角"/);
   assert.match(css, /#top-center-actions\s*\{[\s\S]*?left:\s*50%;[\s\S]*?display:\s*flex;[\s\S]*?transform:\s*translateX\(-50%\)/);
   assert.match(
     css,
@@ -823,14 +823,14 @@ test('cockpit briefing cycle control keeps its state as the accessible name', ()
     /<button\s+id="cockpit-brief-auto"[\s\S]*?<\/button>/,
   );
   assert.ok(match, 'cockpit briefing cycle toggle is missing');
-  assert.match(match[0], /aria-label="CYCLE OFF"/);
+  assert.match(match[0], /aria-label="循环 关"/);
   assert.match(match[0], /aria-pressed="false"/);
-  assert.match(match[0], />CYCLE OFF<\/button>/);
+  assert.match(match[0], />循环 关<\/button>/);
   assert.match(match[0], /title="Cycle briefing pages automatically every 9 seconds \(Signals → News → Local\)\./);
 
   const update = setBriefAutoRotate.toString();
   assert.ok(update, 'cockpit briefing cycle state updater is missing');
-  assert.match(update, /const label = this\.briefAutoRotateEnabled \? 'CYCLE ON' : 'CYCLE OFF';/);
+  assert.match(update, /const label = this\.briefAutoRotateEnabled \? '循环 开' : '循环 关';/);
   assert.match(update, /setAttribute\('aria-label', label\)/);
   assert.match(update, /\.title = help;/);
   assert.doesNotMatch(update, /setAttribute\('aria-label', help\)/);
