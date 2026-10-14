@@ -249,7 +249,7 @@ export function _updateCctvSyncChip(loading, enabled) {
     clearTimeout(this._cctvChipHideTimer);
     this._cctvChipHideTimer = null;
     this._cctvChipWasBusy = true;
-    this.actions.setSplitFlapText(this._cctvSyncLabel, 'loading frames');
+    this.actions.setSplitFlapText(this._cctvSyncLabel, '正在加载画面');
     // The counter is left plain on purpose: it ticks every few frames
     // during a grid load, and flapping it would read as a slot machine.
     this._cctvSyncProgress.textContent = `${loaded}/${total}`;

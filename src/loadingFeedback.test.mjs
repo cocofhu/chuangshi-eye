@@ -118,7 +118,7 @@ test('universal notice masks active loading only for its own fixed dwell', () =>
   const notice = createGlobalStatusNotice('Shared satellite is unavailable', 300);
 
   assert.equal(presentGlobalLoadingStatus(notice, loading, summary, 301).label, 'Shared satellite is unavailable');
-  assert.equal(presentGlobalLoadingStatus(notice, loading, summary, notice.hideAt).label, 'LOADING LIVE DATA');
+  assert.equal(presentGlobalLoadingStatus(notice, loading, summary, notice.hideAt).label, '正在加载实时数据');
 });
 
 test('terminal failure preempts a finite notice, whose full dwell starts afterward', () => {
@@ -232,9 +232,9 @@ test('reveals sustained loading and then a bounded completion state', () => {
   const summary = aggregateLayerLoading([{ id: 'a', name: 'A', lifecycleState: 'enabling' }]);
   const pending = reduceLoadingFeedback(createLoadingFeedbackState(), summary, 100);
   const visible = reduceLoadingFeedback(pending, summary, 300);
-  assert.equal(presentLoadingFeedback(visible, summary, 300).label, 'LOADING LIVE DATA');
+  assert.equal(presentLoadingFeedback(visible, summary, 300).label, '正在加载实时数据');
   const complete = reduceLoadingFeedback(visible, aggregateLayerLoading([]), 350);
-  assert.equal(presentLoadingFeedback(complete, aggregateLayerLoading([]), 350).label, 'LOAD COMPLETE');
+  assert.equal(presentLoadingFeedback(complete, aggregateLayerLoading([]), 350).label, '加载完成');
 });
 
 test('terminal loading feedback centers its label without an empty detail slot', () => {
@@ -736,7 +736,7 @@ test('ALPR retry success does not inherit its prior error, including turning the
   assert.equal(presentLoadingFeedback(state, loading, 200).label, 'RETRYING ALPR CAMERAS');
   const done = aggregateLayerLoading([camera({ status: 'ready', count: 3 })]);
   state = reduceLoadingFeedback(state, done, 300);
-  assert.equal(presentLoadingFeedback(state, done, 300).label, 'LOAD COMPLETE');
+  assert.equal(presentLoadingFeedback(state, done, 300).label, '加载完成');
   const stopping = normalizeLayerLoading({ ...camera({ status: 'unavailable', error: 'Old failure' }), lifecycleState: 'disabling' });
   assert.equal(stopping.error, null);
   assert.equal(stopping.unavailable, false);

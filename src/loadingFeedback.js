@@ -244,7 +244,7 @@ export function reduceTrafficSyncFeedback(
       // Neutral default: the layer always supplies its own LIVE/SIMULATED
       // label, and a fallback string must never claim a live feed on a
       // keyless build.
-      label: label || 'syncing road network',
+      label: label || '正在同步路网',
       progressText: hasProgress ? `${progressPct}%` : '...',
     };
   }
@@ -420,7 +420,7 @@ export function presentLoadingFeedback(state, summary, nowMs) {
   if (!state?.visible) return null;
   if (state.phase === 'terminal') {
     const labels = {
-      complete: 'LOAD COMPLETE',
+      complete: '加载完成',
       cancelled: 'LOAD CANCELLED',
       error: 'LOAD FAILED',
     };
@@ -431,7 +431,7 @@ export function presentLoadingFeedback(state, summary, nowMs) {
             state.activeIds?.length === 1 &&
             state.activeIds[0] === 'military-installations'
           ? 'MAPPED SITES LOADED'
-          : labels[state.terminal] || 'LOAD COMPLETE';
+          : labels[state.terminal] || '加载完成';
     return { state: state.terminal, label, detail: '' };
   }
   const active = summary.active;
@@ -463,7 +463,7 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     ? 'TURNING OFF LIVE DATA'
     : summary.refresh
       ? 'REFRESHING LIVE DATA'
-      : 'LOADING LIVE DATA';
+      : '正在加载实时数据';
   const names = active
     .slice(0, 2)
     .map((record) => record.label)
