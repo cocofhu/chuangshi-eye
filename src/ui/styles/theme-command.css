@@ -7,7 +7,7 @@
 :root {
   --bg-dark: #05070d;
   --glass-bg: linear-gradient(160deg, rgba(14, 22, 38, 0.78), rgba(6, 10, 20, 0.72));
-  --glass-solid: rgba(8, 13, 24, 0.78);
+  --glass-solid: rgba(8, 13, 24, 0.88);
   --glass-border: rgba(120, 200, 255, 0.12);
   --glass-border-hover: rgba(120, 220, 255, 0.32);
   --accent: #3ee0ff;
@@ -228,6 +228,7 @@ input[type='range'] {
 /* 中文可读性：正文字体与行高 */
 body,
 .panel,
+.panel-collapsible,
 .cyber-panel,
 .cockpit-panel,
 #first-run-launcher {
@@ -237,6 +238,7 @@ body,
 
 /* 毛玻璃：仅静态面板，模糊降到 12px（工程师建议） */
 .panel,
+.panel-collapsible,
 .cyber-panel,
 .cockpit-side-panel,
 .command-dock,
@@ -255,13 +257,14 @@ body,
 .overlay-card,
 .menu-popup,
 [role='dialog'] {
-  background: rgba(8, 14, 22, 0.92);
+  background: rgba(8, 14, 22, 0.94);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
 /* 面板 L 形角标 */
 .panel,
+.panel-collapsible,
 .cyber-panel,
 .cockpit-side-panel,
 #first-run-launcher {
@@ -269,6 +272,7 @@ body,
 }
 
 .panel::before,
+.panel-collapsible::before,
 .cyber-panel::before,
 .cockpit-side-panel::before,
 #first-run-launcher::before {
@@ -298,6 +302,16 @@ body,
 .status-value {
   color: var(--accent-gold);
   letter-spacing: 0.04em;
+}
+
+.cs-topbar__brand {
+  font-weight: 600;
+  text-shadow: 0 0 18px rgba(245, 196, 107, 0.25);
+}
+
+.panel-title,
+.cyber-panel-title {
+  font-weight: 600;
 }
 
 /* 顶部状态栏（工程师挂 .cs-topbar DOM） */
@@ -360,6 +374,7 @@ body,
 
 /* 面板入场 */
 .panel,
+.panel-collapsible,
 .cyber-panel,
 .cockpit-side-panel {
   animation: cse-panel-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -394,7 +409,7 @@ body,
   #first-run-launcher {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    background: rgba(8, 14, 22, 0.92);
+    background: rgba(8, 14, 22, 0.94);
   }
 }
 
@@ -409,7 +424,7 @@ body,
   #first-run-launcher {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: rgba(8, 14, 22, 0.92);
+    background: rgba(8, 14, 22, 0.94);
   }
 
 }
