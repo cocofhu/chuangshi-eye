@@ -305,8 +305,10 @@ body,
 }
 
 .cs-topbar__brand {
+  color: #f5c46b !important;
   font-weight: 600;
-  text-shadow: 0 0 18px rgba(245, 196, 107, 0.25);
+  letter-spacing: 0.06em;
+  text-shadow: none;
 }
 
 .panel-title,
@@ -451,3 +453,15 @@ body,
 .title-accent {
   color: var(--accent-gold);
 }
+
+#title-bar h1,
+#title-bar .title-accent,
+.loader-content .title-accent {
+  color: var(--accent-gold);
+  text-shadow: none;
+}
+
+#title-bar .title-logo {
+  filter: drop-shadow(0 0 10px rgba(245, 196, 107, 0.35));
+}
+
