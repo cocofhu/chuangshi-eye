@@ -395,12 +395,14 @@ body,
 /* 减弱动态：关动画与毛玻璃 */
 @media (prefers-reduced-motion: reduce) {
   .panel,
+  .panel-collapsible,
   .cyber-panel,
   .cockpit-side-panel {
     animation: none !important;
   }
 
   .panel,
+  .panel-collapsible,
   .cyber-panel,
   .cockpit-side-panel,
   .command-dock,
@@ -416,6 +418,7 @@ body,
 /* 小屏：关掉模糊 */
 @media (max-width: 620px) {
   .panel,
+  .panel-collapsible,
   .cyber-panel,
   .cockpit-side-panel,
   .command-dock,
