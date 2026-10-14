@@ -55,16 +55,16 @@ function formatDate(ms) {
 
 function presentStatus(state) {
   const pressed = state.enabled === true;
-  const title = pressed ? 'Turn Street Level off' : 'Turn Street Level on';
+  const title = pressed ? '关闭街景' : '打开街景';
   if (state.keyRejected)
-    return { text: 'KEY REJECTED', tone: 'warn', pressed, title };
+    return { text: '密钥已拒', tone: 'warn', pressed, title };
   if (state.keyRequired)
-    return { text: 'KEY REQUIRED', tone: 'warn', pressed, title };
+    return { text: '需要密钥', tone: 'warn', pressed, title };
   if (state.coverage.loading)
-    return { text: 'LOADING', tone: 'busy', pressed, title };
+    return { text: '加载中', tone: 'busy', pressed, title };
   return pressed
-    ? { text: 'ON', tone: 'on', pressed, title }
-    : { text: 'OFF', tone: '', pressed, title };
+    ? { text: '开', tone: 'on', pressed, title }
+    : { text: '关', tone: '', pressed, title };
 }
 
 /** A chip is lit only while the layer and its provider are both on. */

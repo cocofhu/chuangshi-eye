@@ -12,8 +12,8 @@ test('installation retry remains visible after failure dwell without a false spi
   const summary = aggregateLayerLoading([retrySite()]);
   const view = presentLoadingFeedback(createLoadingFeedbackState(), summary, 100);
   assert.equal(view.state, 'retry');
-  assert.equal(view.label, 'OVERPASS TEMPORARILY UNAVAILABLE');
-  assert.match(view.detail, /retrying in 30s/);
+  assert.equal(view.label, 'OVERPASS 暂不可用');
+  assert.match(view.detail, /30 秒后重试/);
   assert.equal(presentLoadingFeedback(createLoadingFeedbackState(), aggregateLayerLoading([{ ...retrySite(), enabled: false }]), 100), null);
 });
 test('an installation retry never conceals another participant failure', () => {

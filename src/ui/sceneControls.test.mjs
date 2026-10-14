@@ -214,7 +214,7 @@ test('Scene Escape and recording presentation follow playback and release on des
     f.owner.setPlaybackKeyboardEnabled(true);
     f.owner.updateRuntime('Scene A / Shot A');
     escape();
-    assert.deepEqual(f.calls, [['stop', 'Stopped (Esc)']]);
+    assert.deepEqual(f.calls, [['stop', '已停止（Esc）']]);
     f.owner.destroy();
     f.owner.destroy();
     f.owner.setPlaybackKeyboardEnabled(true);
@@ -266,7 +266,7 @@ test('Scene action failures are visible only while that action still owns presen
     let pending = f.owner.run('load', 'scene-a', 'shot-a');
     reject(new Error('unavailable'));
     await pending;
-    assert.equal(f.elements.status.textContent, 'Scene action failed');
+    assert.equal(f.elements.status.textContent, '场景操作失败');
     pending = f.owner.run('load', 'scene-a', 'shot-a');
     f.owner.run('selectShot', 'shot-a');
     f.owner.updateStatus('Current selection');

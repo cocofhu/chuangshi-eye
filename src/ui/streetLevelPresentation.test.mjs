@@ -78,7 +78,7 @@ function deepMerge(target, source) {
 test('a key-gated layer disables every control and flags KEY REQUIRED', () => {
   const view = presentStreetLevelPanel(snapshot({ keyRequired: true }));
   assert.equal(view.controlsDisabled, true);
-  assert.equal(view.status.text, 'KEY REQUIRED');
+  assert.equal(view.status.text, '需要密钥');
   assert.equal(view.status.tone, 'warn');
 });
 
@@ -91,7 +91,7 @@ test('KEY REQUIRED shows no raw error code under the pill', () => {
       providers: [provider({ keyRequired: true, error: 'no_key' })],
     }),
   );
-  assert.equal(view.status.text, 'KEY REQUIRED');
+  assert.equal(view.status.text, '需要密钥');
   assert.equal(view.error, null);
   // The chip still says how to add the key.
   assert.match(view.providers[0].title, /^Mapillary: Needs /);
@@ -109,7 +109,7 @@ test('a key Mapillary rejected reads KEY REJECTED and names the fix', () => {
       providers: [provider({ keyRequired: true, keyRejected: true, error })],
     }),
   );
-  assert.equal(view.status.text, 'KEY REJECTED');
+  assert.equal(view.status.text, '密钥已拒');
   assert.equal(view.status.tone, 'warn');
   assert.equal(view.controlsDisabled, true);
   assert.equal(view.error, error);
@@ -124,37 +124,37 @@ test('a key problem outranks loading on the pill: KEY REJECTED, then KEY REQUIRE
   assert.equal(
     presentStreetLevelPanel(snapshot({ ...loading, keyRequired: true })).status
       .text,
-    'KEY REQUIRED',
+    '需要密钥',
   );
   assert.equal(
     presentStreetLevelPanel(
       snapshot({ ...loading, keyRequired: true, keyRejected: true }),
     ).status.text,
-    'KEY REJECTED',
+    '密钥已拒',
   );
 });
 
 test('the header pill is the on/off switch and reads OFF, LOADING or ON', () => {
   assert.deepEqual(presentStreetLevelPanel(snapshot()).status, {
-    text: 'OFF',
+    text: '关',
     tone: '',
     pressed: false,
-    title: 'Turn Street Level on',
+    title: '打开街景',
   });
   assert.deepEqual(
     presentStreetLevelPanel(
       snapshot({ enabled: true, coverage: { loading: true } }),
     ).status,
     {
-      text: 'LOADING',
+      text: '加载中',
       tone: 'busy',
       pressed: true,
-      title: 'Turn Street Level off',
+      title: '关闭街景',
     },
   );
   assert.deepEqual(
     presentStreetLevelPanel(snapshot({ enabled: true })).status,
-    { text: 'ON', tone: 'on', pressed: true, title: 'Turn Street Level off' },
+    { text: '开', tone: 'on', pressed: true, title: '关闭街景' },
   );
   assert.equal(
     presentStreetLevelPanel(snapshot({ enabled: true, keyRequired: true }))

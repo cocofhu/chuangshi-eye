@@ -123,7 +123,7 @@ export class SceneControls {
     const generation = ++this.actionGeneration;
     const failed = () => {
       if (!this.destroyed && generation === this.actionGeneration)
-        this.updateStatus('Scene action failed');
+        this.updateStatus('场景操作失败');
     };
     try {
       const result = this.actions[action](...args);
@@ -140,7 +140,7 @@ export class SceneControls {
   createScene() {
     if (this.destroyed) return;
     const name = window.prompt(
-      'New scene name',
+      '新场景名称',
       `Scene ${this.read().scenes.length + 1}`,
     );
     if (name) this.run('create', name);
@@ -215,7 +215,7 @@ export class SceneControls {
     } else if (!this.destroyed && !this.playbackKeyRemover) {
       const onKeyDown = (event) => {
         if (!this.destroyed && event.key === 'Escape' && this.read().running)
-          this.run('stop', 'Stopped (Esc)');
+          this.run('stop', '已停止（Esc）');
       };
       document.addEventListener('keydown', onKeyDown);
       this.playbackKeyRemover = () =>

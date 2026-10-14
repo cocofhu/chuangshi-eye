@@ -306,7 +306,7 @@ export function bindRadioControls() {
           this._radioTunerStation.textContent = '电台不可用';
         this._radioTunerSlider?.setAttribute(
           'aria-valuetext',
-          'Station unavailable after directory refresh',
+          '目录刷新后电台不可用',
         );
       }
     }

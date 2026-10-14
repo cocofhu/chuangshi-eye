@@ -117,19 +117,19 @@ test('ordered articles omit Controls and retain history labels, forecast dates a
   );
   assert.match(
     line(f, 'wind', 'time').textContent,
-    /Forecast · valid .*UTC · issued .*UTC/,
+    /预报 · 有效 .*UTC · 发布 .*UTC/,
   );
   f.state({ mode: 'history', target: ticks[1] });
-  assert.match(line(f, radar.id, 'time').textContent, /01:05 UTC.*synced/);
-  assert.match(line(f, 'wind', 'time').textContent, /Does not follow history/);
+  assert.match(line(f, radar.id, 'time').textContent, /01:05 UTC.*已同步/);
+  assert.match(line(f, 'wind', 'time').textContent, /不跟随历史/);
   f.state({
     products: [{ id: radar.id, shown: ticks[0], selected: ticks[0] }],
   });
-  assert.match(line(f, radar.id, 'time').textContent, /01:00 UTC.*nearest/);
+  assert.match(line(f, radar.id, 'time').textContent, /01:00 UTC.*最近/);
   f.state({ products: [{ id: radar.id, shown: null, selected: null }] });
   assert.equal(
     line(f, radar.id, 'time').textContent,
-    'No frame within 30 min of 01:05 UTC',
+    '01:05 UTC 前后 30 分钟内无帧',
   );
   const global = {
     id: 'weather-satellite',
@@ -139,7 +139,7 @@ test('ordered articles omit Controls and retain history labels, forecast dates a
   f.state({ products: [{ id: global.id, shown: null, selected: null }] });
   assert.equal(
     line(f, global.id, 'time').textContent,
-    'No frame within 3 h of 01:05 UTC',
+    '01:05 UTC 前后 3 小时内无帧',
   );
   view.destroy();
 });
@@ -400,7 +400,7 @@ test('cyclones lead, and observed history owns one bordered group with only acti
   assert.equal(group.children[0].textContent, '观测历史');
   assert.equal(
     group.children[1].textContent,
-    'Rain radar · Satellite clouds · Lightning density',
+    '降雨雷达 · 卫星云图 · 闪电密度',
   );
   assert.equal(group.children[2], timelineHost(f));
   assert.deepEqual(
@@ -413,7 +413,7 @@ test('cyclones lead, and observed history owns one bordered group with only acti
     'storms',
   );
   view.update([wind, satellite]);
-  assert.equal(group.children[1].textContent, 'Satellite clouds');
+  assert.equal(group.children[1].textContent, '卫星云图');
   view.update([wind]);
   assert.equal(group.hidden, true);
   view.destroy();
@@ -491,30 +491,30 @@ test('compact lines show observation age, forecast validity, storm selection or 
   view.update([cyclone, wind, radar]);
   const compact = (id) =>
     f.find((n) => n.className.startsWith('rail-card-compact'), card(f, id));
-  assert.equal(compact(radar.id).textContent, '09-22 01:05 UTC · 8m ago');
+  assert.equal(compact(radar.id).textContent, '09-22 01:05 UTC · 8 分钟前');
   assert.equal(
     compact(wind.id).textContent,
-    'Forecast · valid 09-22 01:00 UTC',
+    '预报 · 有效 09-22 01:00 UTC',
   );
   f.state({ mode: 'history', target: ticks[1] });
   assert.equal(
     compact(radar.id).textContent,
-    '09-22 01:05 UTC · 8m ago · synced',
+    '09-22 01:05 UTC · 8 分钟前 · 已同步',
   );
   assert.equal(
     compact(wind.id).textContent,
-    'Forecast · valid 09-22 01:00 UTC',
+    '预报 · 有效 09-22 01:00 UTC',
   );
   assert.match(
     line(f, wind.id, 'time').textContent,
-    /issued .*Does not follow history/,
+    /发布 .*不跟随历史/,
   );
   f.state({
     products: [{ id: radar.id, shown: ticks[0], selected: ticks[0] }],
   });
   assert.equal(
     compact(radar.id).textContent,
-    '09-22 01:00 UTC · 13m ago · nearest',
+    '09-22 01:00 UTC · 13 分钟前 · 最近',
   );
   clickHeader(f, wind.id);
   assert.equal(
