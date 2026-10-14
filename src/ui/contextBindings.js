@@ -32,7 +32,7 @@ export function _initGlobalContextPanel() {
     void this._runUserFacingContextAction(
       (notificationToken) =>
         this._selectContextMode(nextMode, { notificationToken }),
-      'Contacts could not complete the requested transition; try again',
+      '目标未能完成请求的切换；请重试',
     ).then((succeeded) => {
       if (
         !this.destroyed &&
@@ -61,7 +61,7 @@ export function _initGlobalContextPanel() {
     void this._runUserFacingContextAction(
       (notificationToken) =>
         this._selectContextMode(nextMode, { notificationToken }),
-      'Space Missions could not complete the requested transition; try again',
+      '航天任务未能完成请求的切换；请重试',
     ).then((succeeded) => {
       if (
         !this.destroyed &&
@@ -108,11 +108,11 @@ export function _initGlobalContextPanel() {
       this.showToast(
         stats?.statusMessage ||
           (stats?.status === 'zoom-in'
-            ? 'Zoom in to search mapped installations'
+            ? '放大地图以搜索标注站点'
             : 'Nearby installations refreshed'),
       );
       return true;
-    }, 'Nearby installations could not be refreshed; try again').finally(() => {
+    }, '附近站点刷新失败；请重试').finally(() => {
       if (this.destroyed) return;
       button.setAttribute('aria-disabled', 'false');
       button.setAttribute('aria-busy', 'false');

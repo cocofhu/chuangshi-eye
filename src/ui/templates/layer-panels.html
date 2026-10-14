@@ -23,7 +23,7 @@
       </div>
       <div class="cyber-panel-body" data-rail-scroller>
       <div id="cctv-frame-wrap" class="cctv-frame-wrap">
-        <img id="cctv-frame" alt="CCTV feed frame" />
+        <img id="cctv-frame" alt="监控画面帧" />
         <canvas id="cctv-video" class="cctv-frame" hidden></canvas>
       </div>
       <div id="cctv-source-badge" role="status" aria-live="polite">来源 · 未知</div>
@@ -52,13 +52,13 @@
           <button id="cctv-adjust-btn" class="scene-btn" title="在场景中拖动相机：圆环旋转，箭头平移，手柄调距离/视场">调整</button>
         </div>
         <div id="cctv-cal-readout" class="cctv-cal-readout" aria-label="相机姿态 — 点击数值可输入">
-          <button class="cctv-cal-value" data-cal-field="heading" title="Heading (compass °) — click to type">HDG --</button>
-          <button class="cctv-cal-value" data-cal-field="pitch" title="Pitch (° up/down) — click to type">PITCH --</button>
-          <button class="cctv-cal-value" data-cal-field="fov" title="Horizontal FOV (°) — click to type">FOV --</button>
-          <button class="cctv-cal-value" data-cal-field="range" title="Range / monitor-plane distance (m) — click to type">RANGE --</button>
-          <button class="cctv-cal-value" data-cal-field="height" title="Mount height above ground (m) — click to type">HGT --</button>
-          <button class="cctv-cal-value" data-cal-field="north" title="North offset from catalog position (m) — click to type">ΔN --</button>
-          <button class="cctv-cal-value" data-cal-field="east" title="East offset from catalog position (m) — click to type">ΔE --</button>
+          <button class="cctv-cal-value" data-cal-field="heading" title="航向（罗盘°）— 点击输入">HDG --</button>
+          <button class="cctv-cal-value" data-cal-field="pitch" title="俯仰（° 上下）— 点击输入">PITCH --</button>
+          <button class="cctv-cal-value" data-cal-field="fov" title="水平视场角（°）— 点击输入">FOV --</button>
+          <button class="cctv-cal-value" data-cal-field="range" title="距离 / 监视平面距离（米）— 点击输入">RANGE --</button>
+          <button class="cctv-cal-value" data-cal-field="height" title="安装高度（离地米）— 点击输入">HGT --</button>
+          <button class="cctv-cal-value" data-cal-field="north" title="相对目录位置的北向偏移（米）— 点击输入">ΔN --</button>
+          <button class="cctv-cal-value" data-cal-field="east" title="相对目录位置的东向偏移（米）— 点击输入">ΔE --</button>
         </div>
         <div class="cctv-controls cctv-calibration-actions">
           <button id="cctv-calib-save-btn" class="scene-btn">保存标定</button>
@@ -118,9 +118,9 @@
             <!-- A missing key gates the filters only: the chips above stay
                  focusable so their tooltip can say how to add the key. -->
             <fieldset id="sl-controls" class="sl-controls">
-              <div class="sl-filters" role="group" aria-label="Imagery filters">
+              <div class="sl-filters" role="group" aria-label="影像滤镜">
                 <span class="cctv-summary-label">影像</span>
-                <div class="sl-seg" role="radiogroup" aria-label="Panorama filter">
+                <div class="sl-seg" role="radiogroup" aria-label="全景滤镜">
                   <button type="button" class="sl-seg-btn is-active" data-sl-pano="all" role="radio" aria-checked="true">ALL</button>
                   <button type="button" class="sl-seg-btn" data-sl-pano="pano" role="radio" aria-checked="false" tabindex="-1">360°</button>
                   <button type="button" class="sl-seg-btn" data-sl-pano="flat" role="radio" aria-checked="false" tabindex="-1">FLAT</button>
@@ -128,11 +128,11 @@
               </div>
               <div class="sl-since">
                 <label class="cctv-summary-label" for="sl-since">SINCE</label>
-                <input id="sl-since" class="sl-range" type="range" min="0" max="8" step="1" value="0" aria-valuetext="ANY DATE" aria-describedby="sl-since-label" />
+                <input id="sl-since" class="sl-range" type="range" min="0" max="8" step="1" value="0" aria-valuetext="任意日期" aria-describedby="sl-since-label" />
                 <output id="sl-since-label" class="sl-since-label" for="sl-since">任意日期</output>
               </div>
             </fieldset>
-            <ul id="sl-legend" class="sl-legend" aria-label="Coverage colours"></ul>
+            <ul id="sl-legend" class="sl-legend" aria-label="覆盖颜色"></ul>
             <div id="sl-coverage-meta" class="sl-meta"></div>
           </div>
         </div>
@@ -150,7 +150,7 @@
         <button class="panel-collapse-btn" data-collapse-target="scene-panel" title="收起">+</button>
       </div>
       <div class="scene-controls">
-        <select id="scene-select" aria-label="Scene recipe"></select>
+        <select id="scene-select" aria-label="场景配方"></select>
         <button id="scene-new-btn" class="scene-btn">NEW</button>
         <button id="scene-delete-btn" class="scene-btn scene-btn-danger">DEL</button>
       </div>

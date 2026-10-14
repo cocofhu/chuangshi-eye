@@ -5,7 +5,7 @@
       <div class="weather-panel-inner" data-rail-scroller>
         <div class="panel-header">
           <span class="panel-title">天气</span>
-          <span id="weather-panel-count" aria-label="Active weather products">0</span>
+          <span id="weather-panel-count" aria-label="活动天气产品">0</span>
           <span class="panel-divider"></span>
           <button class="panel-collapse-btn" data-collapse-target="weather-panel" type="button" title="收起">▼</button>
         </div>
@@ -17,7 +17,7 @@
       <div class="recent-imagery-panel-inner" data-rail-scroller>
         <div class="panel-header">
           <span class="panel-title">近期影像</span>
-          <span id="recent-imagery-panel-count" aria-label="Imagery days in the box"></span>
+          <span id="recent-imagery-panel-count" aria-label="框内影像天数"></span>
           <span class="panel-divider"></span>
           <button class="panel-collapse-btn" data-collapse-target="recent-imagery-panel" type="button" title="收起">▼</button>
         </div>
@@ -31,7 +31,7 @@
           <span class="panel-title">情境</span>
           <span class="panel-divider"></span>
           <div id="context-radio-dock" class="context-radio-dock">
-            <button id="context-radio-toggle-btn" class="context-radio-toggle" type="button" aria-expanded="false" aria-controls="context-radio-mini" aria-label="Open compact Radio controls" title="Open compact Radio controls">
+            <button id="context-radio-toggle-btn" class="context-radio-toggle" type="button" aria-expanded="false" aria-controls="context-radio-mini" aria-label="打开精简电台控制" title="打开精简电台控制">
               <span class="material-symbols-outlined" aria-hidden="true">radio</span>
             </button>
             <div id="context-radio-mini" class="context-radio-mini" role="group" aria-label="Compact Radio controls" hidden>
@@ -39,10 +39,10 @@
                 <span>RADIO</span>
                 <strong id="context-radio-mini-station">电台就绪</strong>
                 <span class="context-radio-mini-actions">
-                  <button id="context-radio-details-btn" type="button" aria-label="Open detailed Radio controls" aria-expanded="false" aria-controls="radio-panel" title="Open detailed Radio controls">
+                  <button id="context-radio-details-btn" type="button" aria-label="打开详细电台控制" aria-expanded="false" aria-controls="radio-panel" title="打开详细电台控制">
                     <span class="material-symbols-outlined" aria-hidden="true">open_in_full</span>
                   </button>
-                  <button id="context-radio-mini-close-btn" type="button" aria-label="Close compact Radio controls" title="Close compact Radio controls">
+                  <button id="context-radio-mini-close-btn" type="button" aria-label="关闭精简电台控制" title="关闭精简电台控制">
                     <span class="material-symbols-outlined" aria-hidden="true">close</span>
                   </button>
                 </span>
@@ -60,7 +60,7 @@
               </label>
             </div>
           </div>
-          <button class="panel-collapse-btn" data-collapse-target="global-context-panel" title="Expand panel">▶</button>
+          <button class="panel-collapse-btn" data-collapse-target="global-context-panel" title="展开面板">▶</button>
         </div>
         <div class="cyber-panel-body" data-rail-scroller>
         <div class="global-context-modes" role="tablist" aria-label="Context mode">
@@ -110,18 +110,18 @@
             </div>
           </div>
         </section>
-        <section id="radio-panel" class="panel-collapsible collapsed" data-panel-id="radio-panel" aria-label="Internet radio and local SDR">
+        <section id="radio-panel" class="panel-collapsible collapsed" data-panel-id="radio-panel" aria-label="网络电台与本地 SDR">
           <div class="radio-panel-inner">
             <div class="panel-header">
               <span class="panel-title">电台</span>
               <span id="radio-layer-state" class="radio-layer-state">OFF</span>
               <span class="panel-divider"></span>
-              <button class="panel-collapse-btn" data-collapse-target="radio-panel" title="Expand Radio" aria-label="Expand Radio section">+</button>
+              <button class="panel-collapse-btn" data-collapse-target="radio-panel" title="展开电台" aria-label="展开电台分区">+</button>
             </div>
             <div class="radio-directory-row">
               <button id="radio-enable-btn" class="panel-layer-toggle" type="button" aria-pressed="false">ENABLE</button>
               <label class="radio-filter-label" for="radio-filter">电台标签</label>
-              <select id="radio-filter" aria-label="Filter stations by station tag" disabled>
+              <select id="radio-filter" aria-label="按电台标签筛选" disabled>
                 <option value="all">All</option>
               </select>
             </div>
@@ -139,7 +139,7 @@
                 <div class="radio-tuner-scale" aria-hidden="true"></div>
                 <div id="radio-tuner-needle" class="radio-tuner-needle" aria-hidden="true"></div>
                 <input id="radio-tuner-slider" type="range" min="0" max="0" step="1" value="0"
-                  aria-label="Tune available internet radio stations" aria-valuetext="No station available" disabled />
+                  aria-label="调谐可用网络电台" aria-valuetext="暂无可用电台" disabled />
               </div>
               <div class="radio-tuner-readout">
                 <span id="radio-tuner-station">全部 · 拖动指针</span>
@@ -150,7 +150,7 @@
               <button id="radio-prev-btn" type="button" aria-label="Previous filtered station" disabled>PREV</button>
               <button id="radio-play-btn" type="button" aria-label="Play selected station" disabled>PLAY</button>
               <button id="radio-next-btn" type="button" aria-label="Next filtered station" disabled>NEXT</button>
-              <button id="radio-stop-btn" type="button" aria-label="Stop radio playback" disabled>STOP</button>
+              <button id="radio-stop-btn" type="button" aria-label="停止电台播放" disabled>停止</button>
             </div>
             <label class="radio-volume-row" for="radio-volume">
               <span>VOLUME</span>
@@ -180,7 +180,7 @@
               </div>
               <div class="sdr-gain-row">
                 <label for="sdr-gain-select">GAIN</label>
-                <select id="sdr-gain-select" aria-label="RTL-SDR tuner gain for the current mode">
+                <select id="sdr-gain-select" aria-label="当前模式下的 RTL-SDR 调谐增益">
                   <option value="auto">AUTO</option>
                   <option value="0.0">0.0 dB</option>
                   <option value="0.9">0.9 dB</option>

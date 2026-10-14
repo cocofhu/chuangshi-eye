@@ -1170,7 +1170,7 @@ export class VisualSettings {
         ok: false,
         celestialRing: current(),
         cameraFocused: false,
-        error: 'Celestial ring options must be boolean',
+        error: '天体环选项必须为布尔值',
       };
     }
     if (!styleSupported && enabled) {
@@ -1178,7 +1178,7 @@ export class VisualSettings {
         ok: false,
         celestialRing: current(),
         cameraFocused: false,
-        error: 'Celestial ring is available only in Normal style',
+        error: '天体环仅在标准风格下可用',
       };
     }
     if (syncShare) this.shareLinkManager?.claimRestoreLane?.('visual');
@@ -1190,8 +1190,8 @@ export class VisualSettings {
       this._celestialBtn.disabled = !styleSupported;
       this._celestialBtn.setAttribute('aria-disabled', String(!styleSupported));
       this._celestialBtn.title = styleSupported
-        ? 'Celestial ring — reveal the full globe'
-        : 'Celestial ring — available in Normal style';
+        ? '天体环 — 展开完整地球'
+        : '天体环 — 仅在标准风格下可用';
     }
     let cameraFocused = false;
     if (nextEnabled && focus) {
@@ -1656,8 +1656,8 @@ export class VisualSettings {
     btn.setAttribute(
       'aria-label',
       enabled
-        ? `Detection overlay: ${String(modeLabel).toLowerCase()}`
-        : 'Detection overlay: off',
+        ? `探测叠加：${String(modeLabel).toLowerCase()}`
+        : '探测叠加：关',
     );
     btn.classList.remove('active', 'god', 'panoptic');
     if (modeLabel === 'SPARSE') {

@@ -63,7 +63,7 @@ export function _handleContextLayerChange(change) {
               notificationToken,
             });
             return true;
-          }, 'Space Missions cancellation could not restore the previous layer state'),
+          }, '航天任务取消未能恢复先前图层状态'),
         );
       }
     }
@@ -84,7 +84,7 @@ export function _handleContextLayerChange(change) {
     ) {
       this.showToast(
         change.reason ||
-          'That layer is unavailable in the current Context mode',
+          '当前情境模式下该图层不可用',
       );
     }
     this._syncContextModeButtons();

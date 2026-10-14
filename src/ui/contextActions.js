@@ -5,7 +5,7 @@ import {
 
 export async function _runUserFacingContextAction(
   operation,
-  message = 'Context could not restore every layer; try again',
+  message = '情境未能恢复全部图层；请重试',
   { falseIsFailure = true } = {},
 ) {
   if (this.destroyed) return false;
@@ -76,7 +76,7 @@ export async function setContextMode(
     ok: false,
     action: 'set_context_mode',
     cancelled: true,
-    error: 'Context request was superseded by a newer voice turn',
+    error: '情境请求已被更新的语音回合取代',
     ...this.getContextModeState(),
     ...(this._contextTransitionFailedLayerIds?.length
       ? { failedLayerIds: [...this._contextTransitionFailedLayerIds] }
@@ -103,7 +103,7 @@ export async function setContextMode(
         ...state,
         ...(result === true
           ? {}
-          : { error: 'Context mode transition did not complete' }),
+          : { error: '情境模式切换未完成' }),
         ...(this._contextTransitionFailedLayerIds?.length
           ? { failedLayerIds: [...this._contextTransitionFailedLayerIds] }
           : {}),
@@ -172,7 +172,7 @@ export async function setContextMode(
     return {
       ok: false,
       action: 'set_context_mode',
-      error: error?.message || 'Context mode transition failed',
+      error: error?.message || '情境模式切换失败',
       ...(Array.isArray(error?.failedLayerIds)
         ? { failedLayerIds: [...error.failedLayerIds] }
         : {}),
@@ -222,7 +222,7 @@ export function clearSelectedLayers() {
   const operation = managerOperation
     .then((result) => {
       if (result.targetIds.length === 0) {
-        this.showToast('No selected data layers');
+        this.showToast('没有已选数据图层');
       } else if (result.notClearedIds.length > 0) {
         this.showToast(
           `${result.notClearedIds.length} data layer${result.notClearedIds.length === 1 ? '' : 's'} could not be cleared`,
@@ -236,7 +236,7 @@ export function clearSelectedLayers() {
     })
     .catch((error) => {
       console.warn('[Data] clear selected layers failed', error);
-      this.showToast('Selected data layers could not be cleared');
+      this.showToast('无法清除已选数据图层');
       return {
         targetIds: [],
         items: [],

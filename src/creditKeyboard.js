@@ -19,7 +19,7 @@ export function configureCreditKeyboardAccess(root = document) {
   expand.setAttribute('aria-expanded', 'false');
   close.setAttribute('role', 'button');
   close.setAttribute('tabindex', '0');
-  close.setAttribute('aria-label', 'Close data attribution');
+  close.setAttribute('aria-label', '关闭数据归属说明');
 
   if (expand.dataset.gevKeyboardReady === 'true') return true;
   expand.dataset.gevKeyboardReady = 'true';

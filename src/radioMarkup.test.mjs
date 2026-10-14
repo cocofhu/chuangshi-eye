@@ -252,7 +252,7 @@ test('Radio is nested inside Context with separate disclosure and power controls
   assert.match(html, /id="context-radio-mini-enable-btn"[^>]*aria-pressed="false"/);
   assert.match(html, /id="context-radio-details-btn"[^>]*aria-expanded="false"[^>]*aria-controls="radio-panel"/);
   assert.match(html, /id="context-radio-details-btn"[\s\S]*?<span class="material-symbols-outlined" aria-hidden="true">open_in_full<\/span>/);
-  assert.match(html, /id="context-radio-mini-close-btn"[^>]*aria-label="Close compact Radio controls"/);
+  assert.match(html, /id="context-radio-mini-close-btn"[^>]*aria-label="关闭精简电台控制"/);
   assert.match(html, /id="context-radio-mini-(?:prev|play|next)-btn"/);
   assert.match(html, /id="context-radio-mini-volume"/);
   assert.match(html, /id="cockpit-radio-panel"[^>]*aria-label="Cockpit compact Radio controls"[^>]*hidden/);
