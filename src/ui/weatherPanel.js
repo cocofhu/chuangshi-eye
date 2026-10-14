@@ -74,7 +74,7 @@ export function createWeatherPanel({
   observedGroup.setAttribute('aria-label', 'Observed history');
   const heading = document.createElement('h3');
   heading.className = 'panel-title';
-  heading.textContent = 'Observed history';
+  heading.textContent = '观测历史';
   const scope = document.createElement('div');
   scope.className = 'weather-observed-scope';
   const observedCardsHost = document.createElement('div');

@@ -31,7 +31,7 @@ test('preview is immediate, commits are coalesced and the drag DOM and tick mapp
   view.update(props);
   const slider = f.find((n) => n.tagName === 'INPUT');
   const row = slider.parent;
-  assert.equal(slider.getAttribute('aria-label'), 'Observed history');
+  assert.equal(slider.getAttribute('aria-label'), '观测历史');
   slider.value = '0';
   slider.dispatchEvent(new Event('input'));
   assert.deepEqual(commits, []);
@@ -104,7 +104,7 @@ test('observed history label and endpoint times track the advertised tick range'
   view.update(props);
   assert.equal(
     f.find((n) => n.className === 'panel-title').textContent,
-    'Observed history',
+    '观测历史',
   );
   const endpoints = f.find((n) => n.className === 'rail-timeline-endpoints');
   assert.equal(endpoints.parent.className, 'rail-timeline-track');

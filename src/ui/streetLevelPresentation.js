@@ -6,15 +6,15 @@ const DAY_MS = 86_400_000;
 
 /** SINCE slider stops, in relative days so a share link keeps its meaning. */
 export const SINCE_STOPS = Object.freeze([
-  Object.freeze({ days: 0, label: 'ANY DATE' }),
-  Object.freeze({ days: 3652, label: 'LAST 10 YEARS' }),
-  Object.freeze({ days: 1826, label: 'LAST 5 YEARS' }),
-  Object.freeze({ days: 1095, label: 'LAST 3 YEARS' }),
-  Object.freeze({ days: 730, label: 'LAST 2 YEARS' }),
-  Object.freeze({ days: 365, label: 'LAST YEAR' }),
-  Object.freeze({ days: 182, label: 'LAST 6 MONTHS' }),
-  Object.freeze({ days: 91, label: 'LAST 3 MONTHS' }),
-  Object.freeze({ days: 30, label: 'LAST MONTH' }),
+  Object.freeze({ days: 0, label: '任意日期' }),
+  Object.freeze({ days: 3652, label: '近 10 年' }),
+  Object.freeze({ days: 1826, label: '近 5 年' }),
+  Object.freeze({ days: 1095, label: '近 3 年' }),
+  Object.freeze({ days: 730, label: '近 2 年' }),
+  Object.freeze({ days: 365, label: '近 1 年' }),
+  Object.freeze({ days: 182, label: '近 6 个月' }),
+  Object.freeze({ days: 91, label: '近 3 个月' }),
+  Object.freeze({ days: 30, label: '近 1 个月' }),
 ]);
 
 /** The exact stop for a day count, else the nearest one. */
@@ -34,13 +34,13 @@ export function sinceStopIndex(days) {
 function presentSince(days, now) {
   const value = Number(days) || 0;
   const index = sinceStopIndex(value);
-  if (value <= 0) return { index, days: 0, label: 'ANY DATE' };
+  if (value <= 0) return { index, days: 0, label: '任意日期' };
   const stop = SINCE_STOPS[index];
-  const window = stop.days === value ? stop.label : `LAST ${value} DAYS`;
+  const window = stop.days === value ? stop.label : `近 ${value} 天`;
   return {
     index,
     days: value,
-    label: `${window} · SINCE ${formatDate(now - value * DAY_MS)}`,
+    label: `${window} · 自 ${formatDate(now - value * DAY_MS)}`,
   };
 }
 

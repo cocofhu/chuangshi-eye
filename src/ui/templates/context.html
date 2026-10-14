@@ -66,7 +66,7 @@
         <div class="global-context-modes" role="tablist" aria-label="Context mode">
           <button id="global-context-flights-btn" class="context-mode-button" type="button" role="tab" tabindex="0" aria-selected="false" aria-controls="context-flights-view" aria-label="CONTACTS" title="Cycles the nearest contacts of whatever type you select — planes, vessels, installations. Satellites track independently.">
             <span class="material-symbols-outlined" aria-hidden="true">radar</span>
-            <span>CONTACTS</span>
+            <span>目标</span>
           </button>
           <button id="global-context-missions-btn" class="context-mode-button" type="button" role="tab" tabindex="0" aria-selected="false" aria-controls="context-missions-view">
             <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
@@ -75,13 +75,13 @@
         </div>
         <div id="context-mode-standby" class="context-mode-standby">
           <strong>选择情境</strong>
-          <span>CONTACTS — nearest planes · vessels · sites<br>SPACE MISSIONS — launches &amp; orbital assets</span>
+          <span>目标 — 最近的飞机 · 船舶 · 站点<br>航天任务 — 发射与在轨资产</span>
         </div>
         <section id="context-flights-view" class="context-mode-view" role="tabpanel" aria-labelledby="global-context-flights-btn" hidden>
           <div class="global-context-actions" aria-label="Contact Context actions">
             <button id="cockpit-entry" type="button" hidden>
               <span class="material-symbols-outlined" aria-hidden="true">flight</span>
-              <span>COCKPIT</span>
+              <span>驾驶舱</span>
             </button>
             <button id="installations-search-btn" class="panel-layer-toggle" type="button">搜索附近站点</button>
             <button id="tr3b-toggle" class="tr3b-toggle" type="button" aria-pressed="false" hidden aria-label="Reclassify tracked contact as TR-3B" title="Reclassify as TR-3B">🛸</button>
@@ -89,7 +89,7 @@
           <aside id="military-awareness-panel">
             <div class="military-awareness-standby">
               <strong>目标情境 关</strong>
-              <span>SELECT CONTACTS TO LOAD OBSERVED / MAPPED PROXIMITY</span>
+              <span>选择目标以加载观测 / 已标绘邻近信息</span>
             </div>
           </aside>
         </section>
@@ -104,9 +104,9 @@
                 <output data-mission-roster-count>—</output>
               </div>
               <div class="space-mission-roster-list" data-mission-roster-list>
-                <div class="space-mission-roster-empty">LOADING 30-DAY MISSION INDEX</div>
+                <div class="space-mission-roster-empty">正在加载 30 日任务索引</div>
               </div>
-              <p class="space-mission-roster-focus-continuation" tabindex="-1" data-mission-roster-focus-continuation>TAB PREVIEWS · ENTER / SPACE SELECTS</p>
+              <p class="space-mission-roster-focus-continuation" tabindex="-1" data-mission-roster-focus-continuation>Tab 预览 · Enter / 空格选择</p>
             </div>
           </div>
         </section>
@@ -142,7 +142,7 @@
                   aria-label="Tune available internet radio stations" aria-valuetext="No station available" disabled />
               </div>
               <div class="radio-tuner-readout">
-                <span id="radio-tuner-station">ALL · DRAG THE NEEDLE</span>
+                <span id="radio-tuner-station">全部 · 拖动指针</span>
                 <span>吸附到可用电台</span>
               </div>
             </div>
@@ -165,12 +165,12 @@
             <p class="radio-privacy">Audio connects directly to the broadcaster after you press play. Your IP is visible to that broadcaster.</p>
             <div id="sdr-radio-card" class="sdr-radio-card" role="group" aria-label="Local RTL-SDR receiver">
               <div class="sdr-radio-heading">
-                <strong>LOCAL RTL-SDR</strong>
+                <strong>本地 RTL-SDR</strong>
                 <span id="sdr-connection-state">NO USB</span>
               </div>
               <p>Chrome/Edge · WebUSB · one local tuner shared by FM and the Local ADS-B layer.</p>
               <div class="sdr-radio-actions">
-                <button id="sdr-connect-btn" class="panel-layer-toggle" type="button" aria-pressed="false">CONNECT</button>
+                <button id="sdr-connect-btn" class="panel-layer-toggle" type="button" aria-pressed="false">连接</button>
                 <button id="sdr-locate-btn" type="button" title="Use your location for faster ADS-B position decoding">LOCATE</button>
                 <button id="sdr-change-device-btn" type="button" title="选择其他 RTL-SDR 或接收通道">更换设备</button>
               </div>
@@ -229,7 +229,7 @@
                 <button id="sdr-seek-forward-btn" type="button" disabled>SEEK ▶</button>
               </div>
               <label class="radio-volume-row" for="sdr-volume">
-                <span>SDR VOL</span>
+                <span>SDR 音量</span>
                 <input id="sdr-volume" class="gev-quantitative-slider" type="range" min="0" max="100" value="80" aria-label="Local SDR volume" />
                 <output id="sdr-volume-value" class="gev-slider-value" for="sdr-volume">80%</output>
               </label>

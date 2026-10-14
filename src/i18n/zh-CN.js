@@ -44,4 +44,16 @@ export const zhCN = {
   syncingDirectory: '正在同步目录',
   noStations: '暂无电台',
   noStationAvailable: '暂无可用电台',
+  captureShot: '捕捉镜头',
+  updateShot: '更新镜头',
+  exportPresets: '导出预设',
+  runLog: '运行日志',
+  load: '载入',
+  del: '删除',
+  connect: '连接',
+  nearest: '最近',
+  anyDate: '任意日期',
+  offAir: '停播',
+  observedHistory: '观测历史',
 };
+

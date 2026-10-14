@@ -793,7 +793,7 @@ test('Global Context names its mixed contact cycle without changing the stable m
     /<button id="global-context-flights-btn"[\s\S]*?<\/button>/,
   );
   assert.ok(match, 'Global Context contacts button is missing');
-  assert.match(match[0], />CONTACTS</);
+  assert.match(match[0], />目标</);
   assert.match(match[0], /aria-label="CONTACTS"/);
   assert.match(match[0], /title="Cycles the nearest contacts of whatever type you select — planes, vessels, installations\. Satellites track independently\."/);
   assert.doesNotMatch(match[0], />FLIGHTS</);
@@ -814,8 +814,8 @@ test('Global Context standby describes both chooser modes', () => {
     /<div id="context-mode-standby"[\s\S]*?<\/div>/,
   );
   assert.ok(match, 'Global Context standby is missing');
-  assert.match(match[0], /CONTACTS — nearest planes · vessels · sites/);
-  assert.match(match[0], /SPACE MISSIONS — launches &amp; orbital assets/);
+  assert.match(match[0], /目标 — 最近的飞机 · 船舶 · 站点/);
+  assert.match(match[0], /航天任务 — 发射与在轨资产/);
 });
 
 test('cockpit briefing cycle control keeps its state as the accessible name', () => {

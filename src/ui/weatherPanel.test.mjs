@@ -397,7 +397,7 @@ test('cyclones lead, and observed history owns one bordered group with only acti
   );
   const group = f.find((n) => n.className === 'weather-observed-group');
   assert.equal(root.children[1], group);
-  assert.equal(group.children[0].textContent, 'Observed history');
+  assert.equal(group.children[0].textContent, '观测历史');
   assert.equal(
     group.children[1].textContent,
     'Rain radar · Satellite clouds · Lightning density',

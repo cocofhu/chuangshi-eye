@@ -252,7 +252,7 @@ test('chips are dark while the layer is off, so the chip is the layer switch', (
   );
 });
 
-test('the SINCE slider runs from any date on the left to the last month on the right', () => {
+test('the 自 slider runs from any date on the left to the last month on the right', () => {
   assert.deepEqual(
     SINCE_STOPS.map((stop) => stop.days),
     [0, 3652, 1826, 1095, 730, 365, 182, 91, 30],
@@ -267,10 +267,10 @@ test('the SINCE slider runs from any date on the left to the last month on the r
   assert.equal(sinceStopIndex(-4), 0);
 });
 
-test('the SINCE readout names the window and the cut-off date it means today', () => {
+test('the since readout names the window and the cut-off date it means today', () => {
   const now = Date.UTC(2026, 8, 25);
   const any = presentStreetLevelPanel(snapshot(), { now });
-  assert.deepEqual(any.since, { index: 0, days: 0, label: 'ANY DATE' });
+  assert.deepEqual(any.since, { index: 0, days: 0, label: '任意日期' });
   const year = presentStreetLevelPanel(
     snapshot({ filter: { pano: 'pano', sinceDays: 365 } }),
     { now },
@@ -279,14 +279,14 @@ test('the SINCE readout names the window and the cut-off date it means today', (
   assert.deepEqual(year.since, {
     index: 5,
     days: 365,
-    label: 'LAST YEAR · SINCE 2025-09-25',
+    label: '近 1 年 · 自 2025-09-25',
   });
   const custom = presentStreetLevelPanel(
     snapshot({ filter: { pano: 'all', sinceDays: 400 } }),
     { now },
   );
   assert.equal(custom.since.index, 5);
-  assert.equal(custom.since.label, 'LAST 400 DAYS · SINCE 2025-08-21');
+  assert.equal(custom.since.label, '近 400 天 · 自 2025-08-21');
 });
 
 test('legend passes through in the layer’s order', () => {
