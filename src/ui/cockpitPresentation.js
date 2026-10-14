@@ -32,10 +32,10 @@ export const COCKPIT_GROUND_WAIT_TIMEOUT_MS = 5000;
 export const COCKPIT_BRIEF_ROTATE_MS = 9000;
 
 export const COCKPIT_BRIEF_CYCLE_OFF_HELP =
-  'Cycle briefing pages automatically every 9 seconds (Signals → News → Local). Pauses while you hover or focus the panel. Live signal data refreshes continuously either way.';
+  '每 9 秒自动循环简报页（信号 → 新闻 → 本地）。悬停或聚焦时暂停。实时信号数据仍会持续刷新。';
 
 export const COCKPIT_BRIEF_CYCLE_ON_HELP =
-  'Stop automatic page cycling. Previous, Next, and the SIG/NEWS/LOCAL tabs stay available.';
+  '停止自动翻页。上一页、下一页以及信号/新闻/本地标签仍可用。';
 
 export const COCKPIT_REGIONAL_REFRESH_MS = 5 * 60_000;
 
@@ -44,20 +44,20 @@ export const COCKPIT_REGIONAL_REFRESH_DISTANCE_M = 25_000;
 export const COCKPIT_BRIEF_PAGES = [
   {
     id: 'signals',
-    kicker: 'LIVE SIGNALS',
-    subtitle: 'OBSERVED / MAPPED PINGS',
-    source: 'SOURCE-BACKED EVENTS · NO SYNTHETIC NEWS',
+    kicker: '实时信号',
+    subtitle: '观测 / 标注信号',
+    source: '来源事件 · 无合成新闻',
   },
   {
     id: 'news',
-    kicker: 'REGIONAL NEWS',
-    subtitle: 'LATEST LOCATION-MATCHED REPORTING',
-    source: 'GOOGLE NEWS RSS · LOCATION QUERY · RECENT',
+    kicker: '区域新闻',
+    subtitle: '最新位置匹配报道',
+    source: 'GOOGLE NEWS RSS · 位置查询 · 近期',
   },
   {
     id: 'local',
-    kicker: 'LOCAL INFO',
-    subtitle: 'PLACE / CONDITIONS / POSITION',
+    kicker: '本地信息',
+    subtitle: '地点 / 气象 / 位置',
     source: 'NATURAL EARTH · OPEN-METEO · UTC',
   },
 ];

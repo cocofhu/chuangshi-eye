@@ -61,7 +61,7 @@ export function renderSceneShots(
     const label = document.createElement('div');
     label.className = 'scene-shot-label';
     label.textContent = shot.title;
-    label.title = 'Double-click to rename';
+    label.title = '双击重命名';
     listen(label, 'click', () => select(shot.id));
     listen(label, 'dblclick', () => {
       if (label.children.length) return;

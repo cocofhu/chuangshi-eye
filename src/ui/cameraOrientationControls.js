@@ -288,8 +288,8 @@ export function bindCameraOrientationControls({
       tiltButton?.setAttribute(
         'aria-label',
         next.tilted
-          ? 'Return map to straight-down view'
-          : 'Tilt map to oblique view',
+          ? '恢复地图为正俯视图'
+          : '倾斜地图为斜视图',
       );
     }
     if (!applied || applied.heading !== next.heading) {
@@ -323,7 +323,7 @@ export function bindCameraOrientationControls({
         : false;
     });
     if (result) {
-      showToast?.(result.tilted ? 'Tilted view' : 'Straight-down view');
+      showToast?.(result.tilted ? '斜视' : '正俯视');
       // The action reports the state it just commanded, so the button can
       // follow it without a second pick.
       tilted = result.tilted;

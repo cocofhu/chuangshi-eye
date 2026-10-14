@@ -129,7 +129,7 @@ function presentMeta(state) {
   if (!state.enabled) return 'Switch a provider on to draw its coverage.';
   if (state.sequence.selectedId)
     return state.sequence.loading
-      ? 'Loading this sequence…'
+      ? '正在加载该序列…'
       : `${state.sequence.images.toLocaleString()} images in this sequence · Esc clears`;
   if (state.coverage.count > 0)
     return `${state.coverage.count.toLocaleString()} sequences in view · click a line for its photos`;

@@ -32,7 +32,7 @@ test('layer toggles confirm the resulting state and fold only material feed tags
     },
     { layerId: 'flights', enabled: true },
   );
-  assert.equal(on.say, 'Flights on, stale.');
+  assert.equal(on.say, 'Flights已开启，陈旧.');
   const fallback = envelope(
     'set_layer_visibility',
     {
@@ -46,7 +46,7 @@ test('layer toggles confirm the resulting state and fold only material feed tags
   );
   assert.equal(
     fallback.say,
-    'Flights on.',
+    'Flights已开启.',
     'a healthy fallback feed is valid data, shown not spoken',
   );
   assert.deepEqual(fallback.display.sources, [{ label: 'adsb.lol' }]);
@@ -62,14 +62,14 @@ test('layer toggles confirm the resulting state and fold only material feed tags
   );
   assert.equal(
     unavailable.say,
-    'Active Fires on, but its feed is unavailable.',
+    'Active Fires已开启，但其数据源不可用。',
   );
   const off = envelope(
     'set_layer_visibility',
     { ok: true, label: 'Flights', enabled: false },
     { enabled: false },
   );
-  assert.equal(off.say, 'Flights off.');
+  assert.equal(off.say, 'Flights已关闭.');
   const failed = envelope(
     'set_layer_visibility',
     {
@@ -79,7 +79,7 @@ test('layer toggles confirm the resulting state and fold only material feed tags
     },
     { layerId: 'traffic', enabled: true },
   );
-  assert.equal(failed.say, "Couldn't turn on traffic.");
+  assert.equal(failed.say, "无法开启 traffic。");
   assert.equal(failed.ok, false, 'the envelope never changes the outcome');
 });
 
@@ -111,7 +111,7 @@ test('aircraft identity always covers operator, type and route from returned fie
     'the identity line is not forced onto other questions',
   );
   assert.ok(
-    full.display.lines.includes('Registration N12345'),
+    full.display.lines.includes('注册号 N12345'),
     'registration is shown, not spoken',
   );
   assert.deepEqual(full.referents, [
@@ -129,7 +129,7 @@ test('aircraft identity always covers operator, type and route from returned fie
   });
   assert.equal(
     sparse.identityLine,
-    'RCH123, operator unknown, type unknown, no route on file.',
+    'RCH123, 运营方未知, 机型未知, 无航路记录.',
   );
   assertSpeakable(sparse.identityLine);
 
@@ -190,7 +190,7 @@ test('nearest-aircraft results name the aircraft, distance and altitude briefly'
       distanceKm: 12.4,
     },
   });
-  assert.equal(ok.say, 'Selected SWA1940, 12 km from Austin, 31,000 feet.');
+  assert.equal(ok.say, '已选中 SWA1940, 距 Austin 12 km, 31,000 英尺.');
   assertSpeakable(ok.say);
   assert.equal(ok.referents[0].id, 'a0b1');
 
@@ -201,20 +201,20 @@ test('nearest-aircraft results name the aircraft, distance and altitude briefly'
     location: { label: 'Austin' },
     feed: { state: 'nominal' },
   });
-  assert.equal(empty.say, 'No airborne aircraft loaded near Austin yet.');
+  assert.equal(empty.say, 'Austin附近尚未加载空中航空器。');
   const down = envelope('select_nearest_aircraft', {
     ok: false,
     stage: 'nearest',
     feed: { state: 'unavailable', source: 'OpenSky' },
   });
-  assert.equal(down.say, 'The aircraft feed is unavailable.');
+  assert.equal(down.say, '航空器数据源不可用。');
   const stale = envelope('select_nearest_aircraft', {
     ok: true,
     location: 'Austin',
     feed: { state: 'stale' },
     aircraft: { callsign: 'AAL1', distanceKm: 3.26 },
   });
-  assert.equal(stale.say, 'Selected AAL1, 3.3 km from Austin, stale.');
+  assert.equal(stale.say, '已选中 AAL1, 距 Austin 3.3 km, 陈旧.');
 });
 
 test('frame_overhead keeps the essential scope audible and lists referents', () => {
@@ -230,7 +230,7 @@ test('frame_overhead keeps the essential scope audible and lists referents', () 
       { id: null, label: null },
     ],
   });
-  assert.equal(framed.say, 'Framed 14 aircraft within 150 km.');
+  assert.equal(framed.say, '已框选 14 个航空器，范围 150 km.');
   assert.deepEqual(
     framed.referents.map((r) => r.label),
     ['UAL1', 'b'],
@@ -242,13 +242,13 @@ test('frame_overhead keeps the essential scope audible and lists referents', () 
     count: 80,
     nearest: [],
   });
-  assert.equal(capped.say, 'Framed at least 80 ships within 120 km.');
+  assert.equal(capped.say, '已框选 至少 80 个船舶，范围 120 km.');
   const off = envelope('frame_overhead', {
     ok: false,
     layerId: 'satellites',
     error: 'The satellites layer is not enabled',
   });
-  assert.equal(off.say, 'The satellites layer is off. Turn it on?');
+  assert.equal(off.say, '卫星图层已关闭。要打开吗？');
   const empty = envelope('frame_overhead', {
     ok: false,
     layerId: 'flights',
@@ -256,14 +256,14 @@ test('frame_overhead keeps the essential scope audible and lists referents', () 
     count: 0,
     error: 'No flights within 150 km of the current view',
   });
-  assert.equal(empty.say, 'No aircraft within 150 km.');
+  assert.equal(empty.say, '150 km内没有航空器。');
   // The runner's real refusal envelope never claims the sky is empty.
   const refused = envelope('frame_overhead', {
     ok: false,
     action: 'frame_overhead',
     error: 'Camera navigation is unavailable in the current view',
   });
-  assert.equal(refused.say, "Couldn't frame the contacts right now.");
+  assert.equal(refused.say, "现在无法框选该目标。");
   const noPolicy = envelope('frame_overhead', {
     ok: false,
     action: 'frame_overhead',
@@ -320,7 +320,7 @@ test('view state speaks enabled layers only and is a silent lookup by default', 
   });
   assert.equal(
     view.say,
-    'Camera 40 km up. Thermal style. Flights and Fires on. Flights stale.',
+    '相机 40 公里高度. Thermal 风格. Flights和Fires已开启. Flights 陈旧.',
   );
   assert.equal(view.schedule, 'silent');
   assertSpeakable(view.say);
@@ -337,7 +337,7 @@ test('annotation speech names only what failed and never announces drawing', () 
     ],
   });
   assert.equal(clean.say, null);
-  assert.equal(clean.display.title, 'Marked 2 places');
+  assert.equal(clean.display.title, '已标记 2 处');
   assert.deepEqual(
     clean.referents.map((r) => r.label),
     ['Capitol', 'Zilker Park'],
@@ -348,7 +348,7 @@ test('annotation speech names only what failed and never announces drawing', () 
     failedLabels: ['Flibbergibbet Building'],
     items: [{ ok: true, label: 'Capitol' }, { ok: false }],
   });
-  assert.equal(partial.say, "Couldn't place Flibbergibbet Building.");
+  assert.equal(partial.say, "无法放置 Flibbergibbet Building。");
   const route = envelope('annotate_map', {
     ok: true,
     routeFallback: true,
@@ -356,7 +356,7 @@ test('annotation speech names only what failed and never announces drawing', () 
   });
   assert.equal(
     route.say,
-    'That line is straight-line distance, not a street route.',
+    '该线为直线距离，不是街道路线。',
   );
   const pending = envelope('annotate_map', {
     ok: true,
@@ -364,7 +364,7 @@ test('annotation speech names only what failed and never announces drawing', () 
     items: [{ ok: true, label: 'Presidio' }],
   });
   assert.equal(pending.say, null);
-  assert.deepEqual(pending.display.notes, ['Tracing outlines']);
+  assert.deepEqual(pending.display.notes, ['正在描边轮廓']);
 });
 
 test('analyst speech preserves exact counts, lower bounds and partial status', () => {
@@ -388,7 +388,7 @@ test('analyst speech preserves exact counts, lower bounds and partial status', (
       partial: true,
       unanswered: ['military'],
     }).say,
-    'At least 250,000 aircraft anywhere in the loaded data. Partial; military not answered.',
+    'At least 250,000 aircraft anywhere in the loaded data. 部分；military未回答。',
   );
 });
 
@@ -430,7 +430,7 @@ test('labels are bounded and cleaned before they are spoken', () => {
         { target: 'UT' },
       ],
     }),
-    'Mark Capitol and Zilker +1',
+    'Mark Capitol和Zilker +1',
   );
   assert.equal(
     planStepLabel('fly_to_location', { query: 'Tokyo' }),
@@ -438,7 +438,7 @@ test('labels are bounded and cleaned before they are spoken', () => {
   );
   assert.equal(
     progressStepLabel('resolve', 'Capitol'),
-    'Finding places: Capitol',
+    '正在查找地点: Capitol',
   );
   for (const step of [
     'resolve',

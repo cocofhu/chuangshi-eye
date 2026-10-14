@@ -319,7 +319,7 @@ export function createRecentImageryPanel({
           {
             id: 'select-box',
             label: 'SELECT BOX',
-            title: 'Drag a box on the map (Esc cancels)',
+            title: '在地图上拖框（Esc 取消）',
             onClick: () => {
               exportError = null;
               if (tool?.isActive()) tool.cancel('toggle');
@@ -747,8 +747,8 @@ export function createRecentImageryPanel({
               {
                 id: 'toggle-empty',
                 label: showing
-                  ? 'HIDE EMPTY DAYS'
-                  : `SHOW EMPTY DAYS · ${hidden}`,
+                  ? '隐藏空日'
+                  : `显示空日 · ${hidden}`,
                 title: 'Days the probe found empty in this box',
                 disabled: !showing && !hidden,
                 onClick: () => layer.setShowUnavailable(!showing),

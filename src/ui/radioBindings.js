@@ -150,7 +150,7 @@ export function bindRadioControls() {
         'aria-valuetext',
         station
           ? `${station.name}, station ${slot.stationIndex + 1} of ${this._radioTunerStations.length}`
-          : 'No station available',
+          : '暂无可用电台',
       );
     }
     if (syncStatic)

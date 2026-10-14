@@ -655,7 +655,7 @@ export class LayerPanel {
           ? FEED_STATE_LABELS[feedState]
           : '关';
     const keyGuidance = unavailable
-      ? String(layer.stats.error || 'Data source unavailable')
+      ? String(layer.stats.error || '数据源不可用')
       : layerKeyRequirementTooltip(layer);
     // Name the missing key on the control itself: a row reading KEY REQUIRED
     // without saying WHICH key leaves a dead control and no next step. Empty

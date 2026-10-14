@@ -193,14 +193,14 @@ test('the Contact panel never hides itself out from under its own NEXT button', 
   assert.match(body, /'BRG —'/);
   // A culled subject holds last-known content behind the CONTACT LOST cue.
   assert.match(body, /readout\.contactLost/);
-  assert.match(body, /CONTACT LOST/);
+  assert.match(body, /目标丢失/);
   assert.match(body, /this\.context\.dataset\.state = 'lost'/);
-  assert.match(body, /if \(readout\.contactLost\) \{/, 'the CONTACT LOST branch is missing');
+  assert.match(body, /if \(readout\.contactLost\) \{/, '目标丢失分支缺失');
   // PREVIOUS/NEXT must be written before any early return, so the operator can
   // always step off the current contact — including a lost one.
   const navIndex = body.indexOf('this.contextNext.disabled');
   const lostIndex = body.indexOf('if (readout.contactLost)');
-  assert.ok(navIndex >= 0 && lostIndex > navIndex, 'nav state must be written before the CONTACT LOST return');
+  assert.ok(navIndex >= 0 && lostIndex > navIndex, '导航状态须在目标丢失返回前写入');
   assert.equal(
     (body.match(/this\.contextNext\.disabled/g) || []).length,
     1,
@@ -209,7 +209,7 @@ test('the Contact panel never hides itself out from under its own NEXT button', 
   assert.match(
     css,
     /\.cockpit-context-window\[data-state='lost'\]/,
-    'CONTACT LOST reuses the panel-level data-state cue that "uncertain" already uses',
+    '目标丢失复用 uncertain 已用的面板级 data-state 提示',
   );
 });
 
@@ -886,8 +886,8 @@ test('voice Cockpit entry refuses when the entry gate is shut', () => {
     ui.indexOf("if (normalized === 'exit') {"),
   );
   assert.match(branch, /if \(!this\.cockpitView\.isEntryAllowed\?\.\(\)\) \{/);
-  assert.match(branch, /Contacts must be active to enter Cockpit/);
-  assert.match(branch, /Contacts is still starting up/);
+  assert.match(branch, /进入驾驶舱前需先开启目标/);
+  assert.match(branch, /目标仍在启动/);
 });
 
 test('cockpit state cannot report entryAllowed while already active', () => {

@@ -20,8 +20,8 @@ export function updateContext(info, heading) {
     this.pushCockpitSignal(
       'context-status',
       'info',
-      'CONTEXT STANDBY',
-      'ENABLE GLOBAL CONTEXT FOR PROXIMITY PINGS',
+      '情境待命',
+      '开启全局情境以显示邻近信号',
     );
     return;
   }
@@ -53,7 +53,7 @@ export function updateContext(info, heading) {
     this.context.dataset.state = 'lost';
     if (this.contextUncertainty) {
       this.contextUncertainty.textContent =
-        'CONTACT LOST · LAST KNOWN READOUT · NOT AN ALL-CLEAR';
+        '目标丢失 · 保留最后已知读数 · 非全部清除';
     }
     // The cue changes the footer's height; re-run layout once on the way in
     // rather than every frame the contact stays lost.
@@ -61,8 +61,8 @@ export function updateContext(info, heading) {
     this.pushCockpitSignal(
       'context-status',
       'warning',
-      `CONTACT LOST · ${snapshot.subject.label || snapshot.subject.id || 'SUBJECT'}`,
-      'SUBJECT LEFT ITS FEED · READOUT HOLDING LAST KNOWN',
+      `目标丢失 · ${snapshot.subject.label || snapshot.subject.id || '目标'}`,
+      '目标已离开其数据源 · 读数保留最后已知值',
     );
     return;
   }
@@ -84,11 +84,11 @@ export function updateContext(info, heading) {
   if (this.contextNearestLabel) {
     this.contextNearestLabel.textContent = closest
       ? `${closest.cohort.label.toUpperCase()} · ${closestLabel}`
-      : 'NO AVAILABLE EXAMPLE';
+      : '暂无示例';
     this.contextNearestLabel.setAttribute(
       'aria-label',
       closest && closestLabel === '—'
-        ? `${closest.cohort.label}, Unavailable`
+        ? `${closest.cohort.label}，不可用`
         : this.contextNearestLabel.textContent,
     );
   }
@@ -101,7 +101,7 @@ export function updateContext(info, heading) {
       'aria-label',
       Number.isFinite(distanceM)
         ? this.contextDistance.textContent
-        : 'Unavailable',
+        : '不可用',
     );
   }
 
@@ -134,14 +134,14 @@ export function updateContext(info, heading) {
   }
   if (this.contextBearing) {
     if (relative === null) this.contextBearing.textContent = 'BRG —';
-    else if (Math.abs(relative) < 8) this.contextBearing.textContent = 'AHEAD';
+    else if (Math.abs(relative) < 8) this.contextBearing.textContent = '正前';
     else
       this.contextBearing.textContent = `${relative < 0 ? 'L' : 'R'} ${String(Math.round(Math.abs(relative))).padStart(3, '0')}°`;
   }
   if (this.contextUncertainty) {
     this.contextUncertainty.textContent = unknownCount
-      ? `${unknownCount} INPUT${unknownCount === 1 ? '' : 'S'} UNKNOWN · NOT AN ALL-CLEAR`
-      : 'AVAILABLE INPUTS CURRENT · NOT AN ALL-CLEAR';
+      ? `${unknownCount} 项输入未知 · 非全部清除`
+      : '可用输入为当前值 · 非全部清除';
   }
   if (this.contextUpdated) {
     this.contextUpdated.textContent = Number.isFinite(snapshot.evaluatedAt)

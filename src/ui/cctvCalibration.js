@@ -81,7 +81,7 @@ export function _resetCctvCalibration() {
     },
     { origin: 'user' },
   );
-  this.actions.showToast('CCTV calibration reset');
+  this.actions.showToast('监控标定已重置');
 }
 
 export function _beginCctvCalValueEdit(chip) {

@@ -66,7 +66,7 @@ export class LocationNavigation {
       return {
         ok: false,
         orbiting: false,
-        error: 'No active landmark to orbit — fly to a landmark first',
+        error: '当前无地标可环绕 — 请先飞往地标',
       };
     }
     this._toggleOrbit();
@@ -87,8 +87,8 @@ export class LocationNavigation {
       this._currentPoi = null;
       this._collapsePOIRow();
       this._updateLocationMiniStatus();
-    } else if (change.type === 'missing') this._showToast('Location not found');
-    else if (change.type === 'failed') this._showToast('Search failed');
+    } else if (change.type === 'missing') this._showToast('未找到地点');
+    else if (change.type === 'failed') this._showToast('搜索失败');
     else if (change.type === 'settled')
       this._settleLocationSearchUi(change.generation);
     else if (
@@ -117,7 +117,7 @@ export class LocationNavigation {
         }),
       onResult: (destination) => {
         if (destination.outlineUnavailable)
-          this._showToast('Detailed outline unavailable');
+          this._showToast('详细轮廓不可用');
       },
       onError: (error) => console.error('[Search] Geocoding failed:', error),
     });
@@ -277,7 +277,7 @@ export class LocationNavigation {
 
   _toggleOrbit() {
     if (!this._currentTarget) {
-      this._showToast('Fly to a POI first');
+      this._showToast('请先飞往兴趣点');
       return;
     }
 
@@ -379,11 +379,11 @@ export class LocationNavigation {
       };
       this._resetGlobeBtn?.setAttribute(
         'aria-label',
-        'Reset to full globe view',
+        '重置为完整地球视图',
       );
       this._cockpitResetGlobeBtn?.setAttribute(
         'aria-label',
-        'Reset cockpit to full globe view',
+        '重置驾驶舱为完整地球视图',
       );
       this._globeResetPromise = null;
       this._cancelGlobeReset = null;
@@ -399,11 +399,11 @@ export class LocationNavigation {
     }, 4200);
     this._resetGlobeBtn?.setAttribute(
       'aria-label',
-      'Resetting to full globe view',
+      '正在重置为完整地球视图',
     );
     this._cockpitResetGlobeBtn?.setAttribute(
       'aria-label',
-      'Resetting cockpit to full globe view',
+      '正在重置驾驶舱为完整地球视图',
     );
     const target = flyToGlobeView(this.viewer, {
       onComplete: () => finish(false),

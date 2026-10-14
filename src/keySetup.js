@@ -77,7 +77,7 @@ export async function waitForChatGptOAuth({
     if (response.ok && payload.available) return true;
     if (!response.ok || payload.loginFailed) {
       throw new Error(
-        payload.error || 'Could not check ChatGPT sign-in. Try again.',
+        payload.error || '无法检查 ChatGPT 登录。请重试。',
       );
     }
     if (now() >= deadline) break;
@@ -127,8 +127,8 @@ function updateCloudVoiceAuthControl(auth, busy = false) {
   toggle.textContent = mode === 'oauth' ? '改用 API 密钥' : '使用 ChatGPT 登录';
   toggle.title =
     mode === 'oauth'
-      ? 'Use OPENAI_API_KEY for the next cloud voice session'
-      : 'Use the signed-in local ChatGPT/Codex OAuth session for the next cloud voice session';
+      ? '下次云语音会话使用 OPENAI_API_KEY'
+      : '下次云语音会话使用已登录的本地 ChatGPT/Codex OAuth 会话';
   // Keep the control focusable while the delegated handler blocks repeats.
   toggle.setAttribute('aria-disabled', String(busy));
 }
@@ -162,7 +162,7 @@ function buildRow(documentRef, key) {
     exposed.className = 'key-setup-exposed';
     exposed.textContent = '浏览器端';
     exposed.title =
-      'This key runs in the browser by design — restrict it at the provider (see SECURITY.md)';
+      '此密钥按设计在浏览器中运行 — 请在服务商侧限制权限（见 SECURITY.md）';
     head.append(exposed);
   }
   if (external) {
@@ -172,7 +172,7 @@ function buildRow(documentRef, key) {
     badge.className = 'key-setup-external';
     badge.textContent = 'configured externally';
     badge.title =
-      'Supplied by your environment, Keychain, or launcher — change it where it was set';
+      '由环境变量、钥匙串或启动器提供 — 请在设置处修改';
     head.append(badge);
   }
   const get = documentRef.createElement('a');
@@ -210,7 +210,7 @@ function buildRow(documentRef, key) {
       remove.type = 'button';
       remove.className = 'key-setup-remove';
       remove.dataset.keySetupRemove = JSON.stringify(key.envVars);
-      remove.textContent = 'REMOVE';
+      remove.textContent = '移除';
       remove.title = `Remove ${key.title} from this app's saved keys`;
       fields.append(remove);
     }
@@ -386,7 +386,7 @@ export async function initKeySetup({
     )?.set;
     busy = true;
     applyButton?.setAttribute('aria-disabled', 'true');
-    say('Saving…');
+    say('正在保存…');
     try {
       const response = await doFetch('/api/setup/keys', {
         method: 'POST',
@@ -448,10 +448,10 @@ export async function initKeySetup({
       })),
     );
     if (!Object.keys(updates).length) {
-      say('Paste at least one key first.');
+      say('请先粘贴至少一个密钥。');
       return;
     }
-    await submitUpdates(updates, 'Saved to');
+    await submitUpdates(updates, '已保存到');
   };
 
   chip.addEventListener('click', openDialog);
@@ -469,12 +469,12 @@ export async function initKeySetup({
         if (current === 'oauth') {
           writeStoredCloudVoiceAuthMode('api-key');
           syncCloudVoiceAuth();
-          say('Cloud voice will use OPENAI_API_KEY on the next session.');
+          say('下次会话云语音将使用 OPENAI_API_KEY。');
           return;
         }
         oauthBusy = true;
         syncCloudVoiceAuth();
-        say('Checking local ChatGPT OAuth sign-in…');
+        say('正在检查本地 ChatGPT OAuth 登录…');
         try {
           const response = await doFetch('/api/realtime/oauth-status', {
             cache: 'no-store',
@@ -484,21 +484,21 @@ export async function initKeySetup({
           if (lifetime.signal.aborted) return;
           if (!response.ok)
             throw new Error(
-              payload.error || 'Could not check ChatGPT sign-in.',
+              payload.error || '无法检查 ChatGPT 登录。',
             );
           if (payload.available) {
             writeStoredCloudVoiceAuthMode('oauth');
             syncCloudVoiceAuth();
             say(
-              'ChatGPT OAuth selected for cloud voice. Your API key stays saved and available.',
+              '已选择 ChatGPT OAuth 用于云语音。你的 API 密钥仍会保存并可用。',
             );
             return;
           }
 
           say(
             payload.code === 'CODEX_OAUTH_REAUTH_REQUIRED'
-              ? 'ChatGPT sign-in expired. Opening sign-in again…'
-              : 'Opening ChatGPT sign-in in your browser…',
+              ? 'ChatGPT 登录已过期。正在重新打开登录…'
+              : '正在浏览器中打开 ChatGPT 登录…',
           );
           const loginResponse = await doFetch('/api/realtime/oauth-login', {
             method: 'POST',
@@ -511,7 +511,7 @@ export async function initKeySetup({
             say(
               loginPayload.error ||
                 payload.error ||
-                'Could not start ChatGPT sign-in on this machine.',
+                '无法在本机启动 ChatGPT 登录。',
             );
             return;
           }
@@ -519,13 +519,13 @@ export async function initKeySetup({
             writeStoredCloudVoiceAuthMode('oauth');
             syncCloudVoiceAuth();
             say(
-              'ChatGPT OAuth selected for cloud voice. Your API key stays saved and available.',
+              '已选择 ChatGPT OAuth 用于云语音。你的 API 密钥仍会保存并可用。',
             );
             return;
           }
 
           say(
-            'Finish ChatGPT sign-in in the browser. Waiting for it to complete…',
+            '请在浏览器中完成 ChatGPT 登录。正在等待完成…',
           );
           const available = await waitForChatGptOAuth({
             fetchImpl: doFetch,
@@ -541,7 +541,7 @@ export async function initKeySetup({
           writeStoredCloudVoiceAuthMode('oauth');
           syncCloudVoiceAuth();
           say(
-            'ChatGPT sign-in complete. OAuth will be used for the next cloud voice session.',
+            'ChatGPT 登录完成。下次云语音会话将使用 OAuth。',
           );
         } catch (error) {
           if (lifetime.signal.aborted) return;
@@ -567,11 +567,11 @@ export async function initKeySetup({
     // a deliberate two-step the lure cannot pre-satisfy.
     const ok =
       typeof globalThis.confirm !== 'function' ||
-      globalThis.confirm('Remove this key from your saved configuration?');
+      globalThis.confirm('从已保存配置中移除此密钥？');
     if (!ok) return;
     void submitUpdates(
       Object.fromEntries(envVars.map((name) => [name, null])),
-      'Removed from',
+      '已从以下位置移除',
     );
   });
 
