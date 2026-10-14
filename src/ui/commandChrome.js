@@ -1,5 +1,5 @@
 /**
- * 指挥中心顶栏与开机扫描：北京时间时钟、数据源状态点、扫描线自动移除。
+ * 指挥中心顶栏：北京时间时钟与数据源状态点。
  * @module ui/commandChrome
  */
 
@@ -21,7 +21,6 @@ function formatBeijingClock(date = new Date()) {
 }
 
 function isoBeijing(date = new Date()) {
-  // datetime 用 ISO，展示文案另写；用 en-CA 在上海时区得到 YYYY-MM-DD 便于拼装。
   const d = new Intl.DateTimeFormat('en-CA', {
     timeZone: BEIJING_TZ,
     year: 'numeric',
@@ -39,12 +38,11 @@ function isoBeijing(date = new Date()) {
 }
 
 /**
- * 挂载顶栏时钟与开机扫描。可重复调用，第二次为空操作。
+ * 挂载顶栏时钟。可重复调用；第二次起仍会重置定时器。
  * @returns {{ dispose: () => void }}
  */
 export function mountCommandChrome(root = document) {
   const clock = root.querySelector('[data-cs-clock]');
-  const scan = root.querySelector('[data-cs-boot-scan]');
   let timer = 0;
 
   const tick = () => {
@@ -57,21 +55,6 @@ export function mountCommandChrome(root = document) {
   if (clock) {
     tick();
     timer = window.setInterval(tick, 1000);
-  }
-
-  const prefersReduced =
-    typeof matchMedia === 'function' &&
-    matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (scan) {
-    const remove = () => scan.remove();
-    if (prefersReduced) {
-      remove();
-    } else {
-      scan.addEventListener('animationend', remove, { once: true });
-      // 兜底：动画被打断时也不留遮罩
-      window.setTimeout(remove, 1600);
-    }
   }
 
   return {
