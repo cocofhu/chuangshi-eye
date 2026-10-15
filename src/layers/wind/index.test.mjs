@@ -194,8 +194,8 @@ test('missing optional scalar retains valid wind and labels the field unavailabl
   await Promise.resolve();
   await Promise.resolve();
   assert.equal(layer.getStats().count, 4);
-  assert.match(layer.getStats().error, /pressure field unavailable/);
-  assert.match(layer.getRowControls().info, /Selected field unavailable/);
+  assert.match(layer.getStats().error, /海平面气压场不可用/);
+  assert.match(layer.getRowControls().info, /所选场不可用/);
   assert.deepEqual(layer.getRowControls().legend, []);
   layer.destroy();
 });
@@ -216,7 +216,7 @@ test('a pending companion does not claim that it is already unavailable', async 
   assert.equal(layer.getStats().loading, true);
   assert.doesNotMatch(
     layer.getRowControls().info,
-    /Selected field unavailable/,
+    /所选场不可用/,
   );
   resolve(
     complete('gfs', {
@@ -225,7 +225,7 @@ test('a pending companion does not claim that it is already unavailable', async 
   );
   await Promise.resolve();
   await Promise.resolve();
-  assert.match(layer.getRowControls().info, /Selected field unavailable/);
+  assert.match(layer.getRowControls().info, /所选场不可用/);
   layer.destroy();
 });
 test('an imagery failure appears in status and cannot retain a misleading field legend', async () => {
@@ -274,15 +274,15 @@ test('renderer readiness pushes fresh loading stats and controls to the displaye
   });
   const update = layer.update();
   const loadingInfo = layer.getRowControls().info;
-  assert.match(loadingInfo, /Valid: [^\n]+ · loading/);
+  assert.match(loadingInfo, /有效 [^\n]+ · 加载中/);
   await update;
   assert.equal(displayed.loading, true);
-  assert.match(displayed.info, /Valid: [^\n]+ · preparing/);
+  assert.match(displayed.info, /有效 [^\n]+ · 准备中/);
   assert.equal(displayed.info.split('\n').length, loadingInfo.split('\n').length);
   ready = true;
   statusChanged();
   assert.equal(displayed.loading, false);
-  assert.doesNotMatch(displayed.info, / · preparing| · loading/);
+  assert.doesNotMatch(displayed.info, / · 准备中| · 加载中/);
   assert.equal(displayed.info.split('\n').length, loadingInfo.split('\n').length);
   layer.destroy();
 });
@@ -291,13 +291,13 @@ test('weather summary describes the selected forecast and count remains numeric'
   const { layer } = harness({ getSnapshot: async () => complete('gfs') });
   await layer.update();
   assert.equal(typeof layer.getStats().count, 'number');
-  assert.equal(layer.getStats().countLabel, 'Forecast');
+  assert.equal(layer.getStats().countLabel, '预报');
   const summary = layer.getRowControls().summary;
-  assert.equal(summary.label, 'Wind motion');
+  assert.equal(summary.label, '风场流动');
   assert.equal(summary.units, 'km/h');
-  assert.match(summary.detail, /GFS forecast.*UTC/);
+  assert.match(summary.detail, /GFS 预报.*UTC/);
   assert.equal((summary.detail.match(/UTC/g) || []).length, 1);
-  assert.equal(layer.getRowControls().chips.find(c => c.id === 'overlay-temperature').label, 'Temperature');
+  assert.equal(layer.getRowControls().chips.find(c => c.id === 'overlay-temperature').label, '气温');
   layer.destroy();
 });
 
@@ -347,7 +347,7 @@ test('sample stays fixed across model, field and unit changes; dismissal and dis
   assert.match(changed.wind, /mph/);
   assert.equal(samples, 1, 'units do not resample');
   assert.equal(layer.getRowControls().summary.result.id, 'reading');
-  assert.deepEqual(layer.getRowControls().summary.settings.map(({ label }) => label), ['MODEL', 'FIELD', 'UNITS', 'MOTION']);
+  assert.deepEqual(layer.getRowControls().summary.settings.map(({ label }) => label), ['模型', '场', '单位', '动态']);
   assert.equal(nodes.length, 1);
   assert.equal(typeof listener, 'function');
   viewer.camera.pickEllipsoid = () => { samples++; return { longitude: 70, latitude: 20 }; };
@@ -360,7 +360,7 @@ test('sample stays fixed across model, field and unit changes; dismissal and dis
   assert.equal(resampled.model, 'ECMWF');
   assert.equal(resampled.position, captured.position);
   assert.equal(samples, 1, 'model and field changes never sample the moved camera');
-  assert.match(layer.getRowControls().summary.result.lines.find(({ id }) => id === 'meta').text, /ECMWF · valid/);
+  assert.match(layer.getRowControls().summary.result.lines.find(({ id }) => id === 'meta').text, /ECMWF · 有效/);
   await layer.update();
   assert.equal(layer.getRowControls().summary.reading.coordinates, captured.coordinates);
   layer.setParams({ inspect: true });
@@ -388,7 +388,7 @@ test('observed history labels wind as a forecast without changing its data or pa
   await clock.setTarget('2026-09-14T12:00:00.000Z');
   assert.equal(layer.getRowControls().summary.status, null, 'history does not mask source status');
   assert.ok(changes > 0);
-  assert.match(layer.getRowControls().info, /Forecast · does not follow history/);
+  assert.match(layer.getRowControls().info, /预报 · 不跟随历史/);
   assert.deepEqual(layer.getParams(), params);
   await clock.latest();
   assert.equal(layer.getRowControls().summary.status, null);
@@ -404,7 +404,7 @@ test('wind unit chips appear only alongside a speed legend, including canvas tra
   const layer = createWindLayer({ feed: { getSnapshot: async () => complete('gfs') }, createRendering: () => ({ attach() {}, start() {}, clear() {}, setField() {}, setOptions() {}, getDiagnostics: () => ({ renderMode, imageryError }), stop() {}, destroy() {} }) });
   layer.init({ container: {} }); layer.enable(); await layer.update();
   const unitChips = () => layer.getRowControls().chips.filter(({ id }) => id.startsWith('units-'));
-  assert.equal(layer.getRowControls().readout, true); assert.equal(layer.getRowControls().summary.coverage, 'Global · 1° grid');
+  assert.equal(layer.getRowControls().readout, true); assert.equal(layer.getRowControls().summary.coverage, '全球 · 1° 网格');
   assert.deepEqual(unitChips(), []); assert.deepEqual(layer.getRowControls().legend, []);
   renderMode = 'canvas-fallback'; assert.equal(unitChips().length, 3); assert.ok(layer.getRowControls().legend.length);
   renderMode = 'gpu-streamlines'; layer.setParams({ overlay: 'speed' }); assert.equal(unitChips().length, 3);

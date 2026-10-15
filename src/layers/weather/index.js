@@ -29,7 +29,7 @@ const LIGHTNING_STOPS = [
   ['300+', '#00FF00'],
 ];
 const utc = (value) =>
-  value ? `${value.slice(5, 16).replace('T', ' ')} UTC` : 'Unavailable';
+  value ? `${value.slice(5, 16).replace('T', ' ')} UTC` : '不可用';
 
 /** A per-application observation layer, using the existing layer lifecycle and
  * row controls. History is transient: shared links always open latest imagery. */
@@ -227,12 +227,12 @@ export function createWeatherLayer({
         rendering.setHidden?.(false);
         void warmNext(time);
       }
-      error = ok ? null : 'Frame unavailable; previous observation retained';
+      error = ok ? null : '帧不可用，保留上一观测';
       if (!ok) stop();
       return ok;
     } catch {
       if (owner === generation && !controller.signal.aborted) {
-        error = 'Weather imagery unavailable';
+        error = '天气影像不可用';
         stop();
       }
       return false;
@@ -250,12 +250,12 @@ export function createWeatherLayer({
   const layer = {
     id,
     name: radar
-      ? 'Rain radar'
+      ? '降水雷达'
       : lightning
-        ? 'Lightning density'
-        : 'Satellite clouds',
+        ? '闪电密度'
+        : '卫星云图',
     icon: radar ? '◉' : lightning ? 'ϟ' : '☁',
-    source: 'NOAA nowCOAST · OBSERVED',
+    source: 'NOAA nowCOAST · 观测',
     updateInterval: lightning ? 600_000 : 120_000,
     init(nextViewer) {
       viewer = nextViewer;
@@ -338,7 +338,7 @@ export function createWeatherLayer({
         if (!enabled || controller.signal.aborted || request !== controller)
           return false;
         if (snapshot.unavailable) {
-          error = 'Weather source unavailable; previous observation retained';
+          error = '天气源不可用，保留上一观测';
           stop();
           return true;
         }
@@ -368,7 +368,7 @@ export function createWeatherLayer({
         return !controller.signal.aborted && request === controller && enabled;
       } catch (cause) {
         if (controller.signal.aborted || request !== controller) return false;
-        error = cause?.message || 'Weather unavailable';
+        error = cause?.message || '天气不可用';
         stop();
         return true;
       } finally {
@@ -487,15 +487,15 @@ export function createWeatherLayer({
         noFrame &&
         shared?.mode === 'history' &&
         shared.products.find((entry) => entry.id === id)?.selected === null
-          ? `No frame within ${maxGap() / 60_000 < 60 ? `${maxGap() / 60_000} min` : `${maxGap() / 3600_000} h`} of ${utc(shared.target)}`
+          ? `${utc(shared.target)} 前后 ${maxGap() / 60_000 < 60 ? `${maxGap() / 60_000} 分钟` : `${maxGap() / 3600_000} 小时`}内无帧`
           : null;
       const time = shownTime();
       const relation =
         shared?.mode === 'history' && time
           ? Date.parse(time) === Date.parse(shared.target)
-            ? ' · synced'
+            ? ' · 已同步'
             : Date.parse(time) < Date.parse(shared.target)
-              ? ' · nearest'
+              ? ' · 最近'
               : ''
           : '';
       const times = manifest?.times || [];
@@ -508,8 +508,8 @@ export function createWeatherLayer({
         age === null
           ? ''
           : age >= 60
-            ? `${Math.floor(age / 60)}h ${age % 60}m ago`
-            : `${age}m ago`;
+            ? `${Math.floor(age / 60)} 小时 ${age % 60} 分钟前`
+            : `${age} 分钟前`;
       const diagnostic = rendering?.getDiagnostics();
       const b = manifest?.bounds;
       const canvas = viewer?.scene?.canvas;
@@ -539,45 +539,45 @@ export function createWeatherLayer({
         readout: true,
         summary: {
           label: radar
-            ? 'Rain radar · US'
+            ? '降水雷达 · 美国'
             : lightning
-              ? 'Lightning density · 15 min'
-              : 'Satellite clouds',
+              ? '闪电密度 · 15 分钟'
+              : '卫星云图',
           coverage: radar
-            ? 'CONUS'
+            ? '美国本土'
             : lightning
-              ? 'Americas + Pacific'
+              ? '美洲与太平洋'
               : product === 'clouds'
-                ? 'Global · 60°S–60°N'
-                : 'North America',
+                ? '全球 · 60°S–60°N'
+                : '北美',
           shownTime: time,
           maxGapMinutes: maxGap() / 60_000,
           detail: time
-            ? `${followLatest ? 'Observed' : 'History'} · ${utc(time)} · ${lag}${relation}`
+            ? `${followLatest ? '观测' : '历史'} · ${utc(time)} · ${lag}${relation}`
             : missing
-              ? 'Observation unavailable'
-              : 'Waiting for observation',
+              ? '观测不可用'
+              : '等待观测',
           status:
             missing ||
             hostStatus ||
             error ||
             diagnostic?.error ||
             (observationDelayed()
-              ? 'Source observations delayed'
+              ? '来源延迟'
               : manifest?.stale
-                ? 'Stale source'
+                ? '来源已过期'
                 : loading
-                  ? 'Loading next frame…'
+                  ? '正在加载下一帧…'
                   : outside
-                    ? 'Map center outside coverage'
+                    ? '地图中心超出覆盖'
                     : null),
-          units: radar ? 'dBZ' : lightning ? 'strikes/km²/min ×10³' : '',
+          units: radar ? 'dBZ' : lightning ? '次/km²/分钟 ×10³' : '',
         },
         chips: [
           ...(satellite
             ? [
-                ['clouds-regional', 'N. America'],
-                ['clouds', 'Global'],
+                ['clouds-regional', '北美'],
+                ['clouds', '全球'],
               ].map(([value, label]) => ({
                 id: value,
                 label,
@@ -585,43 +585,42 @@ export function createWeatherLayer({
                 params: { product: value },
                 title:
                   value === 'clouds'
-                    ? 'Hourly global mosaic; usually 2–3 hours delayed'
-                    : 'GOES regional clouds; approximately 5-minute updates',
+                    ? '逐小时全球拼图，通常延迟 2–3 小时'
+                    : 'GOES 区域云图，约 5 分钟更新',
               }))
             : []),
           ...(satellite
             ? [
                 {
                   id: 'filtered',
-                  label: 'Clouds only',
+                  label: '仅云',
                   active: infrared === 'filtered',
                   params: { infrared: 'filtered' },
-                  title:
-                    'Dim everything but the bright, cold cloud tops; a brightness filter, not a cloud mask',
+                  title: '压暗亮冷云顶以外的部分；这是亮度过滤，不是云掩膜',
                 },
                 {
                   id: 'full',
-                  label: 'Full',
+                  label: '完整',
                   active: infrared === 'full',
                   params: { infrared: 'full' },
-                  title: 'The complete infrared image at the chosen opacity',
+                  title: '按所选不透明度显示完整红外图像',
                 },
               ]
             : []),
           ...['light', 'strong'].map((value) => ({
             id: `opacity-${value}`,
-            label: value === 'light' ? 'Soft' : 'Vivid',
+            label: value === 'light' ? '柔和' : '鲜明',
             active: opacity === value,
             params: { opacity: value },
-            title: 'Image opacity; does not alter the observed values',
+            title: '图像不透明度；不改变观测值',
           })),
           {
             id: 'coverage',
             label: radar
-              ? 'View US radar'
+              ? '查看美国雷达'
               : lightning
-                ? 'View Americas & Pacific'
-                : 'View coverage',
+                ? '查看美洲与太平洋'
+                : '查看覆盖',
             disabled: !manifest || !runNavigation,
             params: { focus: true },
           },
@@ -632,37 +631,37 @@ export function createWeatherLayer({
                 label: String(label),
                 color,
                 blurb: lightning
-                  ? `${label} strikes/km²/min ×10³ (15-minute density)`
-                  : `${label} dBZ radar reflectivity`,
+                  ? `${label} 次/km²/分钟 ×10³（15 分钟密度）`
+                  : `${label} dBZ 雷达反射率`,
               }))
             : [],
         info: hostHidden
           ? hostStatus
-          : `${radar ? 'RADAR REFLECTIVITY · dBZ' : lightning ? 'LIGHTNING DENSITY · 15 min accumulation' : product === 'clouds' ? 'GLOBAL INFRARED · hourly' : 'GOES INFRARED · ~5 min'}\n${time ? `${followLatest ? 'Latest observation' : 'History'}: ${utc(time)}\n${lag}${current && !followLatest ? ` · frame ${index + 1}/${times.length}` : ''}${loading ? ' · loading' : ''}` : `Observation: unavailable${loading ? ' · loading' : ''}`}${missing ? `\n${missing}` : ''}${manifest?.stale ? '\nSTALE · cached source metadata' : ''}${error || diagnostic?.error ? '\n' + (error || diagnostic.error) : ''}\n${radar ? 'Contiguous US · gaps ≠ no rain' : lightning ? 'Americas + Pacific · not individual strikes\nColor: strikes/km²/min ×10³' : product === 'clouds' ? '60°S–60°N · typically 2–3 h delayed' : 'North America · infrared imagery'}${outside ? '\nMap center is outside source coverage' : ''}${motion?.matches ? (clock ? '\nReduced motion · history playback unavailable' : '\nReduced motion · manual history available') : ''}`,
+          : `${radar ? '雷达反射率 · dBZ' : lightning ? '闪电密度 · 15 分钟累积' : product === 'clouds' ? '全球红外 · 逐小时' : 'GOES 红外 · 约 5 分钟'}\n${time ? `${followLatest ? '最新观测' : '历史'}：${utc(time)}\n${lag}${current && !followLatest ? ` · 第 ${index + 1}/${times.length} 帧` : ''}${loading ? ' · 加载中' : ''}` : `观测：不可用${loading ? ' · 加载中' : ''}`}${missing ? `\n${missing}` : ''}${manifest?.stale ? '\n已过期 · 缓存的来源元数据' : ''}${error || diagnostic?.error ? '\n' + (error || diagnostic.error) : ''}\n${radar ? '美国本土 · 空隙不等于无雨' : lightning ? '美洲与太平洋 · 不是单次闪电\n色标：次/km²/分钟 ×10³' : product === 'clouds' ? '60°S–60°N · 通常延迟 2–3 小时' : '北美 · 红外影像'}${outside ? '\n地图中心超出来源覆盖' : ''}${motion?.matches ? (clock ? '\n减弱动态 · 历史播放不可用' : '\n减弱动态 · 可手动回看历史') : ''}`,
         infoTitle: lightning
-          ? 'NOAA/NWS 15-minute lightning density derived from Vaisala NLDN/GLD360. Coverage 110°E across the Pacific/Americas to 0°, 25°S–80°N. Not a live strike count, global coverage or a safety warning.'
+          ? 'NOAA/NWS 15 分钟闪电密度，源自 Vaisala NLDN/GLD360。覆盖从 110°E 经太平洋与美洲至 0°，25°S–80°N。不是实时闪电计数、全球覆盖或安全预警。'
           : radar
-            ? 'NOAA MRMS radar echoes indicate precipitation patterns, not rain rate, a storm warning or a future forecast. Native source approximately 1 km; display is limited to level 6. Frames use exact advertised observation times.'
-            : 'GOES-19/18 longwave infrared Band 14 regional; NESDIS global longwave mosaic. Clouds only dims everything but bright, cold cloud tops; a brightness filter, not a cloud mask. Coverage and freshness differ by region.',
+            ? 'NOAA MRMS 雷达回波表示降水形态，不是雨强、风暴预警或未来预报。源分辨率约 1 公里；显示限制在第 6 级。各帧使用公布的观测时刻。'
+            : 'GOES-19/18 长波红外 Band 14 区域图；NESDIS 全球长波拼图。仅云会压暗亮冷云顶以外的部分；这是亮度过滤，不是云掩膜。覆盖和时效因区域而异。',
       };
       controls.summary.settings = [
         ...(satellite
           ? [
               {
                 id: 'region',
-                label: 'REGION',
+                label: '区域',
                 chips: controls.chips.filter(({ params }) => params.product),
               },
               {
                 id: 'image',
-                label: 'IMAGE',
+                label: '图像',
                 chips: controls.chips.filter(({ params }) => params.infrared),
               },
             ]
           : []),
         {
           id: 'opacity',
-          label: 'OPACITY',
+          label: '不透明度',
           chips: controls.chips.filter(({ params }) => params.opacity),
         },
       ];
@@ -677,7 +676,7 @@ export function createWeatherLayer({
     getStats() {
       return {
         count: shownTime() ? 1 : 0,
-        countLabel: isLatest() ? 'Observed' : 'History',
+        countLabel: isLatest() ? '观测' : '历史',
         lastUpdate: shownTime() ? Date.parse(shownTime()) : null,
         loading,
         error: error || rendering?.getDiagnostics().error || null,

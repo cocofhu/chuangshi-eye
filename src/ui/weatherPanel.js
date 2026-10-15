@@ -26,7 +26,7 @@ const age = (time) => {
     : `${minutes} 分钟前`;
 };
 const historyTime = (time) =>
-  `${utc(time).slice(6)} · ${Math.max(0, Math.floor((Date.now() - Date.parse(time)) / 60_000))} min ago`;
+  `${utc(time).slice(6)} · ${Math.max(0, Math.floor((Date.now() - Date.parse(time)) / 60_000))} 分钟前`;
 const dated = (time) => `${utc(time)} · ${age(time)}`;
 const set = (node, key, value) => {
   if (node[key] !== value) node[key] = value;

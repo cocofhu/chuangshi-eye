@@ -31,7 +31,7 @@ test('observed source accepts bounded exact times and refuses malformed or unsor
   ])
     assert.throws(
       () => validateWeatherSnapshot({ ...snapshot(), ...bad }, 'radar'),
-      /Malformed/,
+      /格式无效/,
     );
 });
 test('weather tile URLs are same origin and ignore upstream templates', async () => {
@@ -196,6 +196,6 @@ test('image frames are read through the bounded image route', async () => {
   });
   await assert.rejects(
     failing.getImage({ product: 'radar', time }),
-    /Weather image HTTP 409/,
+    /天气图像请求失败 HTTP 409/,
   );
 });

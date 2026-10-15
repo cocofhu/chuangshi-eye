@@ -11,7 +11,7 @@ export function formatWindReading(reading, units) {
         ? formatWindSpeed(reading.speed, units)
         : reading.scalarValue,
     wind: Number.isFinite(reading.speed)
-      ? `${formatWindSpeed(reading.speed, units)}${reading.from === 'Calm' ? ' · calm' : ` from ${reading.from}`}`
+      ? `${formatWindSpeed(reading.speed, units)}${reading.from === '静风' ? ' · 静风' : ` 来自 ${reading.from}`}`
       : reading.wind,
   };
 }
@@ -22,7 +22,7 @@ export function windUnitChips(units) {
     label: value,
     active: units === value,
     params: { units: value },
-    title: 'Wind speed units',
+    title: '风速单位',
   }));
 }
 
@@ -30,7 +30,7 @@ export function windUnitChips(units) {
 export function windReadingResult(reading) {
   return {
     id: 'reading',
-    label: `WIND AT ${reading.coordinates.replace(' · ', ' ')}`,
+    label: `中心风场 ${reading.coordinates.replace(' · ', ' ')}`,
     lines: [
       {
         id: 'wind',
@@ -38,7 +38,7 @@ export function windReadingResult(reading) {
       },
       {
         id: 'meta',
-        text: `${reading.model} · valid ${reading.validTime?.replace(/^\d{4}-/, '')}`,
+        text: `${reading.model} · 有效 ${reading.validTime?.replace(/^\d{4}-/, '')}`,
       },
       ...(reading.scalarValue
         ? [

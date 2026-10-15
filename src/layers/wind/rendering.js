@@ -13,6 +13,11 @@ import {
   windTrailColor,
 } from './fields.js';
 
+const FIELD_UNAVAILABLE = {
+  speed: '风速场不可用',
+  temperature: '气温场不可用',
+  pressure: '气压场不可用',
+};
 const WIND_FIELD_FADE_HIGH_METERS = 1_200_000;
 const WIND_FIELD_FADE_LOW_METERS = 200_000;
 const WIND_FIELD_LOG_RANGE = Math.log(
@@ -336,7 +341,7 @@ export function createWindRendering({
     }
     const raster = createFieldRaster(snapshot, overlay);
     if (!raster) {
-      imageryError = `${overlay} field unavailable`;
+      imageryError = FIELD_UNAVAILABLE[overlay] || '场不可用';
       return;
     }
     if (
@@ -344,7 +349,7 @@ export function createWindRendering({
         ? !cesium.Primitive
         : !collection || !cesium.SingleTileImageryProvider
     ) {
-      imageryError = 'Globe imagery unavailable';
+      imageryError = '地球影像不可用';
       return;
     }
     try {
@@ -384,12 +389,12 @@ export function createWindRendering({
       imagery.alpha = overlay === 'temperature' ? 1 : 0.85;
       if (gpuActive) updateImageryFade(viewer.scene.camera, true);
       imageryErrorRemove = provider.errorEvent?.addEventListener(() => {
-        imageryError = 'Globe field image unavailable';
+        imageryError = '地球场图像不可用';
       });
       viewer.scene?.requestRender?.();
     } catch {
       removeImagery();
-      imageryError = 'Globe field image unavailable';
+      imageryError = '地球场图像不可用';
     }
   }
 

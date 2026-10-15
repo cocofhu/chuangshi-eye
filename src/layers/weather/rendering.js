@@ -294,7 +294,7 @@ function createGlobeRendering({
             );
           }
         } else {
-          lastError = 'Weather tiles unavailable · previous frame retained';
+          lastError = '天气瓦片不可用 · 保留上一帧';
           remove(frame);
         }
         frame.resolve(ok);
@@ -335,10 +335,10 @@ function createGlobeRendering({
         );
         const credit = new cesium.Credit(
           snapshot.product === 'lightning'
-            ? 'NOAA/NWS lightning density · derived from Vaisala NLDN/GLD360'
+            ? 'NOAA/NWS 闪电密度 · 源自 Vaisala NLDN/GLD360'
             : snapshot.product === 'radar'
               ? 'NOAA nowCOAST · NWS/OAR MRMS'
-              : 'NOAA nowCOAST · NESDIS GOES / global satellite partners',
+              : 'NOAA nowCOAST · NESDIS GOES / 全球卫星合作方',
           false,
         );
         const provider = global
@@ -413,7 +413,7 @@ function createGlobeRendering({
             return;
           }
           frame.failed = true;
-          lastError = 'Some weather tiles unavailable';
+          lastError = '部分天气瓦片不可用';
           onChange();
         });
         // A shown, transparent layer lets Cesium request staging tiles while the last

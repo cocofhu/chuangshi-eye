@@ -51,10 +51,10 @@ test('presentation: a slow annotate turn shows captions, plan steps and the resu
   ].reduce(reduceVoiceCard, state);
   view = voiceCardView(done);
   assert.equal(view.phase, 'DONE');
-  assert.equal(view.steps[0].detail, 'Outline traced');
+  assert.equal(view.steps[0].detail, '轮廓已描');
   assert.equal(view.result.title, 'Marked 1 place');
   assert.deepEqual(view.result.referents, [{ n: 1, label: 'Texas State Capitol' }]);
-  assert.deepEqual(view.result.notes, ['Tracing outlines', 'Source: OpenStreetMap']);
+  assert.deepEqual(view.result.notes, ['Tracing outlines', '来源：OpenStreetMap']);
   assert.equal(view.announce, 'Marked 1 place', 'the live region carries the result title');
 });
 
@@ -226,8 +226,8 @@ test('presentation: stale and unmatched events never reopen the card', () => {
   ]);
   assert.equal(reduceVoiceCard(live, { type: 'outline', id: 'anno-7', status: 'resolved' }), live, 'another mark is ignored');
   const first = reduceVoiceCard(live, { type: 'outline', id: 'anno-1', status: 'resolved' });
-  assert.equal(voiceCardView(first).steps[0].detail, 'Tracing outline', 'one of two outlines still pending');
+  assert.equal(voiceCardView(first).steps[0].detail, '正在描边', 'one of two outlines still pending');
   assert.equal(voiceCardView(first).visible, false, 'a dismissed card stays hidden');
   const both = reduceVoiceCard(first, { type: 'outline', id: 'anno-2', status: 'failed' });
-  assert.equal(voiceCardView(both).steps[0].detail, 'Outline unavailable');
+  assert.equal(voiceCardView(both).steps[0].detail, '轮廓不可用');
 });

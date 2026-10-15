@@ -277,7 +277,7 @@ test('settings, reading and footer actions pass the layer id, params and user or
   const { createWindLayer } = await import('../layers/wind/index.js');
   const layer = createWindLayer({ feed: { getSnapshot: async () => null } });
   const action = layer.getRowControls().summary.actions[0];
-  assert.equal(action.label, 'Read wind at map center');
+  assert.equal(action.label, '读取地图中心');
   assert.equal(action.hint, undefined);
   const f = fixture();
   const calls = [];
@@ -319,9 +319,9 @@ test('settings, reading and footer actions pass the layer id, params and user or
   const result = f.find((n) => n.className === 'rail-card-result');
   const header = result.children[0];
   assert.equal(header.className, 'rail-card-result-header');
-  assert.equal(header.children[0].textContent, 'WIND AT 26.59°N 123.34°W');
+  assert.equal(header.children[0].textContent, '中心风场 26.59°N 123.34°W');
   assert.equal(header.children[1].textContent, '×');
-  assert.equal(header.children[1].getAttribute('aria-label'), 'Clear reading');
+  assert.equal(header.children[1].getAttribute('aria-label'), '清除读数');
   assert.deepEqual(
     result.children[1].children[0].children.map((n) => [
       n.dataset.lineId,
@@ -329,14 +329,14 @@ test('settings, reading and footer actions pass the layer id, params and user or
     ]),
     [
       ['wind', '6.0 m/s from N'],
-      ['meta', 'ECMWF · valid 09-22 06:00 UTC'],
+      ['meta', 'ECMWF · 有效 09-22 06:00 UTC'],
       ['scalar', 'Wind speed · 6.0 m/s'],
       ['explanation', 'Interpolated model forecast.'],
     ],
   );
   assert.equal(
     f.find((n) => n.dataset.actionId === 'read-wind').textContent,
-    'Read wind at map center',
+    '读取地图中心',
   );
   assert.equal(
     f.find((n) => n.className === 'rail-card-action-hint').hidden,

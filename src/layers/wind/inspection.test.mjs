@@ -11,7 +11,7 @@ test('wind directions describe the source of the flow and calm is not north', ()
   assert.equal(windFrom(-10, 0), 'E');
   assert.equal(windFrom(0, 10), 'S');
   assert.equal(windFrom(0, -10), 'N');
-  assert.equal(windFrom(0, 0), 'Calm');
+  assert.equal(windFrom(0, 0), '静风');
   assert.equal(formatWindSpeed(10, 'km/h'), '36.0 km/h');
   assert.equal(formatWindSpeed(10, 'mph'), '22.4 mph');
 });
@@ -48,14 +48,14 @@ test('center inspection uses a fixed forecast reading without double-converting 
     validTime: 'fixed',
     status: 'forecast',
   });
-  assert.equal(result.wind, '36.0 km/h from W');
+  assert.equal(result.wind, '36.0 km/h 来自 W');
   assert.equal(result.scalarValue, '20.0 °C');
   assert.equal(result.validTime, 'fixed');
   assert.equal(result.coordinates, '0.00°N · 0.00°E');
   viewer.camera.pickEllipsoid = () => null;
   assert.equal(
     inspectWindAtCenter(snapshot, viewer, cesium).coordinates,
-    'No surface reading',
+    '无地面读数',
   );
 });
 

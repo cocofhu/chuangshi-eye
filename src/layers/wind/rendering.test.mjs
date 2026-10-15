@@ -410,7 +410,7 @@ test('scalar imagery builds once, survives pause, replaces cleanly, and releases
     0,
     'unavailable scalar cannot display the previous field',
   );
-  assert.match(h.rendering.getDiagnostics().imageryError, /unavailable/);
+  assert.match(h.rendering.getDiagnostics().imageryError, /不可用/);
   h.rendering.setField({
     grid: FIELD,
     u: FIELD.u,
@@ -1066,7 +1066,7 @@ test('scalar installation with no host reports hidden and installs on restore', 
   assert.equal(h.textures.length, 0);
   assert.equal(
     h.rendering.getDiagnostics().imageryError,
-    'Hidden by this map source · choose a globe map',
+    '当前地图源已隐藏 · 请改用地球地图',
   );
   host = { collection: h.viewer.imageryLayers, kind: 'globe' };
   h.rendering.rehome();

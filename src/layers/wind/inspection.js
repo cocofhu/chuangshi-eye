@@ -27,7 +27,7 @@ export const WIND_UNITS = Object.freeze({
 
 /** Meteorological bearing is where the wind comes FROM, not where it travels. */
 export function windFrom(u, v) {
-  if (Math.hypot(u, v) < 0.2) return 'Calm';
+  if (Math.hypot(u, v) < 0.2) return '静风';
   const bearing = ((Math.atan2(-u, -v) * 180) / Math.PI + 360) % 360;
   return DIRECTIONS[Math.round(bearing / 22.5) % 16];
 }
@@ -56,13 +56,12 @@ export function inspectWindAtCenter(
       ));
   if (!point || !snapshot?.u || !snapshot?.v)
     return {
-      coordinates: 'No surface reading',
-      wind: 'Aim the map center at Earth',
+      coordinates: '无地面读数',
+      wind: '请将地图中心对准地球',
       model,
       validTime,
       status,
-      explanation:
-        'A location reading needs a loaded forecast and the Earth at the center of the view.',
+      explanation: '需要已加载的预报，且地图中心落在地球上。',
     };
   const location = cesium.Cartographic.fromCartesian(point, ellipsoid);
   const lon = cesium.Math.toDegrees(location.longitude);
@@ -83,15 +82,15 @@ export function inspectWindAtCenter(
     from,
     units,
     coordinates: `${Math.abs(lat).toFixed(2)}°${lat < 0 ? 'S' : 'N'} · ${Math.abs(lon).toFixed(2)}°${lon < 0 ? 'W' : 'E'}`,
-    wind: `${formatWindSpeed(speed, units)}${from === 'Calm' ? ' · calm' : ` from ${from}`}`,
+    wind: `${formatWindSpeed(speed, units)}${from === '静风' ? ' · 静风' : ` 来自 ${from}`}`,
     scalarKind: overlay,
     scalarLabel:
       overlay === 'speed'
-        ? 'Wind speed'
+        ? '风速'
         : overlay === 'temperature'
-          ? 'Air temperature · 2 m'
+          ? '2 米气温'
           : overlay === 'pressure'
-            ? 'Sea-level pressure'
+            ? '海平面气压'
             : null,
     scalarValue:
       overlay === 'speed'
@@ -103,7 +102,7 @@ export function inspectWindAtCenter(
     validTime,
     status,
     explanation:
-      'Interpolated model forecast on an approximately 1° grid. Broad weather patterns, not a street-level measurement.',
+      '约 1° 网格上的插值预报。这是大尺度天气型，不是街道级实测。',
   };
 }
 
