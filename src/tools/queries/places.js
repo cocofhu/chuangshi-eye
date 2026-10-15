@@ -10,7 +10,7 @@ import {
   resolveArea,
   resolvePoint,
 } from '../area.js';
-import { LIMIT_SCHEMA, capRows, countNoun, thinEvenly } from '../results.js';
+import { LIMIT_SCHEMA, capRows, thinEvenly } from '../results.js';
 
 // Most results the app's place search endpoints return, and the widest
 // radius a text search covers.
@@ -19,6 +19,7 @@ const NEARBY_RESULTS = 20;
 const MAX_SEARCH_RADIUS_M = 50_000;
 
 const MODES = { walk: 'foot', drive: 'car', bike: 'bike' };
+const MODE_WORDS = { walk: '步行', drive: '驾车', bike: '骑行' };
 const MAX_ROUTE_POINTS = 100;
 const NOT_CONFIGURED =
   'Place search needs a Google Places key configured for this server';
@@ -78,17 +79,15 @@ export const searchPlaces = defineTool({
     const limited = result.places.length >= SEARCH_RESULTS;
     const narrowed = wantedM > MAX_SEARCH_RADIUS_M;
     const notes = [
-      ...(limited
-        ? [`the search returns at most ${SEARCH_RESULTS} matches`]
-        : []),
+      ...(limited ? [`搜索最多返回 ${SEARCH_RESULTS} 条`] : []),
       ...(narrowed
-        ? [`searched within ${MAX_SEARCH_RADIUS_M / 1000} km of the center`]
+        ? [`仅搜索中心周边 ${MAX_SEARCH_RADIUS_M / 1000} km`]
         : []),
     ];
     return {
       summary:
-        `${countNoun(rows.length, 'place')} matching "${args.query}" in ${area.label}` +
-        (notes.length ? ` (${notes.join('; ')}).` : '.'),
+        `${rows.length} 个地点匹配「${args.query}」，位于 ${area.label}` +
+        (notes.length ? `（${notes.join('；')}）。` : '。'),
       data: {
         ...capRows(rows, args.limit),
         may_have_more: limited || narrowed,
@@ -127,10 +126,10 @@ export const placesNearby = defineTool({
     const limited = result.places.length >= NEARBY_RESULTS;
     return {
       summary:
-        `${countNoun(rows.length, 'place')} within ${radiusM} m of ${point.label}` +
+        `${rows.length} 个地点，距 ${point.label} ${radiusM} 米内` +
         (limited
-          ? ` (nearby search returns at most ${NEARBY_RESULTS} places).`
-          : '.'),
+          ? `（附近搜索最多返回 ${NEARBY_RESULTS} 个地点）。`
+          : '。'),
       data: { ...capRows(rows, args.limit), may_have_more: limited },
     };
   },
@@ -159,13 +158,14 @@ export const planRoute = defineTool({
       resolvePoint(args.to, { services, signal }),
     ]);
     const mode = args.mode ?? 'walk';
+    const modeWord = MODE_WORDS[mode] || mode;
     const route = await services.routing.route([from, to], MODES[mode], {
       signal,
     });
     if (!route?.ok)
       throw new ToolError(
         'invalid_arguments',
-        `No ${mode} route from ${from.label} to ${to.label}: ${route?.error || 'no route found'}`,
+        `没有从 ${from.label} 到 ${to.label} 的${modeWord}路线：${route?.error || '未找到路线'}`,
       );
     const path = thinEvenly(route.geometry, MAX_ROUTE_POINTS).map(
       ([lon, lat]) => [round(lon, 5), round(lat, 5)],
@@ -173,7 +173,7 @@ export const planRoute = defineTool({
     const km = route.distanceM / 1000;
     const minutes = Math.round(route.durationS / 60);
     return {
-      summary: `${mode[0].toUpperCase()}${mode.slice(1)} from ${from.label} to ${to.label}: ${km.toFixed(1)} km, about ${minutes} minutes.`,
+      summary: `${modeWord}，从 ${from.label} 到 ${to.label}：${km.toFixed(1)} km，约 ${minutes} 分钟。`,
       data: {
         mode,
         from,

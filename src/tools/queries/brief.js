@@ -192,7 +192,7 @@ export const situationBrief = defineTool({
   async run(args, context) {
     const { area, brief, lines } = await buildBrief(args, context);
     return {
-      summary: `Situation in ${area.label}: ${lines.join(' ')}`,
+      summary: `态势，${area.label}：${lines.join(' ')}`,
       data: {
         view: suggestView(context.services, {
           area,
@@ -290,7 +290,7 @@ export const militaryAwareness = defineTool({
       signal,
     });
     return {
-      summary: `Military awareness within ${radiusKm} km of ${point.label}: ${lines.join(' ')}`,
+      summary: `军事感知，${point.label} 周边 ${radiusKm} km：${lines.join(' ')}`,
       data: {
         view: suggestView(services, {
           area,

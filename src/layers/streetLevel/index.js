@@ -408,7 +408,7 @@ export function createStreetLevelLayer({
       let loadingLabel = '';
       const keyLabel = coverage.keyRejected ? 'KEY REJECTED' : 'KEY REQUIRED';
       if (coverage.keyRequired) loadingLabel = keyLabel;
-      else if (coverage.loading) loadingLabel = 'loading coverage...';
+      else if (coverage.loading) loadingLabel = '正在加载覆盖…';
       else if (coverage.hint && state.enabled) loadingLabel = coverage.hint;
       return {
         count: coverage.count,

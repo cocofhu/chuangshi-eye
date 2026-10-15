@@ -8,7 +8,7 @@ import {
   lineTouchesArea,
   resolveArea,
 } from '../area.js';
-import { LIMIT_SCHEMA, capRows, countNoun } from '../results.js';
+import { LIMIT_SCHEMA, capRows } from '../results.js';
 
 const ATTRIBUTION = '© TeleGeography — submarinecablemap.com (CC BY-NC-SA 3.0)';
 
@@ -72,14 +72,12 @@ export const findSubmarineCables = defineTool({
         name: feature.properties.name,
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
-    const where = area ? ` in ${area.label}` : '';
-    const what = wanted ? ` matching "${args.name}"` : '';
+    const where = area ? `，位于 ${area.label}` : '';
+    const what = wanted ? `，匹配「${args.name}」` : '';
     return {
       summary:
-        `${countNoun(rows.length, 'submarine cable')}${what}${where}` +
-        (area
-          ? `, with ${countNoun(landingRows.length, 'landing point')}.`
-          : '.'),
+        `${rows.length} 条海底光缆${what}${where}` +
+        (area ? `，登陆点 ${landingRows.length} 个。` : '。'),
       data: {
         view: suggestView(
           services,

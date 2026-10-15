@@ -9,7 +9,7 @@ import {
   distanceKm,
   resolveArea,
 } from '../area.js';
-import { LIMIT_SCHEMA, capRows, countNoun } from '../results.js';
+import { LIMIT_SCHEMA, capRows } from '../results.js';
 
 const MAX_SIDE_DEGREES = 3;
 
@@ -50,13 +50,13 @@ export const findAlprCameras = defineTool({
     const result = await services.alpr.fetch(box, signal);
     if (result.noCoverage)
       return {
-        summary: `${area.label} is outside the US and Canadian camera coverage.`,
+        summary: `${area.label} 超出美国和加拿大摄像头覆盖。`,
         data: { ...capRows([], args.limit), coverage: 'US and Canada' },
       };
     if (result.zoomIn)
       throw new ToolError(
         'invalid_arguments',
-        'Use a smaller, city-sized area',
+        '请改用更小的城市范围',
       );
     const center = areaCenter(area);
     const rows = result.records
@@ -80,14 +80,14 @@ export const findAlprCameras = defineTool({
       .sort((a, b) => a.distance_km - b.distance_km);
     const notes = [
       ...(result.saturated
-        ? ['partial: some cameras were not loaded; use a smaller area']
+        ? ['部分结果：有摄像头未加载，请缩小范围']
         : []),
-      ...(result.stale ? ['data may be stale'] : []),
+      ...(result.stale ? ['数据可能已过期'] : []),
     ];
     return {
       summary:
-        `${countNoun(rows.length, 'license plate reader camera')} mapped in ${area.label}` +
-        (notes.length ? ` (${notes.join('; ')}).` : '.'),
+        `${rows.length} 个已标注车牌识别摄像头，位于 ${area.label}` +
+        (notes.length ? `（${notes.join('；')}）。` : '。'),
       data: {
         view: suggestView(services, { area, layers: ['alpr-cameras'] }),
         ...capRows(rows, args.limit),

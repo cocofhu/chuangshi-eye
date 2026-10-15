@@ -1436,7 +1436,7 @@ try {
     assert.equal(result.alprLondon.countLabel, '');
     assert.equal(
       result.alprLondon.loadingLabel,
-      'No ALPR data for this area — US and Canada only',
+      '此区域无车牌识别数据 — 仅美国和加拿大',
     );
     await page.evaluate(() => {
       if (document.querySelector('#data-panel.collapsed'))

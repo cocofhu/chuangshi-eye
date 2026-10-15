@@ -69,7 +69,7 @@ export function createIngestion({
         ownsAisRequest(requestController, requestSessionId) &&
         error?.name !== 'AbortError'
       ) {
-        markUnavailable(error?.message || 'AIS live load failed');
+        markUnavailable(error?.message || 'AIS 实时加载失败');
         console.warn('[Data:ais-live-vessels]', feed.error, error);
       }
     } finally {

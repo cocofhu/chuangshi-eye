@@ -53,7 +53,7 @@ test('earthquakes are filtered, ordered strongest first and capped', async () =>
   const all = await catalog.call('get_earthquakes', {});
   assert.equal(
     all.summary,
-    '3 earthquakes of M2.5+ in the last 24 hours worldwide; strongest M5.1 near Hualien.',
+    '3 次 M2.5+ 地震，近 24 小时，全球；最强 M5.1 near Hualien。',
   );
   assert.deepEqual(
     all.data.rows.map((row) => row.id),
@@ -76,7 +76,7 @@ test('earthquakes are filtered, ordered strongest first and capped', async () =>
   });
   assert.equal(
     local.summary,
-    '1 earthquake of M3+ in the last 24 hours in Taiwan; strongest M5.1 near Hualien.',
+    '1 次 M3+ 地震，近 24 小时，位于 Taiwan；最强 M5.1 near Hualien。',
   );
   assert.deepEqual(
     {
@@ -119,7 +119,7 @@ test('fires need an area and report a missing key as unavailable', async () => {
   });
   assert.equal(
     result.summary,
-    '2 fire detections in Taiwan in the last 24 hours.',
+    '2 个火点，位于 Taiwan，近 24 小时。',
   );
   assert.deepEqual(
     result.data.rows.map((row) => row.frp_mw),
@@ -167,7 +167,7 @@ test('recent launches are newest first with missing fields as null', async () =>
   const result = await catalog.call('get_recent_launches', {});
   assert.equal(
     result.summary,
-    '2 launches in the last 30 days; latest Electron | Mission.',
+    '2 次发射，近 30 天；最近 Electron | Mission。',
   );
   assert.deepEqual(result.data.rows[0], {
     id: 'new',

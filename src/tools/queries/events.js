@@ -96,10 +96,9 @@ export const getBhoteKoshiFlood = defineTool({
     const { imagery = {} } = event;
     return {
       summary:
-        `${event.title}, observed ${event.observedDate}: ${evidence.length} ` +
-        `evidence record${evidence.length === 1 ? '' : 's'}` +
-        (args.phase ? ` in the ${args.phase} phase` : '') +
-        ` along a ${lengthKm} km mapped flood path.`,
+        `${event.title}，观测 ${event.observedDate}：${evidence.length} 条证据` +
+        (args.phase ? `，阶段 ${args.phase}` : '') +
+        `，沿 ${lengthKm} km 已标注洪水路径。`,
       data: {
         view: suggestView(services, {
           area: pathArea(BHOTE_KOSHI_FLOOD_PATH),

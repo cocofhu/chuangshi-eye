@@ -46,7 +46,7 @@ function coveragePhrase(area) {
       ? `，覆盖 ${coords} 周边 ${center.radiusKm} km`
       : `，覆盖 ${coords}`;
   }
-  if (area.label && area.label !== 'the requested box')
+  if (area.label && area.label !== '指定范围')
     return `，覆盖 ${area.label}`;
   return '，覆盖指定范围';
 }

@@ -1,12 +1,11 @@
 /**
  * @module routeSteps
- * @description Turn-by-turn steps from an OSRM route, in plain English.
+ * @description Turn-by-turn steps from an OSRM route, in Simplified Chinese.
  *
  * OSRM (the FOSSGIS servers behind `/api/route`) returns each step as a
  * maneuver `type` + `modifier` (+ roundabout `exit`) and the road name; it
- * does not phrase instructions. This module does, with the same vocabulary
- * OSRM's own text-instructions package uses so a reader of either feels at
- * home. Pure: used by the Vite proxy and node:test.
+ * does not phrase instructions. This module does, in Simplified Chinese.
+ * Pure: used by the Vite proxy and node:test.
  *
  * OSRM maneuver types handled: depart, arrive, turn, new name, continue,
  * end of road, fork, merge, on ramp, off ramp, roundabout, rotary,
@@ -16,15 +15,35 @@
 /** Cap on steps returned for one route — a 2,500 km drive rarely needs more. */
 export const ROUTE_STEPS_MAX = 200;
 
-const DIRECTION_WORDS = Object.freeze({
-  left: 'left',
-  right: 'right',
-  'slight left': 'slightly left',
-  'slight right': 'slightly right',
-  'sharp left': 'sharply left',
-  'sharp right': 'sharply right',
-  straight: 'straight',
-  uturn: 'around',
+const TURN_WORDS = Object.freeze({
+  left: '左转',
+  right: '右转',
+  'slight left': '稍向左转',
+  'slight right': '稍向右转',
+  'sharp left': '急左转',
+  'sharp right': '急右转',
+  straight: '直行',
+  uturn: '掉头',
+});
+
+const KEEP_WORDS = Object.freeze({
+  left: '向左',
+  right: '向右',
+  'slight left': '稍向左',
+  'slight right': '稍向右',
+  'sharp left': '急向左',
+  'sharp right': '急向右',
+  straight: '直行',
+  uturn: '掉头',
+});
+
+const SIDE_WORDS = Object.freeze({
+  left: '左',
+  right: '右',
+  'slight left': '左',
+  'slight right': '右',
+  'sharp left': '左',
+  'sharp right': '右',
 });
 
 function cleanText(value) {
@@ -46,89 +65,71 @@ export function roadLabel(step) {
 
 function ontoRoad(step) {
   const road = roadLabel(step);
-  return road ? ` onto ${road}` : '';
+  return road ? `，进入 ${road}` : '';
 }
 
-function direction(modifier) {
-  const key = cleanText(modifier).toLowerCase();
-  return DIRECTION_WORDS[key] || key;
-}
-
-function ordinal(n) {
-  if (!Number.isInteger(n) || n < 1) return null;
-  const suffix =
-    n % 100 >= 11 && n % 100 <= 13
-      ? 'th'
-      : { 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th';
-  return `${n}${suffix}`;
+function wordOf(table, modifier) {
+  return table[cleanText(modifier).toLowerCase()] || '';
 }
 
 /**
- * One English sentence for an OSRM step.
+ * One Simplified Chinese sentence for an OSRM step. Maneuver type and
+ * modifier stay the OSRM tokens; only the spoken instruction changes.
  * @param {{type?: string, modifier?: string, exit?: number, name?: string, ref?: string}} step
  * @returns {string}
  */
 export function instructionFor(step) {
   const type = cleanText(step?.type).toLowerCase();
   const modifier = cleanText(step?.modifier).toLowerCase();
-  const dir = direction(modifier);
+  const turn = wordOf(TURN_WORDS, modifier);
+  const keep = wordOf(KEEP_WORDS, modifier);
+  const side = wordOf(SIDE_WORDS, modifier);
   const onto = ontoRoad(step);
   const road = roadLabel(step);
   switch (type) {
     case 'depart':
-      return road ? `Head out on ${road}` : 'Head out';
+      return road ? `沿 ${road} 出发` : '出发';
     case 'arrive':
-      if (modifier === 'left' || modifier === 'right')
-        return `Arrive at your destination, on the ${modifier}`;
-      return 'Arrive at your destination';
+      if (modifier === 'left') return '到达目的地，靠左侧';
+      if (modifier === 'right') return '到达目的地，靠右侧';
+      return '到达目的地';
     case 'turn':
-      if (modifier === 'uturn') return `Make a U-turn${onto}`;
-      if (modifier === 'straight') return `Continue straight${onto}`;
-      return dir ? `Turn ${dir}${onto}` : `Turn${onto}`;
+      if (modifier === 'uturn') return `掉头${onto}`;
+      if (modifier === 'straight') return `继续直行${onto}`;
+      return turn ? `${turn}${onto}` : `转弯${onto}`;
     case 'new name':
-      return `Continue${onto}`;
+      return `继续${onto}`;
     case 'continue':
-      if (modifier === 'uturn') return `Make a U-turn${onto}`;
-      return dir && dir !== 'straight'
-        ? `Continue ${dir}${onto}`
-        : `Continue straight${onto}`;
+      if (modifier === 'uturn') return `掉头${onto}`;
+      return turn && turn !== '直行'
+        ? `继续${turn}${onto}`
+        : `继续直行${onto}`;
     case 'end of road':
-      return dir
-        ? `At the end of the road, turn ${dir}${onto}`
-        : `At the end of the road, continue${onto}`;
+      return turn ? `路尽头${turn}${onto}` : `路尽头继续${onto}`;
     case 'fork':
-      return dir
-        ? `Keep ${dir} at the fork${onto}`
-        : `Continue at the fork${onto}`;
+      return keep ? `岔路${keep}${onto}` : `岔路继续${onto}`;
     case 'merge':
-      return dir ? `Merge ${dir}${onto}` : `Merge${onto}`;
+      return keep ? `${keep}汇入${onto}` : `汇入${onto}`;
     case 'on ramp':
-      return dir
-        ? `Take the ramp on the ${dir}${onto}`
-        : `Take the ramp${onto}`;
+      return side ? `从${side}侧进入匝道${onto}` : `进入匝道${onto}`;
     case 'off ramp':
-      return dir
-        ? `Take the exit on the ${dir}${onto}`
-        : `Take the exit${onto}`;
+      return side ? `从${side}侧驶出${onto}` : `驶出${onto}`;
     case 'roundabout':
     case 'rotary': {
-      const exit = ordinal(step?.exit);
-      return exit
-        ? `At the roundabout, take the ${exit} exit${onto}`
-        : `Enter the roundabout${onto}`;
+      const exit =
+        Number.isInteger(step?.exit) && step.exit >= 1 ? step.exit : null;
+      return exit ? `环岛走第 ${exit} 出口${onto}` : `进入环岛${onto}`;
     }
     case 'roundabout turn':
-      return dir
-        ? `At the roundabout, turn ${dir}${onto}`
-        : `At the roundabout, continue${onto}`;
+      return turn ? `环岛${turn}${onto}` : `环岛继续${onto}`;
     case 'exit roundabout':
     case 'exit rotary':
-      return `Exit the roundabout${onto}`;
+      return `驶出环岛${onto}`;
     case 'use lane':
-      return dir ? `Use the ${dir} lane${onto}` : `Continue${onto}`;
+      return side ? `使用${side}侧车道${onto}` : `继续${onto}`;
     case 'notification':
     default:
-      return `Continue${onto}`;
+      return `继续${onto}`;
   }
 }
 

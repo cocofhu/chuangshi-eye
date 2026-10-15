@@ -71,12 +71,12 @@ export const DEFAULT_AIS_RUNTIME = Object.freeze({
  */
 
 export const AIS_STATUS_REASON = {
-  'missing-key': 'AISSTREAM_API_KEY not set',
-  unsupported: 'live feed unsupported',
-  connecting: 'connecting to feed…',
-  closed: 'feed disconnected',
-  error: 'feed down',
-  idle: 'feed idle',
+  'missing-key': '未设置 AISSTREAM_API_KEY',
+  unsupported: '不支持实时数据',
+  connecting: '正在连接数据源…',
+  closed: '数据源已断开',
+  error: '数据源中断',
+  idle: '数据源空闲',
 };
 
 /**

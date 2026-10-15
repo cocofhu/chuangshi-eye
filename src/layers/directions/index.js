@@ -31,9 +31,9 @@ export const DIRECTIONS_STEP_OVERLAY_SOURCE_OPTIONS = Object.freeze({
 
 /** Travel modes, keyed by the `/api/route` profile name. */
 export const DIRECTIONS_MODES = Object.freeze({
-  car: Object.freeze({ chip: 'DRIVE', word: 'Drive', icon: '🚗' }),
-  foot: Object.freeze({ chip: 'WALK', word: 'Walk', icon: '🚶' }),
-  bike: Object.freeze({ chip: 'BIKE', word: 'Bike', icon: '🚲' }),
+  car: Object.freeze({ chip: '驾车', word: '驾车', icon: '🚗' }),
+  foot: Object.freeze({ chip: '步行', word: '步行', icon: '🚶' }),
+  bike: Object.freeze({ chip: '骑行', word: '骑行', icon: '🚲' }),
 });
 export const DEFAULT_DIRECTIONS_MODE = 'car';
 
@@ -110,29 +110,29 @@ export function directionsRowControls(state) {
     label: spec.chip,
     active: mode === id,
     state: mode === id ? 'active' : 'idle',
-    title: `${spec.word} — reroute for ${spec.word.toLowerCase()}`,
+    title: `改为${spec.word}`,
     params: { mode: id },
   }));
   chips.push({
     id: 'set-a',
-    label: armed === 'a' ? 'CLICK MAP' : a ? 'A ✓' : 'SET A',
+    label: armed === 'a' ? '点地图' : a ? 'A ✓' : '设 A',
     active: armed === 'a',
     state: armed === 'a' ? 'active' : 'idle',
     title:
       armed === 'a'
-        ? 'Click a spot on the globe to place A (click again to cancel)'
-        : 'Then click the globe to place the start',
+        ? '在地球上点击放置 A，再点一次取消'
+        : '然后点击地球放置起点',
     params: { arm: armed === 'a' ? null : 'a' },
   });
   chips.push({
     id: 'set-b',
-    label: armed === 'b' ? 'CLICK MAP' : b ? 'B ✓' : 'SET B',
+    label: armed === 'b' ? '点地图' : b ? 'B ✓' : '设 B',
     active: armed === 'b',
     state: armed === 'b' ? 'active' : 'idle',
     title:
       armed === 'b'
-        ? 'Click a spot on the globe to place B (click again to cancel)'
-        : 'Then click the globe to place the destination',
+        ? '在地球上点击放置 B，再点一次取消'
+        : '然后点击地球放置终点',
     params: { arm: armed === 'b' ? null : 'b' },
   });
   chips.push({
@@ -140,26 +140,26 @@ export function directionsRowControls(state) {
     label: '⇄',
     disabled: !(a && b) || routing,
     state: 'idle',
-    title: 'Swap A and B',
+    title: '交换 A 与 B',
     params: { swap: true },
   });
   const flying = Number.isInteger(flightStep);
   chips.push({
     id: 'fly',
-    label: routing ? 'FLY ···' : flying ? 'FLYING' : 'FLY',
+    label: routing ? '飞行 ···' : flying ? '飞行中' : '飞行',
     disabled: !route || routing,
     busy: routing || flying,
     active: flying,
     state: routing || flying ? 'loading' : 'idle',
-    title: route ? 'Fly the camera along the route' : 'Place A and B first',
+    title: route ? '沿路线飞行' : '请先放置 A 和 B',
     params: { fly: true },
   });
   chips.push({
     id: 'clear',
-    label: 'CLEAR',
+    label: '清除',
     disabled: !a && !b && !route,
     state: 'idle',
-    title: 'Remove the route and both markers',
+    title: '清除路线和两端标记',
     params: { clear: true },
   });
   return {
@@ -179,8 +179,8 @@ export function directionsRowControls(state) {
  */
 export const POINTER_TOOL_EXITS = Object.freeze({
   draw: Object.freeze({
-    name: 'Draw',
-    leave: 'press Escape twice to leave Draw',
+    name: '绘制',
+    leave: '按两次 Esc 退出绘制',
   }),
 });
 
@@ -202,8 +202,8 @@ export function pointerBlockedMessage(owner, which) {
   const endpoint = which === 'b' ? 'B' : 'A';
   const known = POINTER_TOOL_EXITS[id];
   const name = known?.name || id;
-  const leave = known?.leave || `turn ${name} off`;
-  return `${name} is active — ${leave}, then set ${endpoint}`;
+  const leave = known?.leave || `请关闭${name}`;
+  return `${name}占用中 — ${leave}，然后再设 ${endpoint}`;
 }
 
 /**
@@ -285,13 +285,13 @@ export function directionsStepList({
       id: 'step-truncated',
       ordinal: items.length + 1,
       lead: '',
-      text: `Only the first ${steps.length} turns of this route are shown`,
+      text: `本路线仅显示前 ${steps.length} 个转弯`,
       active: false,
       current: false,
       disabled: true,
     });
   }
-  return { ariaLabel: 'Turn-by-turn directions', items };
+  return { ariaLabel: '逐步路线', items };
 }
 
 /**
@@ -331,12 +331,12 @@ export function directionsStats(state) {
     armed,
     pointerBlocked,
   } = state;
-  const source = 'OSM routing';
+  const source = 'OSM 路径';
   if (pointerBlocked) {
     return {
       count: route?.steps.length || 0,
       lastUpdate,
-      error: 'Another map tool is using clicks — close it, then SET A again',
+      error: '其他地图工具占用点击 — 请关闭后再设 A',
       status: 'empty',
       source,
     };
@@ -347,7 +347,7 @@ export function directionsStats(state) {
       lastUpdate,
       error: null,
       loading: true,
-      loadingLabel: 'Routing…',
+      loadingLabel: '正在规划…',
       source,
     };
   }
@@ -355,7 +355,7 @@ export function directionsStats(state) {
     return {
       count: 0,
       lastUpdate,
-      error: error || 'No route found',
+      error: error || '未找到路线',
       status: 'empty',
       source,
     };
@@ -367,7 +367,7 @@ export function directionsStats(state) {
     const word = DIRECTIONS_MODES[mode]?.word || mode;
     const summary =
       `${formatRouteDistance(route.distanceM)} · ${formatRouteDuration(route.durationS)} · ${word}` +
-      (route.stepsTruncated ? ` · first ${route.steps.length} turns` : '');
+      (route.stepsTruncated ? ` · 仅前 ${route.steps.length} 个转弯` : '');
     return {
       count: route.steps.length,
       lastUpdate,
@@ -378,10 +378,10 @@ export function directionsStats(state) {
     };
   }
   let coverage;
-  if (armed) coverage = `Click the globe to place ${armed.toUpperCase()}`;
-  else if (a && !b) coverage = 'SET B, then click the globe';
-  else if (!a && b) coverage = 'SET A, then click the globe';
-  else coverage = 'SET A, then click the globe';
+  if (armed) coverage = `点击地球放置 ${armed.toUpperCase()}`;
+  else if (a && !b) coverage = '设 B，然后点击地球';
+  else if (!a && b) coverage = '设 A，然后点击地球';
+  else coverage = '设 A，然后点击地球';
   return {
     count: 0,
     lastUpdate,
@@ -406,10 +406,10 @@ export function directionsStepCopy(steps, index) {
   if (step.distanceM > 0) leg.push(formatRouteDistance(step.distanceM));
   if (step.durationS > 0) leg.push(formatRouteDuration(step.durationS));
   details.push(
-    `Step ${index + 1} of ${steps.length}${leg.length ? ` · then ${leg.join(' · ')}` : ''}`,
+    `第 ${index + 1} / ${steps.length} 步${leg.length ? ` · 随后 ${leg.join(' · ')}` : ''}`,
   );
   const next = steps[index + 1];
-  if (next) details.push(`Then: ${next.instruction}`);
+  if (next) details.push(`然后：${next.instruction}`);
   return { title: step.instruction, details };
 }
 
@@ -840,10 +840,10 @@ export function createDirectionsLayer({ services, source }) {
         _status = 'error';
         _error =
           payload?.error === 'no route found'
-            ? 'No route found between A and B'
+            ? 'A 与 B 之间没有路线'
             : payload?.error
-              ? `Routing failed: ${payload.error}`
-              : 'No route found between A and B';
+              ? `规划失败：${payload.error}`
+              : 'A 与 B 之间没有路线';
         return;
       }
       _route = route;
@@ -860,10 +860,10 @@ export function createDirectionsLayer({ services, source }) {
       // happened instead.
       _error =
         error?.name === 'AbortError'
-          ? 'Routing timed out'
+          ? '路径规划超时'
           : error?.name === 'TypeError'
-            ? 'Routing unavailable — no response from the routing service'
-            : error?.message || 'Routing unavailable';
+            ? '路径规划不可用 — 路径服务无响应'
+            : error?.message || '路径规划不可用';
     } finally {
       clearTimeout(timer);
       if (_routeAbort === controller) _routeAbort = null;
@@ -1244,7 +1244,7 @@ export function createDirectionsLayer({ services, source }) {
     id: 'directions',
     name: 'Directions',
     icon: '🧭',
-    source: 'OSM routing',
+    source: 'OSM 路径',
     updateInterval: 0,
 
     /**

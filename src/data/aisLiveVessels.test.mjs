@@ -43,14 +43,14 @@ test('open feed with vessels is healthy (null)', () => {
 test('open feed without a received message is not a fresh healthy update', () => {
   assert.equal(
     deriveAisFeedError({ status: 'open', lastMessageAt: null, error: null }, 0),
-    'awaiting first AIS message…',
+    '正在等待首条 AIS 消息…',
   );
 });
 
 test('open feed with a message but zero accepted positions stays non-fresh', () => {
   assert.equal(
     deriveAisFeedError({ status: 'open', lastMessageAt: 123, error: null }, 0),
-    'awaiting usable AIS positions…',
+    '正在等待可用的 AIS 位置…',
   );
 });
 
@@ -81,7 +81,7 @@ test('raw rows that all fail normalization do not satisfy AIS product health', (
   });
   assert.equal(snapshot.rawRowCount, 1);
   assert.equal(snapshot.acceptedRowCount, 0);
-  assert.equal(snapshot.error, 'awaiting usable AIS positions…');
+  assert.equal(snapshot.error, '正在等待可用的 AIS 位置…');
 });
 
 test('accepted cached rows remain usable while transport reconnects', () => {
@@ -97,16 +97,16 @@ test('accepted cached rows remain usable while transport reconnects', () => {
 test('missing key with no rows surfaces a clean reason', () => {
   assert.equal(
     deriveAisFeedError({ status: 'missing-key', error: 'AISSTREAM_API_KEY is not set' }, 0),
-    'AISSTREAM_API_KEY not set',
+    '未设置 AISSTREAM_API_KEY',
   );
 });
 
 test('socket error with no rows surfaces "feed down"', () => {
-  assert.equal(deriveAisFeedError({ status: 'error', error: 'AISStream websocket error' }, 0), 'feed down');
+  assert.equal(deriveAisFeedError({ status: 'error', error: 'AISStream websocket error' }, 0), '数据源中断');
 });
 
 test('closed feed with no rows surfaces "feed disconnected"', () => {
-  assert.equal(deriveAisFeedError({ status: 'closed', error: null }, 0), 'feed disconnected');
+  assert.equal(deriveAisFeedError({ status: 'closed', error: null }, 0), '数据源已断开');
 });
 
 test('non-open status but rows still flowing is treated as stale, not down (null)', () => {
@@ -117,7 +117,7 @@ test('non-open status but rows still flowing is treated as stale, not down (null
 test('unknown status falls back to a generic reason and appends server detail', () => {
   assert.equal(
     deriveAisFeedError({ status: 'weird-state', error: 'something specific' }, 0),
-    'feed unavailable (something specific)',
+    '数据源不可用 (something specific)',
   );
 });
 
@@ -134,47 +134,47 @@ test("'live' is the healthy status and reads exactly like the older 'open'", () 
   assert.equal(deriveAisFeedError({ status: 'live', lastMessageAt: 1, error: null }, 42), null);
   assert.equal(
     deriveAisFeedError({ status: 'live', lastMessageAt: null, error: null }, 0),
-    'awaiting first AIS message…',
+    '正在等待首条 AIS 消息…',
   );
   assert.equal(
     deriveAisFeedError({ status: 'live', lastMessageAt: 123, error: null }, 0),
-    'awaiting usable AIS positions…',
+    '正在等待可用的 AIS 位置…',
   );
 });
 
 test('a stale feed is surfaced even though cached vessels are still on screen', () => {
   assert.equal(
     deriveAisFeedError({ status: 'stale', silentForMs: 184_000, lastMessageAt: 5 }, 4_812),
-    'feed silent 184s — no AIS data',
+    '数据源静默 184 秒 — 无 AIS 数据',
   );
 });
 
 test('a stale feed without a silence figure still says the feed is silent', () => {
   assert.equal(
     deriveAisFeedError({ status: 'stale', lastMessageAt: 5 }, 0),
-    'feed silent — no AIS data',
+    '数据源静默 — 无 AIS 数据',
   );
 });
 
 test('reconnecting reports which attempt is in flight, rows or no rows', () => {
   assert.equal(
     deriveAisFeedError({ status: 'reconnecting', reconnectAttempt: 2 }, 900),
-    'reconnecting to feed… (attempt 2)',
+    '正在重新连接数据源…（第 2 次）',
   );
-  assert.equal(deriveAisFeedError({ status: 'reconnecting' }, 0), 'reconnecting to feed…');
+  assert.equal(deriveAisFeedError({ status: 'reconnecting' }, 0), '正在重新连接数据源…');
 });
 
 test('DOWN is a visible terminal state, not a silent retry', () => {
   assert.equal(
     deriveAisFeedError({ status: 'down', reconnectAttempt: 5 }, 1_200),
-    'feed down — retrying slowly (attempt 5)',
+    '数据源中断 — 正在缓慢重试（第 5 次）',
   );
 });
 
 test('a rejected API key reads as actionable, not as a countdown', () => {
   assert.equal(
     deriveAisFeedError({ status: 'auth-failed', reconnectAttempt: 3 }, 4_000),
-    'API key rejected — check AISSTREAM_API_KEY',
+    'API 密钥被拒绝 — 请检查 AISSTREAM_API_KEY',
   );
 
   const runtime = makeFakeAisRuntime(1_000_000);
@@ -225,7 +225,7 @@ test('a degraded feed keeps its reason through snapshot classification', () => {
     rows: [{ mmsi: 'cached', lat: 29.7, lon: -95.1 }],
   });
   assert.equal(snapshot.acceptedRowCount, 1, 'the cached vessel is still drawable');
-  assert.equal(snapshot.error, 'feed down — retrying slowly (attempt 5)');
+  assert.equal(snapshot.error, '数据源中断 — 正在缓慢重试（第 5 次）');
 });
 
 function makeFakeAisRuntime(startMs = 1000) {
@@ -303,7 +303,7 @@ test('zero accepted rows preserve warm vessel selection, trail, and freshness ti
       loading: false,
       loadingLabel: '',
       stale: true,
-      error: 'awaiting usable AIS positions…',
+      error: '正在等待可用的 AIS 位置…',
       status: undefined,
       lastUpdate: 456,
       transportStatus: 'open',
@@ -342,7 +342,7 @@ test('open first load stays LOADING for one bounded first-connect grace period',
     assert.equal(feed.lastUpdate, null);
     assert.equal(feed.stale, false);
     assert.equal(feed.loading, true);
-    assert.equal(feed.loadingLabel, 'awaiting first AIS position…');
+    assert.equal(feed.loadingLabel, '正在等待首个 AIS 位置…');
     assert.equal(feed.error, null);
     assert.equal(feed.status, undefined);
     assert.equal(feed.firstConnectPhase, 'loading');
@@ -359,7 +359,7 @@ test('open first load stays LOADING for one bounded first-connect grace period',
     clock.advance(1);
     const expired = _getVesselFeedStateForTest();
     assert.equal(expired.loading, false);
-    assert.equal(expired.error, 'awaiting first AIS message…');
+    assert.equal(expired.error, '正在等待首条 AIS 消息…');
     assert.equal(expired.status, 'unavailable');
     assert.equal(expired.firstConnectPhase, 'unavailable');
     assert.equal(layerFeedState(aisLiveVesselsLayer.getStats()), 'unavailable');
@@ -405,7 +405,7 @@ test('definitive AIS transport failures end grace immediately', () => {
     const feed = _getVesselFeedStateForTest();
     assert.equal(feed.loading, false);
     assert.equal(feed.status, 'unavailable');
-    assert.equal(feed.error, 'AISSTREAM_API_KEY not set');
+    assert.equal(feed.error, '未设置 AISSTREAM_API_KEY');
     assert.equal(feed.firstConnectPhase, 'unavailable');
     assert.equal(clock.activeCount(), 0);
   } finally {
@@ -457,7 +457,7 @@ test('first accepted position ends grace and warm data survives later open silen
     assert.equal(feed.loading, false);
     assert.equal(feed.firstConnectPhase, 'ready');
     assert.equal(feed.stale, true);
-    assert.equal(feed.error, 'awaiting usable AIS positions…');
+    assert.equal(feed.error, '正在等待可用的 AIS 位置…');
   } finally {
     _setVesselStateForTest({ enabled: false });
     _setVesselOverlayHostForTest();
@@ -526,7 +526,7 @@ test('HTTP rejection ends first-connect grace without waiting for its deadline',
     const feed = _getVesselFeedStateForTest();
     assert.equal(feed.loading, false);
     assert.equal(feed.status, 'unavailable');
-    assert.equal(feed.error, 'AISSTREAM_API_KEY not set');
+    assert.equal(feed.error, '未设置 AISSTREAM_API_KEY');
     assert.equal(feed.firstConnectPhase, 'unavailable');
     assert.equal(clock.activeCount(), 0);
   } finally {
@@ -584,7 +584,7 @@ test('superseded AIS response cannot mutate or finalize a replacement request', 
     feed = _getVesselFeedStateForTest();
     assert.equal(feed.loading, false);
     assert.equal(feed.lastUpdate, 200);
-    assert.equal(feed.error, 'awaiting first AIS message…');
+    assert.equal(feed.error, '正在等待首条 AIS 消息…');
     assert.equal(feed.stale, true);
     assert.equal(feed.selectedMmsi, replacement.mmsi);
     assert.equal(feed.trailMmsi, replacement.mmsi);

@@ -205,7 +205,7 @@ test('getStats tells a rejected key from a missing one', async (t) => {
   const provider = fakeProvider();
   const { layer } = await enabledLayer(t, [provider]);
   provider.stats.loading = true;
-  assert.equal(layer.getStats().loadingLabel, 'loading coverage...');
+  assert.equal(layer.getStats().loadingLabel, '正在加载覆盖…');
   assert.equal(layer.getStats().keyRequired, false);
 
   provider.stats.keyRequired = true;

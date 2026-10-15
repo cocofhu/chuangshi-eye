@@ -18,7 +18,7 @@ import {
   distanceKm,
   resolveArea,
 } from '../area.js';
-import { LIMIT_SCHEMA, capRows, countNoun, isoTime } from '../results.js';
+import { LIMIT_SCHEMA, capRows, isoTime } from '../results.js';
 
 const MAX_SYSTEMS = 3;
 
@@ -47,7 +47,7 @@ function covering(area, entries, centerOf, radiusOf) {
 const skippedNote = (skipped, nameOf) =>
   skipped.length
     ? [
-        `${skipped.length} more not searched: ${skipped.map(nameOf).join(', ')}; use a smaller area`,
+        `${skipped.length} 个未搜索：${skipped.map(nameOf).join('、')}；请缩小范围`,
       ]
     : [];
 
@@ -75,7 +75,7 @@ export const getBikeShare = defineTool({
     );
     if (!systems.length)
       return {
-        summary: `No supported bike-share system covers ${area.label}.`,
+        summary: `没有支持的共享单车系统覆盖 ${area.label}。`,
         data: { ...capRows([], args.limit), systems: [] },
       };
     const center = areaCenter(area);
@@ -95,7 +95,7 @@ export const getBikeShare = defineTool({
     if (results.every((result) => result.status === 'rejected'))
       throw new ToolError(
         'unavailable',
-        'Bike-share feeds are unavailable right now',
+        '共享单车数据源暂不可用',
       );
     const rows = results
       .flatMap((result) => (result.status === 'fulfilled' ? result.value : []))
@@ -126,14 +126,13 @@ export const getBikeShare = defineTool({
       (result) => result.status === 'rejected',
     ).length;
     const notes = [
-      ...(failed ? [`${countNoun(failed, 'system')} unavailable`] : []),
+      ...(failed ? [`${failed} 个系统不可用`] : []),
       ...skippedNote(skipped, (system) => system.city),
     ];
     return {
       summary:
-        `${countNoun(rows.length, 'bike-share station')} in ${area.label} with ` +
-        `${countNoun(bikes, 'bike')} available` +
-        (notes.length ? ` (${notes.join('; ')}).` : '.'),
+        `${rows.length} 个共享单车站点，位于 ${area.label}，可用 ${bikes} 辆车` +
+        (notes.length ? `（${notes.join('；')}）。` : '。'),
       data: {
         view: suggestView(services, { area, layers: ['bikeshare'] }),
         ...capRows(rows, args.limit),
@@ -178,7 +177,7 @@ export const getTransitVehicles = defineTool({
     );
     if (!feeds.length)
       return {
-        summary: `No supported transit feed covers ${area.label}.`,
+        summary: `没有支持的公交数据源覆盖 ${area.label}。`,
         data: { ...capRows([], args.limit), feeds: [] },
       };
     const center = areaCenter(area);
@@ -221,7 +220,7 @@ export const getTransitVehicles = defineTool({
     if (results.every((result) => result.status === 'rejected'))
       throw new ToolError(
         'unavailable',
-        'Transit feeds are unavailable right now',
+        '公交数据源暂不可用',
       );
     const wanted = args.route?.trim().toLowerCase();
     const rows = results
@@ -263,19 +262,17 @@ export const getTransitVehicles = defineTool({
     const staleFeeds = answered.filter((feed) => feed.stale).length;
     const expired = answered.reduce((total, feed) => total + feed.expired, 0);
     const notes = [
-      ...(failed ? [`${countNoun(failed, 'feed')} unavailable`] : []),
+      ...(failed ? [`${failed} 个数据源不可用`] : []),
       ...(staleFeeds
-        ? [
-            `${countNoun(staleFeeds, 'feed')} stale; positions may be out of date`,
-          ]
+        ? [`${staleFeeds} 个数据源陈旧，位置可能过时`]
         : []),
       ...skippedNote(skipped, (feed) => feed.name),
     ];
-    const what = args.route ? ` on route ${args.route}` : '';
+    const what = args.route ? `，线路 ${args.route}` : '';
     return {
       summary:
-        `${countNoun(rows.length, 'transit vehicle')}${what} in ${area.label}` +
-        (notes.length ? ` (${notes.join('; ')}).` : '.'),
+        `${rows.length} 辆公交车辆${what}，位于 ${area.label}` +
+        (notes.length ? `（${notes.join('；')}）。` : '。'),
       data: {
         view: suggestView(services, { area, layers: ['transit'] }),
         ...capRows(rows, args.limit),
@@ -467,13 +464,10 @@ export const getTrafficFlow = defineTool({
     return {
       summary:
         (segments.length
-          ? `Traffic in ${area.label}: ${speedPct ?? 'unknown'}% of free-flow speed on average; ` +
-            `${round(congestedKm, 1)} km congested of ${round(measuredKm, 1)} km measured` +
-            (closedKm > 0 ? `; ${round(closedKm, 1)} km closed.` : '.')
-          : `No live traffic is reported in ${area.label}.`) +
-        (flow.partial
-          ? ' Some map tiles did not load, so these figures are partial.'
-          : ''),
+          ? `路况 ${area.label}：平均自由流速度的 ${speedPct ?? '未知'}%；已测 ${round(measuredKm, 1)} km 中拥堵 ${round(congestedKm, 1)} km` +
+            (closedKm > 0 ? `；封闭 ${round(closedKm, 1)} km。` : '。')
+          : `${area.label} 无实时路况报告。`) +
+        (flow.partial ? '部分地图瓦片未加载，以上数字不完整。' : ''),
       data: {
         view: suggestView(services, { area, layers: ['traffic'] }),
         area: area.label,

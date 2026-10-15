@@ -52,7 +52,7 @@ test('place search is centered on the area, kept inside it, and reports a missin
     query: 'coffee',
     area: { place: 'Austin' },
   });
-  assert.equal(result.summary, '1 place matching "coffee" in Austin, Texas.');
+  assert.equal(result.summary, '1 个地点匹配「coffee」，位于 Austin, Texas。');
   assert.deepEqual(result.data.rows[0], {
     id: 'a',
     name: 'Place a',
@@ -96,7 +96,7 @@ test('nearby places use the given radius', async () => {
     location: { lat: 30.27, lon: -97.74 },
     radius_m: 400,
   });
-  assert.equal(result.summary, '1 place within 400 m of 30.2700, -97.7400.');
+  assert.equal(result.summary, '1 个地点，距 30.2700, -97.7400 400 米内。');
   assert.deepEqual(search.calls[0], {
     latitude: 30.27,
     longitude: -97.74,
@@ -133,7 +133,7 @@ test('routes resolve endpoints, map modes and thin long paths', async () => {
   });
   assert.equal(
     result.summary,
-    'Drive from Austin, Texas to 32.7800, -96.8000: 312.4 km, about 187 minutes.',
+    '驾车，从 Austin, Texas 到 32.7800, -96.8000：312.4 km，约 187 分钟。',
   );
   assert.equal(requests[0].profile, 'car');
   assert.deepEqual(requests[0].points[1], {
@@ -159,7 +159,7 @@ test('routes resolve endpoints, map modes and thin long paths', async () => {
       from: { place: 'Austin' },
       to: { place: 'Dallas' },
     }),
-    /No walk route from Austin, Texas to Dallas, Texas: route leg too long/,
+    /没有从 Austin, Texas 到 Dallas, Texas 的步行路线：route leg too long/,
   );
   await assert.rejects(
     catalog.call('plan_route', {
@@ -266,11 +266,11 @@ test('place answers say when the search limits may have left places out', async 
     limit: 100,
   });
   assert.equal(capped.data.may_have_more, true);
-  assert.match(capped.summary, /the search returns at most 5 matches\)\.$/);
+  assert.match(capped.summary, /搜索最多返回 5 条）。$/);
   const wide = await catalog.call('search_places', {
     query: 'coffee',
     area: { lat: 30.27, lon: -97.74, radius_km: 200 },
   });
   assert.equal(wide.data.searched_radius_km, 50);
-  assert.match(wide.summary, /searched within 50 km of the center/);
+  assert.match(wide.summary, /仅搜索中心周边 50 km/);
 });

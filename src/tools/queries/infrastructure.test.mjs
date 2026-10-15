@@ -95,7 +95,7 @@ test('datacenters and dams are listed nearest first with their own fields', asyn
   });
   assert.equal(
     dc.summary,
-    '1 mapped datacenter in 20 km around 38.950, -77.450.',
+    '1 个已标注数据中心，位于 38.950, -77.450 周边 20 km。',
   );
   assert.deepEqual(dc.data.rows[0], {
     name: 'Equinix DC2',

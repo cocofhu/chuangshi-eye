@@ -37,7 +37,7 @@ test('the flood tool lists the bundled evidence in story order', async () => {
   const all = await catalog.call('get_bhote_koshi_flood', {});
   assert.match(
     all.summary,
-    /^Bhote Koshi Outburst Flood, observed 2026-08-26: 16 evidence records along a \d+(\.\d)? km mapped flood path\.$/,
+    /^Bhote Koshi Outburst Flood，观测 2026-08-26：16 条证据，沿 \d+(\.\d)? km 已标注洪水路径。$/,
   );
   assert.deepEqual(
     all.data.evidence.map((row) => row.sequence),
@@ -70,5 +70,5 @@ test('the flood tool lists the bundled evidence in story order', async () => {
   assert.ok(
     downstream.data.evidence.every((row) => row.phase === 'downstream passage'),
   );
-  assert.match(downstream.summary, /in the Downstream passage phase/);
+  assert.match(downstream.summary, /阶段 Downstream passage/);
 });

@@ -73,7 +73,7 @@ test('vessels in an area are nearest first and filterable by type', async () => 
     services: { vessels: vessels() },
   });
   const all = await catalog.call('vessels_in_area', { area: bay });
-  assert.equal(all.summary, '2 vessels in 20 km around 37.780, -122.400.');
+  assert.equal(all.summary, '2 艘船舶，位于 37.780, -122.400 周边 20 km。');
   assert.deepEqual(
     all.data.rows.map((row) => row.mmsi),
     ['366999712', '538001234'],
@@ -99,7 +99,7 @@ test('vessels in an area are nearest first and filterable by type', async () => 
   });
   assert.equal(
     tankers.summary,
-    '1 tanker vessel in 20 km around 37.780, -122.400.',
+    '1 艘 tanker 船舶，位于 37.780, -122.400 周边 20 km。',
   );
   const stale = composeCatalog({
     tools: coreTools,
@@ -107,7 +107,7 @@ test('vessels in an area are nearest first and filterable by type', async () => 
   });
   assert.match(
     (await stale.call('vessels_in_area', { area: bay })).summary,
-    /\(data may be stale\)\.$/,
+    /（数据可能已过期）。$/,
   );
 });
 
@@ -129,10 +129,10 @@ test('vessels are found by exactly one identifier', async () => {
     ['538001234'],
   );
   const byName = await catalog.call('find_vessel', { name: 'trader' });
-  assert.equal(byName.summary, 'Found 1 vessel with name trader.');
+  assert.equal(byName.summary, '找到 1 艘船名为 trader 的船舶。');
   assert.equal(
     (await catalog.call('find_vessel', { mmsi: '99999' })).summary,
-    'No vessel with mmsi 99999 is currently reported.',
+    '当前没有报告MMSI为 99999 的船舶。',
   );
   await assert.rejects(
     catalog.call('find_vessel', { mmsi: '366999712', name: 'xy' }),
@@ -152,7 +152,7 @@ test('vessel tracks are ordered and drop untimed positions', async () => {
   const track = await catalog.call('get_vessel_track', { mmsi: '366999712' });
   assert.equal(
     track.summary,
-    '2 positions for 366999712 from 2026-01-01T00:00:00.000Z to 2026-01-01T01:00:00.000Z.',
+    '2 个位置，366999712，从 2026-01-01T00:00:00.000Z 到 2026-01-01T01:00:00.000Z。',
   );
   assert.deepEqual(
     track.data.points.map((point) => point.lat),
@@ -160,7 +160,7 @@ test('vessel tracks are ordered and drop untimed positions', async () => {
   );
   assert.equal(
     (await catalog.call('get_vessel_track', { mmsi: '235000001' })).summary,
-    'No recent track is available for 235000001.',
+    '没有 235000001 的近期轨迹。',
   );
 });
 

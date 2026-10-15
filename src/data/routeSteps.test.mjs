@@ -12,16 +12,16 @@ import {
 test('instructions read like a navigator, one sentence per OSRM maneuver', () => {
   assert.equal(
     instructionFor({ type: 'depart', name: 'Kaivokatu' }),
-    'Head out on Kaivokatu',
+    '沿 Kaivokatu 出发',
   );
-  assert.equal(instructionFor({ type: 'depart' }), 'Head out');
+  assert.equal(instructionFor({ type: 'depart' }), '出发');
   assert.equal(
     instructionFor({
       type: 'new name',
       modifier: 'straight',
       name: 'Simonkatu',
     }),
-    'Continue onto Simonkatu',
+    '继续，进入 Simonkatu',
   );
   assert.equal(
     instructionFor({
@@ -29,11 +29,11 @@ test('instructions read like a navigator, one sentence per OSRM maneuver', () =>
       modifier: 'left',
       name: 'Annankatu',
     }),
-    'At the end of the road, turn left onto Annankatu',
+    '路尽头左转，进入 Annankatu',
   );
   assert.equal(
     instructionFor({ type: 'turn', modifier: 'right', name: 'Kansakoulukatu' }),
-    'Turn right onto Kansakoulukatu',
+    '右转，进入 Kansakoulukatu',
   );
   assert.equal(
     instructionFor({
@@ -42,11 +42,11 @@ test('instructions read like a navigator, one sentence per OSRM maneuver', () =>
       name: 'Ring I',
       ref: 'Kt 50',
     }),
-    'Turn slightly left onto Ring I (Kt 50)',
+    '稍向左转，进入 Ring I (Kt 50)',
   );
   assert.equal(
     instructionFor({ type: 'turn', modifier: 'uturn' }),
-    'Make a U-turn',
+    '掉头',
   );
   assert.equal(
     instructionFor({
@@ -55,27 +55,27 @@ test('instructions read like a navigator, one sentence per OSRM maneuver', () =>
       exit: 2,
       name: 'Malminrinne',
     }),
-    'At the roundabout, take the 2nd exit onto Malminrinne',
+    '环岛走第 2 出口，进入 Malminrinne',
   );
   assert.equal(
     instructionFor({ type: 'rotary', exit: 1 }),
-    'At the roundabout, take the 1st exit',
+    '环岛走第 1 出口',
   );
   assert.equal(
     instructionFor({ type: 'roundabout', exit: 11 }),
-    'At the roundabout, take the 11th exit',
+    '环岛走第 11 出口',
   );
   assert.equal(
     instructionFor({ type: 'fork', modifier: 'slight right', ref: 'E12' }),
-    'Keep slightly right at the fork onto E12',
+    '岔路稍向右，进入 E12',
   );
   assert.equal(
     instructionFor({ type: 'off ramp', modifier: 'right', name: 'Turunväylä' }),
-    'Take the exit on the right onto Turunväylä',
+    '从右侧驶出，进入 Turunväylä',
   );
   assert.equal(
     instructionFor({ type: 'on ramp', modifier: 'left' }),
-    'Take the ramp on the left',
+    '从左侧进入匝道',
   );
   assert.equal(
     instructionFor({
@@ -83,21 +83,15 @@ test('instructions read like a navigator, one sentence per OSRM maneuver', () =>
       modifier: 'slight left',
       name: 'Länsiväylä',
     }),
-    'Merge slightly left onto Länsiväylä',
+    '稍向左汇入，进入 Länsiväylä',
   );
   assert.equal(
     instructionFor({ type: 'arrive', modifier: 'right' }),
-    'Arrive at your destination, on the right',
+    '到达目的地，靠右侧',
   );
-  assert.equal(
-    instructionFor({ type: 'arrive' }),
-    'Arrive at your destination',
-  );
-  assert.equal(
-    instructionFor({ type: 'made-up', name: 'X' }),
-    'Continue onto X',
-  );
-  assert.equal(instructionFor(null), 'Continue');
+  assert.equal(instructionFor({ type: 'arrive' }), '到达目的地');
+  assert.equal(instructionFor({ type: 'made-up', name: 'X' }), '继续，进入 X');
+  assert.equal(instructionFor(null), '继续');
 });
 
 test('road label prefers "Name (Ref)" and never repeats a ref already in the name', () => {
@@ -177,13 +171,13 @@ test('normalizeOsrmSteps flattens legs, folds roundabout exits, and drops steps 
   assert.equal(steps[1].durationS, 24);
   assert.equal(
     steps[1].instruction,
-    'At the roundabout, take the 2nd exit onto Malminrinne',
+    '环岛走第 2 出口，进入 Malminrinne',
   );
   assert.deepEqual(
     steps.map((s) => s.index),
     [0, 1, 2],
   );
-  assert.equal(steps[2].instruction, 'Arrive at your destination, on the left');
+  assert.equal(steps[2].instruction, '到达目的地，靠左侧');
   assert.equal(steps[0].lon, 24.9384);
   assert.equal(steps[0].lat, 60.1699);
   assert.deepEqual(normalizeOsrmSteps(null), { steps: [], truncated: false });

@@ -745,7 +745,7 @@ test('empty mapped coverage, stale data and a saturated response remain distinct
     assert.equal(alprCamerasLayer.getStats().status, 'empty');
     assert.match(
       alprCamerasLayer.getStats().loadingLabel,
-      /No ALPR data for this area/,
+      /此区域无车牌识别数据/,
     );
     h.expire();
     h.setFetch(async () =>
@@ -760,7 +760,7 @@ test('empty mapped coverage, stale data and a saturated response remain distinct
     assert.equal(alprCamerasLayer.getStats().saturated, true);
     assert.match(
       alprCamerasLayer.getStats().loadingLabel,
-      /cached.*Coverage limited/,
+      /显示缓存位置.*覆盖有限/,
     );
   } finally {
     h.restore();
@@ -1011,13 +1011,13 @@ test('loaded cameras outside the view say so instead of looking unloaded', async
     await alprCamerasLayer.update();
     let stats = alprCamerasLayer.getStats();
     assert.equal(stats.onScreen, 0);
-    assert.match(stats.countLabel, /1 nearby · 0 on screen/);
-    assert.match(stats.loadingLabel, /None on screen/);
+    assert.match(stats.countLabel, /1 个附近 · 画面内 0/);
+    assert.match(stats.loadingLabel, /画面内没有/);
     inView = true;
     h.viewer.camera.moveEnd.raiseEvent();
     stats = alprCamerasLayer.getStats();
     assert.equal(stats.onScreen, 1);
-    assert.doesNotMatch(stats.loadingLabel, /None on screen/);
+    assert.doesNotMatch(stats.loadingLabel, /画面内没有/);
   } finally {
     Cesium.SceneTransforms.worldToWindowCoordinates = project;
     h.restore();
@@ -1194,9 +1194,9 @@ test('nearby count and discovery control frame a real loaded camera without fetc
   try {
     assert.equal(alprCamerasLayer.getRowControls().chips[0].disabled, true);
     await alprCamerasLayer.update();
-    assert.equal(alprCamerasLayer.getStats().countLabel, '1 nearby');
+    assert.equal(alprCamerasLayer.getStats().countLabel, '1 个附近');
     const controls = alprCamerasLayer.getRowControls();
-    assert.equal(controls.legend[0].label, 'Camera badges');
+    assert.equal(controls.legend[0].label, '摄像头标记');
     assert.equal(controls.chips[0].onClick(), true);
     assert.equal(flights.length, 1);
     assert.equal(getSelectedEntityContext().id, 'alpr:42');
@@ -1261,7 +1261,7 @@ test('unsupported ALPR coverage suppresses the nearby count and names the extrac
     assert.equal(stats.countLabel, '');
     assert.equal(
       stats.loadingLabel,
-      'No ALPR data for this area — US and Canada only',
+      '此区域无车牌识别数据 — 仅美国和加拿大',
     );
   } finally {
     h.restore();

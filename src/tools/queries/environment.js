@@ -15,7 +15,7 @@ import {
   resolveArea,
   resolvePoint,
 } from '../area.js';
-import { LIMIT_SCHEMA, capRows, countNoun, isoTime } from '../results.js';
+import { LIMIT_SCHEMA, capRows, isoTime } from '../results.js';
 
 const MAX_TERRAIN_POINTS = 20;
 const MAX_SITE_BOX_DEGREES = 10;
@@ -76,14 +76,46 @@ function weatherRow(weather) {
   };
 }
 
+const WEATHER_PHRASES = {
+  'clear sky': '晴',
+  'mainly clear': '大部晴朗',
+  'partly cloudy': '少云',
+  overcast: '阴',
+  fog: '雾',
+  'depositing rime fog': '雾凇',
+  'light drizzle': '小毛毛雨',
+  drizzle: '毛毛雨',
+  'dense drizzle': '浓毛毛雨',
+  'light freezing drizzle': '小冻毛毛雨',
+  'freezing drizzle': '冻毛毛雨',
+  'light rain': '小雨',
+  rain: '雨',
+  'heavy rain': '大雨',
+  'light freezing rain': '小冻雨',
+  'freezing rain': '冻雨',
+  'light snow': '小雪',
+  snow: '雪',
+  'heavy snow': '大雪',
+  'snow grains': '米雪',
+  'light rain showers': '小阵雨',
+  'rain showers': '阵雨',
+  'violent rain showers': '强阵雨',
+  'light snow showers': '小阵雪',
+  'snow showers': '阵雪',
+  thunderstorm: '雷暴',
+  'thunderstorm with light hail': '雷暴伴小冰雹',
+  'thunderstorm with heavy hail': '雷暴伴大冰雹',
+};
+
 function describeWeather(row) {
-  if (!row) return 'no current weather';
+  if (!row) return '无当前天气';
+  const condition = WEATHER_PHRASES[row.conditions] || row.conditions;
   const parts = [
-    row.conditions,
+    condition,
     Number.isFinite(row.temperature_c) && `${Math.round(row.temperature_c)}°C`,
-    Number.isFinite(row.wind_kph) && `wind ${Math.round(row.wind_kph)} km/h`,
+    Number.isFinite(row.wind_kph) && `风 ${Math.round(row.wind_kph)} km/h`,
   ].filter(Boolean);
-  return parts.join(', ') || 'conditions unknown';
+  return parts.join('，') || '状况未知';
 }
 
 export const getWeather = defineTool({
@@ -109,8 +141,8 @@ export const getWeather = defineTool({
     const stale = payload?.status === 'stale';
     return {
       summary:
-        `Weather at ${point.label}: ${describeWeather(row)}` +
-        (stale ? ' (data may be stale).' : '.'),
+        `${point.label}：${describeWeather(row)}` +
+        (stale ? '（数据可能已过期）。' : '。'),
       data: {
         location: point,
         weather: row,
@@ -149,7 +181,7 @@ export const getRegionalBrief = defineTool({
     const weather = weatherRow(brief?.weather);
     const label = place?.label || point.label;
     return {
-      summary: `${label}: ${describeWeather(weather)}; ${countNoun(articles.length, 'recent headline')}.`,
+      summary: `${label}：${describeWeather(weather)}；${articles.length} 条近期标题。`,
       data: {
         location: point,
         place: place && {
@@ -187,7 +219,7 @@ export const getCyclones = defineTool({
     if (snapshot.unavailable)
       throw new ToolError(
         'unavailable',
-        'Cyclone advisories are unavailable right now',
+        '台风与飓风通报暂不可用',
       );
     const storms = snapshot.storms
       .filter(
@@ -214,13 +246,13 @@ export const getCyclones = defineTool({
         advisory_url: storm.advisoryUrl,
       }))
       .sort((a, b) => (b.wind_kt ?? 0) - (a.wind_kt ?? 0));
-    const where = area ? ` in ${area.label}` : '';
+    const where = area ? `，位于 ${area.label}` : '';
     return {
       summary:
-        `${countNoun(storms.length, 'active tropical cyclone')}${where}` +
+        `${storms.length} 个活跃热带气旋${where}` +
         (storms[0]
-          ? `; strongest ${storms[0].name} at ${storms[0].wind_kt} kt.`
-          : '.'),
+          ? `；最强 ${storms[0].name}，${storms[0].wind_kt} kt。`
+          : '。'),
       data: {
         view: suggestView(
           services,
@@ -279,7 +311,7 @@ export const getFirePerimeters = defineTool({
       }))
       .sort((a, b) => (b.acres ?? 0) - (a.acres ?? 0));
     return {
-      summary: `${countNoun(rows.length, 'mapped wildfire perimeter')} in ${area.label}.`,
+      summary: `${rows.length} 个已标注山火范围，位于 ${area.label}。`,
       data: {
         view: suggestView(services, { area, layers: ['fire-perimeters'] }),
         ...capRows(rows, args.limit),
@@ -335,7 +367,7 @@ export const getTerrainHeight = defineTool({
   async run(args, { services, signal }) {
     const results = await services.terrain.getHeights(args.points, { signal });
     if (!Array.isArray(results) || results.length !== args.points.length)
-      throw new ToolError('malformed', 'Terrain heights were incomplete');
+      throw new ToolError('malformed', '地面高程不完整');
     const rows = args.points.map((point, index) => ({
       lat: point.lat,
       lon: point.lon,
@@ -347,8 +379,8 @@ export const getTerrainHeight = defineTool({
     return {
       summary:
         rows.length === 1
-          ? `Ground elevation is ${first.elevation_m ?? 'unknown'} m at ${first.lat}, ${first.lon}.`
-          : `Ground elevation at ${countNoun(rows.length, 'point')}.`,
+          ? `地面高程 ${first.elevation_m ?? '未知'} 米，位于 ${first.lat}, ${first.lon}。`
+          : `${rows.length} 个点的地面高程。`,
       data: { points: rows },
     };
   },
@@ -442,13 +474,13 @@ export const findMilitaryInstallations = defineTool({
       }))
       .sort((a, b) => a.distance_km - b.distance_km);
     const notes = [
-      ...(complete ? [] : ['partial: the source returned only some sites']),
-      ...(namesPending ? ['site names are still loading'] : []),
+      ...(complete ? [] : ['部分结果：来源只返回了部分站点']),
+      ...(namesPending ? ['站点名称仍在加载'] : []),
     ];
     return {
       summary:
-        `${countNoun(rows.length, 'mapped military installation')} in ${area.label}` +
-        (notes.length ? ` (${notes.join('; ')}).` : '.'),
+        `${rows.length} 个已标注军事设施，位于 ${area.label}` +
+        (notes.length ? `（${notes.join('；')}）。` : '。'),
       data: {
         view: suggestView(services, {
           area,
@@ -512,9 +544,14 @@ export const getMapFeatures = defineTool({
       }))
       .filter((row) => row.name)
       .sort((a, b) => (a.admin_level ?? 99) - (b.admin_level ?? 99));
-    const kind = args.kind.replace('_', ' ');
+    const kind =
+      {
+        administrative_areas: '行政区',
+        named_places: '地名',
+        monuments: '纪念地',
+      }[args.kind] || args.kind;
     return {
-      summary: `${countNoun(rows.length, 'named feature')} (${kind}) at ${point.label}.`,
+      summary: `${rows.length} 个地名（${kind}），位于 ${point.label}。`,
       data: { location: point, ...capRows(rows, args.limit) },
     };
   },

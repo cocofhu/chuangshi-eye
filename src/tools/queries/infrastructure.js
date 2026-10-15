@@ -9,11 +9,11 @@ import {
   distanceKm,
   resolveArea,
 } from '../area.js';
-import { LIMIT_SCHEMA, capRows, countNoun } from '../results.js';
+import { LIMIT_SCHEMA, capRows } from '../results.js';
 
 const KINDS = {
-  datacenters: { layerId: 'local-datacenters', noun: 'datacenter' },
-  dams: { layerId: 'local-dams', noun: 'dam' },
+  datacenters: { layerId: 'local-datacenters', noun: '数据中心' },
+  dams: { layerId: 'local-dams', noun: '水坝' },
 };
 const ATTRIBUTION = {
   datacenters: '© OpenStreetMap contributors (ODbL 1.0)',
@@ -61,7 +61,7 @@ export const findInfrastructure = defineTool({
       }))
       .sort((a, b) => a.distance_km - b.distance_km);
     return {
-      summary: `${countNoun(rows.length, `mapped ${noun}`)} in ${area.label}.`,
+      summary: `${rows.length} 个已标注${noun}，位于 ${area.label}。`,
       data: {
         view: suggestView(services, { area, layers: [layerId] }),
         ...capRows(rows, args.limit),
