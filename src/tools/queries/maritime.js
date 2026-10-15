@@ -13,7 +13,6 @@ import {
 import {
   LIMIT_SCHEMA,
   capRows,
-  countNoun,
   isoTime,
   thinEvenly,
 } from '../results.js';
@@ -118,11 +117,11 @@ export const vesselsInArea = defineTool({
       )
       .map((record) => vesselRow(record, center))
       .sort((a, b) => a.distance_km - b.distance_km);
-    const kind = args.type ? `${args.type} vessel` : 'vessel';
+    const kind = args.type ? ` ${args.type} ` : '';
     return {
       summary:
-        `${countNoun(rows.length, kind)} in ${area.label}` +
-        (snapshot.freshness === 'stale' ? ' (data may be stale).' : '.'),
+        `${rows.length} 艘${kind}船舶，位于 ${area.label}` +
+        (snapshot.freshness === 'stale' ? '（数据可能已过期）。' : '。'),
       data: {
         view: suggestView(services, { area, layers: ['ais-live-vessels'] }),
         ...capRows(rows, args.limit),
@@ -167,10 +166,11 @@ export const findVessel = defineTool({
     const rows = snapshot.records
       .filter(matches)
       .map((record) => vesselRow(record));
+    const keyLabel = { mmsi: 'MMSI', imo: 'IMO', name: '船名' }[key];
     return {
       summary: rows.length
-        ? `Found ${countNoun(rows.length, 'vessel')} with ${key} ${args[key]}.`
-        : `No vessel with ${key} ${args[key]} is currently reported.`,
+        ? `找到 ${rows.length} 艘${keyLabel}为 ${args[key]} 的船舶。`
+        : `当前没有报告${keyLabel}为 ${args[key]} 的船舶。`,
       data: {
         // Ships cannot be followed from a link; one match is framed closely.
         view:
@@ -209,8 +209,8 @@ export const getVesselTrack = defineTool({
     const kept = thinEvenly(points, MAX_TRACK_POINTS);
     return {
       summary: points.length
-        ? `${countNoun(points.length, 'position')} for ${args.mmsi} from ${isoTime(points[0].observedAtMs)} to ${isoTime(points.at(-1).observedAtMs)}.`
-        : `No recent track is available for ${args.mmsi}.`,
+        ? `${points.length} 个位置，${args.mmsi}，从 ${isoTime(points[0].observedAtMs)} 到 ${isoTime(points.at(-1).observedAtMs)}。`
+        : `没有 ${args.mmsi} 的近期轨迹。`,
       data: {
         view: kept.length
           ? suggestView(services, {

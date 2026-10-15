@@ -66,7 +66,7 @@ export const getRecentImagery = defineTool({
     const { candidate, reason } = latest;
     if (!candidate)
       return {
-        summary: `No recent satellite image covers ${area.label}.`,
+        summary: `没有覆盖 ${area.label} 的近期卫星影像。`,
         data: { area: area.label, image: null },
       };
     const height = Math.max(
@@ -89,22 +89,22 @@ export const getRecentImagery = defineTool({
     if (!/^image\/(png|jpeg)$/.test(image.contentType))
       throw new ToolError(
         'unavailable',
-        'The imagery service returned no image',
+        '影像服务未返回图像',
       );
     if (image.bytes.byteLength > MAX_IMAGE_BYTES)
-      throw new ToolError('unavailable', 'The image is too large to return');
+      throw new ToolError('unavailable', '图像过大，无法返回');
     const sensor = SENSORS[candidate.product] || candidate.product;
     const cloud = candidate.cloud
-      ? `${Math.round(candidate.cloud.min)}–${Math.round(candidate.cloud.max)}% cloud`
-      : 'cloud cover unknown';
+      ? `${Math.round(candidate.cloud.min)}–${Math.round(candidate.cloud.max)}% 云量`
+      : '云量未知';
     const quality = {
-      clear: 'clear',
-      cloudy: 'cloudy',
-      partial: 'partly covering the area',
-      overview: 'coarse overview',
+      clear: '晴好',
+      cloudy: '多云',
+      partial: '部分覆盖该区域',
+      overview: '粗略概览',
     }[reason];
     return {
-      summary: `Most recent image of ${area.label}: ${sensor}, ${candidate.day}, ${quality}${reason === 'overview' ? '' : `, ${cloud}`}.`,
+      summary: `${area.label} 的最近影像：${sensor}，${candidate.day}，${quality}${reason === 'overview' ? '' : `，${cloud}`}。`,
       data: {
         view: suggestView(services, { area, layers: ['recent-imagery'] }),
         area: area.label,

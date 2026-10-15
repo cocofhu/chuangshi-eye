@@ -130,7 +130,7 @@ export const showInGodsEyeView = defineTool({
     });
     const url = viewUrl(base, view);
     return {
-      summary: `Open ${label} in God's Eye View: ${url}`,
+      summary: `在创世之眼中打开 ${label}：${url}`,
       data: { url, view },
     };
   },

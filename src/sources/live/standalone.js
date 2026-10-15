@@ -210,11 +210,11 @@ export function createVesselSource({
       if (!response.ok) {
         const error = httpError(response, 'Vessels');
         const reasons = {
-          'missing-key': 'AISSTREAM_API_KEY not set',
-          'auth-failed': 'API key rejected — check AISSTREAM_API_KEY',
-          unsupported: 'live feed unsupported',
-          error: 'feed down',
-          closed: 'feed disconnected',
+          'missing-key': '未设置 AISSTREAM_API_KEY',
+          'auth-failed': 'API 密钥被拒绝 — 请检查 AISSTREAM_API_KEY',
+          unsupported: '不支持实时数据',
+          error: '数据源中断',
+          closed: '数据源已断开',
         };
         error.message = reasons[payload?.status] || error.message;
         throw error;

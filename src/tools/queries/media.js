@@ -9,7 +9,7 @@ import {
   distanceKm,
   resolveArea,
 } from '../area.js';
-import { LIMIT_SCHEMA, capRows, countNoun, toBase64 } from '../results.js';
+import { LIMIT_SCHEMA, capRows, toBase64 } from '../results.js';
 
 const FRAME_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const MAX_FRAME_BYTES = 3 * 1024 * 1024;
@@ -94,18 +94,18 @@ export const findCctvCameras = defineTool({
     return {
       summary:
         (rows.length || trimmed.length
-          ? `${countNoun(rows.length, 'public camera')} in ${area.label}`
+          ? `${rows.length} 个公开摄像头，位于 ${area.label}`
           : // The catalog covers selected regions; an empty answer elsewhere
             // means it has no cameras there, not that none exist.
-            `The camera catalog has no cameras in ${area.label}`) +
+            `摄像头目录在 ${area.label} 没有摄像头`) +
         (trimmed.length
-          ? ` (the catalog serves only some cameras here: ${trimmed
+          ? `（目录仅提供部分摄像头：${trimmed
               .map(
                 (entry) =>
-                  `${entry.served} of ${entry.available} from ${entry.pack}`,
+                  `${entry.pack} ${entry.served}/${entry.available}`,
               )
-              .join(', ')}).`
-          : '.'),
+              .join('，')}）。`
+          : '。'),
       data: {
         view: suggestView(services, { area, layers: ['cctv'] }),
         ...capRows(rows, args.limit),
@@ -150,7 +150,7 @@ export const getCctvSnapshot = defineTool({
       );
     const name = text(camera.name) || camera.id;
     return {
-      summary: `Current view from ${name}${camera.city ? ` in ${camera.city}` : ''}${camera.credit ? `, courtesy of ${camera.credit}` : ''}.`,
+      summary: `${name} 的当前画面${camera.city ? `，${camera.city}` : ''}${camera.credit ? `，来源 ${camera.credit}` : ''}。`,
       data: {
         view: suggestView(services, {
           point: { lat: camera.lat, lon: camera.lon },
@@ -243,16 +243,16 @@ export const findRadioStations = defineTool({
           : {}),
       }));
     if (center) rows.sort((a, b) => a.distance_km - b.distance_km);
-    const where = area ? ` in ${area.label}` : '';
-    const what = args.query ? ` matching "${args.query}"` : '';
+    const where = area ? `，位于 ${area.label}` : '';
+    const what = args.query ? `，匹配「${args.query}」` : '';
     // The directory is a selection of popular stations, not every station.
     const notes = [
-      `from a directory of ${directory.stations.length} popular stations`,
-      ...(directory.stale ? ['the directory may be stale'] : []),
-      ...(directory.degraded ? ['the directory is incomplete right now'] : []),
+      `来自 ${directory.stations.length} 个热门电台的目录`,
+      ...(directory.stale ? ['目录可能已过期'] : []),
+      ...(directory.degraded ? ['目录当前不完整'] : []),
     ];
     return {
-      summary: `${countNoun(rows.length, 'radio station')}${what}${where} (${notes.join('; ')}).`,
+      summary: `${rows.length} 个电台${what}${where}（${notes.join('；')}）。`,
       data: {
         view: area ? suggestView(services, { area, layers: ['radio'] }) : null,
         ...capRows(rows, args.limit),

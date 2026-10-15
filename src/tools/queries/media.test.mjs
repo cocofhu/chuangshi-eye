@@ -50,7 +50,7 @@ test('cameras in an area are listed nearest first', async () => {
   const result = await catalog.call('find_cctv_cameras', { area: downtown });
   assert.equal(
     result.summary,
-    '2 public cameras in 3 km around 30.267, -97.743.',
+    '2 个公开摄像头，位于 30.267, -97.743 周边 3 km。',
   );
   assert.deepEqual(
     result.data.rows.map((row) => row.id),
@@ -82,7 +82,7 @@ test('a snapshot returns the frame as an image with its credit', async () => {
   });
   assert.equal(
     result.summary,
-    'Current view from Congress at 6th in Austin, courtesy of City of Austin.',
+    'Congress at 6th 的当前画面，Austin，来源 City of Austin。',
   );
   assert.deepEqual(result.images, [
     { mimeType: 'image/png', data: 'iVBORw0KGgo=' },
@@ -187,7 +187,7 @@ test('radio stations match area and every search term', async () => {
   });
   assert.equal(
     jazz.summary,
-    '1 radio station matching "jazz norwegian" (from a directory of 3 popular stations).',
+    '1 个电台，匹配「jazz norwegian」（来自 3 个热门电台的目录）。',
   );
   assert.equal(jazz.data.directory_size, 3);
   assert.equal(jazz.data.stale, false);
@@ -242,7 +242,7 @@ test('a stale or degraded radio directory is reported', async () => {
   const result = await catalog.call('find_radio_stations', { query: 'jazz' });
   assert.match(
     result.summary,
-    /the directory may be stale; the directory is incomplete right now\)\.$/,
+    /目录可能已过期；目录当前不完整）。$/,
   );
   assert.equal(result.data.degraded, true);
 });
@@ -279,7 +279,7 @@ test('cameras from a trimmed catalog pack are reported as partial', async () => 
   ]);
   assert.match(
     result.summary,
-    /\(the catalog serves only some cameras here: 250 of 900 from tfl\)\.$/,
+    /（目录仅提供部分摄像头：tfl 250\/900）。$/,
   );
 });
 
@@ -316,13 +316,13 @@ test('an area the catalog trimmed away entirely is not reported complete', async
   });
   assert.equal(suburb.data.rows.length, 0);
   assert.equal(suburb.data.complete, false);
-  assert.match(suburb.summary, /250 of 900 from tfl/);
+  assert.match(suburb.summary, /tfl 250\/900/);
   const elsewhere = await catalog.call('find_cctv_cameras', {
     area: { lat: 40.7, lon: -74, radius_km: 3 },
   });
   assert.equal(elsewhere.data.complete, true);
   assert.equal(
     elsewhere.summary,
-    'The camera catalog has no cameras in 3 km around 40.700, -74.000.',
+    '摄像头目录在 40.700, -74.000 周边 3 km 没有摄像头。',
   );
 });

@@ -63,8 +63,8 @@ export function createLifecycle({
       state.feed.firstConnectPhase = 'unavailable';
       state.feed.loadingLabel = '';
       state.feed.error = state.feed.lastMessageAt
-        ? 'awaiting usable AIS positions…'
-        : 'awaiting first AIS message…';
+        ? '正在等待可用的 AIS 位置…'
+        : '正在等待首条 AIS 消息…';
       state.feed.stale = state.feed.count > 0;
     }, delayMs);
   }
@@ -85,7 +85,7 @@ export function createLifecycle({
 
   function markAisUnavailable(reason) {
     settleFirstConnectPhase('unavailable');
-    state.feed.error = reason || 'AIS live load failed';
+    state.feed.error = reason || 'AIS 实时加载失败';
     state.feed.stale = state.feed.count > 0;
   }
 

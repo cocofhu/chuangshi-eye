@@ -36,7 +36,7 @@ test('the most recent clear image is returned with its date and sensor', async (
   const result = await catalog.call('get_recent_imagery', { area: austin });
   assert.equal(
     result.summary,
-    'Most recent image of the requested box: Sentinel-2 (30 m), 2026-09-28, clear, 2–6% cloud.',
+    '指定范围 的最近影像：Sentinel-2 (30 m)，2026-09-28，晴好，2–6% 云量。',
   );
   assert.deepEqual(result.images, [
     { mimeType: 'image/png', data: 'iVBORw==' },
@@ -65,7 +65,7 @@ test('overview fallback, empty results and invalid areas are reported', async ()
   const coarse = await overview.call('get_recent_imagery', { area: austin });
   assert.equal(
     coarse.summary,
-    'Most recent image of the requested box: VIIRS daily overview (250 m), 2026-10-01, coarse overview.',
+    '指定范围 的最近影像：VIIRS daily overview (250 m)，2026-10-01，粗略概览。',
   );
   assert.deepEqual(coarse.data.search_errors, ['S30']);
   const none = composeCatalog({
@@ -74,7 +74,7 @@ test('overview fallback, empty results and invalid areas are reported', async ()
   });
   assert.equal(
     (await none.call('get_recent_imagery', { area: austin })).summary,
-    'No recent satellite image covers the requested box.',
+    '没有覆盖 指定范围 的近期卫星影像。',
   );
   await assert.rejects(
     none.call('get_recent_imagery', { area: { bbox: [-120, 20, -60, 50] } }),

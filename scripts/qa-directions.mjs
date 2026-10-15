@@ -265,7 +265,7 @@ try {
   let state = await layerState();
   check(
     'the row guides the operator before anything is placed',
-    /SET A/.test(state.stats.coverage || ''),
+    /设 A/.test(state.stats.coverage || ''),
     state.stats.coverage,
   );
 
@@ -322,7 +322,7 @@ try {
   );
   check(
     'the armed chip tells the operator to click the map',
-    state.chips.find((chip) => chip.id === 'set-a')?.label === 'CLICK MAP',
+    state.chips.find((chip) => chip.id === 'set-a')?.label === '点地图',
   );
 
   let at = await screenAt(FERRY.lat, FERRY.lon);
@@ -392,7 +392,7 @@ try {
   const driveSummary = state.stats.coverage;
   check(
     'the row summarises distance, time and mode',
-    /·.*·\s*Drive$/.test(driveSummary || ''),
+    /·.*·\s*驾车$/.test(driveSummary || ''),
     driveSummary,
   );
   const focused = await page.evaluate(() => {
@@ -416,7 +416,7 @@ try {
 
   // ── 3. Switch profile; the route changes. ────────────────────────────────
   await setMode('foot');
-  await waitForMode('Walk');
+  await waitForMode('步行');
   const walk = await layerState();
   check(
     'WALK reroutes and the summary follows',
@@ -429,15 +429,15 @@ try {
     `drive ${state.listCount} steps vs walk ${walk.listCount}`,
   );
   await setMode('bike');
-  await waitForMode('Bike');
+  await waitForMode('骑行');
   const bike = await layerState();
   check(
     'BIKE reroutes as well',
-    /Bike$/.test(bike.stats.coverage),
+    /骑行$/.test(bike.stats.coverage),
     bike.stats.coverage,
   );
   await setMode('car');
-  await waitForMode('Drive');
+  await waitForMode('驾车');
 
   // ── 4. Swap endpoints. ──────────────────────────────────────────────────
   const beforeSwap = await layerState();
@@ -469,7 +469,7 @@ try {
   );
   check(
     'the surviving route is the last one asked for',
-    /Drive$/.test(rapid.stats.coverage || ''),
+    /驾车$/.test(rapid.stats.coverage || ''),
     rapid.stats.coverage,
   );
 
@@ -519,7 +519,7 @@ try {
       name: 'no route found',
       stub: { status: 200, body: '{"ok":false,"error":"no route found"}' },
       wait: 3500,
-      expect: /No route found between A and B/,
+      expect: /A 与 B 之间没有路线/,
     },
     {
       // The exact body the proxy sends when the routing service rate-limits
@@ -610,9 +610,9 @@ try {
     afterReroute.cameraMotion === null,
     JSON.stringify(afterReroute.cameraMotion),
   );
-  await waitForMode('Walk');
+  await waitForMode('步行');
   await setMode('car');
-  await waitForMode('Drive');
+  await waitForMode('驾车');
   await sleep(800);
   check('FLY is offered again after the reroute', await clickChip('fly'));
   await sleep(2000);
@@ -658,7 +658,7 @@ try {
   check(
     'nothing is armed, and the row says why the click would do nothing',
     blocked.chips.find((chip) => chip.id === 'set-a')?.active === false &&
-      /Another map tool/.test(blocked.stats.error || ''),
+      /其他地图工具占用点击/.test(blocked.stats.error || ''),
     blocked.stats.error,
   );
   // The row is not where the operator is looking after pressing a chip, so the
@@ -672,7 +672,7 @@ try {
   });
   check(
     'the refusal reaches the app toast, naming the tool and how to leave it',
-    /Draw is active/.test(toast.text) && /then set A/.test(toast.text),
+    /绘制占用中/.test(toast.text) && /然后再设 A/.test(toast.text),
     JSON.stringify(toast.text),
   );
   check('and that toast is actually on screen', toast.visible);

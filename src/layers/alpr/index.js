@@ -275,7 +275,7 @@ export function createAlprCamerasLayer({ source, services } = {}) {
       state.stale = Boolean(state.lastUpdate);
       setAlprStatus(
         'unavailable',
-        error?.message || 'Camera source temporarily unavailable',
+        error?.message || '摄像头源暂时不可用',
       );
       if (!isUnavailableCapability(error)) scheduleUnavailableRetry();
     } finally {
@@ -372,10 +372,10 @@ export function createAlprCamerasLayer({ source, services } = {}) {
         chips: [
           {
             id: 'find-camera',
-            label: 'SHOW NEAREST',
+            label: '最近摄像头',
             title: state.viewer?.trackedEntity
-              ? 'Stop following the current object before navigating to a camera'
-              : 'Move to the nearest loaded camera and show its details',
+              ? '请先停止跟随当前目标，再前往摄像头'
+              : '飞到最近的已加载摄像头并显示详情',
             disabled:
               !state.enabled || !count || Boolean(state.viewer?.trackedEntity),
             onClick: focusNearest,
@@ -383,11 +383,11 @@ export function createAlprCamerasLayer({ source, services } = {}) {
         ],
         legend: [
           {
-            label: 'Camera badges',
+            label: '摄像头标记',
             color: ALPR_COLOR,
             count,
             blurb:
-              'Cyan cameras turn coral when selected. Wedges illustrate mapped direction, not measured coverage. Nearby cameras may be outside the screen.',
+              '选中后青色摄像头变为珊瑚色。楔形表示标注朝向，不是实测覆盖。附近摄像头可能在画面外。',
           },
         ],
       };
@@ -428,9 +428,9 @@ export function createAlprCamerasLayer({ source, services } = {}) {
         count: state.dataSource?.entities.values.length || 0,
         countLabel:
           state.enabled && !state.noCoverage && state.status !== 'zoom-in'
-            ? `${state.dataSource?.entities.values.length || 0} nearby${
+            ? `${state.dataSource?.entities.values.length || 0} 个附近${
                 Number.isInteger(state.onScreen)
-                  ? ` · ${state.onScreen} on screen`
+                  ? ` · 画面内 ${state.onScreen}`
                   : ''
               }`
             : '',
@@ -451,20 +451,20 @@ export function createAlprCamerasLayer({ source, services } = {}) {
           : 0,
         loadingLabel: state.loading
           ? state.retrying
-            ? 'retrying mapped ALPR cameras'
-            : 'loading mapped ALPR cameras'
+            ? '正在重试已标注车牌摄像头'
+            : '正在加载已标注车牌摄像头'
           : state.noCoverage
-            ? 'No ALPR data for this area — US and Canada only'
+            ? '此区域无车牌识别数据 — 仅美国和加拿大'
             : state.status === 'zoom-in'
-              ? 'Zoom in to load mapped cameras'
+              ? '放大地图以加载已标注摄像头'
               : [
-                  state.stale ? 'Showing cached locations' : '',
+                  state.stale ? '显示缓存位置' : '',
                   state.saturated || state.renderSaturated
-                    ? 'Coverage limited — zoom in'
+                    ? '覆盖有限 — 请放大'
                     : '',
-                  state.status === 'empty' ? 'No ALPR data for this area' : '',
+                  state.status === 'empty' ? '此区域无车牌识别数据' : '',
                   state.status === 'ready' && state.onScreen === 0
-                    ? 'None on screen — nearby cameras are outside the view'
+                    ? '画面内没有 — 附近摄像头在视野外'
                     : '',
                 ]
                   .filter(Boolean)

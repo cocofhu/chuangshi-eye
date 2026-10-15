@@ -301,8 +301,8 @@ test('steps are opt-in: the upstream is only asked for them when a caller is', a
   assert.equal(asked.length, 2);
   assert.match(asked[1], /steps=true/);
   assert.equal(withSteps.body.steps.length, 3);
-  assert.equal(withSteps.body.steps[0].instruction, 'Head out on Road 0');
-  assert.equal(withSteps.body.steps[1].instruction, 'Turn left onto Road 1');
+  assert.equal(withSteps.body.steps[0].instruction, '沿 Road 0 出发');
+  assert.equal(withSteps.body.steps[1].instruction, '左转，进入 Road 1');
 
   // A stepful cache entry still serves a stepless caller its own shape.
   const reuse = await request(route, query);

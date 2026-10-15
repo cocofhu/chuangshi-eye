@@ -12,7 +12,6 @@ import {
 import {
   LIMIT_SCHEMA,
   capRows,
-  countNoun,
   isoTime,
   thinEvenly,
 } from '../results.js';
@@ -118,18 +117,18 @@ export const aircraftInArea = defineTool({
       )
       .map((record) => aircraftRow(record, center))
       .sort((a, b) => a.distance_km - b.distance_km);
-    const kind = args.military ? 'military aircraft' : 'aircraft';
+    const kind = args.military ? '军用航空器' : '航空器';
     // A regional fallback feed covers only part of the world around the
     // area's center; say so rather than imply a worldwide answer.
     const regional = /regional/i.test(snapshot.coverage || '');
     const notes = [
-      ...(regional ? [`regional feed: ${snapshot.coverage}`] : []),
-      ...(snapshot.freshness === 'stale' ? ['data may be stale'] : []),
+      ...(regional ? [`区域数据源：${snapshot.coverage}`] : []),
+      ...(snapshot.freshness === 'stale' ? ['数据可能已过期'] : []),
     ];
     return {
       summary:
-        `${rows.length} ${kind} in ${area.label}` +
-        (notes.length ? ` (${notes.join('; ')}).` : '.'),
+        `${rows.length} 个${kind}，位于 ${area.label}` +
+        (notes.length ? `（${notes.join('；')}）。` : '。'),
       data: {
         view: suggestView(services, {
           area,
@@ -226,16 +225,21 @@ export const findAircraft = defineTool({
     const stale = answered
       .filter((feed) => feed.freshness === 'stale')
       .map((feed) => feed.feed);
+    const keyLabel = { callsign: '呼号', icao24: '识别码', registration: '注册号' }[
+      key
+    ];
+    const feedLabel = (name) =>
+      ({ civil: '民航', military: '军用' })[name] || name;
     return {
       summary:
         (rows.length
-          ? `Found ${countNoun(rows.length, 'aircraft', 'aircraft')} with ${key} ${wanted}.`
-          : `No aircraft with ${key} ${wanted} is currently reported.`) +
+          ? `找到 ${rows.length} 架${keyLabel}为 ${wanted} 的航空器。`
+          : `当前没有报告${keyLabel}为 ${wanted} 的航空器。`) +
         (unavailable.length
-          ? ` The ${unavailable.join(' and ')} feed did not answer.`
+          ? `${unavailable.map(feedLabel).join('、')}数据源无响应。`
           : '') +
         (stale.length
-          ? ` The ${stale.join(' and ')} feed data may be stale.`
+          ? `${stale.map(feedLabel).join('、')}数据可能已过期。`
           : ''),
       data: {
         view: only
@@ -287,8 +291,8 @@ export const getAircraftTrack = defineTool({
     const last = points.at(-1);
     return {
       summary: points.length
-        ? `${countNoun(points.length, 'position')} for ${icao24} from ${isoTime(first.observedAtMs)} to ${isoTime(last.observedAtMs)}.`
-        : `No recent track is available for ${icao24}.`,
+        ? `${points.length} 个位置，${icao24}，从 ${isoTime(first.observedAtMs)} 到 ${isoTime(last.observedAtMs)}。`
+        : `没有 ${icao24} 的近期轨迹。`,
       data: {
         view: last
           ? suggestView(services, {
@@ -369,18 +373,17 @@ export const getAircraftInfo = defineTool({
     if (icao24)
       parts.push(
         aircraft
-          ? `aircraft ${icao24} is ${aircraft.type_name || aircraft.type_code || 'an aircraft of unknown type'}${aircraft.registration ? ` (${aircraft.registration})` : ''}`
-          : `no type is known for ${icao24}`,
+          ? `航空器 ${icao24} 为 ${aircraft.type_name || aircraft.type_code || '未知机型'}${aircraft.registration ? `（${aircraft.registration}）` : ''}`
+          : `未知 ${icao24} 的机型`,
       );
     if (callsign)
       parts.push(
         flight
-          ? `flight ${callsign} flies ${flight.origin?.code || flight.origin?.name} to ${flight.destination?.code || flight.destination?.name}${flight.airline ? ` (${flight.airline})` : ''}`
-          : `no route is known for ${callsign}`,
+          ? `航班 ${callsign} 从 ${flight.origin?.code || flight.origin?.name || '未知'} 飞往 ${flight.destination?.code || flight.destination?.name || '未知'}${flight.airline ? `（${flight.airline}）` : ''}`
+          : `未知 ${callsign} 的航线`,
       );
-    const summary = parts.join('; ');
     return {
-      summary: `${summary.charAt(0).toUpperCase()}${summary.slice(1)}.`,
+      summary: `${parts.join('；')}。`,
       data: { aircraft, route: flight },
     };
   },

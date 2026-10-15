@@ -70,7 +70,7 @@ test('the next pass defaults to the ISS and reports times, peak and direction', 
   assert.match(
     result.summary,
     new RegExp(
-      `^ISS \\(ZARYA\\) next rises over 40.7000, -74.0000 at ${pass.rise} in the ${pass.rise_direction}, peaking at \\d+°`,
+      `^ISS \\(ZARYA\\) 下次于 ${pass.rise} 在 40.7000, -74.0000 升起，方向 ${pass.rise_direction}，最高 \\d+°`,
     ),
   );
 });
@@ -98,7 +98,7 @@ test('satellites are matched by name or catalog number within the group', async 
       location: { lat: 0, lon: 0 },
       satellite: 'Hubble',
     }),
-    /No satellite matching "Hubble" is in the stations group/,
+    /「Hubble」不在 stations 组中/,
   );
   await assert.rejects(
     catalog.call('next_satellite_pass', {
@@ -122,7 +122,7 @@ test('a pass that never comes is a normal answer, and catalog failures are unava
   assert.equal(none.data.pass, null);
   assert.equal(
     none.summary,
-    'ISS (ZARYA) has no pass over 89.9000, 0.0000 in the next 6 hours.',
+    'ISS (ZARYA) 在未来 6 小时内于 89.9000, 0.0000 无过境。',
   );
   const down = composeCatalog({
     tools: coreTools,
@@ -168,7 +168,7 @@ test('satellites overhead are those above the elevation, highest first', async (
   assert.equal(strict.data.total, 0);
   assert.match(
     strict.summary,
-    /^0 satellites from the stations group are at least 90° above/,
+    /^0 颗 stations 组卫星在 .+ 时位于 .+ 上空至少 90°/,
   );
 });
 
@@ -190,10 +190,10 @@ test('stale orbit and launch data are reported', async () => {
     location: { lat: 0, lon: 0 },
   });
   assert.equal(overhead.data.stale, true);
-  assert.match(overhead.summary, /\(orbit data may be stale\)\.$/);
+  assert.match(overhead.summary, /（轨道数据可能已过期）。$/);
   const launches = await catalog.call('get_recent_launches', {});
   assert.equal(launches.data.stale, true);
-  assert.match(launches.summary, /\(data may be stale\)\.$/);
+  assert.match(launches.summary, /（数据可能已过期）。$/);
 });
 
 test('satellite and launch sources read the proxies stale markers', async () => {

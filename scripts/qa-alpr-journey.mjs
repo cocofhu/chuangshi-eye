@@ -548,7 +548,7 @@ try {
         if (
           stop.cameras > 0 &&
           stop.onScreen === 0 &&
-          !/none on screen/i.test(stop.label)
+          !/画面内没有/.test(stop.label)
         )
           fail(
             `${pass.name} ${stop.stop}: no camera on screen and no explicit state`,
