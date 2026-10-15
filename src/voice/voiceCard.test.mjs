@@ -32,7 +32,7 @@ test('presentation: a slow annotate turn shows captions, plan steps and the resu
   assert.equal(view.user.text, 'Annotate the Texas State Capitol');
   assert.equal(view.assistant.text, 'Finding the Capitol, then outlining it.');
   assert.deepEqual(view.steps.map(({ label, status, detail }) => ({ label, status, detail })), [
-    { label: 'Mark Texas State Capitol', status: 'running', detail: 'Finding places: Texas State Capitol' },
+    { label: '标记 Texas State Capitol', status: 'running', detail: '正在查找地点: Texas State Capitol' },
   ]);
   const done = [
     {
@@ -197,10 +197,10 @@ test('presentation: concurrent calls of one tool update their own steps', () => 
   ]);
   const steps = voiceCardView(state).steps;
   assert.deepEqual(steps.map(({ label, status }) => [label, status]), [
-    ['Fly to Tokyo', 'running'],
-    ['Fly to Paris', 'failed'],
+    ['飞往 Tokyo', 'running'],
+    ['飞往 Paris', 'failed'],
   ]);
-  assert.equal(steps[0].detail, 'Looking up place: Tokyo');
+  assert.equal(steps[0].detail, '正在查询地点: Tokyo');
 });
 
 test('presentation: stale and unmatched events never reopen the card', () => {

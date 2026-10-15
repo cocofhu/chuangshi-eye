@@ -1078,7 +1078,7 @@ test('generic layer visibility exposes lifecycle truth for every manager phase a
     lifecycleUncertain: false,
   });
   // The voice envelope is additive and states the failure plainly.
-  assert.equal(say, "Couldn't turn on radio.");
+  assert.equal(say, '无法开启 radio。');
   assert.equal(display.title, 'radio');
 });
 
