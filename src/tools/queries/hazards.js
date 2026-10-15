@@ -83,7 +83,7 @@ export const getActiveFires = defineTool({
     if (snapshot.keyRequired)
       throw new ToolError(
         'unavailable',
-        'Fire detections need a NASA FIRMS key configured for this server',
+        '火点探测需要在本服务器配置 NASA FIRMS 密钥',
       );
     const fires = snapshot.fires
       .filter((fire) => areaContains(area, fire))

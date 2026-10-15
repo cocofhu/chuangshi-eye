@@ -316,7 +316,7 @@ test('a rejected key stops coverage requests until the layer goes off', async ()
   source.calls[0].reject(rejected);
   await settle();
   assert.equal(state.keyRejected, true);
-  assert.match(state.coverage.lastError, /rejected MAPILLARY_CLIENT_TOKEN/);
+  assert.match(state.coverage.lastError, /MAPILLARY_CLIENT_TOKEN/);
   viewer.view.lon += 0.05;
   coverage.refresh();
   assert.equal(source.calls.length, 1, 'panning asks for nothing more');

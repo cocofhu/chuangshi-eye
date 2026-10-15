@@ -251,7 +251,7 @@ export function createModel({ state: layerState, services, parts, source }) {
       // drops `loadingLabel` in its error branch, so the owner's SIMULATED copy
       // has to BE the error text or the steady state reverts to a bare
       // "TomTom daily budget reached" that never says what is on screen.
-      const degraded = `SIMULATED — ${flowError}`;
+      const degraded = `模拟 — ${flowError}`;
       return { mode, error: degraded, loadingLabel: degraded };
     }
     // TomTom and Hybrid name their geometry; OpenStreetMap keeps its match copy.
@@ -260,10 +260,10 @@ export function createModel({ state: layerState, services, parts, source }) {
         mode,
         error: null,
         loadingLabel: fetching
-          ? 'Syncing flow · Roads: TomTom'
+          ? '正在同步路况 · 道路：TomTom'
           : coveragePct > 0
-            ? 'LIVE · Roads: TomTom · Roads without flow hidden'
-            : 'LIVE · Roads: TomTom · No flow roads in view',
+            ? '实时 · 道路：TomTom · 无路况道路已隐藏'
+            : '实时 · 道路：TomTom · 视野内无路况道路',
       };
     }
     if (liveMode && roadSource === 'TomTom + OpenStreetMap') {
@@ -271,8 +271,8 @@ export function createModel({ state: layerState, services, parts, source }) {
         mode,
         error: null,
         loadingLabel: fetching
-          ? `Syncing flow · Roads: ${roadSource}`
-          : `${coveragePct > 0 ? 'LIVE' : 'SIMULATED'} · Roads: ${roadSource} · Flow ${coveragePct}%`,
+          ? `正在同步路况 · 道路：${roadSource}`
+          : `${coveragePct > 0 ? '实时' : '模拟'} · 道路：${roadSource} · 路况 ${coveragePct}%`,
       };
     }
     if (liveMode) {
@@ -280,10 +280,10 @@ export function createModel({ state: layerState, services, parts, source }) {
         mode,
         error: null,
         loadingLabel: fetching
-          ? 'Syncing flow · Roads: OpenStreetMap · Flow: TomTom · Unmatched: simulated'
+          ? '正在同步路况 · 道路：OpenStreetMap · 路况：TomTom · 未匹配：模拟'
           : coveragePct > 0
-            ? `LIVE · Roads: OpenStreetMap · Flow: TomTom · ${coveragePct}% cov${coveragePct < 100 ? ' · Unmatched: simulated' : ''}`
-            : 'SIMULATED · Roads: OpenStreetMap · Flow: TomTom (no matches)',
+            ? `实时 · 道路：OpenStreetMap · 路况：TomTom · ${coveragePct}% 覆盖${coveragePct < 100 ? ' · 未匹配：模拟' : ''}`
+            : '模拟 · 道路：OpenStreetMap · 路况：TomTom（无匹配）',
       };
     }
     // Keyless simulation — one terse line that names the mode and the remedy
@@ -293,8 +293,8 @@ export function createModel({ state: layerState, services, parts, source }) {
       mode,
       error: null,
       loadingLabel: statusUnavailable
-        ? 'SIMULATED — traffic service unreachable'
-        : 'SIMULATED — add TomTom key for live',
+        ? '模拟 — 路况服务不可达'
+        : '模拟 — 添加 TomTom 密钥以获取实时路况',
     };
   }
 

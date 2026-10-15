@@ -71,7 +71,7 @@ function feedFor(services, military) {
   if (!services.military)
     throw new ToolError(
       'unsupported',
-      'The military aircraft feed is not available here',
+      '此处没有军用航空器数据源',
     );
   return services.military;
 }
@@ -185,7 +185,7 @@ export const findAircraft = defineTool({
     if (!feeds.length)
       throw new ToolError(
         'unavailable',
-        'The military aircraft feed is not available here',
+        '此处没有军用航空器数据源',
       );
     const settled = await Promise.allSettled(
       feeds.map(({ feed }) => feed.getSnapshot({}, { signal })),

@@ -289,7 +289,7 @@ async function main() {
     console.log(FIXTURES ? '(i) FIXTURE — loading synthetic fires through the source adapter...' : '(i) LIVE — loading the fires layer through the cached proxy...');
     const live = await bootAndEnable(page);
     {
-      const ok = live.count > 1000 && !live.error && String(live.loadingLabel || '').startsWith('LIVE');
+      const ok = live.count > 1000 && !live.error && String(live.loadingLabel || '').startsWith('实时');
       record(`${FIXTURES ? 'FIXTURE' : 'LIVE'}: >1000 detections, no error, LIVE label`, ok,
         `count=${live.count} error=${JSON.stringify(live.error)} label=${JSON.stringify(live.loadingLabel)}`);
       if (!FIXTURES) record('LIVE: /api/firms/status has key + quota statistics',
@@ -345,7 +345,7 @@ async function main() {
 
     const keyless = await bootAndEnable(page, { timeoutS: 20 });
     {
-      const ok = keyless.error === 'KEY REQUIRED' && keyless.count === 0;
+      const ok = keyless.error === '需要密钥' && keyless.count === 0;
       record('KEYLESS: error "KEY REQUIRED", zero fires, no crash', ok,
         `error=${JSON.stringify(keyless.error)} count=${keyless.count} label=${JSON.stringify(keyless.loadingLabel)}`);
       if (!ok) exitCode = 1;
@@ -358,7 +358,7 @@ async function main() {
     const stale = await bootAndEnable(page, { timeoutS: 20 });
     {
       const ok = stale.stale === true
-        && String(stale.error || '').startsWith('STALE')
+        && String(stale.error || '').startsWith('过期')
         && stale.count === 3;
       record('STALE: stats.stale, "STALE · cached" error, fires still render', ok,
         `stale=${stale.stale} error=${JSON.stringify(stale.error)} count=${stale.count}`);

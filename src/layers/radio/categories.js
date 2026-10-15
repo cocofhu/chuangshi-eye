@@ -69,14 +69,14 @@ export function createCategories({
   function buildRadioCategories(stations) {
     const rows = Array.isArray(stations) ? stations : [];
     const categories = [
-      { id: 'all', label: 'All' },
-      { id: 'news', label: 'News' },
-      { id: 'talk', label: 'Talk' },
-      { id: 'weather', label: 'Weather / Emergency' },
-      { id: 'public-safety', label: 'Public Safety' },
-      { id: 'aviation-marine', label: 'Aviation / Marine' },
-      { id: 'traffic-transit', label: 'Traffic / Transit' },
-      { id: 'music', label: 'Music' },
+      { id: 'all', label: '全部' },
+      { id: 'news', label: '新闻' },
+      { id: 'talk', label: '谈话' },
+      { id: 'weather', label: '天气 / 应急' },
+      { id: 'public-safety', label: '公共安全' },
+      { id: 'aviation-marine', label: '航空 / 海事' },
+      { id: 'traffic-transit', label: '交通 / 公交' },
+      { id: 'music', label: '音乐' },
     ];
 
     for (const [genre, label] of MUSIC_GENRES) {
@@ -85,7 +85,7 @@ export function createCategories({
         categories.push({ id, label });
       }
     }
-    categories.push({ id: 'other', label: 'Other' });
+    categories.push({ id: 'other', label: '其他' });
     return categories.map((category) => ({
       ...category,
       color: parts.model.radioCategoryColor(category.id),

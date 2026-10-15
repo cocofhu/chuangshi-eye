@@ -329,14 +329,14 @@ export function createModel({
    */
 
   function buildSelectedFireCard(fire, nowMs) {
-    const meta = [`${confidenceBucket(fire.confidence)} conf`];
+    const meta = [`${confidenceBucket(fire.confidence)}置信`];
     if (fire.acqMs > 0) {
       const age = formatAge(nowMs - fire.acqMs);
-      if (age) meta.push(`${age} ago`);
+      if (age) meta.push(`${age} 前`);
     }
     const sat = satelliteShortName(fire.satellite);
     meta.push(
-      sat ? `${fire.sensor || 'VIIRS'} ${sat}` : fire.sensor || 'sensor n/a',
+      sat ? `${fire.sensor || 'VIIRS'} ${sat}` : fire.sensor || '传感器未知',
     );
     return {
       id: `selected-fire:${fireDetectionKey(fire)}`,
@@ -346,10 +346,10 @@ export function createModel({
       cullPosition: fireCullPosition(fire),
       gapPx: frpPixelSize(fire.frp),
       accent: accentForSeverity(detectionColorStop(fire).name),
-      title: `FIRE · ${formatFrp(fire.frp)} MW`,
+      title: `火点 · ${formatFrp(fire.frp)} MW`,
       details: [
         meta.join(' · '),
-        formatLatLon(fire.lat, fire.lon) + (fire.night ? ' · NIGHT' : ''),
+        formatLatLon(fire.lat, fire.lon) + (fire.night ? ' · 夜间' : ''),
       ],
       selected: true,
       priority: Number.MAX_SAFE_INTEGER,
@@ -400,11 +400,10 @@ export function createModel({
 
   function buildCellCard(candidate, nowMs) {
     const cell = candidate.cell;
-    const noun = cell.count === 1 ? 'FIRE' : 'FIRES';
-    const parts = [`max ${formatFrp(cell.maxFrp)} MW`];
+    const parts = [`最大 ${formatFrp(cell.maxFrp)} MW`];
     if (cell.newestAcqMs > 0) {
       const age = formatAge(nowMs - cell.newestAcqMs);
-      if (age) parts.push(`new ${age}`);
+      if (age) parts.push(`最新 ${age}`);
     }
     return {
       id: `cell:${cell.latCell ?? 'x'}:${cell.lonCell ?? 'x'}`,
@@ -412,7 +411,7 @@ export function createModel({
       cullPosition: candidate.cullPosition || candidate.position,
       gapPx: 10,
       accent: candidate.accent || accentForSeverity('yellow'),
-      title: `${cell.count} ${noun}`,
+      title: `${cell.count} 个火点`,
       details: [parts.join(' · ')],
       selected: false,
       priority: Number(cell.maxFrp) || 0,
@@ -490,19 +489,19 @@ export function createModel({
   /** Millisecond delta → "<1m ago" / "Xm ago" / "Xh ago" (fresh-feed readout). */
 
   function formatAgoMinutes(deltaMs) {
-    if (!Number.isFinite(deltaMs) || deltaMs < 0) return 'just now';
+    if (!Number.isFinite(deltaMs) || deltaMs < 0) return '刚刚';
     const minutes = Math.floor(deltaMs / 60000);
-    if (minutes < 1) return '<1m ago';
-    if (minutes < 90) return `${minutes}m ago`;
-    return `${Math.round(minutes / 60)}h ago`;
+    if (minutes < 1) return '不到 1 分钟前';
+    if (minutes < 90) return `${minutes} 分钟前`;
+    return `${Math.round(minutes / 60)} 小时前`;
   }
 
-  /** Normalized 0..1 confidence → low/nominal/high display bucket. */
+  /** Normalized 0..1 confidence → 低/中/高 display bucket. */
 
   function confidenceBucket(confidence) {
-    if (confidence >= 0.75) return 'high';
-    if (confidence >= 0.45) return 'nominal';
-    return 'low';
+    if (confidence >= 0.75) return '高';
+    if (confidence >= 0.45) return '中';
+    return '低';
   }
   return {
     mapAnalystRecord,

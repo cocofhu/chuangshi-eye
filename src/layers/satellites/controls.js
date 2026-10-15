@@ -493,14 +493,12 @@ export function createControls({ state: layerState, services, parts, source }) {
       const active =
         layerState._params.catalog === 'dense' &&
         layerState._denseStatus === 'ready';
-      let title =
-        'Add the full Starlink broadband shell (thousands of extra points)';
-      if (loading) title = 'Loading the Starlink shell…';
+      let title = '加入完整的 Starlink 宽带壳层（数千个额外点）';
+      if (loading) title = '正在加载 Starlink 壳层…';
       else if (failed)
-        title = `Starlink ${layerState._denseError || 'load failed'} — click to retry`;
+        title = `Starlink ${layerState._denseError || '加载失败'} — 点击重试`;
       else if (active)
-        title =
-          'Showing the full Starlink shell — click for the core catalog only';
+        title = '正在显示完整 Starlink 壳层 — 点击仅保留核心星表';
       return {
         chips: [
           {

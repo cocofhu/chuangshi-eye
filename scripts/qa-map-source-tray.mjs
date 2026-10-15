@@ -1562,11 +1562,11 @@ try {
         const state = window.__qaDataFocus?.transition;
         const button = document.querySelector(`[data-layer-id="${layerId}"] .data-toggle-btn`);
         return state?.enableCalls === 1 && typeof state.releaseEnable === 'function'
-          && button?.textContent.trim() === 'ENABLING';
+          && button?.textContent.trim() === '启用中';
       }, { timeout: 5_000 }, dataSetup.transitionId);
       const enabling = await layerFocusState(dataSetup.transitionId);
       check('Data Layers: focused Space keeps a visible ring through ENABLING',
-        hasVisibleControlFocus(enabling) && enabling.label === 'ENABLING' && !enabling.disabled
+        hasVisibleControlFocus(enabling) && enabling.label === '启用中' && !enabling.disabled
           && enabling.ariaDisabled === 'true' && enabling.ariaBusy === 'true', JSON.stringify(enabling));
       const enablingEpoch = await page.evaluate((layerId) => (
         window.__godsEyeView.dataManager.layers.get(layerId).visibilityIntentEpoch
@@ -1593,11 +1593,11 @@ try {
         const state = window.__qaDataFocus?.transition;
         const button = document.querySelector(`[data-layer-id="${layerId}"] .data-toggle-btn`);
         return state?.disableCalls === 1 && typeof state.releaseDisable === 'function'
-          && button?.textContent.trim() === 'DISABLING';
+          && button?.textContent.trim() === '关闭中';
       }, { timeout: 5_000 }, dataSetup.transitionId);
       const disabling = await layerFocusState(dataSetup.transitionId);
       check('Data Layers: focused Space keeps a visible ring through DISABLING',
-        hasVisibleControlFocus(disabling) && disabling.label === 'DISABLING' && !disabling.disabled
+        hasVisibleControlFocus(disabling) && disabling.label === '关闭中' && !disabling.disabled
           && disabling.ariaDisabled === 'true' && disabling.ariaBusy === 'true', JSON.stringify(disabling));
       const disablingEpoch = await page.evaluate((layerId) => (
         window.__godsEyeView.dataManager.layers.get(layerId).visibilityIntentEpoch

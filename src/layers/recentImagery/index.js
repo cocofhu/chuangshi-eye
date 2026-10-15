@@ -1329,17 +1329,17 @@ export function createRecentImageryLayer({
         chips: [
           {
             id: 'hls',
-            label: 'MORE DETAIL · 30 m',
+            label: '更细 · 30 m',
             active: _sources.hls,
-            title: 'Sentinel-2 and Landsat via HLS, 30 m, every 2–6 days',
+            title: 'Sentinel-2 与 Landsat（HLS），30 米，每 2–6 天',
             params: { hls: !_sources.hls },
           },
           {
             id: 'viirs',
-            label: 'DAILY OVERVIEW · 250 m',
+            label: '每日概览 · 250 m',
             active: _sources.viirs,
             title:
-              'VIIRS daily mosaic, 250 m, follows broad changes; little detail under 25 km',
+              'VIIRS 每日镶嵌，250 米，反映大范围变化；25 km 以下细节很少',
             params: { viirs: !_sources.viirs },
           },
         ],

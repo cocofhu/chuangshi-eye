@@ -230,10 +230,10 @@ export function createOverpassAlprSource({
       }
       const message =
         response.status === 429
-          ? 'Overpass rate-limited'
+          ? 'Overpass 已限流'
           : response.status === 504
-            ? 'Overpass timed out'
-            : 'Overpass temporarily unavailable';
+            ? 'Overpass 超时'
+            : 'Overpass 暂时不可用';
       throw new Error(message);
     }
     const stale = response.headers.get('x-overpass-cache') === 'STALE';
@@ -242,7 +242,7 @@ export function createOverpassAlprSource({
     // The shared proxy already rejects query errors. Validate here too so a
     // malformed or partial response never becomes an authoritative empty map.
     if (!Array.isArray(payload?.elements) || payload.remark) {
-      throw new Error('Overpass returned an incomplete camera response');
+      throw new Error('Overpass 返回的摄像头数据不完整');
     }
     return {
       records: [

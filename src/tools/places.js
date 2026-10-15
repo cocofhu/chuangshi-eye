@@ -201,7 +201,7 @@ export function createRouteService({
 function httpFailure(response, label) {
   if (response.status === 429) {
     const seconds = Number(response.headers.get('retry-after'));
-    return new ToolError('retry_later', `${label} is rate limited`, {
+    return new ToolError('retry_later', `${label} 已限流`, {
       retryAfterSeconds:
         Number.isFinite(seconds) && seconds > 0 ? seconds : null,
     });

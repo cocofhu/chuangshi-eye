@@ -14,6 +14,10 @@ const FEED_STATE_LABELS = Object.freeze({
   fallback: '回退',
   unavailable: '不可用',
 });
+const LIFECYCLE_DISPLAY = Object.freeze({
+  enabling: '启用中',
+  disabling: '关闭中',
+});
 
 // Presentation order is independent of catalog registration and startup order.
 const PANEL_GROUPS = [
@@ -550,16 +554,16 @@ export class LayerPanel {
     const lifecycleState =
       layer.lifecycleState || (layer.enabled ? 'enabled' : 'disabled');
     if (lifecycleState === 'enabling' || lifecycleState === 'disabling') {
-      return `${lifecycleState.toUpperCase()} · ${source}`;
+      return `${LIFECYCLE_DISPLAY[lifecycleState]} · ${source}`;
     }
     if (layer.lifecycleUncertain) {
-      return `UNCERTAIN · ${source} · lifecycle state requires reconciliation`;
+      return `待核对 · ${source} · 生命周期状态需要核对`;
     }
     const presentedError =
       stats.error || stats.lastError || stats.managerRefreshError;
     if (presentedError) {
       if (typeof stats.retryInSec === 'number' && stats.retryInSec > 0) {
-        return `${stateLabel} · ${source} · ${presentedError} · retry ${stats.retryInSec}s`;
+        return `${stateLabel} · ${source} · ${presentedError} · ${stats.retryInSec} 秒后重试`;
       }
       return `${stateLabel} · ${source} · ${presentedError}`;
     }
@@ -601,7 +605,7 @@ export class LayerPanel {
     if (feedState === 'stale') {
       const retry =
         typeof stats.retryInSec === 'number' && stats.retryInSec > 0
-          ? ` · retrying in ${stats.retryInSec}s`
+          ? ` · ${stats.retryInSec} 秒后重试`
           : '';
       return `${stateLabel} · ${source} · ${ago}${retry}`;
     }
@@ -648,9 +652,9 @@ export class LayerPanel {
     );
     button.setAttribute('aria-busy', String(transitioning));
     button.textContent = transitioning
-      ? layer.lifecycleState.toUpperCase()
+      ? LIFECYCLE_DISPLAY[layer.lifecycleState]
       : uncertain
-        ? 'UNCERTAIN'
+        ? '待核对'
         : layer.enabled || unavailable
           ? FEED_STATE_LABELS[feedState]
           : '关';

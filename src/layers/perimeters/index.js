@@ -364,7 +364,7 @@ export function createFirePerimetersLayer({
         if (request.signal.aborted || _request !== request || !_enabled)
           return false;
         console.warn('[Data:FirePerimeters] Fetch error:', e);
-        _lastError = e?.message || 'Perimeter source unavailable';
+        _lastError = e?.message || '火场范围源暂时不可用';
         return false;
       } finally {
         if (_request === request) _request = null;
@@ -414,10 +414,10 @@ export function createFirePerimetersLayer({
 
     getRowControls() {
       const bands = [
-        { label: 'Not contained or unknown', color: containmentAccent(0) },
-        { label: 'Under 50% contained', color: containmentAccent(1) },
-        { label: '50–99% contained', color: containmentAccent(50) },
-        { label: 'Fully contained', color: containmentAccent(100) },
+        { label: '未控或未知', color: containmentAccent(0) },
+        { label: '控制不足 50%', color: containmentAccent(1) },
+        { label: '已控 50–99%', color: containmentAccent(50) },
+        { label: '完全控制', color: containmentAccent(100) },
       ];
       return {
         chips: [],
@@ -429,7 +429,7 @@ export function createFirePerimetersLayer({
           ...(index === 0
             ? {
                 blurb:
-                  'Colour shows reported containment. Perimeters are simplified to about 100 m.',
+                  '颜色表示报告的控制程度。范围已简化到约 100 米。',
               }
             : {}),
         })),

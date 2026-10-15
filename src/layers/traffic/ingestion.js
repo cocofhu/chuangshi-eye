@@ -591,7 +591,7 @@ export function createIngestion({
             ? e.message
             : roadRequestError(null, e).message;
       if (generation === layerState._loadGeneration && renderedSomething) {
-        layerState._detailError = `Detailed roads unavailable — ${e instanceof RoadRequestError ? e.message : roadRequestError(null, e).message}`;
+        layerState._detailError = `详细道路不可用 — ${e instanceof RoadRequestError ? e.message : roadRequestError(null, e).message}`;
         layerState._roadPartial = true;
       }
       console.warn('[Data:Traffic] Fetch error:', e);

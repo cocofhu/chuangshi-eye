@@ -14,9 +14,9 @@ export function createControls({ state: layerState, services, parts, source }) {
   function roadStatusLabel(feed) {
     const source = layerState._roadSource;
     if (layerState._roadError)
-      return `UNAVAILABLE · ${source} · Roads unavailable`;
+      return `不可用 · ${source} · 道路不可用`;
     const notes = [feed.loadingLabel];
-    if (!layerState._liveMode || feed.error) notes.push(`Roads: ${source}`);
+    if (!layerState._liveMode || feed.error) notes.push(`道路：${source}`);
     // An explicit TomTom or Hybrid choice without a key draws OpenStreetMap.
     if (
       !layerState._liveMode &&
@@ -24,16 +24,16 @@ export function createControls({ state: layerState, services, parts, source }) {
     )
       notes.push(
         layerState._flowStatusUnavailable
-          ? `${layerState._roadMode === 'tomtom' ? 'TomTom roads' : 'Hybrid'} unavailable while the traffic service is unreachable`
+          ? `${layerState._roadMode === 'tomtom' ? 'TomTom 道路' : '混合模式'}在路况服务不可达时不可用`
           : layerState._roadMode === 'tomtom'
-            ? 'TomTom roads need a TomTom key'
-            : 'Hybrid needs a TomTom key',
+            ? 'TomTom 道路需要 TomTom 密钥'
+            : '混合模式需要 TomTom 密钥',
       );
-    if (layerState._surfacePending) notes.push('Local surface still loading');
+    if (layerState._surfacePending) notes.push('本地地表仍在加载');
     if (layerState._roadWarning) notes.push(layerState._roadWarning);
-    else if (layerState._roadPartial) notes.push('Partial coverage');
-    if (layerState._detailError) notes.push('Detailed roads unavailable');
-    else if (layerState._detailLimited) notes.push('Reduced detail coverage');
+    else if (layerState._roadPartial) notes.push('覆盖不完整');
+    if (layerState._detailError) notes.push('详细道路不可用');
+    else if (layerState._detailLimited) notes.push('细节覆盖已降低');
     return notes.join(' · ');
   }
 
@@ -161,13 +161,13 @@ export function createControls({ state: layerState, services, parts, source }) {
     getRowControls() {
       const selected =
         layerState._roadMode || resolveRoadMode(null, layerState._liveMode);
-      const needsKey = layerState._liveMode ? '' : ' (needs a TomTom key)';
+      const needsKey = layerState._liveMode ? '' : '（需要 TomTom 密钥）';
       const titles = {
-        tomtom: `TomTom roads only, each with its live flow${needsKey}`,
-        osm: 'OpenStreetMap roads, with TomTom flow matched when available',
-        hybrid: `TomTom roads first; OpenStreetMap fills the rest, simulated${needsKey}`,
+        tomtom: `仅 TomTom 道路，各带实时路况${needsKey}`,
+        osm: 'OpenStreetMap 道路，有 TomTom 路况时进行匹配',
+        hybrid: `优先 TomTom 道路；其余用 OpenStreetMap 补齐，模拟${needsKey}`,
       };
-      const labels = { tomtom: 'TomTom', osm: 'OSM', hybrid: 'Hybrid' };
+      const labels = { tomtom: 'TomTom', osm: 'OSM', hybrid: '混合' };
       return {
         chips: TRAFFIC_ROAD_MODES.map((mode) => ({
           id: `roads-${mode}`,

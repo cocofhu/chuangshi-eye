@@ -79,7 +79,7 @@ test('place search is centered on the area, kept inside it, and reports a missin
       area: { place: 'Austin' },
     }),
     (error) =>
-      error.code === 'unavailable' && /Google Places key/.test(error.message),
+      error.code === 'unavailable' && /Google Places 密钥/.test(error.message),
   );
 });
 

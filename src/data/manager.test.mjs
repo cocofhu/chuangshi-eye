@@ -1883,15 +1883,15 @@ test('uncertain lifecycle state overrides ordinary feed status without disabling
 
   mgr._syncToggleButton(button, layer);
 
-  assert.equal(button.textContent, 'UNCERTAIN');
+  assert.equal(button.textContent, '待核对');
   assert.equal(button.dataset.feedState, 'uncertain');
   assert.equal(button.disabled, false, 'the lifecycle toggle remains available to reconcile authority');
-  assert.equal(attributes.get('aria-label'), 'Radio: UNCERTAIN');
+  assert.equal(attributes.get('aria-label'), 'Radio: 待核对');
   assert.equal(classes.get('lifecycle-uncertain'), true);
   assert.equal(classes.get('feed-nominal'), false);
   assert.equal(
     mgr._buildMetaText(layer),
-    'UNCERTAIN · Radio Browser · lifecycle state requires reconciliation',
+    '待核对 · Radio Browser · 生命周期状态需要核对',
   );
 });
 
@@ -2840,7 +2840,7 @@ test('keyboard focus survives Data Layer enabling and disabling transitions', as
     assert.equal(button.disabled, false, 'ENABLING never uses native disabled');
     assert.equal(button.getAttribute('aria-disabled'), 'true');
     assert.equal(button.getAttribute('aria-busy'), 'true');
-    assert.equal(button.textContent, 'ENABLING');
+    assert.equal(button.textContent, '启用中');
     await button.listeners.click();
     assert.equal(calls.enable, 1, 'repeat activation is inert while enabling');
     assert.equal(mgr.layers.get('focus-layer').visibilityIntentEpoch, 1);
@@ -2859,7 +2859,7 @@ test('keyboard focus survives Data Layer enabling and disabling transitions', as
     assert.equal(button.disabled, false, 'DISABLING never uses native disabled');
     assert.equal(button.getAttribute('aria-disabled'), 'true');
     assert.equal(button.getAttribute('aria-busy'), 'true');
-    assert.equal(button.textContent, 'DISABLING');
+    assert.equal(button.textContent, '关闭中');
     await button.listeners.click();
     assert.equal(calls.disable, 1, 'repeat activation is inert while disabling');
     assert.equal(mgr.layers.get('focus-layer').visibilityIntentEpoch, 2);

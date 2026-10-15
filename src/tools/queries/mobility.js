@@ -409,7 +409,7 @@ export const getTrafficFlow = defineTool({
     if (!status.hasKey)
       throw new ToolError(
         'unavailable',
-        'Live traffic needs a TomTom key configured for this server',
+        '实时路况需要在本服务器配置 TomTom 密钥',
       );
     const flow = await readFlow(services.traffic, area, signal);
     // Tiles cover the area's box; a radius area keeps only the parts of each

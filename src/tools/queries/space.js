@@ -34,7 +34,7 @@ export const getRecentLaunches = defineTool({
         };
     const launches = Array.isArray(payload) ? payload : payload.results;
     if (!Array.isArray(launches))
-      throw new ToolError('malformed', 'The launch feed returned no launches');
+      throw new ToolError('malformed', '发射数据源没有返回发射任务');
     const rows = launches
       .map((launch) => ({
         id: text(launch?.id),
@@ -129,7 +129,7 @@ async function readCatalog(services, group, signal) {
   if (!result.ok)
     throw new ToolError(
       'unavailable',
-      `The ${group} satellite catalog is unavailable (HTTP ${result.status})`,
+      `${group} 卫星星表不可用（HTTP ${result.status}）`,
     );
   const entries = parseTleText(result.text).flatMap((entry) => {
     try {

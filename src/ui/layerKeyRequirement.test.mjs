@@ -58,7 +58,7 @@ test('the fire layer names the key it needs and reports when it is missing', () 
   assert.equal(stats.keyRequired, true);
   assert.equal(
     stats.error,
-    'KEY REQUIRED',
+    '需要密钥',
     'the human string the row already shows is unchanged',
   );
 });
@@ -69,7 +69,7 @@ test('the guidance names the environment variable and where to set it', () => {
     stats: { keyRequired: true },
   });
   assert.match(text, /FIRMS_MAP_KEY/);
-  assert.match(text, /Provider Settings/);
+  assert.match(text, /提供者设置/);
 });
 
 test('guidance appears only for a key that is actually missing and actually named', () => {

@@ -526,11 +526,11 @@ async function main() {
         && disablingPresentation.manager.lifecycleState === 'disabling'
         && disablingPresentation.presentationActive === false
         && disablingPresentation.markerSourceVisible === false
-        && disablingPresentation.full === 'DISABLING'
+        && disablingPresentation.full === '关闭中'
         && /紧凑电台/.test(disablingPresentation.disclosure)
-        && disablingPresentation.compactPower === 'DISABLING'
-        && disablingPresentation.layerState === 'DISABLING'
-        && /disabling/i.test(disablingPresentation.message)
+        && disablingPresentation.compactPower === '关闭中'
+        && disablingPresentation.layerState === '关闭中'
+        && /正在关闭/.test(disablingPresentation.message)
         && disablingPresentation.stopDisabled
         && disablingPresentation.volumeDisabled,
       JSON.stringify(disablingPresentation),
@@ -602,13 +602,13 @@ async function main() {
         && enablingPresentation.manager.lifecycleState === 'enabling'
         && enablingPresentation.presentationActive === false
         && enablingPresentation.markerSourceVisible === false
-        && enablingPresentation.full === 'ENABLING'
+        && enablingPresentation.full === '开启中'
         && enablingPresentation.disclosure === '转到已展开的电台'
         && enablingPresentation.disclosureControls === 'radio-panel'
         && enablingPresentation.disclosureExpanded === 'true'
-        && enablingPresentation.compactPower === 'ENABLING'
-        && enablingPresentation.layerState === 'ENABLING'
-        && /enabling/i.test(enablingPresentation.message)
+        && enablingPresentation.compactPower === '开启中'
+        && enablingPresentation.layerState === '开启中'
+        && /正在开启/.test(enablingPresentation.message)
         && enablingPresentation.tunerHidden
         && enablingPresentation.stopDisabled
         && enablingPresentation.volumeDisabled,

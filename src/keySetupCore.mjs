@@ -375,7 +375,7 @@ export function knownKeySetupEnvVars() {
 export function keySetupRequirement(id) {
   const entry = KEY_SETUP_KEYS.find((candidate) => candidate.id === id);
   if (!entry || entry.hidden) return '';
-  return `Needs ${entry.envVars.join(' + ')} — add it in Provider Settings`;
+  return `需要 ${entry.envVars.join(' + ')} — 请在提供者设置中添加`;
 }
 
 /**

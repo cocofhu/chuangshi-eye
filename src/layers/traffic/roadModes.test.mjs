@@ -215,7 +215,7 @@ test('row chips use real params; query overrides passive restore and user can ch
     assert.equal(chips[0].active, true);
     layer.setParams(chips[2].params, { origin: 'user' });
     assert.equal(layer.getParams().roadMode, 'hybrid');
-    assert.match(layer.getStats().loadingLabel, /Hybrid needs a TomTom key/);
+    assert.match(layer.getStats().loadingLabel, /混合模式需要 TomTom 密钥/);
     assert.equal(layer.getStats().roadMode, 'osm');
   } finally {
     if (oldLocation === undefined) delete globalThis.location;
@@ -240,7 +240,7 @@ test('Hybrid retains TomTom on OSM outage with a named warning; TomTom failure n
   assert.equal(data.roads.length, 1);
   assert.equal(data.roads[0].directFlow, true);
   assert.equal(data.partial, true);
-  assert.equal(data.roadWarning, 'OpenFreeMap tiles rate-limited');
+  assert.equal(data.roadWarning, 'OpenFreeMap 瓦片已限流');
   await assert.rejects(
     source.requestRoads(box, {
       roadMode: 'tomtom',
@@ -294,12 +294,12 @@ test('status names the drawn road source for each mode', async () => {
   assert.equal(
     present({ liveMode: true, coveragePct: 100, roadSource: 'TomTom' })
       .loadingLabel,
-    'LIVE · Roads: TomTom · Roads without flow hidden',
+    '实时 · 道路：TomTom · 无路况道路已隐藏',
   );
   assert.equal(
     present({ liveMode: true, coveragePct: 0, roadSource: 'TomTom' })
       .loadingLabel,
-    'LIVE · Roads: TomTom · No flow roads in view',
+    '实时 · 道路：TomTom · 视野内无路况道路',
   );
   assert.equal(
     present({
@@ -307,11 +307,11 @@ test('status names the drawn road source for each mode', async () => {
       coveragePct: 81,
       roadSource: 'TomTom + OpenStreetMap',
     }).loadingLabel,
-    'LIVE · Roads: TomTom + OpenStreetMap · Flow 81%',
+    '实时 · 道路：TomTom + OpenStreetMap · 路况 81%',
   );
   assert.match(
     present({ liveMode: true, coveragePct: 74 }).loadingLabel,
-    /^LIVE · Roads: OpenStreetMap · Flow: TomTom · 74% cov/,
+    /^实时 · 道路：OpenStreetMap · 路况：TomTom · 74% 覆盖/,
   );
 });
 

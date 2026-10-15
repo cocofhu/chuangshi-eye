@@ -100,7 +100,7 @@ function appBase(services) {
   try {
     return new URL(services.app.baseUrl).href;
   } catch {
-    throw new ToolError('unavailable', "The app's address is not configured");
+    throw new ToolError('unavailable', '应用地址未配置');
   }
 }
 

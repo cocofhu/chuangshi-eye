@@ -155,7 +155,7 @@ async function runSections(all, area, { tools, signal }) {
       const known = result.reason instanceof ToolError;
       answers[key] = {
         unavailable: true,
-        reason: known ? result.reason.message : 'unavailable right now',
+        reason: known ? result.reason.message : '当前不可用',
       };
     }
   });
@@ -250,7 +250,7 @@ export const getHudCaption = defineTool({
     );
     const caption = response?.data?.summary;
     if (!response?.ok || typeof caption !== 'string' || !caption)
-      throw new ToolError('unavailable', 'The caption service did not answer');
+      throw new ToolError('unavailable', '说明服务没有响应');
     return {
       summary: caption,
       data: { area: area.label, caption },

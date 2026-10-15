@@ -22,7 +22,7 @@ const MODES = { walk: 'foot', drive: 'car', bike: 'bike' };
 const MODE_WORDS = { walk: '步行', drive: '驾车', bike: '骑行' };
 const MAX_ROUTE_POINTS = 100;
 const NOT_CONFIGURED =
-  'Place search needs a Google Places key configured for this server';
+  '地点搜索需要在本服务器配置 Google Places 密钥';
 
 const round = (value, digits) =>
   Number.isFinite(value) ? Number(value.toFixed(digits)) : null;

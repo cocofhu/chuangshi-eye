@@ -522,12 +522,12 @@ export const getMapFeatures = defineTool({
     if (features?.unavailable)
       throw new ToolError(
         'unavailable',
-        'Map feature lookups need an Overpass server configured for this app',
+        '地图要素查询需要为本应用配置 Overpass 服务器',
       );
     if (!Array.isArray(features))
       throw new ToolError(
         'retry_later',
-        'The map feature service did not answer',
+        '地图要素服务没有响应',
       );
     const rows = features
       .map((feature) => ({

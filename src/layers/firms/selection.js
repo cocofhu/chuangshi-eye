@@ -80,7 +80,7 @@ export function createSelection({
     requestWorldFocus({
       kind: 'fire',
       id: fireDetectionKey(fire),
-      label: 'FIRE',
+      label: '火点',
       position: components.model.firePosition(fire),
     });
   }
@@ -192,7 +192,7 @@ export function createSelection({
       layerName: name,
       source: 'NASA FIRMS',
       dataSource: layerState._dataSource,
-      label: `Fire · FRP ${components.model.formatFrp(fire.frp)} MW`,
+      label: `火点 · FRP ${components.model.formatFrp(fire.frp)} MW`,
       latitude: fire.lat,
       longitude: fire.lon,
       properties: {
@@ -201,8 +201,8 @@ export function createSelection({
         age:
           fire.acqMs > 0
             ? components.model.formatAge(Date.now() - fire.acqMs)
-            : 'unknown',
-        sensor: fire.sensor || 'unknown',
+            : '未知',
+        sensor: fire.sensor || '未知',
       },
     });
     return recordId;

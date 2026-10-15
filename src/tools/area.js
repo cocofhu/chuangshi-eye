@@ -67,7 +67,7 @@ export async function resolveArea(area, { services, signal } = {}) {
   if (!places)
     throw new ToolError(
       'unsupported',
-      'Place names cannot be resolved here; give a bbox or lat/lon instead',
+      '此处无法解析地名；请改用范围框或经纬度',
     );
   const place = await places.resolve(area.place, { signal });
   if (!place)
