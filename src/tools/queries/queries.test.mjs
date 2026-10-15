@@ -134,7 +134,7 @@ test('fires need an area and report a missing key as unavailable', async () => {
   await assert.rejects(
     keyless.call('get_active_fires', { area: { bbox: [0, 0, 1, 1] } }),
     (error) =>
-      error.code === 'unavailable' && /NASA FIRMS key/.test(error.message),
+      error.code === 'unavailable' && /NASA FIRMS 密钥/.test(error.message),
   );
 });
 

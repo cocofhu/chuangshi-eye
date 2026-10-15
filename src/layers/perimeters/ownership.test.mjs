@@ -158,7 +158,7 @@ test('clicking a perimeter publishes its incident card; empty space clears it', 
   const entries = h.overlay.entries.get('fire-perimeters');
   assert.equal(entries.length, 1);
   assert.equal(entries[0].id, 'fire-perimeter-card:2026-NMGNF-000123');
-  assert.equal(entries[0].title, 'FIRE · Fixture Fire');
+  assert.equal(entries[0].title, '火场 · Fixture Fire');
   assert.ok(entries[0].position, 'card must carry a world anchor');
 
   pickResult = { id: 'other-layer:aircraft-1' };
@@ -229,7 +229,7 @@ test('a matched incident card carries the InciWeb line and click-through', async
   assert.equal(h.overlay.entries.get('fire-perimeters').length, 1);
   await new Promise((done) => setTimeout(done, 0));
   const entries = h.overlay.entries.get('fire-perimeters');
-  assert.equal(entries[0].details.at(-1), 'InciWeb ↗ · click card to open');
+  assert.equal(entries[0].details.at(-1), 'InciWeb ↗ · 点击卡片打开');
 
   // Clicking the card itself opens the InciWeb page.
   cardHitResult = { entryId: entries[0].id };
@@ -287,7 +287,7 @@ test('a complex member resolves to its complex page from the catalog', async () 
   h.clicks.handler({ position: { x: 10, y: 10 } });
   await new Promise((done) => setTimeout(done, 0));
   const entries = h.overlay.entries.get('fire-perimeters');
-  assert.equal(entries[0].details.at(-1), 'InciWeb ↗ · click card to open');
+  assert.equal(entries[0].details.at(-1), 'InciWeb ↗ · 点击卡片打开');
 });
 
 test('a stale or unverifiable publication yields no link', async () => {
@@ -504,7 +504,7 @@ test('containment legend uses the existing thresholds, colours and incident coun
   );
   assert.equal(
     controls.legend[0].blurb,
-    'Colour shows reported containment. Perimeters are simplified to about 100 m.',
+    '颜色表示报告的控制程度。范围已简化到约 100 米。',
   );
   h.layer.destroy();
   assert.deepEqual(

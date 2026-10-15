@@ -720,7 +720,7 @@ test('ALPR retries show a countdown, preserve other failures, and clear when dis
   const view = presentLoadingFeedback(createLoadingFeedbackState(), summary, 0);
   assert.equal(view.state, 'retry');
   assert.equal(view.label, 'OVERPASS RATE-LIMITED');
-  assert.match(view.detail, /ALPR cameras · retrying in 30s/);
+  assert.match(view.detail, /车牌识别摄像头 · 30 秒后重试/);
   const failed = { visible: true, phase: 'terminal', terminal: 'error', activeIds: ['alpr-cameras', 'flights'] };
   const otherFailure = aggregateLayerLoading([camera, { id: 'flights', enabled: true, stats: { error: 'Failed' } }]);
   assert.equal(presentLoadingFeedback(failed, otherFailure, 0).label, '加载失败');

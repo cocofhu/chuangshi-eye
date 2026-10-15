@@ -663,7 +663,7 @@ test('a snapshot the proxy replayed from its own cache for six minutes is refuse
   const stats = app.layer.getStats();
   assert.equal(stats.count, 0);
   assert.equal(stats.stale, true);
-  assert.match(stats.coverage, /\(\d+s old\)/);
+  assert.match(stats.coverage, /（\d+ 秒前）/);
   assert.equal(
     app.holds().includes('transit'),
     false,
@@ -1034,7 +1034,7 @@ test('the coverage text ages a quiet feed by the same rule the row state uses', 
   app.silence('mbta');
   app.advance(FEED_STALE_AFTER_MS + 10_000);
   const stale = app.layer.getStats();
-  assert.match(stale.coverage, /^MBTA 1 \(\d+s old\)$/);
+  assert.match(stale.coverage, /^MBTA 1（\d+ 秒前）$/);
   assert.equal(stale.stale, true);
 });
 

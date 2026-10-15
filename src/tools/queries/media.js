@@ -207,7 +207,7 @@ export const findRadioStations = defineTool({
     if (!Array.isArray(directory?.stations))
       throw new ToolError(
         'malformed',
-        'The radio directory returned no stations',
+        '电台目录没有返回电台',
       );
     const center = area ? areaCenter(area) : null;
     const rows = directory.stations

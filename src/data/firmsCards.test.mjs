@@ -42,7 +42,7 @@ test('buildFireCard: title carries FRP, detail carries conf/age/satellite', () =
   const card = buildFireCard({ fire: fire(), position: { x: 1, y: 2, z: 3 } }, NOW);
   assert.equal(card.title, '▲ 1520 MW');
   assert.equal(card.details.length, 1);
-  assert.equal(card.details[0], 'high · 2h · N20');
+  assert.equal(card.details[0], '高 · 2h · N20');
   assert.equal(card.selected, false);
   assert.equal(card.accent, accentForSeverity('red'), 'FRP 1520 is red-hot');
   assert.deepEqual(card.position, { x: 1, y: 2, z: 3 }, 'uses the candidate position untouched');
@@ -50,7 +50,7 @@ test('buildFireCard: title carries FRP, detail carries conf/age/satellite', () =
 
 test('buildFireCard: missing acquisition time omits the age segment', () => {
   const card = buildFireCard({ fire: fire({ acqMs: 0 }), position: {} }, NOW);
-  assert.equal(card.details[0], 'high · N20');
+  assert.equal(card.details[0], '高 · N20');
 });
 
 test('buildFireCard: SNPP satellite code renders as SNPP, weak fire is not red', () => {
@@ -62,15 +62,15 @@ test('buildFireCard: SNPP satellite code renders as SNPP, weak fire is not red',
 
 test('buildSelectedFireCard: full detail card with coords, selected flag, no fade', () => {
   const card = buildSelectedFireCard(fire(), NOW);
-  assert.equal(card.title, 'FIRE · 1520 MW');
+  assert.equal(card.title, '火点 · 1520 MW');
   assert.equal(card.selected, true);
-  assert.equal(card.details[0], 'high conf · 2h ago · VIIRS N20');
+  assert.equal(card.details[0], '高置信 · 2h 前 · VIIRS N20');
   assert.equal(card.details[1], '61.914°N 122.944°W');
 });
 
 test('buildSelectedFireCard: night detections are tagged', () => {
   const card = buildSelectedFireCard(fire({ night: true }), NOW);
-  assert.match(card.details[1], / · NIGHT$/);
+  assert.match(card.details[1], / · 夜间$/);
 });
 
 test('buildCellCard: plural noun, max FRP and newest age, accent passthrough', () => {
@@ -80,8 +80,8 @@ test('buildCellCard: plural noun, max FRP and newest age, accent passthrough', (
     accent: accentForSeverity('orange'),
   };
   const card = buildCellCard(candidate, NOW);
-  assert.equal(card.title, '14 FIRES');
-  assert.equal(card.details[0], 'max 210 MW · new 3h');
+  assert.equal(card.title, '14 个火点');
+  assert.equal(card.details[0], '最大 210 MW · 最新 3h');
   assert.equal(card.accent, accentForSeverity('orange'));
 });
 
@@ -108,8 +108,8 @@ test('fire anchor: cold floor renders at 0, then re-grounds when the floor warms
 test('buildCellCard: singular noun and missing-age omission', () => {
   const candidate = { cell: { count: 1, maxFrp: 9.9, newestAcqMs: 0 }, position: {}, accent: undefined };
   const card = buildCellCard(candidate, NOW);
-  assert.equal(card.title, '1 FIRE');
-  assert.equal(card.details[0], 'max 9.9 MW');
+  assert.equal(card.title, '1 个火点');
+  assert.equal(card.details[0], '最大 9.9 MW');
   assert.equal(card.accent, accentForSeverity('yellow'), 'missing accent defaults to yellow');
 });
 

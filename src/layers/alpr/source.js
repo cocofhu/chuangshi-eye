@@ -184,7 +184,7 @@ export function createAlprTileSource({
       for (const source of sources) source.clear();
       precision.clear();
     },
-    label: 'OpenStreetMap · community mapped',
+    label: 'OpenStreetMap · 社区标注',
     attribution: {
       name: 'OpenStreetMap',
       description: '© OpenStreetMap contributors, ODbL',
@@ -230,10 +230,10 @@ export function createOverpassAlprSource({
       }
       const message =
         response.status === 429
-          ? 'Overpass rate-limited'
+          ? 'Overpass 已限流'
           : response.status === 504
-            ? 'Overpass timed out'
-            : 'Overpass temporarily unavailable';
+            ? 'Overpass 超时'
+            : 'Overpass 暂时不可用';
       throw new Error(message);
     }
     const stale = response.headers.get('x-overpass-cache') === 'STALE';
@@ -242,7 +242,7 @@ export function createOverpassAlprSource({
     // The shared proxy already rejects query errors. Validate here too so a
     // malformed or partial response never becomes an authoritative empty map.
     if (!Array.isArray(payload?.elements) || payload.remark) {
-      throw new Error('Overpass returned an incomplete camera response');
+      throw new Error('Overpass 返回的摄像头数据不完整');
     }
     return {
       records: [
@@ -260,10 +260,10 @@ export function createOverpassAlprSource({
   }
   return {
     fetch: fetchAlprNodes,
-    label: 'OpenStreetMap · community mapped',
+    label: 'OpenStreetMap · 社区标注',
     attribution: {
       name: 'OpenStreetMap',
-      description: 'OpenStreetMap contributors (ODbL 1.0; community mapped)',
+      description: 'OpenStreetMap 贡献者（ODbL 1.0；社区标注）',
       text: '© OpenStreetMap contributors',
       href: 'https://www.openstreetmap.org/copyright',
     },

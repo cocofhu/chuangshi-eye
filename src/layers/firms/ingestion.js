@@ -72,7 +72,7 @@ export function createIngestion({
       )
         return;
       console.warn(`[Data:${id}] FIRMS live load failed:`, error);
-      layerState._error = 'live feed unavailable';
+      layerState._error = '实时数据源不可用';
     } finally {
       if (layerState.request === request) {
         layerState.request = null;

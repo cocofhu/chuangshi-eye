@@ -432,11 +432,11 @@ test('the situation brief combines available sections and marks failures', async
   ]);
   assert.deepEqual(result.data.sections.fires, {
     unavailable: true,
-    reason: 'Fire detections need a NASA FIRMS key configured for this server',
+    reason: '火点探测需要在本服务器配置 NASA FIRMS 密钥',
   });
   assert.deepEqual(result.data.sections.cyclones, {
     unavailable: true,
-    reason: 'unavailable right now',
+    reason: '当前不可用',
   });
   assert.equal(result.data.sections.aircraft, undefined);
 });
@@ -539,7 +539,7 @@ test('military awareness gathers contacts around a point and marks failures', as
   );
   assert.deepEqual(result.data.sections.aircraft, {
     unavailable: true,
-    reason: 'unavailable right now',
+    reason: '当前不可用',
   });
   assert.equal(result.data.radius_km, 100);
   const voice = catalogForSurface(catalog, 'voice');

@@ -94,12 +94,12 @@ test('KEY REQUIRED shows no raw error code under the pill', () => {
   assert.equal(view.status.text, '需要密钥');
   assert.equal(view.error, null);
   // The chip still says how to add the key.
-  assert.match(view.providers[0].title, /^Mapillary: Needs /);
+  assert.match(view.providers[0].title, /^Mapillary: 需要 /);
 });
 
 test('a key Mapillary rejected reads KEY REJECTED and names the fix', () => {
   const error =
-    'Mapillary rejected MAPILLARY_CLIENT_TOKEN — replace it in Provider Settings';
+    'Mapillary 拒绝了 MAPILLARY_CLIENT_TOKEN — 请在提供者设置中更换';
   const view = presentStreetLevelPanel(
     snapshot({
       enabled: true,
@@ -207,7 +207,7 @@ test('one chip per provider: on, off, loading, and keyless as an error chip', ()
   assert.equal(view.providers[1].title, 'Panoramax 影像关');
   assert.match(
     view.providers[3].title,
-    /^Google Street View: Needs GOOGLE_MAPS_API_KEY/,
+    /^Google Street View: 需要 GOOGLE_MAPS_API_KEY/,
   );
   assert.ok(view.providers.every((chip) => chip.disabled === false));
 });

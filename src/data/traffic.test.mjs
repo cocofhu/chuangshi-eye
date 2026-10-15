@@ -29,12 +29,12 @@ test('a superseded flow fetch is not an outage', () => {
 
 test('flow failures map onto short, specific reasons', () => {
   const reason = (message) => deriveTrafficFlowError(new Error(message));
-  assert.equal(reason('flow tile 12/1/1: HTTP 503'), 'TomTom key unavailable');
-  assert.equal(reason('flow tile 12/1/1: HTTP 429'), 'TomTom daily budget reached');
-  assert.equal(reason('flow tile 12/1/1: HTTP 502'), 'TomTom upstream unreachable');
-  assert.equal(reason('flow tile 12/1/1: HTTP 504'), 'TomTom upstream unreachable');
-  assert.equal(reason('flow tile 12/1/1: HTTP 418'), 'TomTom flow error (HTTP 418)');
-  assert.equal(reason('flow fetch failed'), 'TomTom flow unavailable');
+  assert.equal(reason('flow tile 12/1/1: HTTP 503'), 'TomTom 密钥不可用');
+  assert.equal(reason('flow tile 12/1/1: HTTP 429'), 'TomTom 日额度已用尽');
+  assert.equal(reason('flow tile 12/1/1: HTTP 502'), 'TomTom 上游不可达');
+  assert.equal(reason('flow tile 12/1/1: HTTP 504'), 'TomTom 上游不可达');
+  assert.equal(reason('flow tile 12/1/1: HTTP 418'), 'TomTom 路况错误（HTTP 418）');
+  assert.equal(reason('flow fetch failed'), 'TomTom 路况不可用');
 });
 
 test('keyless traffic names the mode and the remedy, loading or idle', () => {
@@ -47,8 +47,8 @@ test('keyless traffic names the mode and the remedy, loading or idle', () => {
   assert.equal(idle.error, null);
   assert.equal(loading.error, null);
   // One terse line in both states; the chip's progress text carries "working".
-  assert.equal(idle.loadingLabel, 'SIMULATED — add TomTom key for live');
-  assert.equal(loading.loadingLabel, 'SIMULATED — add TomTom key for live');
+  assert.equal(idle.loadingLabel, '模拟 — 添加 TomTom 密钥以获取实时路况');
+  assert.equal(loading.loadingLabel, '模拟 — 添加 TomTom 密钥以获取实时路况');
 });
 
 test('no keyless label ever implies a live feed', () => {
@@ -56,19 +56,20 @@ test('no keyless label ever implies a live feed', () => {
     trafficFeedPresentation({ liveMode: false, fetching: false }),
     trafficFeedPresentation({ liveMode: false, fetching: true }),
     trafficFeedPresentation({ statusUnavailable: true }),
-    trafficFeedPresentation({ liveMode: true, flowError: 'TomTom flow unavailable' }),
-    trafficFeedPresentation({ liveMode: true, fetching: true, flowError: 'TomTom flow unavailable' }),
+    trafficFeedPresentation({ liveMode: true, flowError: 'TomTom 路况不可用' }),
+    trafficFeedPresentation({ liveMode: true, fetching: true, flowError: 'TomTom 路况不可用' }),
   ].map((feed) => feed.loadingLabel);
   for (const label of labels) {
     assert.ok(!LIVE_CLAIM.test(label), `label implies live data: ${label}`);
-    assert.ok(label.startsWith('SIMULATED'), `fallback label must lead with the mode: ${label}`);
+    assert.ok(!label.startsWith('实时'), `label implies live data: ${label}`);
+    assert.ok(label.startsWith('模拟'), `fallback label must lead with the mode: ${label}`);
   }
 });
 
 test('simulating because the status probe failed reads differently from keyless by design', () => {
   const probeDown = trafficFeedPresentation({ statusUnavailable: true });
   assert.equal(probeDown.mode, 'sim');
-  assert.equal(probeDown.loadingLabel, 'SIMULATED — traffic service unreachable');
+  assert.equal(probeDown.loadingLabel, '模拟 — 路况服务不可达');
 });
 
 test('a healthy keyed layer reports live flow with its real coverage', () => {
@@ -76,29 +77,29 @@ test('a healthy keyed layer reports live flow with its real coverage', () => {
   assert.deepEqual(idle, {
     mode: 'live',
     error: null,
-    loadingLabel: 'LIVE · Roads: OpenStreetMap · Flow: TomTom · 87% cov · Unmatched: simulated',
+    loadingLabel: '实时 · 道路：OpenStreetMap · 路况：TomTom · 87% 覆盖 · 未匹配：模拟',
   });
   assert.equal(
     trafficFeedPresentation({ liveMode: true, fetching: true }).loadingLabel,
-    'Syncing flow · Roads: OpenStreetMap · Flow: TomTom · Unmatched: simulated',
+    '正在同步路况 · 道路：OpenStreetMap · 路况：TomTom · 未匹配：模拟',
   );
 });
 
 test('a mid-session flow outage degrades instead of reporting stale live coverage', () => {
   const down = trafficFeedPresentation({
     liveMode: true,
-    flowError: 'TomTom daily budget reached',
+    flowError: 'TomTom 日额度已用尽',
     coveragePct: 87, // last-good number — must not be presented as current
   });
   // error and loadingLabel are ONE string: the manager's error branch renders
   // `error` and drops `loadingLabel`, so the copy has to live in both.
-  assert.equal(down.error, 'SIMULATED — TomTom daily budget reached');
+  assert.equal(down.error, '模拟 — TomTom 日额度已用尽');
   assert.equal(down.loadingLabel, down.error);
   assert.ok(!down.loadingLabel.includes('87'));
   const busy = trafficFeedPresentation({
     liveMode: true,
     fetching: true,
-    flowError: 'TomTom daily budget reached',
+    flowError: 'TomTom 日额度已用尽',
   });
   assert.deepEqual(busy, down, 'the degraded state reads the same whether or not a load is in flight');
 });
@@ -111,17 +112,17 @@ test('the rendered steady-state meta line carries the SIMULATED copy', () => {
       source: 'OpenStreetMap',
       stats: stats(trafficFeedPresentation({ liveMode: false })),
     }),
-    '回退 · OpenStreetMap · SIMULATED — add TomTom key for live',
+    '回退 · OpenStreetMap · 模拟 — 添加 TomTom 密钥以获取实时路况',
   );
   assert.equal(
     mgr._buildMetaText({
       source: 'OpenStreetMap',
       stats: stats(trafficFeedPresentation({
         liveMode: true,
-        flowError: 'TomTom daily budget reached',
+        flowError: 'TomTom 日额度已用尽',
       })),
     }),
-    '降级 · OpenStreetMap · SIMULATED — TomTom daily budget reached',
+    '降级 · OpenStreetMap · 模拟 — TomTom 日额度已用尽',
   );
 });
 
@@ -138,7 +139,7 @@ test('the manager reads keyless as FALLBACK and an outage as DEGRADED', () => {
   assert.equal(
     layerFeedState({
       ...settled,
-      ...trafficFeedPresentation({ liveMode: true, flowError: 'TomTom flow unavailable' }),
+      ...trafficFeedPresentation({ liveMode: true, flowError: 'TomTom 路况不可用' }),
     }),
     'degraded',
   );
@@ -163,7 +164,7 @@ test('traffic can be destroyed before its first enable and destroyed repeatedly'
 test('zero matched dots never claims live coverage', () => {
   const feed = trafficFeedPresentation({ liveMode: true, coveragePct: 0 });
   assert.equal(feed.mode, 'live');
-  assert.match(feed.loadingLabel, /^SIMULATED/);
-  assert.match(feed.loadingLabel, /TomTom \(no matches\)/);
+  assert.match(feed.loadingLabel, /^模拟/);
+  assert.match(feed.loadingLabel, /TomTom（无匹配）/);
   assert.ok(!LIVE_CLAIM.test(feed.loadingLabel));
 });

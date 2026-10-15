@@ -83,7 +83,7 @@ async function acquire(state, signal) {
   if (state.waiting.length >= PANEL_QUEUED_REQUESTS)
     throw new ToolError(
       'retry_later',
-      'The panel has too many requests waiting',
+      '面板等待中的请求过多',
       {
         retryAfterSeconds: 1,
       },
@@ -175,7 +175,7 @@ async function readLimited(answer) {
     total += value.length;
     if (total > PANEL_RESPONSE_LIMIT_BYTES) {
       await reader.cancel();
-      throw new ToolError('unavailable', 'The response is too large to load');
+      throw new ToolError('unavailable', '响应过大，无法加载');
     }
     chunks.push(value);
   }
@@ -322,7 +322,7 @@ export const panelRequest = defineTool({
     } catch (error) {
       if (signal?.aborted) throw error;
       if (error instanceof ToolError) throw error;
-      throw new ToolError('unavailable', "The app's server did not answer");
+      throw new ToolError('unavailable', '应用服务器没有响应');
     } finally {
       releaseSlot(state);
     }

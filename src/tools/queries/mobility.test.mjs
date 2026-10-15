@@ -345,7 +345,7 @@ test('traffic reports a missing key, empty areas and areas that are too wide', a
       'get_traffic_flow',
       { area: downtown },
     ),
-    (error) => error.code === 'unavailable' && /TomTom key/.test(error.message),
+    (error) => error.code === 'unavailable' && /TomTom 密钥/.test(error.message),
   );
   const quiet = {
     getStatus: async () => ({ hasKey: true }),

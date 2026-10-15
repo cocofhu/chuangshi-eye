@@ -154,7 +154,7 @@ test('a response larger than the panel may load is refused while reading', async
   );
   await assert.rejects(
     catalog.call('panel_request', { key: KEY, path: '/huge' }),
-    (error) => error.code === 'unavailable' && /too large/.test(error.message),
+    (error) => error.code === 'unavailable' && /响应过大/.test(error.message),
   );
   assert.ok(sent <= PANEL_RESPONSE_LIMIT_BYTES + 2 * chunk.length, `${sent}`);
 });

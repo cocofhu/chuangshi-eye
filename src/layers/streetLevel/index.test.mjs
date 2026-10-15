@@ -211,7 +211,7 @@ test('getStats tells a rejected key from a missing one', async (t) => {
   provider.stats.keyRequired = true;
   assert.deepEqual(
     [layer.getStats().loadingLabel, layer.getStats().error],
-    ['KEY REQUIRED', 'KEY REQUIRED'],
+    ['需要密钥', '需要密钥'],
   );
 
   // A rejected key gates the provider exactly like a missing one.
@@ -220,7 +220,7 @@ test('getStats tells a rejected key from a missing one', async (t) => {
   provider.stats.error = 'Mapillary rejected MAPILLARY_CLIENT_TOKEN';
   const stats = layer.getStats();
   assert.equal(stats.keyRequired, true);
-  assert.equal(stats.loadingLabel, 'KEY REJECTED');
+  assert.equal(stats.loadingLabel, '密钥已拒');
   assert.equal(stats.error, 'Mapillary rejected MAPILLARY_CLIENT_TOKEN');
   const ui = layer.getUIState();
   assert.equal(ui.keyRequired, true);

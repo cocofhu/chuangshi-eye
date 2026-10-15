@@ -451,7 +451,7 @@ export function createAlprPresentation({ state, services, source }) {
         layerName: 'ALPR Cameras',
         source:
           source.attribution?.description || source.label || 'Camera source',
-        label: 'ALPR camera',
+        label: '车牌识别摄像头',
         latitude: record.latitude,
         longitude: record.longitude,
         properties: {

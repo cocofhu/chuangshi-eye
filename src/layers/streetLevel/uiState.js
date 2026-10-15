@@ -63,7 +63,7 @@ export function composeUIState({
     color: provider.color,
   }));
   if (active.length)
-    legend.push({ key: 'selected', label: 'Selected', color: COLORS.selected });
+    legend.push({ key: 'selected', label: '已选', color: COLORS.selected });
   return {
     enabled,
     keyRequired,

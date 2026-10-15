@@ -100,43 +100,43 @@ export function buildIncidentCard(row, nowMs, { link = null } = {}) {
     facts.push(`${Math.round(row.acres).toLocaleString('en-US')} ac`);
   facts.push(
     Number.isFinite(row.containedPct)
-      ? `${Math.round(row.containedPct)}% contained`
-      : 'containment unknown',
+      ? `${Math.round(row.containedPct)}% 已控`
+      : '控制程度未知',
   );
   if (row.state) facts.push(row.state);
   else if (row.category) facts.push(row.category);
 
   const situation = [];
-  if (row.cause) situation.push(`${row.cause} cause`);
+  if (row.cause) situation.push(`${row.cause} 起因`);
   if (row.behavior) situation.push(row.behavior);
   if (row.complexity) situation.push(row.complexity);
 
   const response = [];
   if (Number.isFinite(row.personnel))
     response.push(
-      `${Math.round(row.personnel).toLocaleString('en-US')} personnel`,
+      `${Math.round(row.personnel).toLocaleString('en-US')} 人`,
     );
-  if (row.county) response.push(`${row.county} County`);
+  if (row.county) response.push(`${row.county} 县`);
   if (Number.isFinite(row.costToDate)) {
     const cost = formatCost(row.costToDate);
-    if (cost) response.push(`${cost} to date`);
+    if (cost) response.push(`${cost} 累计`);
   }
 
   const ages = [];
   const discovered = formatAge(nowMs - row.discoveredTime);
   if (row.discoveredTime != null && discovered)
-    ages.push(`discovered ${discovered} ago`);
+    ages.push(`发现于 ${discovered} 前`);
   const updated = formatAge(nowMs - row.updatedTime);
-  if (row.updatedTime != null && updated) ages.push(`updated ${updated} ago`);
+  if (row.updatedTime != null && updated) ages.push(`更新于 ${updated} 前`);
 
   const details = [facts.join(' · ')];
-  if (row.complexName) details.push(`part of ${titleCase(row.complexName)}`);
+  if (row.complexName) details.push(`属于 ${titleCase(row.complexName)}`);
   if (situation.length) details.push(situation.join(' · '));
   if (response.length) details.push(response.join(' · '));
   if (ages.length) details.push(ages.join(' · '));
-  if (link) details.push('InciWeb ↗ · click card to open');
+  if (link) details.push('InciWeb ↗ · 点击卡片打开');
 
-  const title = `FIRE · ${row.name || 'Unnamed incident'}`;
+  const title = `火场 · ${row.name || '未命名火场'}`;
   return {
     id: `fire-perimeter-card:${row.stableId}`,
     // `selected` picks the paint lane and collision protection; an explicit
@@ -145,7 +145,7 @@ export function buildIncidentCard(row, nowMs, { link = null } = {}) {
     // Only a linked card is clickable — the overlay host registers hit
     // rectangles solely for interactive entries.
     interactive: Boolean(link),
-    ...(link ? { accessibilityLabel: `Open ${title} on InciWeb` } : undefined),
+    ...(link ? { accessibilityLabel: `在 InciWeb 打开 ${title}` } : undefined),
     title,
     details,
     accent: containmentAccent(row.containedPct),

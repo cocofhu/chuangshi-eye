@@ -393,9 +393,9 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     return {
       state: 'retry',
       label: (
-        camera.cameraRetry.error || 'Overpass temporarily unavailable'
+        camera.cameraRetry.error || 'Overpass 暂时不可用'
       ).toUpperCase(),
-      detail: `ALPR cameras · ${seconds ? `retrying in ${seconds}s` : 'retry pending'}`,
+      detail: `车牌识别摄像头 · ${seconds ? `${seconds} 秒后重试` : '等待重试'}`,
     };
   }
 

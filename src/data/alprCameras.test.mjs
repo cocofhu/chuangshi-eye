@@ -465,7 +465,7 @@ test('all manufacturers share one ALPR title and color; only supplied metadata a
     );
     for (const entity of entities) {
       h.click(entity.id);
-      assert.equal(getSelectedEntityContext().label, 'ALPR camera');
+      assert.equal(getSelectedEntityContext().label, '车牌识别摄像头');
       assert.equal(getSelectedEntityContext().layerName, 'ALPR Cameras');
     }
   } finally {

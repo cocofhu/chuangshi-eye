@@ -675,9 +675,9 @@ test('layer stats guide the operator to the Radio card until ADS-B is streaming'
     services,
     now: () => clock.now,
   });
-  assert.equal(layer.getStats().statusMessage, 'connect a receiver in Radio');
+  assert.equal(layer.getStats().statusMessage, '请在电台中连接接收机');
   receiver.set({ connected: true, status: 'streaming', mode: 'fm' });
-  assert.equal(layer.getStats().statusMessage, 'receiver is in FM mode');
+  assert.equal(layer.getStats().statusMessage, '接收机处于调频模式');
   receiver.set({
     mode: 'adsb',
     messagesPerSecond: 3.5,
@@ -685,13 +685,13 @@ test('layer stats guide the operator to the Radio card until ADS-B is streaming'
   });
   const stats = layer.getStats();
   assert.equal(stats.count, 1);
-  assert.equal(stats.loadingLabel, '2 heard · 3.5 msg/s');
+  assert.equal(stats.loadingLabel, '2 架已闻 · 3.5 msg/s');
   receiver.set({ status: 'error', message: 'RTL-SDR sample stream stopped' });
   assert.equal(layer.getStats().error, 'RTL-SDR sample stream stopped');
   receiver.set({ status: 'idle', webUsbSupported: false, connected: false });
   assert.equal(
     layer.getStats().statusMessage,
-    'WebUSB needs desktop Chrome or Edge',
+    'WebUSB 需要桌面版 Chrome 或 Edge',
   );
 });
 
@@ -780,8 +780,8 @@ test('feed records merge with browser SDR records by ICAO and UAT-only aircraft 
     'Heard by your receiver · 978 MHz UAT · decoder feed',
   );
   const stats = layer.getStats();
-  assert.equal(stats.source, 'WebUSB + decoder feeds');
-  assert.equal(stats.loadingLabel, '1 feed live · 2 heard');
+  assert.equal(stats.source, 'WebUSB + 解码数据源');
+  assert.equal(stats.loadingLabel, '1 路实时 · 2 架已闻');
   assert.equal(stats.count, 2);
 
   await layer.disable();
@@ -818,40 +818,40 @@ test('row status reflects decoder feeds and the browser SDR together', () => {
   assert.deepEqual(status(idle, null), {
     source: 'RTL-SDR · WebUSB',
     status: 'idle',
-    statusMessage: 'connect a receiver in Radio',
+    statusMessage: '请在电台中连接接收机',
   });
   assert.deepEqual(
     status(idle, { configured: false, feeds: [], polling: false }),
     status(idle, null),
   );
-  assert.equal(status(usb, null).loadingLabel, '14 heard · 3.5 msg/s');
+  assert.equal(status(usb, null).loadingLabel, '14 架已闻 · 3.5 msg/s');
   assert.equal(
     status(idle, { configured: null, polling: true, feeds: [] }).loadingLabel,
-    'checking decoder feeds',
+    '正在检查解码数据源',
   );
 
   let stats = status(idle, feedState(['1090', 'live'], ['978', 'live']));
   assert.deepEqual(stats, {
-    source: 'Decoder feeds',
+    source: '解码数据源',
     status: 'streaming',
-    loadingLabel: '2 feeds live · 14 heard',
+    loadingLabel: '2 路实时 · 14 架已闻',
   });
   stats = status(usb, feedState(['978', 'live']));
-  assert.equal(stats.source, 'WebUSB + decoder feeds');
-  assert.equal(stats.loadingLabel, '1 feed live · 14 heard · USB 3.5 msg/s');
+  assert.equal(stats.source, 'WebUSB + 解码数据源');
+  assert.equal(stats.loadingLabel, '1 路实时 · 14 架已闻 · USB 3.5 msg/s');
 
   // A live feed keeps the row nominal; the unreachable one is a trailing note.
   stats = status(idle, feedState(['1090', 'live'], ['978', 'unreachable']), 9);
   assert.deepEqual(stats, {
-    source: 'Decoder feeds',
+    source: '解码数据源',
     status: 'streaming',
-    loadingLabel: '9 heard · feed 978 unreachable',
+    loadingLabel: '9 架已闻 · 数据源 978 不可达',
   });
   assert.equal(layerFeedState(stats), 'nominal');
 
   stats = status(idle, feedState(['978', 'unreachable']), 0);
   assert.equal(stats.status, 'error');
-  assert.equal(stats.error, 'feed 978 unreachable');
+  assert.equal(stats.error, '数据源 978 不可达');
   stats = status(
     usb,
     feedState(['1090', 'stale'], ['978', 'stale'], ['1090', 'invalid']),
@@ -861,7 +861,7 @@ test('row status reflects decoder feeds and the browser SDR together', () => {
   assert.equal(layerFeedState(stats), 'nominal');
   assert.equal(
     stats.loadingLabel,
-    '14 heard · USB 3.5 msg/s · feeds 1090 #1, 978 stale · feed 1090 #2 invalid',
+    '14 架已闻 · USB 3.5 msg/s · 数据源 1090 #1、978 过期 · 数据源 1090 #2 无效',
   );
 });
 
@@ -883,9 +883,9 @@ test('a stale decoder feed does not mark a streaming browser receiver degraded',
     heard: 3,
   });
   assert.deepEqual(stats, {
-    source: 'WebUSB + decoder feeds',
+    source: 'WebUSB + 解码数据源',
     status: 'streaming',
-    loadingLabel: '3 heard · USB 5.8 msg/s · feed 1090 stale',
+    loadingLabel: '3 架已闻 · USB 5.8 msg/s · 数据源 1090 过期',
   });
   assert.equal(layerFeedState(stats), 'nominal');
 });
@@ -908,7 +908,7 @@ test('a browser receiver error beside a live feed is a note on a nominal row', (
   });
   assert.equal(stats.status, 'streaming');
   assert.equal(layerFeedState(stats), 'nominal');
-  assert.equal(stats.loadingLabel, '2 heard · USB error');
+  assert.equal(stats.loadingLabel, '2 架已闻 · USB 错误');
 });
 
 test('every feed stale reads STALE, not an error; unreachable stays an error', () => {
@@ -935,7 +935,7 @@ test('every feed stale reads STALE, not an error; unreachable stays an error', (
   assert.equal(stats.status, 'stale');
   assert.equal(stats.error, undefined);
   assert.equal(layerFeedState(stats), 'stale');
-  assert.equal(stats.statusMessage, 'feeds 1090, 978 stale · 3 heard');
+  assert.equal(stats.statusMessage, '数据源 1090、978 过期 · 3 架已闻');
 
   // An invalid entry is a configuration note, not a reason to fail the row.
   stats = status(feedState(['1090', 'stale'], ['978', 'invalid']), 0);
@@ -969,7 +969,7 @@ test('row status names two same-band feeds by their ordinal labels', () => {
   });
   assert.equal(
     stats.loadingLabel,
-    '4 heard · feeds 978 MHz UAT #2, 1090 unreachable',
+    '4 架已闻 · 数据源 978 MHz UAT #2、1090 不可达',
   );
 });
 

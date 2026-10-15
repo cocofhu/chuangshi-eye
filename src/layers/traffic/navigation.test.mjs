@@ -205,7 +205,7 @@ test('parked failures back off and disabling cancels the scheduled retry', async
   await tick(400);
   assert.equal(calls, 1);
   assert.equal(layer.getStats().loading, false);
-  assert.equal(layer.getStats().error, 'OpenFreeMap tiles unavailable');
+  assert.equal(layer.getStats().error, 'OpenFreeMap 瓦片不可用');
   await tick(1500);
   await tick(400);
   assert.equal(calls, 2);
@@ -234,7 +234,7 @@ test('not-configured roads stop both parked retries and the enable-time kick', a
   await h.tick(60_000);
   assert.equal(requests, 1);
   assert.equal(h.layer.getStats().loading, false);
-  assert.match(h.layer.getStats().loadingLabel, /UNAVAILABLE/);
+  assert.match(h.layer.getStats().loadingLabel, /不可用/);
 });
 
 test('a declined road request reaches the row as the reason, not as a shrug', async (t) => {
@@ -244,14 +244,14 @@ test('a declined road request reaches the row as the reason, not as a shrug', as
   await tick(400);
   assert.equal(
     layer.getStats().error,
-    'OpenFreeMap tiles unavailable (HTTP 406)',
+    'OpenFreeMap 瓦片不可用（HTTP 406）',
   );
 
   status = 429;
   for (let i = 0; i < 20; i++) await tick(1500);
   assert.equal(
     layer.getStats().error,
-    'OpenFreeMap tiles rate-limited',
+    'OpenFreeMap 瓦片已限流',
     'a rate limit is a different instruction to the reader than a refusal',
   );
 });
@@ -262,7 +262,7 @@ test('an unclassified road failure keeps the general line', async (t) => {
   });
   layer.enable(viewer);
   await tick(400);
-  assert.equal(layer.getStats().error, 'OpenFreeMap tiles unavailable');
+  assert.equal(layer.getStats().error, 'OpenFreeMap 瓦片不可用');
 });
 
 test('a stalled TomTom status never blocks road acquisition or first simulated dots', async (t) => {

@@ -224,8 +224,8 @@ export function createQueries({ state, parts }) {
           source: 'GTFS-RT',
           status: 'zoom-in',
           coverage: state._altitudeGateOpen
-            ? `No feed here yet · ${TRANSIT_ENABLED_FEEDS.length} regions available`
-            : `Fly below ${Math.round(ACTIVATION_ALTITUDE_M / 1000).toLocaleString()} km to a covered region`,
+            ? `此处尚无数据源 · ${TRANSIT_ENABLED_FEEDS.length} 个区域可用`
+            : `降至 ${Math.round(ACTIVATION_ALTITUDE_M / 1000).toLocaleString()} km 以下进入覆盖区域`,
         };
       }
       // Age is shown by the same rule the row state uses, so the text and the
@@ -239,7 +239,7 @@ export function createQueries({ state, parts }) {
               now - status.upstreamAt > FEED_STALE_AFTER_MS);
           const aged =
             quiet && Number.isFinite(status.upstreamAt)
-              ? ` (${Math.round((now - status.upstreamAt) / 1000)}s old)`
+              ? `（${Math.round((now - status.upstreamAt) / 1000)} 秒前）`
               : '';
           return `${feed.name} ${status.count}${aged}`;
         })
@@ -255,7 +255,7 @@ export function createQueries({ state, parts }) {
         loading: health.loading && count === 0,
         loadingLabel:
           health.loading && count === 0
-            ? `Loading ${active.map((feed) => feed.name).join(', ')}`
+            ? `正在加载 ${active.map((feed) => feed.name).join('、')}`
             : undefined,
         stale: health.stale,
         source: 'GTFS-RT',

@@ -1585,7 +1585,7 @@ async function runBrowserGroup(record) {
     const r = await settle('local-firms', 30);
     const s = r.stats || {};
     if (env.keys.FIRMS === false) {
-      return s.error === 'KEY REQUIRED'
+      return s.error === '需要密钥'
         ? pass('keyless and honest: getStats().error === "KEY REQUIRED"')
         : fail(`keyless but error=${s.error} count=${s.count} — expected "KEY REQUIRED"`);
     }
@@ -1608,7 +1608,7 @@ async function runBrowserGroup(record) {
     const s = r.stats || {};
     if (env.keys.TOMTOM === false) {
       const label = String(s.loadingLabel || '');
-      return s.mode === 'sim' && /SIMULATED/i.test(label)
+      return s.mode === 'sim' && /模拟/.test(label)
         ? pass(`sim mode labelled honestly: "${label.slice(0, 70)}"`)
         : fail(`mode=${s.mode} label="${label.slice(0, 70)}" — expected sim + a SIMULATED label`);
     }
