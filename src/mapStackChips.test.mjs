@@ -418,8 +418,8 @@ test("models carry the stack's own reason and never invent an active chip", () =
       },
       {
         requirement: '',
-        unavailableHint: 'Hybrid is unavailable',
-        title: 'Hybrid is unavailable',
+        unavailableHint: 'Hybrid不可用',
+        title: 'Hybrid不可用',
       },
     ],
   );

@@ -32,7 +32,7 @@ test('a wide-view pack failure names the unavailable data without an API fallbac
           status: 'unavailable',
           failureReason: error.failureReason,
         }),
-        'Mapped names temporarily unavailable',
+        '标注名称暂不可用',
       );
       return true;
     },

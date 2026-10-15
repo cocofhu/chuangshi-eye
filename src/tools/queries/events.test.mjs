@@ -62,7 +62,7 @@ test('the flood tool lists the bundled evidence in story order', async () => {
   assert.deepEqual(all.data.flood_path.start, { lat: 28.33255, lon: 85.48476 });
   assert.ok(all.data.flood_path.length_km > 50);
   assert.equal(all.data.imagery.after.observed_at, '2026-08-27');
-  assert.match(all.data.caveat, /not an official hazard model/);
+  assert.match(all.data.caveat, /不是官方灾害模型/);
   assert.match(all.data.attribution, /CC BY-NC 4\.0/);
   const downstream = await catalog.call('get_bhote_koshi_flood', {
     phase: 'Downstream passage',

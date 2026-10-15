@@ -123,7 +123,7 @@ test('labels say what the buttons do', () => {
   for (const label of [
     'aria-label="相机跟随视图"',
     '来源',
-    'SINCE',
+    '起始',
   ])
     assert.ok(html.includes(label), label);
   // The provider chips are the on/off switch; no separate buttons.

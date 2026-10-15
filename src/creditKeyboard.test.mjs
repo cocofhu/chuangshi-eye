@@ -64,7 +64,7 @@ test('Cesium Data attribution and close controls join the keyboard tab order', (
   assert.equal(f.expand.getAttribute('aria-expanded'), 'false');
   assert.equal(f.close.getAttribute('role'), 'button');
   assert.equal(f.close.getAttribute('tabindex'), '0');
-  assert.equal(f.close.getAttribute('aria-label'), 'Close data attribution');
+  assert.equal(f.close.getAttribute('aria-label'), '关闭数据归属说明');
 });
 
 test('Enter opens and closes attribution on initial keydown', () => {

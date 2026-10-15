@@ -128,7 +128,7 @@ test('actual Context refresh retains the focused signal button across unchanged 
   assert.equal(f.document.activeElement, target);
   assert.equal(f.losses(), 0);
   assert.equal(f.focusCalls(), calls, 'refresh must preserve focus without repeatedly restoring it');
-  assert.match(f.controller.signalList.textContent, /2\.5 KM/);
+  assert.match(f.controller.signalList.textContent, /2\.5 公里/);
 });
 
 test('signal content and accessible name update without replacing the active target', () => {

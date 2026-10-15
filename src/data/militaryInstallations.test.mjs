@@ -777,7 +777,7 @@ test('zoom-out aborts an active installation request and returns non-loading gui
     assert.equal(militaryInstallationsLayer.getStats().loading, false);
     assert.equal(militaryInstallationsLayer.getStats().status, 'zoom-in');
     assert.equal(militaryInstallationsLayer.getStats().error, null, 'guidance is not a fault');
-    assert.match(militaryInstallationsLayer.getStats().statusMessage, /zoom in/i);
+    assert.match(militaryInstallationsLayer.getStats().statusMessage, /放大地图/);
   } finally {
     militaryInstallationsLayer.destroy(viewer);
     globalThis.fetch = originalFetch;
