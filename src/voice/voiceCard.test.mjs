@@ -28,7 +28,7 @@ test('presentation: a slow annotate turn shows captions, plan steps and the resu
   let view = voiceCardView(state);
   assert.equal(view.visible, true);
   assert.equal(view.busy, true);
-  assert.equal(view.phase, 'WORKING');
+  assert.equal(view.phase, '进行中');
   assert.equal(view.user.text, 'Annotate the Texas State Capitol');
   assert.equal(view.assistant.text, 'Finding the Capitol, then outlining it.');
   assert.deepEqual(view.steps.map(({ label, status, detail }) => ({ label, status, detail })), [
@@ -50,7 +50,7 @@ test('presentation: a slow annotate turn shows captions, plan steps and the resu
     { type: 'outline', id: 'anno-1', status: 'resolved' },
   ].reduce(reduceVoiceCard, state);
   view = voiceCardView(done);
-  assert.equal(view.phase, 'DONE');
+  assert.equal(view.phase, '完成');
   assert.equal(view.steps[0].detail, '轮廓已描');
   assert.equal(view.result.title, 'Marked 1 place');
   assert.deepEqual(view.result.referents, [{ n: 1, label: 'Texas State Capitol' }]);
