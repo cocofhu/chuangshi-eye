@@ -654,8 +654,8 @@ test('public visual facades reject the complete invalid request before authority
       ),
       validations: [
         'Invalid celestial ring enabled value',
-        'Celestial ring options must be boolean',
-        'Celestial ring is available only in Normal style',
+        '天体环选项必须为布尔值',
+        '天体环仅在标准风格下可用',
       ],
     },
   ];

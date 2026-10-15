@@ -242,7 +242,7 @@ test('an invalid box or clock is refused before any request', async () => {
       box: { west: 179, south: 0, east: -179, north: 1 },
       fetchImpl,
     }),
-    /dateline/,
+    /日界线/,
   );
   await assert.rejects(
     searchHls({ box: BOX, now: 'never', fetchImpl }),

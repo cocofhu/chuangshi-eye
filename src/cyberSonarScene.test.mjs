@@ -277,7 +277,7 @@ for (const reducedMotion of [false, true]) {
       );
       scene.postUpdate.raiseEvent();
       assert.equal(root.dataset.cyberSonarGpu, 'unsupported');
-      assert.match(status.textContent, /Native contacts remain visible/);
+      assert.match(status.textContent, /原生目标仍可见/);
       assert.equal(
         requests,
         1,

@@ -146,8 +146,9 @@ test('wind is sampled from the model grid at the location', async () => {
   assert.deepEqual(wind.requested, ['ifs']);
   u.fill(0);
   const calm = await catalog.call('get_wind', { location: { lat: 0, lon: 0 } });
-  assert.equal(calm.summary, 'Wind at 0.0000, 0.0000: 0 km/h, calm.');
-  assert.equal(calm.data.calm, true);
+  assert.equal(calm.summary, 'Wind at 0.0000, 0.0000: 0 km/h from the 静风.');
+  assert.equal(calm.data.from, '静风');
+  assert.equal(calm.data.calm, false);
   const down = composeCatalog({
     tools: coreTools,
     services: { wind: { getSnapshot: async () => ({ unavailable: true }) } },
