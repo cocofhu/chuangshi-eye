@@ -262,7 +262,7 @@
 
 /* "Acquiring" caption only when no previous frame is showing underneath */
 .cctv-frame-wrap.loading:not(.has-frame)::before {
-  content: 'ACQUIRING FRAME';
+  content: '正在获取画面';
   position: absolute;
   inset: 0;
   display: flex;
@@ -364,4 +364,10 @@
   line-height: 1.45;
   color: #a8f7ff;
   text-shadow: 0 0 10px rgba(0, 212, 255, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cctv-frame-wrap.loading::after {
+    animation: none;
+  }
 }

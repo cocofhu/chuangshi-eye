@@ -10,7 +10,7 @@ export function formatAwarenessCount(summary = {}) {
   if (!Number.isFinite(summary.count)) return '?';
   const count = summary.count.toLocaleString('en-US');
   return summary.complete === false || summary.truncated === true
-    ? `At least ${count}`
+    ? `至少 ${count}`
     : count;
 }
 
@@ -56,8 +56,8 @@ export function createPanel({ state: layerState, services, parts, source }) {
   function hidePanel() {
     if (layerState.panel) {
       const markup = `<div class="military-awareness-standby">
-      <strong>${layerState.enabled ? 'CONTEXT READY' : 'GLOBAL CONTEXT OFF'}</strong>
-      <span>${layerState.enabled ? 'SELECT A FLIGHT, VESSEL, OR MAPPED INSTALLATION' : 'ENABLE TO LOAD OBSERVED / MAPPED PROXIMITY'}</span>
+      <strong>${layerState.enabled ? '目标情境就绪' : '目标情境 关'}</strong>
+      <span>${layerState.enabled ? '选择飞机、船舶或已标绘站点' : '开启后加载观测与已标绘邻近信息'}</span>
     </div>`;
       layerState.panel.hidden = false;
       if (layerState.panelMarkup !== markup) {
@@ -78,10 +78,10 @@ export function createPanel({ state: layerState, services, parts, source }) {
         const label = formatAwarenessLabel(item);
         const targetId = item.icao24 || item.mmsi || item.id;
         if (!targetId) {
-          return `<li><span class="military-awareness-target unavailable" aria-label="Unavailable">${escapeHtml(label)} <span>${formatAwarenessDistance(item.distanceM)}</span></span></li>`;
+          return `<li><span class="military-awareness-target unavailable" aria-label="不可用">${escapeHtml(label)} <span>${escapeHtml(formatAwarenessDistance(item.distanceM))}</span></span></li>`;
         }
-        const accessibleLabel = label === '—' ? 'Unavailable' : label;
-        return `<li><button type="button" class="military-awareness-target" data-awareness-layer="${escapeHtml(cohort.id)}" data-awareness-id="${escapeHtml(targetId)}" aria-label="Focus ${escapeHtml(accessibleLabel)}">${escapeHtml(label)} <span>${formatAwarenessDistance(item.distanceM)}</span></button>${namedAreasHtml(item.memberNames)}</li>`;
+        const accessibleLabel = label === '—' ? '不可用' : label;
+        return `<li><button type="button" class="military-awareness-target" data-awareness-layer="${escapeHtml(cohort.id)}" data-awareness-id="${escapeHtml(targetId)}" aria-label="聚焦 ${escapeHtml(accessibleLabel)}">${escapeHtml(label)} <span>${escapeHtml(formatAwarenessDistance(item.distanceM))}</span></button>${namedAreasHtml(item.memberNames)}</li>`;
       })
       .join('');
     const pageCount = Math.max(
@@ -102,10 +102,10 @@ export function createPanel({ state: layerState, services, parts, source }) {
 
   function navigationControlsHtml() {
     const canPrevious = layerState.navigationIndex > 0;
-    return `<div class="military-awareness-controls" role="group" aria-label="Global Context navigation">
-    <button type="button" data-awareness-action="previous" title="Previous — prior visited contact in the 250 km window"${canPrevious ? '' : ' disabled'}>PREVIOUS</button>
-    <button type="button" data-awareness-action="focus">FOCUS</button>
-    <button type="button" data-awareness-action="next" title="Next — nearest unvisited contact in the 250 km window"${parts.navigation.canNavigateNext() ? '' : ' disabled'}>NEXT</button>
+    return `<div class="military-awareness-controls" role="group" aria-label="目标情境导航">
+    <button type="button" data-awareness-action="previous" title="上一个：250 公里窗口内已访问的目标"${canPrevious ? '' : ' disabled'}>上一</button>
+    <button type="button" data-awareness-action="focus">聚焦</button>
+    <button type="button" data-awareness-action="next" title="下一个：250 公里窗口内最近的未访问目标"${parts.navigation.canNavigateNext() ? '' : ' disabled'}>下一</button>
   </div>`;
   }
 
@@ -175,7 +175,7 @@ export function createPanel({ state: layerState, services, parts, source }) {
 
   function namedAreasHtml(names) {
     return names?.length
-      ? `<details class="military-awareness-names"><summary>Named areas (${names.length})</summary><div>${names.map((name) => escapeHtml(name)).join('<br>')}</div></details>`
+      ? `<details class="military-awareness-names"><summary>命名区域（${names.length}）</summary><div>${names.map((name) => escapeHtml(name)).join('<br>')}</div></details>`
       : '';
   }
 
@@ -183,11 +183,11 @@ export function createPanel({ state: layerState, services, parts, source }) {
     if (!layerState.enabled || !layerState.results) return hidePanel();
     const panel = ensurePanel();
     const { subject, cohorts } = layerState.results;
-    const markup = `<div class="military-awareness-subject">${escapeHtml(subject.label)} · ${formatAwarenessDistance(AWARENESS_RADIUS_M)} FLIGHT / VESSEL WINDOW</div>
+    const markup = `<div class="military-awareness-subject">${escapeHtml(subject.label)} · ${escapeHtml(formatAwarenessDistance(AWARENESS_RADIUS_M))} 航空 / 船舶窗口</div>
     ${namedAreasHtml(subject.memberNames)}
     ${navigationControlsHtml()}
     ${cohorts.map(rowHtml).join('')}
-    <p class="military-awareness-note" tabindex="-1" data-awareness-focus-continuation>Open-source mapped/observed context. Missing broadcasts, unloaded map areas, or unmapped sites are not evidence of absence.</p>`;
+    <p class="military-awareness-note" tabindex="-1" data-awareness-focus-continuation>公开来源的已标绘与观测情境。未广播、未加载地图区域或未标绘站点，不能当作不存在的证据。</p>`;
     panel.hidden = false;
     if (layerState.panelMarkup !== markup) {
       const focusSnapshot = captureAwarenessPanelFocus(panel);

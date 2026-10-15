@@ -170,7 +170,7 @@ function buildRow(documentRef, key) {
     // facts this panel reports, never values it rewrites or deletes.
     const badge = documentRef.createElement('span');
     badge.className = 'key-setup-external';
-    badge.textContent = 'configured externally';
+    badge.textContent = '外部配置';
     badge.title =
       '由环境变量、钥匙串或启动器提供 — 请在设置处修改';
     head.append(badge);
@@ -211,7 +211,7 @@ function buildRow(documentRef, key) {
       remove.className = 'key-setup-remove';
       remove.dataset.keySetupRemove = JSON.stringify(key.envVars);
       remove.textContent = '移除';
-      remove.title = `Remove ${key.title} from this app's saved keys`;
+      remove.title = `从本应用已保存的密钥中移除 ${key.title}`;
       fields.append(remove);
     }
     row.append(fields);
@@ -321,7 +321,7 @@ export async function initKeySetup({
     if (disposed) return;
     status = nextStatus;
     chipLabel.textContent = keySetupChipLabel(status);
-    chip.title = `Project keys: ${keySetupChipLabel(status)}`;
+    chip.title = `项目密钥：${keySetupChipLabel(status)}`;
     chip.setAttribute('aria-label', chip.title);
     // Fully powered is the owner's clean screen: the chip retires. The dialog
     // stays reachable this session (and via ?setup=1) to swap or verify keys.

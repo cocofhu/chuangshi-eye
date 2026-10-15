@@ -43,5 +43,5 @@ export function isHeadingEstimated(camera) {
  */
 export function headingHudToken(camera) {
   const hdg = Math.round(Number(camera?.headingDeg) || 0);
-  return `HDG ${hdg}°${isHeadingEstimated(camera) ? ' (ESTIMATED)' : ''}`;
+  return `航向 ${hdg}°${isHeadingEstimated(camera) ? '（估计）' : ''}`;
 }

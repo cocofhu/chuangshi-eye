@@ -15,14 +15,14 @@ test('an empty composition explains unavailable imagery even while disabled', ()
       snapshot({
         enabled,
         providers: [],
-        coverage: { hint: 'No street-level imagery providers configured' },
+        coverage: { hint: '未配置街景影像来源' },
         legend: [],
       }),
     );
     assert.equal(view.controlsDisabled, true);
     assert.equal(view.keyRequired, false);
     assert.deepEqual(view.providers, []);
-    assert.equal(view.meta, 'No street-level imagery providers configured');
+    assert.equal(view.meta, '未配置街景影像来源');
   }
 });
 
@@ -204,7 +204,7 @@ test('one chip per provider: on, off, loading, and keyless as an error chip', ()
     ],
   );
   assert.equal(view.providers[0].label, 'MAPILLARY');
-  assert.equal(view.providers[1].title, 'Panoramax imagery off');
+  assert.equal(view.providers[1].title, 'Panoramax 影像关');
   assert.match(
     view.providers[3].title,
     /^Google Street View: Needs GOOGLE_MAPS_API_KEY/,
@@ -240,7 +240,7 @@ test('chips are dark while the layer is off, so the chip is the layer switch', (
     view.providers.map((chip) => [chip.id, chip.active, chip.state]),
     [['mapillary', false, 'idle']],
   );
-  assert.equal(view.providers[0].title, 'Mapillary imagery off');
+  assert.equal(view.providers[0].title, 'Mapillary 影像关');
   assert.equal(view.enableButton, undefined, 'no separate ON/OFF button');
   const keyless = presentStreetLevelPanel(
     snapshot({ providers: [provider({ keyRequired: true })] }),
@@ -318,12 +318,12 @@ test('each provider chip carries its source colour', () => {
 test('the meta line never mixes the visible-sequence count with the selected sequence', () => {
   assert.equal(
     presentStreetLevelPanel(snapshot()).meta,
-    'Switch a provider on to draw its coverage.',
+    '打开来源以绘制覆盖。',
   );
   const browsing = presentStreetLevelPanel(
     snapshot({ enabled: true, coverage: { count: 812 } }),
   );
-  assert.match(browsing.meta, /^812 sequences in view · click a line/);
+  assert.match(browsing.meta, /^视野内 812 条序列 · 点击线段/);
   const selected = presentStreetLevelPanel(
     snapshot({
       enabled: true,
@@ -331,8 +331,8 @@ test('the meta line never mixes the visible-sequence count with the selected seq
       sequence: { selectedId: 'abc', images: 33 },
     }),
   );
-  assert.equal(selected.meta, '33 images in this sequence · Esc clears');
-  assert.doesNotMatch(selected.meta, /sequences in view/);
+  assert.equal(selected.meta, '33 张序列影像 · Esc 清除');
+  assert.doesNotMatch(selected.meta, /条序列/);
   const hinted = presentStreetLevelPanel(
     snapshot({
       enabled: true,
@@ -362,7 +362,7 @@ test('viewer caption reads "Image by" left, date right, and links to the provide
       },
     }),
   );
-  assert.equal(view.viewer.captionLeft, 'Image by mapfool');
+  assert.equal(view.viewer.captionLeft, '影像作者 mapfool');
   assert.equal(view.viewer.captionRight, '360° · 93° · 2023-10-08');
   assert.equal(
     view.viewer.link,
@@ -399,7 +399,7 @@ test('FOLLOW is disabled off Google 3D and says where to switch', () => {
     snapshot({ street: { ...open, followAvailable: true } }),
   );
   assert.equal(on3d.viewer.follow.disabled, false);
-  assert.match(on3d.viewer.follow.title, /^Camera follows view/);
+  assert.match(on3d.viewer.follow.title, /^相机跟随/);
   const closed = presentStreetLevelPanel(
     snapshot({ street: { open: false, followAvailable: true } }),
   );

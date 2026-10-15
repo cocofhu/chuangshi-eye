@@ -170,7 +170,7 @@ test('a camera switch cancels calibration before old blur can change the new cam
   inputs[0].dispatchEvent(new Event('blur'));
   assert.deepEqual(patches, []);
   assert.equal(chip.input, null);
-  assert.equal(chip.textContent, 'HDG 200.0°');
+  assert.equal(chip.textContent, '航向 200.0°');
 });
 
 test('Escape claims calibration cancellation and disposal prevents late commits', (t) => {

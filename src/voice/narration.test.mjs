@@ -76,7 +76,7 @@ test('a slow tool gets the earcon at 700 ms and its current step spoken at 1.5 s
   r.advance(1);
   assert.equal(r.earcon.on, true);
   r.advance(800);
-  assert.deepEqual(r.spoken.map((s) => s.line), ['Finding Texas Capitol on the map.']);
+  assert.deepEqual(r.spoken.map((s) => s.line), ['正在地图上查找 Texas Capitol。']);
   assert.equal(r.spoken[0].at, 1500);
   assert.equal(r.earcon.on, false, 'speech replaces the earcon');
 });
@@ -90,7 +90,7 @@ test('a spoken preamble suppresses step lines but keeps one still-working line',
   r.advance(5000);
   r.scheduler.progress('a', { step: 'fly', label: 'Austin' });
   r.advance(3000);
-  assert.deepEqual(r.spoken.map((s) => s.line), ['Still working on Austin.']);
+  assert.deepEqual(r.spoken.map((s) => s.line), ['仍在处理 Austin。']);
   r.advance(30000);
   assert.equal(r.spoken.length, 1);
 });
@@ -108,9 +108,9 @@ test('step changes speak at most twice, at least 3 s apart', () => {
   r.scheduler.progress('a', { step: 'refresh' });
   r.advance(3500);
   const lines = r.spoken.map((s) => s.line);
-  assert.deepEqual(lines.slice(0, 2), ['Turning on flights.', 'Heading to Austin.']);
+  assert.deepEqual(lines.slice(0, 2), ['正在开启 flights。', '正在飞往 Austin。']);
   assert.equal(r.spoken[1].at, 4500);
-  assert.ok(!lines.includes('Loading aircraft there.'), 'third step line is capped');
+  assert.ok(!lines.includes('正在加载该处航空器。'), 'third step line is capped');
 });
 
 test('no progress line speaks after the tool result, and an unheard line is retracted', () => {
@@ -151,7 +151,7 @@ test('lines wait while speaking is not allowed and silent tools stay silent', ()
   assert.deepEqual(r.spoken, [], 'user holding push-to-talk: no line');
   allowed = true;
   r.advance(7000);
-  assert.deepEqual(r.spoken.map((s) => s.line), ['Still working on Zilker Park.']);
+  assert.deepEqual(r.spoken.map((s) => s.line), ['仍在处理 Zilker Park。']);
 });
 
 test('the earcon only plays when its output cannot reach the microphone', () => {

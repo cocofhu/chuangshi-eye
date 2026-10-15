@@ -340,7 +340,7 @@ export function createStreetLevelLayer({
         source: STREET_LEVEL_LAYER_ID,
         reason: available
           ? null
-          : 'No street-level imagery providers configured',
+          : '未配置街景影像来源',
       };
     },
 
@@ -521,7 +521,7 @@ export function createStreetLevelLayer({
       if (state.enabled && activeEntries().length)
         state.street.error =
           lastError?.message ||
-          `No street-level imagery within ${NEAREST_RADIUS_M} m of the view centre`;
+          `视野中心 ${NEAREST_RADIUS_M} 米内没有街景影像`;
       state.street.loading = false;
       notify();
       return false;

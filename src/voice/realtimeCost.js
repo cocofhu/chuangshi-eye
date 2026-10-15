@@ -56,23 +56,23 @@ export class RealtimeCost {
       const pendingId = resolveVoiceModel(pendingTier).id;
       this.ui.tierButton.title =
         this.isActive() && state.modelId !== pendingId
-          ? `Next session: ${pendingId} — this session stays on ${state.modelId}`
-          : `Voice model: ${pendingId} — click to switch to ${
-              isMini ? 'standard' : 'mini'
-            }; applies next session`;
+          ? `下次会话：${pendingId} — 本次会话仍使用 ${state.modelId}`
+          : `语音模型：${pendingId} — 点击切换为${
+              isMini ? '标准' : '轻量'
+            }；下次会话生效`;
     }
     if (this.ui?.costValue) {
       const liveAuth = this.sessionCloudVoiceAuth || this.cloudVoiceAuth;
       if (liveAuth === 'oauth') {
         const { responses, input, output, captions } = this.oauthUsage;
         this.ui.costValue.hidden = false;
-        this.ui.costValue.textContent = 'COST UNKNOWN';
+        this.ui.costValue.textContent = '费用未知';
         this.ui.costValue.dataset.level = 'unknown';
         this.ui.costValue.title =
-          `ChatGPT OAuth session: ${responses} response(s), ${input} input and ${output} output tokens, ${captions} caption transcription(s) reported. ` +
-          'USD cost and the API spend cap are unavailable for this auth mode.' +
+          `ChatGPT OAuth 会话：${responses} 次响应，输入 ${input}、输出 ${output} token，字幕转写 ${captions} 次。` +
+          '此认证方式无法提供美元费用和 API 支出上限。' +
           (state.incomplete
-            ? ' Usage is incomplete because a response was still in flight when the session ended.'
+            ? '用量不完整：会话结束时仍有响应在途。'
             : '');
         return;
       }
@@ -125,7 +125,7 @@ export class RealtimeCost {
     if (this.isActive() && this.ui?.detail) {
       this.setStatus(
         this.status,
-        `${this.voiceTier.toUpperCase()} applies next session`,
+        `${this.voiceTier.toUpperCase()} 下次会话生效`,
       );
     }
     return this.voiceTier;

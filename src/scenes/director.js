@@ -122,7 +122,7 @@ export class SceneDirector {
       )
         return;
       if (this._usesAuthoredCamera && !this._claimingCamera)
-        this.stopScene('Camera ownership changed');
+        this.stopScene('相机控制已变更');
     };
     this._cameraHandoffUnsubscribe =
       styleManager.subscribeCameraHandoff?.(yieldCamera);
@@ -171,8 +171,8 @@ export class SceneDirector {
 
     this._presentation = {
       status: this._storageReadError
-        ? 'Saved project could not be read; storage preserved. Import a valid file to resume saving.'
-        : 'Ready',
+        ? '无法读取已保存项目；存储已保留。导入有效文件后可继续保存。'
+        : '就绪',
       progress: 0,
       runtime: '',
       playbackActive: false,
@@ -210,7 +210,7 @@ export class SceneDirector {
           return;
         const scene = this._getSelectedScene();
         if (!scene?.releaseLayerIds?.includes(change.layerId)) return;
-        this.stopScene('Scene layer turned off');
+        this.stopScene('场景图层已关闭');
       });
   }
 
@@ -238,7 +238,7 @@ export class SceneDirector {
     this._controls?.destroy();
     this._state.destroy();
     this._destroyPromise = Promise.resolve().then(async () => {
-      this.stopScene('Stopped');
+      this.stopScene('已停止');
       this._loadAbort?.abort();
       this._loadGeneration++;
       this.viewer.camera.cancelFlight();
@@ -314,7 +314,7 @@ export class SceneDirector {
   _saveProject() {
     if (this._storageReadError) {
       this._toastStorageError(
-        'Scene not saved — existing saved project could not be read. Export edits or import a valid file.',
+        '场景未保存 — 无法读取已保存项目。可导出编辑或导入有效文件。',
       );
       return;
     }
@@ -333,7 +333,7 @@ export class SceneDirector {
       );
       this._toastStorageError(
         e instanceof SceneDocumentError
-          ? `Scene not saved — ${e.message}`
+          ? `场景未保存 — ${e.message}`
           : undefined,
       );
     }
@@ -341,7 +341,7 @@ export class SceneDirector {
 
   /** Surface a "scene not saved" notice via the global toast + scene status line. */
   _toastStorageError(
-    message = 'Scene not saved — browser storage unavailable',
+    message = '场景未保存 — 浏览器存储不可用',
   ) {
     this._updateStatus(message);
     try {
@@ -370,7 +370,7 @@ export class SceneDirector {
 
   _shotOutcome(type, scene, shot, index = scene.shots.indexOf(shot)) {
     if (type === 'shot-loaded')
-      this._presentation.status = `Loaded: ${scene.title} / ${shot.title}`;
+      this._presentation.status = `已载入：${scene.title} / ${shot.title}`;
     this._publish({
       type,
       sceneId: scene.id,
@@ -485,7 +485,7 @@ export class SceneDirector {
 
     const scene = {
       id: uid('scene'),
-      title: sceneName.trim() || `Scene ${this._project.scenes.length + 1}`,
+      title: sceneName.trim() || `场景 ${this._project.scenes.length + 1}`,
       shots: [],
     };
 
@@ -763,7 +763,7 @@ export class SceneDirector {
             ));
       if (!inventoryMatches) {
         this._updateStatus(
-          `Cannot update ${recipe.title}: shot inventory changed`,
+          `无法更新 ${recipe.title}：镜头清单已变`,
         );
         return {
           appended: false,
@@ -794,7 +794,7 @@ export class SceneDirector {
         );
       if (!sourcePackMatches) {
         this._updateStatus(
-          `Cannot update ${recipe.title}: evidence beats changed`,
+          `无法更新 ${recipe.title}：证据节拍已变`,
         );
         return {
           appended: false,
@@ -817,7 +817,7 @@ export class SceneDirector {
     }));
     if (resolvedPatches.some(({ shot }) => !shot)) {
       this._updateStatus(
-        `Cannot update ${recipe.title}: shot bindings are incomplete`,
+        `无法更新 ${recipe.title}：镜头绑定不完整`,
       );
       return {
         appended: false,
@@ -897,8 +897,8 @@ export class SceneDirector {
     if (announce) {
       this._updateStatus(
         marker
-          ? `Updated ${patchedShotCount} ${patchedShotCount === 1 ? 'shot' : 'shots'}: ${recipe.title}`
-          : `Appended ${appendedShots.length} shots: ${recipe.title}`,
+          ? `已更新 ${patchedShotCount} 个镜头：${recipe.title}`
+          : `已追加 ${appendedShots.length} 个镜头：${recipe.title}`,
       );
     }
     return {
@@ -920,14 +920,14 @@ export class SceneDirector {
 
     const camera = this.styleManager.getCameraState();
     if (!camera) {
-      this._updateStatus('Cannot capture shot: camera not ready');
+      this._updateStatus('无法捕捉镜头：相机未就绪');
       return;
     }
 
     const shot = normalizeShot(
       {
         id: uid('shot'),
-        title: `Shot ${scene.shots.length + 1}`,
+        title: `镜头 ${scene.shots.length + 1}`,
         durationSec: DEFAULT_SHOT_DURATION_SEC,
         holdSec: DEFAULT_HOLD_SEC,
         camera,
@@ -941,7 +941,7 @@ export class SceneDirector {
     this._selectedShotId = shot.id;
     this._saveProject();
     this._shotOutcome('shot-captured', scene, shot);
-    this._updateStatus(`Captured: ${scene.title} / ${shot.title}`);
+    this._updateStatus(`已捕捉：${scene.title} / ${shot.title}`);
   }
 
   /**
@@ -954,7 +954,7 @@ export class SceneDirector {
 
     const shot = scene.shots.find((item) => item.id === this._selectedShotId);
     if (!shot) {
-      this._updateStatus('Select a shot first');
+      this._updateStatus('请先选择镜头');
       return;
     }
 
@@ -969,7 +969,7 @@ export class SceneDirector {
 
     this._saveProject();
     this._shotOutcome('shot-updated', scene, shot);
-    this._updateStatus(`Updated: ${scene.title} / ${shot.title}`);
+    this._updateStatus(`已更新：${scene.title} / ${shot.title}`);
   }
 
   /**
@@ -1075,7 +1075,7 @@ export class SceneDirector {
       const released = await this._releaseSceneLayers(previousScene, token);
       if (!released || token.cancelled) {
         if (!token.cancelled)
-          this._updateStatus(`Could not leave scene: ${previousScene.title}`);
+          this._updateStatus(`无法离开场景：${previousScene.title}`);
         return;
       }
       this._loadedSceneId = null;
@@ -1125,7 +1125,7 @@ export class SceneDirector {
         seeking: true,
       });
       if (this._loadAbort === controller) this._loadAbort = null;
-      this._updateStatus(`Seeked: ${scene.title} / ${shot.title}`);
+      this._updateStatus(`已定位：${scene.title} / ${shot.title}`);
       this._activateInteractions(scene, shot);
       return { started: true, shotId };
     }
@@ -1487,14 +1487,14 @@ export class SceneDirector {
       running: false,
       seeking: true,
     });
-    this._updateStatus(`Seeked: ${scene.title} / ${shot.title}`);
+    this._updateStatus(`已定位：${scene.title} / ${shot.title}`);
     return true;
   }
 
   /** Seek the complete authored scene state to an exact clock position. */
   seekScene(sceneId, progress) {
     if (this._destroyed) return Promise.resolve(false);
-    this.stopScene('Seeking scene clock');
+    this.stopScene('正在定位场景时钟');
     const generation = ++this._sceneSeekGeneration;
     return this._trackWork(this._seekScene(sceneId, progress, generation));
   }
@@ -1564,7 +1564,7 @@ export class SceneDirector {
       this._claimingCamera = false;
     }
     if (claimed === false) {
-      this._updateStatus('Camera unavailable — exit cockpit first');
+      this._updateStatus('相机不可用 — 请先退出驾驶舱');
       return false;
     }
     return true;
@@ -1699,7 +1699,7 @@ export class SceneDirector {
       if (!queue.length) return { started: false, reason: 'scene-complete' };
     }
     if (!queue.length) {
-      this._updateStatus('No shots to run');
+      this._updateStatus('没有可播放的镜头');
       return { started: false, reason: 'no-shots' };
     }
 
@@ -1782,7 +1782,7 @@ export class SceneDirector {
         releaseOnFinish: preview,
       });
     } catch (error) {
-      this._updateStatus(`Error: ${error.message || 'run failed'}`);
+      this._updateStatus(`错误：${error.message || '运行失败'}`);
       this._logEvent('scene_run_error', {
         message: error.message || 'unknown error',
       });
@@ -1828,7 +1828,7 @@ export class SceneDirector {
    *
    * @param {string} [reason='Stopped'] - Human-readable cancellation reason
    */
-  stopScene(reason = 'Stopped') {
+  stopScene(reason = '已停止') {
     this._setSceneMediaPlayback();
     this._interactions?.clear();
     this._dataPacks?.clear();
@@ -1900,7 +1900,7 @@ export class SceneDirector {
     if (action.type === 'shot') {
       if (this._interactionTransitions >= 64) {
         this._updateStatus(
-          'Scene transition limit reached — load a shot to reset',
+          '场景切换已达上限 — 载入镜头以重置',
         );
         return false;
       }
@@ -1943,7 +1943,7 @@ export class SceneDirector {
     try {
       payload = stringifySceneDocument(this._project);
     } catch (error) {
-      this._updateStatus(`Export failed: ${error.message}`);
+      this._updateStatus(`导出失败：${error.message}`);
       return;
     }
     // Trigger a browser download via a temporary anchor element
@@ -1956,7 +1956,7 @@ export class SceneDirector {
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
-    this._presentation.status = 'Project exported';
+    this._presentation.status = '项目已导出';
     this._publish({ type: 'project-exported', project: this._project });
   }
 
@@ -1986,7 +1986,7 @@ export class SceneDirector {
       )
         return false;
       // Validate before touching playback, selection or the saved project.
-      this.stopScene('Importing project');
+      this.stopScene('正在导入项目');
       await Promise.allSettled([...(this._pendingWork || [])]);
       if (this._destroyed || generation !== this._importGeneration) return;
       if (
@@ -2016,7 +2016,7 @@ export class SceneDirector {
       this._loadedSceneId = null;
       this._saveProject();
       this._publish({ type: 'project-imported', project });
-      this._updateStatus(`Imported ${file.name}`);
+      this._updateStatus(`已导入 ${file.name}`);
       return true;
     } catch (error) {
       if (
@@ -2027,8 +2027,8 @@ export class SceneDirector {
         return false;
       this._updateStatus(
         error instanceof SceneDocumentError
-          ? `Import failed: ${error.message}`
-          : 'Import failed (could not read JSON file)',
+          ? `导入失败：${error.message}`
+          : '导入失败（无法读取 JSON 文件）',
       );
     }
   }
@@ -2128,7 +2128,7 @@ export class SceneDirector {
     }
 
     if (refused.length) {
-      this._updateStatus(`Layers refused: ${refused.join(', ')}`);
+      this._updateStatus(`图层被拒绝：${refused.join('、')}`);
       this._logEvent('shot_layers_refused', { layerIds: [...refused] });
     }
     return { applied, refused, cancelled: false };
@@ -2219,7 +2219,7 @@ export class SceneDirector {
         result.error || 'unknown reason',
       );
       this._updateStatus(
-        `Could not exit ${mode} — scene layers may be refused`,
+        `无法退出 ${mode} — 场景图层可能被拒绝`,
       );
       this._logEvent('context_mode_exit_failed', {
         mode,
@@ -2245,7 +2245,7 @@ export class SceneDirector {
       token,
     );
     if (!completed && !token.cancelled && !this._destroyed)
-      this.stopScene('Camera move interrupted');
+      this.stopScene('相机移动已中断');
   }
 
   /**
@@ -2334,7 +2334,7 @@ export class SceneDirector {
       const pending = readers.filter(({ read }) => read()?.pending === true);
       if (!pending.length) return;
       if (pending.some(({ maxWaitMs }) => Date.now() - began >= maxWaitMs)) {
-        this.stopScene('Scene media timed out');
+        this.stopScene('场景媒体超时');
         throw new Error(
           'Scene media did not finish within its bounded playback window',
         );

@@ -490,7 +490,7 @@ test('an empty provider composition enables and tears down without acquiring ima
   assert.equal(layer.getUIState().keyRequired, false);
   assert.match(
     layer.getUIState().coverage.hint,
-    /No street-level imagery providers/,
+    /未配置街景影像来源/,
   );
   layer.disable();
   layer.enable(viewer);

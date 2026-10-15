@@ -1477,7 +1477,7 @@ test('invalid and unsupported imports retain the current project, selection and 
       assert.equal(director._project, project);
       assert.equal(director._selectedShotId, selected);
       assert.equal(localStorage.getItem('godsEyeView.sceneProject.v2'), saved);
-      assert.match(director._presentation.status, /Import failed: \$/);
+      assert.match(director._presentation.status, /导入失败：\$/);
     }
     let read = false;
     await director.importProjectFile({ size: 6 * 1024 * 1024, text: async () => { read = true; } });

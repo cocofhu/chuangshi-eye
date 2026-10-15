@@ -131,7 +131,7 @@ export function createSceneSharing(director) {
       if (!alive(owner)) return;
       staged = input;
       inventory(input);
-      dialog.status.textContent = 'Ready to import';
+      dialog.status.textContent = '可以导入';
       dialog.text(
         'Apply replaces the current project. Export your current project first if you want to keep both.',
       );
@@ -210,7 +210,7 @@ export function createSceneSharing(director) {
             JSON.parse(shotText.value),
           );
           sceneText.value = json(details);
-          dialog.status.textContent = 'Anchor added to draft';
+          dialog.status.textContent = '锚点已加入草稿';
         }),
       dialog.body,
     );
@@ -260,7 +260,7 @@ export function createSceneSharing(director) {
           delete details.move;
           shotText.value = json(details);
         } catch {
-          dialog.status.textContent = 'Invalid shot JSON';
+          dialog.status.textContent = '镜头 JSON 无效';
         }
       },
       dialog.body,
@@ -374,7 +374,7 @@ export function createSceneSharing(director) {
         );
         if (alive(owner)) {
           download(text, 'scene.gevbundle.json');
-          dialog.status.textContent = 'Asset bundle downloaded';
+          dialog.status.textContent = '素材包已下载';
         }
       }),
     );

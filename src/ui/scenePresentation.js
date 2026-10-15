@@ -68,7 +68,7 @@ export function renderSceneShots(
       const input = document.createElement('input');
       input.type = 'text';
       input.className = 'scene-shot-rename';
-      input.setAttribute('aria-label', 'Shot name');
+      input.setAttribute('aria-label', '镜头名称');
       input.value = shot.title;
       let finished = false;
       const finish = (save) => {

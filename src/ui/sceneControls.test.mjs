@@ -249,7 +249,7 @@ test('a file import finishing after disposal cannot clear the retained file cont
     finish();
     await new Promise((resolve) => setImmediate(resolve));
     assert.equal(f.elements.file.value, 'project.json');
-    assert.equal(f.elements.status.textContent, 'Ready');
+    assert.equal(f.elements.status.textContent, '就绪');
   } finally {
     f.restore();
   }

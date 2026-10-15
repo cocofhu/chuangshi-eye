@@ -48,11 +48,11 @@ test('an analyst count reaches the model and the card with its scope and caveats
   });
   assert.equal(result.ok, true);
   assert.equal(result.complete, true, 'complete survives the projection');
-  assert.equal(result.say, '3 aircraft anywhere in the loaded data.');
+  assert.equal(result.say, '3 航空器 已加载数据范围内.');
   assert.equal(view.visible, true, 'the card shows an analyst result');
-  assert.equal(view.title, '3 aircraft anywhere in the loaded data');
+  assert.equal(view.title, '3 航空器 已加载数据范围内');
   assert.ok(
-    !view.lines.includes('anywhere in the loaded data'),
+    !view.lines.includes('已加载数据范围内'),
     'the scope is in the title, not repeated as a line',
   );
   assert.deepEqual(
@@ -106,10 +106,10 @@ test('a capped count is a floor everywhere: model, card and caveat', async () =>
     limit: 1,
   });
   assert.equal(result.complete, false);
-  assert.match(result.say, /^At least 250,000 aircraft/);
-  assert.match(view.title, /^At least 250,000 aircraft/);
+  assert.match(result.say, /^至少 250,000 航空器/);
+  assert.match(view.title, /^至少 250,000 航空器/);
   assert.ok(
-    view.notes.some((note) => /counted 250,000 of 400,000/.test(note)),
+    view.notes.some((note) => /已计入 250,000 \/ 400,000/.test(note)),
     'the cap is on screen',
   );
 });
@@ -121,10 +121,10 @@ test('a partial answer names the layers it could not read', async () => {
     scope: { kind: 'anywhere' },
   });
   assert.equal(result.partial, true);
-  assert.match(result.say, /Partial; earthquakes not answered/);
+  assert.match(result.say, /部分；earthquakes未回答/);
   assert.deepEqual(result.unanswered, ['earthquakes']);
-  assert.ok(view.chips.includes('partial'));
-  assert.ok(view.notes.includes('Not answered: earthquakes'));
+  assert.ok(view.chips.includes('部分'));
+  assert.ok(view.notes.includes('未回答：earthquakes'));
 });
 
 test('"the second one" is the second row the card lists', async () => {
@@ -320,7 +320,7 @@ test('a slow annotate_map call narrates its real phase', async () => {
     await narrated('annotate_map', {
       annotations: [{ type: 'pin', target: 'Ferry Building' }],
     }),
-    ['Finding Ferry Building on the map.'],
+    ['正在地图上查找 Ferry Building。'],
   );
 });
 

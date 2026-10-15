@@ -103,7 +103,7 @@ test('aircraft identity always covers operator, type and route from returned fie
   });
   assert.equal(
     full.identityLine,
-    'UAL428, United Airlines, B738, KIAH to KSFO.',
+    'UAL428, United Airlines, B738, KIAH 至 KSFO.',
   );
   assert.equal(
     full.say,
@@ -148,7 +148,7 @@ test('aircraft identity always covers operator, type and route from returned fie
   });
   assert.equal(
     routeString.identityLine,
-    'DAL1, Delta, A321, KATL to KLAX.',
+    'DAL1, Delta, A321, KATL 至 KLAX.',
     'endpoint codes stay verbatim',
   );
 
@@ -190,7 +190,7 @@ test('nearest-aircraft results name the aircraft, distance and altitude briefly'
       distanceKm: 12.4,
     },
   });
-  assert.equal(ok.say, '已选中 SWA1940, 距 Austin 12 km, 31,000 英尺.');
+  assert.equal(ok.say, '已选中 SWA1940, 距 Austin 12 km, 9,400 米.');
   assertSpeakable(ok.say);
   assert.equal(ok.referents[0].id, 'a0b1');
 
@@ -277,12 +277,12 @@ test('frame_overhead keeps the essential scope audible and lists referents', () 
 test('fly_to confirms the destination; cancellation stays silent', () => {
   assert.equal(
     envelope('fly_to_location', { ok: true, label: 'Tokyo' }).say,
-    'Flying to Tokyo.',
+    '正在飞往 Tokyo.',
   );
   assert.equal(
     envelope('fly_to_location', { ok: true, label: 'Austin', arrived: true })
       .say,
-    'Over Austin.',
+    '已在 Austin 上空.',
   );
   assert.equal(
     envelope('fly_to_location', { ok: false, cancelled: true, label: 'Austin' })
@@ -292,7 +292,7 @@ test('fly_to confirms the destination; cancellation stays silent', () => {
   );
   assert.equal(
     envelope('fly_to_location', { ok: false, query: 'Atlantis' }).say,
-    "Couldn't find Atlantis.",
+    '找不到 Atlantis.',
   );
 });
 
@@ -373,12 +373,12 @@ test('analyst speech preserves exact counts, lower bounds and partial status', (
     action: 'analyst_query',
     count: 3,
     complete: true,
-    scopeLabel: 'anywhere in the loaded data',
+    scopeLabel: '已加载数据范围内',
     coverage: { layersQueried: [{ layerKey: 'flights' }] },
   };
   assert.equal(
     attachVoiceResult('analyst_query', raw).say,
-    '3 aircraft anywhere in the loaded data.',
+    '3 航空器 已加载数据范围内.',
   );
   assert.equal(
     attachVoiceResult('analyst_query', {
@@ -388,7 +388,7 @@ test('analyst speech preserves exact counts, lower bounds and partial status', (
       partial: true,
       unanswered: ['military'],
     }).say,
-    'At least 250,000 aircraft anywhere in the loaded data. 部分；military未回答。',
+    '至少 250,000 航空器 已加载数据范围内. 部分；military未回答。',
   );
 });
 
@@ -430,11 +430,11 @@ test('labels are bounded and cleaned before they are spoken', () => {
         { target: 'UT' },
       ],
     }),
-    'Mark Capitol和Zilker +1',
+    '标记 Capitol和Zilker +1',
   );
   assert.equal(
     planStepLabel('fly_to_location', { query: 'Tokyo' }),
-    'Fly to Tokyo',
+    '飞往 Tokyo',
   );
   assert.equal(
     progressStepLabel('resolve', 'Capitol'),

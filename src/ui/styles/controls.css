@@ -1301,3 +1301,12 @@ body.ui-clean-view #scene-runtime.active {
   text-align: right;
   flex-shrink: 0;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-logo,
+  .loader-status,
+  #detection-toggle.panoptic,
+  #detection-toggle.god {
+    animation: none;
+  }
+}

@@ -415,3 +415,9 @@
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  #toast {
+    transition: none;
+  }
+}

@@ -431,3 +431,19 @@ body:not(.ui-clean-view):not(.recording-mode) #cesium-credits {
     flex-basis: 8.5rem;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  #command-dock #location-bar:not(.collapsed) .location-city-row,
+  #command-dock #control-panel:not(.collapsed) .button-grid,
+  #command-dock .poi-row-container.expanded,
+  #command-dock
+    #gev-voice-control[data-status='listening']
+    .gev-voice-visualizer
+    span,
+  #command-dock
+    #gev-voice-control[data-status='executing']
+    .gev-voice-visualizer
+    span {
+    animation: none;
+  }
+}

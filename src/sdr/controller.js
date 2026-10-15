@@ -204,23 +204,23 @@ function clampFmFrequency(value) {
 function describeConnectionError(error) {
   const message = String(error?.message || error || '').trim();
   if (/No device was selected|NotFoundError/i.test(message))
-    return 'No RTL-SDR device selected';
+    return '未选择 RTL-SDR 设备';
   if (
     /does not support the WebUSB|usb/i.test(message) &&
     /support/i.test(message)
   ) {
-    return 'WebUSB requires desktop Chrome or Edge on localhost/HTTPS';
+    return 'WebUSB 需要桌面版 Chrome 或 Edge，且通过 localhost 或 HTTPS 访问';
   }
   if (/access|permission|claim|busy/i.test(message)) {
-    return 'RTL-SDR access failed; close other SDR apps and check USB permissions';
+    return '无法访问 RTL-SDR；请关闭其他 SDR 程序并检查 USB 权限';
   }
-  return message || 'RTL-SDR connection failed';
+  return message || 'RTL-SDR 连接失败';
 }
 
 function streamingMessage(mode) {
   return mode === 'adsb'
-    ? 'Receiving 1090 MHz ADS-B'
-    : 'Receiving broadcast FM';
+    ? '正在接收 1090 MHz ADS-B'
+    : '正在接收调频广播';
 }
 
 /**
@@ -255,8 +255,8 @@ export class SdrController {
       connected: false,
       status: webUsbSupported ? 'idle' : 'unsupported',
       message: webUsbSupported
-        ? 'Connect an RTL-SDR to begin.'
-        : 'WebUSB is unavailable in this browser',
+        ? '连接 RTL-SDR 以开始。'
+        : '此浏览器不支持 WebUSB',
       mode: 'fm',
       frequencyHz: FM_DEFAULT_HZ,
       sampleRate: FM_SAMPLE_RATE,
@@ -402,7 +402,7 @@ export class SdrController {
       // A failed worker (e.g. its module did not load) never recovers: drop
       // it so the next session builds and configures a fresh one.
       this._discardWorker();
-      this._setState({ status: 'error', message: 'SDR decoder worker failed' });
+      this._setState({ status: 'error', message: 'SDR 解码线程失败' });
       if (this._device) void this.stop({ preserveMessage: true });
     };
     return worker;
@@ -600,7 +600,7 @@ export class SdrController {
     if (!this.state.webUsbSupported) {
       this._setState({
         status: 'unsupported',
-        message: 'WebUSB requires desktop Chrome or Edge',
+        message: 'WebUSB 需要桌面版 Chrome 或 Edge',
       });
       return false;
     }
@@ -609,7 +609,7 @@ export class SdrController {
     const superseded = () => this._destroyed || token !== this._sessionToken;
     this._setState({
       status: 'connecting',
-      message: 'Waiting for an RTL-SDR device…',
+      message: '正在等待 RTL-SDR 设备…',
     });
     let acquisition = null;
     try {
@@ -620,7 +620,7 @@ export class SdrController {
       // consumes the click activation.
       if (nextMode === 'fm' && !(await this._ensureAudio())) {
         throw new Error(
-          'Browser audio is suspended; press Connect again to resume it',
+          '浏览器音频已暂停；请再次按「连接」以恢复',
         );
       }
       if (superseded()) return false;
@@ -1002,7 +1002,7 @@ export class SdrController {
         this._setState({
           connected: false,
           status: 'error',
-          message: 'RTL-SDR sample stream stopped',
+          message: 'RTL-SDR 采样流已停止',
         });
         await this.stop({ preserveMessage: true });
         break;
@@ -1045,7 +1045,7 @@ export class SdrController {
     try {
       if (nextMode === 'fm' && !(await this._ensureAudio())) {
         throw new Error(
-          'Browser audio is suspended; select FM again to resume it',
+          '浏览器音频已暂停；请再次选择调频以恢复',
         );
       }
       // A stall teardown, stop() or reconnect during the switch supersedes
@@ -1116,7 +1116,7 @@ export class SdrController {
       console.warn('[SDR] Gain change failed:', error);
       this._setState({
         status: 'error',
-        message: 'RTL-SDR gain change failed',
+        message: 'RTL-SDR 增益调整失败',
       });
       return null;
     }
@@ -1196,7 +1196,7 @@ export class SdrController {
     const token = ++this._seekToken;
     this._setState({
       seeking: true,
-      seekMessage: `Seeking ${seekDirection > 0 ? 'up' : 'down'}…`,
+      seekMessage: `正在向${seekDirection > 0 ? '上' : '下'}搜台…`,
     });
     this._audioNode?.port.postMessage({ type: 'volume', value: 0 });
     try {
@@ -1207,7 +1207,7 @@ export class SdrController {
         const sequence = this._spectrumSequence;
         await this.tuneFm(center, { quiet: true });
         this._setState({
-          seekMessage: `Scanning ${(center / 1_000_000).toFixed(1)} MHz…`,
+          seekMessage: `正在扫描 ${(center / 1_000_000).toFixed(1)} MHz…`,
         });
         if (
           !(await this._waitForSpectrum(sequence)) ||
@@ -1225,14 +1225,14 @@ export class SdrController {
         await this.tuneFm(peak.frequency, { quiet: true });
         this._setState({
           seeking: false,
-          seekMessage: `Found ${(peak.frequency / 1_000_000).toFixed(1)} MHz · ${peak.snr.toFixed(1)} dB`,
+          seekMessage: `已找到 ${(peak.frequency / 1_000_000).toFixed(1)} MHz · ${peak.snr.toFixed(1)} dB`,
           message: `FM signal found at ${(peak.frequency / 1_000_000).toFixed(1)} MHz`,
         });
         return peak;
       }
       if (token === this._seekToken) {
         await this.tuneFm(origin, { quiet: true });
-        this._setState({ seeking: false, seekMessage: 'No FM signal found' });
+        this._setState({ seeking: false, seekMessage: '未找到调频信号' });
       }
       return null;
     } finally {
@@ -1248,7 +1248,7 @@ export class SdrController {
   cancelSeek() {
     this._seekToken += 1;
     if (!this.state.seeking) return false;
-    this._setState({ seeking: false, seekMessage: 'Seek stopped' });
+    this._setState({ seeking: false, seekMessage: '搜台已停止' });
     this._audioNode?.port.postMessage({
       type: 'volume',
       value: this.state.volume,
@@ -1268,7 +1268,7 @@ export class SdrController {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
       this._setState({
         locationStatus: 'unavailable',
-        message: 'Browser location is unavailable',
+        message: '浏览器定位不可用',
       });
       return false;
     }
@@ -1295,7 +1295,7 @@ export class SdrController {
       console.warn('[SDR] Receiver location failed:', error);
       this._setState({
         locationStatus: 'denied',
-        message: 'Receiver location was not granted',
+        message: '未授予接收机位置权限',
       });
       return false;
     }

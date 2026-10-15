@@ -59,7 +59,7 @@ const AWARENESS_DEPENDENCIES = [
 test('Contacts labels a capped cohort as a lower bound', () => {
   assert.equal(
     formatAwarenessCount({ count: 20_000, complete: false, truncated: true }),
-    'At least 20,000',
+    '至少 20,000',
   );
   assert.equal(
     formatAwarenessCount({ count: 19_999, complete: true, truncated: false }),
@@ -3155,7 +3155,7 @@ test('a selected installation card keeps every member name and escapes source te
     });
     militaryAwarenessLayer.update();
     const html = runtime.panel().innerHTML;
-    assert.match(html, /Named areas \(4\)/);
+    assert.match(html, /命名区域（4）/);
     for (const name of ['Area one', 'Area two', 'Area three', '&lt;Area four&gt;']) assert.ok(html.includes(name));
     assert.ok(!html.includes('<Area four>'));
   } finally {

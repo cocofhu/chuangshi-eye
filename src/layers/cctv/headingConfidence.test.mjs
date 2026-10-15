@@ -40,14 +40,14 @@ test('a curated catalog entry overrides a low pack flag', () => {
 test('HUD token tags a synthetic bearing and rounds the degrees', () => {
   assert.equal(
     headingHudToken({ headingDeg: 194.4, headingConfidence: 'low' }),
-    'HDG 194° (ESTIMATED)',
+    '航向 194°（估计）',
   );
 });
 
 test('HUD token stays untagged for surveyed and calibrated bearings', () => {
   assert.equal(
     headingHudToken({ headingDeg: 67.5, headingConfidence: 'high' }),
-    'HDG 68°',
+    '航向 68°',
   );
   assert.equal(
     headingHudToken({
@@ -55,6 +55,6 @@ test('HUD token stays untagged for surveyed and calibrated bearings', () => {
       headingConfidence: 'low',
       calSource: 'manual',
     }),
-    'HDG 225°',
+    '航向 225°',
   );
 });

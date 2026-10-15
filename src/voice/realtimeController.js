@@ -436,12 +436,12 @@ export class GevRealtimeController extends RealtimeFacade {
     const resolvedDetail =
       status === 'listening' && this.pushToTalkMode
         ? this.pushToTalkKeyHeld
-          ? 'Release Space to send'
-          : 'Hold Space to talk'
+          ? '松开空格发送'
+          : '按住空格说话'
         : detail;
     const primaryDetail =
       status === 'error'
-        ? 'VOICE UNAVAILABLE'
+        ? '语音不可用'
         : resolvedDetail ||
           (status === 'idle' ? '语音待命' : '语音通话中');
     this.ui.detail.textContent = primaryDetail;
@@ -449,7 +449,7 @@ export class GevRealtimeController extends RealtimeFacade {
     if (this.ui.errorDetail) {
       this.ui.errorDetail.textContent =
         status === 'error'
-          ? resolvedDetail || 'Voice session could not be started.'
+          ? resolvedDetail || '语音会话未能启动。'
           : '';
     }
     if (status === 'idle' || status === 'connecting' || status === 'error') {

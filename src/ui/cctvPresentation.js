@@ -145,7 +145,7 @@ export function _renderCctvState(state) {
       const provider =
         activeCamera.sourceLabel ||
         activeCamera.provider ||
-        'Configured Source';
+        '已配置来源';
       const statusMsg = activeCamera.sourceMessage
         ? ` · ${activeCamera.sourceMessage}`
         : '';
@@ -154,12 +154,12 @@ export function _renderCctvState(state) {
       const calBadge = activeCamera.calBadge
         ? this._calBadgeLabel(activeCamera.calBadge)
         : '';
-      const projLabel = state?.showProjection !== false ? 'MONITOR' : 'OFF';
-      this._cctvMeta.textContent = `${activeCamera.city} · HDG ${Math.round(activeCamera.headingDeg)}° · FOV ${Math.round(activeCamera.fovDeg)}° · RANGE ${Math.round(activeCamera.rangeM)}m · ${projLabel}${calBadge ? ` · ${calBadge}` : ''} · ${provider}${credit}${statusMsg}`;
+      const projLabel = state?.showProjection !== false ? '监视' : '关';
+      this._cctvMeta.textContent = `${activeCamera.city} · 航向 ${Math.round(activeCamera.headingDeg)}° · 视场 ${Math.round(activeCamera.fovDeg)}° · 距离 ${Math.round(activeCamera.rangeM)}米 · ${projLabel}${calBadge ? ` · ${calBadge}` : ''} · ${provider}${credit}${statusMsg}`;
     } else if (cameras.length > 0) {
       this._cctvMeta.textContent = enabled
-        ? `${cameras.length} cameras loaded · click a camera to activate`
-        : `${cameras.length} cameras loaded · enable CCTV to activate`;
+        ? `已加载 ${cameras.length} 路摄像头 · 点击一路以激活`
+        : `已加载 ${cameras.length} 路摄像头 · 开启监控以激活`;
     } else {
       this._cctvMeta.textContent = '开启监控以加载路口摄像头';
     }

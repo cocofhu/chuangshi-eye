@@ -351,7 +351,7 @@ export function createRendering({
             parts.overlays.createRocketMissionElementOverlayEntry({
               id: `reentry:${launch.id}:${stageIndex}`,
               position: reentryPosition,
-              text: 'STAGE RE-ENTRY',
+              text: '级段再入',
               accent: '#ffd166',
               priority: 700_000 - stageIndex,
               gapPx: 8,
@@ -464,7 +464,7 @@ export function createRendering({
           ? parts.overlays
               .shortMissionLabel(satelliteTrack.name, 22)
               .toUpperCase()
-          : 'EST. ORBIT POSITION';
+          : '估计轨道位置';
         return parts.overlays.createRocketMissionElementOverlayEntry({
           id: `payload-position:${launch.id}`,
           position: () => livePosition,
@@ -520,7 +520,7 @@ export function createRendering({
         parts.overlays.createRocketMissionElementOverlayEntry({
           id: `orbit:${launch.id}`,
           position: orbitLabelPosition,
-          text: satelliteTrack ? 'ORBIT' : 'PROJECTED ORBIT',
+          text: satelliteTrack ? '轨道' : '预计轨道',
           accent: satelliteTrack ? '#22e6e6' : '#c084fc',
           priority: 800_000,
           gapPx: 8,

@@ -339,8 +339,8 @@ test('keeps failed-launch mission details truthful without inventing paths', () 
     orbit: { name: 'Geostationary Transfer Orbit' },
     trajectory: [],
   }, false), {
-    orbit: 'PLANNED · Geostationary Transfer Orbit',
-    ascent: 'UNAVAILABLE',
+    orbit: '计划 · Geostationary Transfer Orbit',
+    ascent: '未知',
     replayAvailable: false,
   });
   assert.deepEqual(missionPathPresentation({
@@ -351,8 +351,8 @@ test('keeps failed-launch mission details truthful without inventing paths', () 
       { latitude: 29, longitude: -79.5 },
     ],
   }, false), {
-    orbit: 'PLANNED · Low Earth Orbit',
-    ascent: 'SUPPLIED TRAJECTORY POINTS',
+    orbit: '计划 · Low Earth Orbit',
+    ascent: '提供的轨迹点',
     replayAvailable: false,
   });
 });
@@ -364,7 +364,7 @@ test('describes only renderable successful mission paths', () => {
     trajectory: [],
   }, true), {
     orbit: 'Low Earth Orbit',
-    ascent: 'RECONSTRUCTED ESTIMATE',
+    ascent: '重建估计',
     replayAvailable: true,
   });
   assert.deepEqual(missionPathPresentation({
@@ -373,7 +373,7 @@ test('describes only renderable successful mission paths', () => {
     trajectory: [{ latitude: 28.5, longitude: -80.5 }],
   }, false), {
     orbit: null,
-    ascent: 'UNAVAILABLE',
+    ascent: '未知',
     replayAvailable: false,
   });
 });
@@ -900,7 +900,7 @@ test('formats the launch epoch for ascent and orbit replay labels', () => {
     formatMissionEventTime('2026-06-29T02:25:00Z'),
     '2026-06-29\n02:25:00 UTC',
   );
-  assert.equal(formatMissionEventTime(null), 'UNAVAILABLE');
+  assert.equal(formatMissionEventTime(null), '未知');
 });
 
 test('reduces generic launch-site names to their identifying suffix', () => {
@@ -939,7 +939,7 @@ test('mission overlay factories preserve all four source-formatted label roles a
 
   const selected = createRocketMissionMarkerOverlayEntry(launch, position, true);
   assert.equal(selected.title, 'FALCON 9');
-  assert.deepEqual(selected.details, ['LAUNCH SITE · 39A']);
+  assert.deepEqual(selected.details, ['发射场 · 39A']);
   assert.equal(selected.paintLane, 'selected');
   assert.equal(selected.protected, true);
 
@@ -1207,11 +1207,11 @@ test('real mission build, select, refresh, deselect, disable, and destroy paths 
     assert.deepEqual(selectedPublication[3], ROCKET_MISSION_SELECTED_OVERLAY_SOURCE_OPTIONS);
     assert.deepEqual(selectedPublication[2].map(({ title }) => title), [
       'FALCON 9',
-      'STAGE RE-ENTRY',
-      'EST. ORBIT POSITION',
-      'PROJECTED ORBIT',
+      '级段再入',
+      '估计轨道位置',
+      '预计轨道',
     ]);
-    assert.deepEqual(selectedPublication[2][0].details, ['LAUNCH SITE · 39A']);
+    assert.deepEqual(selectedPublication[2][0].details, ['发射场 · 39A']);
     assert.match(selectedPublication[2][2].details[0], /^\d{4}-\d{2}-\d{2}$/);
     assert.match(selectedPublication[2][2].details[1], /^\d{2}:\d{2}:\d{2} UTC$/);
     assert.ok(selectedPublication[2].every((entry) => (
@@ -1288,7 +1288,7 @@ test('real mission build, select, refresh, deselect, disable, and destroy paths 
       type === 'entries' && sourceId === ROCKET_MISSION_SELECTED_OVERLAY_SOURCE_ID
     ));
     assert.equal(refreshPublication[2][0].title, 'MISSION REFRESH');
-    assert.deepEqual(refreshPublication[2][0].details, ['LAUNCH SITE · 39A']);
+    assert.deepEqual(refreshPublication[2][0].details, ['发射场 · 39A']);
 
     _setSelectedRocketMissionForTest(null);
     const deselectedPublication = hostCalls.findLast(([type, sourceId]) => (

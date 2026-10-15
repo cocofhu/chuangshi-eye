@@ -33,12 +33,12 @@
         <button id="cctv-nearest-btn" class="scene-btn">最近</button>
       </div>
       <div class="cctv-controls">
-        <button id="cctv-prev-btn" class="scene-btn">PREV</button>
+        <button id="cctv-prev-btn" class="scene-btn">上一</button>
         <select id="cctv-camera-select" aria-label="监控摄像头"></select>
-        <button id="cctv-next-btn" class="scene-btn">NEXT</button>
+        <button id="cctv-next-btn" class="scene-btn">下一</button>
       </div>
       <div class="cctv-controls">
-        <button id="cctv-focus-btn" class="scene-btn">FOCUS</button>
+        <button id="cctv-focus-btn" class="scene-btn">聚焦</button>
         <button id="cctv-coverage-btn" class="scene-btn">覆盖 关</button>
         <button id="cctv-auto-hop-btn" class="scene-btn">自动跳转 关</button>
       </div>
@@ -121,13 +121,13 @@
               <div class="sl-filters" role="group" aria-label="影像滤镜">
                 <span class="cctv-summary-label">影像</span>
                 <div class="sl-seg" role="radiogroup" aria-label="全景滤镜">
-                  <button type="button" class="sl-seg-btn is-active" data-sl-pano="all" role="radio" aria-checked="true">ALL</button>
+                  <button type="button" class="sl-seg-btn is-active" data-sl-pano="all" role="radio" aria-checked="true">全部</button>
                   <button type="button" class="sl-seg-btn" data-sl-pano="pano" role="radio" aria-checked="false" tabindex="-1">360°</button>
-                  <button type="button" class="sl-seg-btn" data-sl-pano="flat" role="radio" aria-checked="false" tabindex="-1">FLAT</button>
+                  <button type="button" class="sl-seg-btn" data-sl-pano="flat" role="radio" aria-checked="false" tabindex="-1">平面</button>
                 </div>
               </div>
               <div class="sl-since">
-                <label class="cctv-summary-label" for="sl-since">SINCE</label>
+                <label class="cctv-summary-label" for="sl-since">起始</label>
                 <input id="sl-since" class="sl-range" type="range" min="0" max="8" step="1" value="0" aria-valuetext="任意日期" aria-describedby="sl-since-label" />
                 <output id="sl-since-label" class="sl-since-label" for="sl-since">任意日期</output>
               </div>
@@ -151,8 +151,8 @@
       </div>
       <div class="scene-controls">
         <select id="scene-select" aria-label="场景配方"></select>
-        <button id="scene-new-btn" class="scene-btn">NEW</button>
-        <button id="scene-delete-btn" class="scene-btn scene-btn-danger">DEL</button>
+        <button id="scene-new-btn" class="scene-btn">新建</button>
+        <button id="scene-delete-btn" class="scene-btn scene-btn-danger">删除</button>
       </div>
       <div class="scene-controls">
         <button id="scene-capture-btn" class="scene-btn">捕捉镜头</button>
@@ -160,20 +160,20 @@
       </div>
       <div id="scene-shot-list" class="scene-shot-list"></div>
       <div class="scene-controls">
-        <button id="scene-start-btn" class="scene-btn">START</button>
-        <button id="scene-stop-btn" class="scene-btn scene-btn-danger">STOP</button>
-        <button id="scene-next-btn" class="scene-btn">NEXT</button>
+        <button id="scene-start-btn" class="scene-btn">开始</button>
+        <button id="scene-stop-btn" class="scene-btn scene-btn-danger">停止</button>
+        <button id="scene-next-btn" class="scene-btn">下一</button>
       </div>
       <div class="scene-controls">
         <button id="scene-export-btn" class="scene-btn">导出预设</button>
-        <button id="scene-import-btn" class="scene-btn">IMPORT</button>
+        <button id="scene-import-btn" class="scene-btn">导入</button>
         <button id="scene-download-btn" class="scene-btn">运行日志</button>
         <input type="file" id="scene-import-file" accept="application/json,.json" hidden />
       </div>
       <div class="scene-progress">
         <div id="scene-progress-fill">0%</div>
       </div>
-      <div id="scene-status">Ready</div>
+      <div id="scene-status">就绪</div>
     </div>
   </div>
 

@@ -52,8 +52,8 @@ export function createVoiceCommands({
   if (ui.tierButton) ui.tierButton.hidden = !capabilities.costControls;
   if (ui.costValue) ui.costValue.hidden = !capabilities.costControls;
   if (!capabilities.pushToTalk) {
-    ui.button.setAttribute('aria-label', 'Toggle voice control');
-    if (ui.helpDetail) ui.helpDetail.textContent = 'Activate to toggle voice';
+    ui.button.setAttribute('aria-label', '开关语音控制');
+    if (ui.helpDetail) ui.helpDetail.textContent = '激活以开关语音';
   }
   // Retain the existing controller's inspection surface for browser tools.
   const controls = adapter.controller || session;
@@ -75,7 +75,7 @@ export function createVoiceCommands({
     if (ui.errorDetail)
       ui.errorDetail.textContent =
         event.state === 'error'
-          ? event.detail || 'Voice could not be started.'
+          ? event.detail || '语音未能启动。'
           : '';
     if (event.state === 'error') ui.root.classList?.remove('error-dismissed');
   });

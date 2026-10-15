@@ -191,7 +191,12 @@ input[type='range'] {
   #first-run-launcher:not([hidden]) .first-run-choices button {
     animation: none !important;
   }
-  .first-run-choices button:hover {
+  .first-run-choices button,
+  .first-run-choices button::before {
+    transition: none;
+  }
+  .first-run-choices button:hover,
+  .first-run-choices button:focus-visible {
     transform: none;
   }
 }
@@ -401,6 +406,12 @@ body,
   .cyber-panel,
   .cockpit-side-panel {
     animation: none !important;
+  }
+
+  button,
+  input,
+  select {
+    transition: none;
   }
 
   .panel,
