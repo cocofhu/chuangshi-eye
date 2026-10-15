@@ -471,10 +471,10 @@ test('pending mapped installations render as unknown instead of a false zero', a
     const snapshot = militaryAwarenessLayer.getContextSnapshot();
     const installations = snapshot?.cohorts.find(({ id }) => id === 'military-installations');
     assert.equal(installations?.count, null, 'loading is not an observed empty cohort');
-    assert.match(installations?.reason || '', /unavailable/i);
+    assert.match(installations?.reason || '', /数据源不可用/);
     assert.match(
       runtime.panel()?.innerHTML || '',
-      /Mapped installations<\/strong><b aria-live="polite">\?<\/b>/,
+      /军事设施<\/strong><b aria-live="polite">\?<\/b>/,
       'the operator sees ? rather than an all-clear 0 while installations load',
     );
   } finally {
@@ -578,15 +578,15 @@ test('a vessel feed still connecting after the lifecycle settles reads as unknow
       null,
       'a source that has never answered has told us nothing — 0 would be a fabricated all-clear',
     );
-    assert.match(vessels?.reason || '', /unavailable/i);
+    assert.match(vessels?.reason || '', /数据源不可用/);
     assert.match(
       runtime.panel()?.innerHTML || '',
-      /AIS vessels<\/strong><b aria-live="polite">\?<\/b>/,
+      /实时船舶<\/strong><b aria-live="polite">\?<\/b>/,
       'the panel prints ? for the whole settled-but-connecting window',
     );
     assert.doesNotMatch(
       runtime.panel()?.innerHTML || '',
-      /AIS vessels<\/strong><b aria-live="polite">0<\/b>/,
+      /实时船舶<\/strong><b aria-live="polite">0<\/b>/,
       'the panel must never print an all-clear 0 before the feed has answered once',
     );
   } finally {
@@ -616,7 +616,7 @@ test('a settled vessel feed reporting a real empty viewport recovers to 0', asyn
     assert.equal(vessels?.count, 0, 'an answered empty viewport is a real observation');
     assert.match(
       runtime.panel()?.innerHTML || '',
-      /AIS vessels<\/strong><b aria-live="polite">0<\/b>/,
+      /实时船舶<\/strong><b aria-live="polite">0<\/b>/,
       'the operator sees the real count once the feed answers',
     );
   } finally {
