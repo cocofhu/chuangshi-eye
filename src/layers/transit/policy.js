@@ -491,7 +491,7 @@ export const TRANSIT_MODE_ABBR = Object.freeze({
   subway: '地铁',
   rail: '列车',
   ferry: '轮渡',
-  unknown: '公交',
+  unknown: '未知',
 });
 
 /**
