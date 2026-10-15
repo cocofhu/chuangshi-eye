@@ -1356,7 +1356,7 @@ test('enable is transactional: a failed satellites dependency rolls the module b
 
   // First enable: dependency activation fails -> enable() must reject and the
   // module must roll itself back (satellite snapshot restored AND cleared).
-  await assert.rejects(() => rocketLaunchesLayer.enable(), /satellites layer/);
+  await assert.rejects(() => rocketLaunchesLayer.enable(), /航天任务需要卫星图层/);
   const restoreCall = calls.filter(([, id, enabled]) => id === 'satellites' && enabled === false);
   assert.ok(restoreCall.length >= 1, 'rollback restored the pre-mission satellites state');
 

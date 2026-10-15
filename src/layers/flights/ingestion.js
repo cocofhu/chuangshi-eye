@@ -43,8 +43,8 @@ export function createIngestion({
         feed._retryAt = 0;
         feed._lastError = sourceStale
           ? sourceAgeMs == null
-            ? 'Source snapshot time unavailable'
-            : `Source snapshot ${Math.max(2, Math.round(sourceAgeMs / 60_000))} min old`
+            ? '快照时间不可用'
+            : `快照已过 ${Math.max(2, Math.round(sourceAgeMs / 60_000))} 分钟`
           : null;
         feed._lastSource = snapshot.source;
         feed._lastCoverage = snapshot.coverage;
@@ -77,7 +77,7 @@ export function createIngestion({
           setSourceLabel(feed._lastSource);
         }
         feed._lastError =
-          e?.name === 'LiveSourceError' ? e.message : 'Live data unavailable';
+          e?.name === 'LiveSourceError' ? e.message : '实时数据不可用';
       } finally {
         feed._activeUpdateControllers.delete(resourceController);
       }

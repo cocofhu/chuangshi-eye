@@ -13,7 +13,7 @@ export function createUsgsEarthquakeSource({
       const payload = await response.json();
       signal?.throwIfAborted();
       const rows = normalizeEarthquakeSnapshot(payload);
-      if (!rows) throw new Error('Malformed USGS response');
+      if (!rows) throw new Error('USGS 响应无效');
       return rows;
     },
   };

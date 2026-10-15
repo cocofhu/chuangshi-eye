@@ -136,9 +136,9 @@ export function createIngestion({
         layerState._degraded = body.degraded;
         layerState._stale = body.stale;
         layerState._error = preservingWarmCatalog
-          ? 'Directory refresh degraded; showing the previous station catalog.'
+          ? '目录刷新降级，仍显示上一份电台目录。'
           : layerState._degraded
-            ? 'Radio directory coverage is degraded.'
+            ? '电台目录覆盖已降级。'
             : null;
       } catch (error) {
         if (
@@ -153,8 +153,8 @@ export function createIngestion({
         )
           return;
         layerState._error = layerState._stations.length
-          ? 'Directory refresh failed; showing the previous station catalog.'
-          : 'Radio directory is temporarily unavailable.';
+          ? '目录刷新失败，仍显示上一份电台目录。'
+          : '电台目录暂时不可用。';
         layerState._stale = layerState._stations.length > 0;
         layerState._degraded = layerState._stations.length > 0;
       } finally {

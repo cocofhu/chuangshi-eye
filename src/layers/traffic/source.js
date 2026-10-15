@@ -339,7 +339,7 @@ export function createTrafficSource({
             resolve({
               segments: [],
               hasKey: Boolean(liveModeHint()),
-              error: 'TomTom flow timed out',
+              error: 'TomTom 路况超时',
             }),
           (options.timeoutSec ?? 20) * 1000,
         );

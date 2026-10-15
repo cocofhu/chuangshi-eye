@@ -280,7 +280,7 @@ export function admitKeySetupRequest({
     return {
       ok: false,
       status: 403,
-      error: 'Provider Settings does not answer proxied requests',
+      error: '提供者设置不响应经代理的请求',
     };
   }
   // Every sharing signal the launcher recognizes (scripts/pinokio-preflight.mjs)
@@ -297,14 +297,14 @@ export function admitKeySetupRequest({
     return {
       ok: false,
       status: 403,
-      error: 'Provider Settings is disabled while sharing is enabled',
+      error: '开启分享时提供者设置已关闭',
     };
   }
   if (!LOOPBACK_ADDRESSES.has(String(remoteAddress || ''))) {
     return {
       ok: false,
       status: 403,
-      error: 'Provider Settings answers only the machine running the server',
+      error: '提供者设置只响应运行服务器的这台机器',
     };
   }
   const authority = localAuthority(hostHeader, protocol);
@@ -312,7 +312,7 @@ export function admitKeySetupRequest({
     return {
       ok: false,
       status: 403,
-      error: 'Provider Settings answers only local hostnames',
+      error: '提供者设置只接受本机主机名',
     };
   }
   if (
@@ -322,7 +322,7 @@ export function admitKeySetupRequest({
     return {
       ok: false,
       status: 403,
-      error: 'Provider Settings requires an exact local Origin',
+      error: '提供者设置需要精确的本机来源',
     };
   }
   if (origin !== undefined && origin !== null && origin !== '') {
@@ -330,7 +330,7 @@ export function admitKeySetupRequest({
     try {
       parsedOrigin = new URL(String(origin));
     } catch {
-      return { ok: false, status: 403, error: 'Unrecognized Origin refused' };
+      return { ok: false, status: 403, error: '拒绝未识别的来源' };
     }
     const exactOrigin =
       parsedOrigin.username === '' &&
@@ -343,7 +343,7 @@ export function admitKeySetupRequest({
       return {
         ok: false,
         status: 403,
-        error: 'Cross-origin requests are refused',
+        error: '已拒绝跨源请求',
       };
     }
   }
@@ -356,7 +356,7 @@ export function admitKeySetupRequest({
     return {
       ok: false,
       status: 415,
-      error: 'Content-Type must be application/json',
+      error: 'Content-Type 必须是 application/json',
     };
   }
   return { ok: true };
@@ -437,39 +437,39 @@ export function validateKeySetupUpdates(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return {
       ok: false,
-      error: 'Body must be a JSON object of {ENV_VAR: value}',
+      error: '请求体必须是 {环境变量: 值} 的 JSON 对象',
     };
   }
   const entries = Object.entries(body);
-  if (entries.length === 0) return { ok: false, error: 'No keys provided' };
+  if (entries.length === 0) return { ok: false, error: '未提供密钥' };
   if (entries.length > KEY_SETUP_UPDATE_LIMIT) {
     return {
       ok: false,
-      error: `At most ${KEY_SETUP_UPDATE_LIMIT} keys per save`,
+      error: `每次最多保存 ${KEY_SETUP_UPDATE_LIMIT} 个密钥`,
     };
   }
   const known = knownKeySetupEnvVars();
   const updates = {};
   for (const [name, raw] of entries) {
-    if (!known.has(name)) return { ok: false, error: `Unknown key: ${name}` };
+    if (!known.has(name)) return { ok: false, error: `未知密钥：${name}` };
     if (raw === null) {
       updates[name] = null;
       continue;
     }
     if (typeof raw !== 'string')
-      return { ok: false, error: `${name} must be a string` };
+      return { ok: false, error: `${name} 必须是字符串` };
     const value = raw.trim();
-    if (!value) return { ok: false, error: `${name} is empty` };
+    if (!value) return { ok: false, error: `${name} 为空` };
     if (value.length > KEY_SETUP_VALUE_LIMIT) {
       return {
         ok: false,
-        error: `${name} is longer than any real key (${KEY_SETUP_VALUE_LIMIT} max)`,
+        error: `${name} 超过密钥长度上限（${KEY_SETUP_VALUE_LIMIT}）`,
       };
     }
     if (!/^[\x21-\x7e]+$/.test(value)) {
       return {
         ok: false,
-        error: `${name} may only contain printable characters with no spaces`,
+        error: `${name} 只能包含可打印字符，且不能有空格`,
       };
     }
     // Reject the dotenv metacharacters that would round-trip WRONG when written
@@ -480,7 +480,7 @@ export function validateKeySetupUpdates(body) {
     if (/[#"'$\\`]/.test(value)) {
       return {
         ok: false,
-        error: `${name} contains a character that is not valid in a key (#, quotes, $, \\, or backtick)`,
+        error: `${name} 含有密钥中不允许的字符（#、引号、$、\\ 或反引号）`,
       };
     }
     updates[name] = value;

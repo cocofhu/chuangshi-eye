@@ -1040,7 +1040,7 @@ export class SdrController {
       status: 'tuning',
       mode: nextMode,
       gain: this._gainByMode[nextMode],
-      message: `Switching to ${nextMode === 'adsb' ? 'ADS-B' : 'FM'}…`,
+      message: `正在切换到 ${nextMode === 'adsb' ? 'ADS-B' : '调频'}…`,
     });
     try {
       if (nextMode === 'fm' && !(await this._ensureAudio())) {
@@ -1161,7 +1161,7 @@ export class SdrController {
         ...(quiet
           ? {}
           : {
-              message: `Tuned to ${(frequency / 1_000_000).toFixed(1)} MHz FM`,
+              message: `已调谐至 ${(frequency / 1_000_000).toFixed(1)} MHz 调频`,
             }),
       });
       return true;
@@ -1226,7 +1226,7 @@ export class SdrController {
         this._setState({
           seeking: false,
           seekMessage: `已找到 ${(peak.frequency / 1_000_000).toFixed(1)} MHz · ${peak.snr.toFixed(1)} dB`,
-          message: `FM signal found at ${(peak.frequency / 1_000_000).toFixed(1)} MHz`,
+          message: `在 ${(peak.frequency / 1_000_000).toFixed(1)} MHz 发现调频信号`,
         });
         return peak;
       }
@@ -1333,7 +1333,7 @@ export class SdrController {
       status: preserveMessage ? this.state.status : idleStatus,
       ...(preserveMessage
         ? {}
-        : { message: message || 'RTL-SDR disconnected' }),
+        : { message: message || 'RTL-SDR 已断开' }),
       snr: null,
       samplesPerSecond: 0,
       workerBlocks: 0,

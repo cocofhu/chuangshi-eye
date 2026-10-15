@@ -105,7 +105,7 @@ export function createInstallationSource({
     const names = await waitForSignal(loadNames(), signal).catch((cause) => {
       signal?.throwIfAborted();
       throw Object.assign(
-        new Error('Mapped names temporarily unavailable', { cause }),
+        new Error('标注名称暂时不可用', { cause }),
         {
           failureReason: 'names_unavailable',
         },
@@ -200,7 +200,7 @@ export function createInstallationSource({
         north <= south ||
         east === west
       )
-        throw new TypeError('A bounded installation viewport is required');
+        throw new TypeError('需要有界的设施视野');
       signal?.throwIfAborted();
       if (east < west || north - south > 10 || east - west > 10)
         return getNamedSites(box, signal, thinned);
@@ -226,7 +226,7 @@ export function createInstallationSource({
           sourceResponseError(
             body,
             response,
-            'Installation context unavailable',
+            '设施情境不可用',
           ),
           {
             failureReason: ['rate_limited', 'timeout', 'query_failed'].includes(
@@ -237,7 +237,7 @@ export function createInstallationSource({
           },
         );
       if (!Array.isArray(body?.elements))
-        throw new Error('Malformed installation snapshot');
+        throw new Error('设施快照无效');
       return {
         ...normalizeMilitaryInstallations(
           body,

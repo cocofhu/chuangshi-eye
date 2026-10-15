@@ -1277,7 +1277,7 @@ test('accepted snapshots allowlist station fields and never regress generation i
     assert.equal(getRadioUIState().stationCount, 1);
     assert.equal(getRadioUIState().stale, true);
     assert.equal(getRadioUIState().degraded, true);
-    assert.match(getRadioUIState().error, /refresh failed/i);
+    assert.match(getRadioUIState().error, /目录刷新失败/);
 
     // Producer restart: a NEW instance token restarts the generation sequence.
     // Generation 1 from instance B is a fresh catalog, not a repeat of the old

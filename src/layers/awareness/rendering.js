@@ -137,7 +137,7 @@ export function createRendering({
       '--compass-rotation',
       `${-headingDeg}deg`,
     );
-    layerState.compassHeading.textContent = `HDG ${String(headingDeg).padStart(3, '0')}°`;
+    layerState.compassHeading.textContent = `航向 ${String(headingDeg).padStart(3, '0')}°`;
     layerState.compassHeading.style.left = `${geometry.centerX}px`;
     layerState.compassHeading.style.top = `${geometry.centerY - compassRadius + 39}px`;
     for (const label of layerState.compassLabels) {

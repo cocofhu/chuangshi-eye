@@ -1,6 +1,12 @@
 import { twoline2satrec } from 'satellite.js';
 import * as Cesium from 'cesium';
-import { CATALOG_GROUPS, ISS_NORAD, POINT_STYLES } from './policy.js';
+import {
+  CATALOG_GROUPS,
+  ISS_NORAD,
+  POINT_STYLES,
+  SATELLITE_CATALOG_UNREACHABLE,
+  satelliteGroupsUnavailableMessage,
+} from './policy.js';
 
 export function createIngestion({
   state: layerState,
@@ -63,7 +69,7 @@ export function createIngestion({
         // the chip still read "just now". Keep the existing (stale) catalog on
         // screen and surface the outage instead — do NOT stamp _lastUpdate.
         if (results.every((r) => !r.ok)) {
-          layerState._lastError = 'CelesTrak unreachable';
+          layerState._lastError = SATELLITE_CATALOG_UNREACHABLE;
           console.warn(
             '[Data:Satellites] All CelesTrak groups failed — keeping existing catalog, surfacing outage',
           );
@@ -75,7 +81,7 @@ export function createIngestion({
         // partial outage visible at the layer control instead of presenting the
         // reduced catalog as a fully healthy refresh.
         layerState._lastError = failed.length
-          ? `${failed.length} CelesTrak group${failed.length === 1 ? '' : 's'} unavailable`
+          ? satelliteGroupsUnavailableMessage(failed.length)
           : null;
 
         // Clear existing

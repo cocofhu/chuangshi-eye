@@ -471,7 +471,7 @@ test('a flow snapshot that misses the pass deadline cannot hold roads', async ()
   assert.equal(hybrid.roadMode, 'hybrid');
   assert.equal(hybrid.roadSource, 'OpenStreetMap');
   assert.ok(hybrid.roads.every((road) => road.simulatedOnly));
-  await assert.rejects(request('tomtom', true), /TomTom flow timed out/);
+  await assert.rejects(request('tomtom', true), /TomTom 路况超时/);
 });
 
 test('frontage roads beside a TomTom motorway survive; same-class duplicates do not', () => {

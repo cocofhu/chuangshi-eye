@@ -375,9 +375,7 @@ export async function initKeySetup({
   };
 
   const storeLabel = () =>
-    status?.store === 'pinokio-environment'
-      ? 'your app configuration'
-      : 'your local .env';
+    status?.store === 'pinokio-environment' ? '应用配置' : '本机 .env';
 
   const submitUpdates = async (updates, doneVerb) => {
     if (disposed || busy) return;
@@ -397,7 +395,7 @@ export async function initKeySetup({
       const payload = await response.json().catch(() => ({}));
       if (disposed) return;
       if (!response.ok || !payload.ok) {
-        say(payload.error || `Save failed (${response.status}).`);
+        say(payload.error || `保存失败（${response.status}）。`);
         return;
       }
       for (const input of root.querySelectorAll('input[data-env-var]'))
@@ -428,10 +426,10 @@ export async function initKeySetup({
         });
       }
       say(
-        `${doneVerb} ${storeLabel()}. Restarting — this page reloads itself.`,
+        `${doneVerb}${storeLabel()}。正在重启，页面将自动刷新。`,
       );
     } catch (error) {
-      say(`Save failed: ${error?.message || error}`);
+      say(`保存失败：${error?.message || error}`);
     } finally {
       busy = false;
       applyButton?.setAttribute('aria-disabled', 'false');
@@ -545,7 +543,7 @@ export async function initKeySetup({
           );
         } catch (error) {
           if (lifetime.signal.aborted) return;
-          say(`OAuth check failed: ${error?.message || error}`);
+          say(`OAuth 检查失败：${error?.message || error}`);
         } finally {
           oauthBusy = false;
           if (!disposed) syncCloudVoiceAuth();

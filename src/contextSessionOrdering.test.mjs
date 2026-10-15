@@ -165,7 +165,7 @@ test('the Radio chip catches lifecycle rejection and semantic false through the 
     radioBindings.indexOf("this.listen(this._radioFilter, 'change'"),
   );
   assert.match(radioControls, /await this\.actions\.runUserAction\(/);
-  assert.match(radioControls, /Radio could not \$\{enabling \? 'start' : 'stop'\} cleanly/);
+  assert.match(radioControls, /电台未能干净\$\{enabling \? '开启' : '关闭'\}/);
   assert.match(radioControls, /if \(this\.destroyed \|\| toggled === false\) return/);
 });
 
