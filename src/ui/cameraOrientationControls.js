@@ -297,7 +297,7 @@ export function bindCameraOrientationControls({
       northButton?.style?.setProperty('--camera-heading', `${next.heading}deg`);
       northButton?.setAttribute(
         'aria-label',
-        `Reset map to north up. Current heading ${next.heading} degrees`,
+        `恢复正北朝上。当前航向 ${next.heading} 度`,
       );
     }
     applied = next;
@@ -342,7 +342,7 @@ export function bindCameraOrientationControls({
         })
       );
     });
-    if (result) showToast?.('North up');
+    if (result) showToast?.('正北朝上');
     sync();
   });
 

@@ -169,25 +169,25 @@ try {
       )),
   );
   await click('编辑详情');
-  await click('Capture camera as anchor');
+  await click('将当前相机记为锚点');
   await page.waitForFunction(() =>
     document
       .querySelector('[data-director-dialog] [role=status]')
       .textContent.includes('锚点已加入'),
   );
-  await click('Set move start to current camera');
+  await click('将移动起点设为当前相机');
   await page.waitForFunction(() =>
     document
       .querySelector('[data-director-dialog] [role=status]')
-      .textContent.includes('Move added'),
+      .textContent.includes('移动已写入'),
   );
   const draft = await page.$eval(
-    '[aria-label="Shot camera, timing, packs and actions"]',
+    '[aria-label="镜头相机、时长、数据包与动作"]',
     (n) => n.value,
   );
   const bad = JSON.parse(draft);
   bad.camera.lat = 91;
-  await value('Shot camera, timing, packs and actions', JSON.stringify(bad));
+  await value('镜头相机、时长、数据包与动作', JSON.stringify(bad));
   const saved = await page.evaluate(() =>
     localStorage.getItem('godsEyeView.sceneProject.v2'),
   );
@@ -204,7 +204,7 @@ try {
       saved,
     ),
   );
-  await value('Shot camera, timing, packs and actions', draft);
+  await value('镜头相机、时长、数据包与动作', draft);
   await page.click('[data-director-apply-details]');
   await page.waitForFunction(
     () => !document.querySelector('[data-director-dialog]'),
@@ -233,7 +233,7 @@ try {
     };
   });
   await click('分享场景');
-  await click('Download scene JSON');
+  await click('下载场景 JSON');
   const exported = await page.evaluate(async () =>
     JSON.parse(await window.__shareExports.at(-1)),
   );
@@ -242,20 +242,20 @@ try {
     exported.scenes.length === 1 &&
       exported.scenes[0].dataPacks[0].attribution.license === 'CC0-1.0',
   );
-  await click('Download asset bundle');
+  await click('下载素材包');
   await page.waitForFunction(() =>
     document
       .querySelector('[data-director-dialog] [role=status]')
-      .textContent.includes('Could not complete'),
+      .textContent.includes('操作未完成'),
   );
   check(
     'missing explicit files produce no partial download or network fallback',
     requests.length === 0 &&
       (await page.evaluate(() => window.__shareExports.length === 1)),
   );
-  const files = await page.$('[aria-label="Choose data-pack files"]');
+  const files = await page.$('[aria-label="选择数据包文件"]');
   await files.uploadFile(path.join(output, 'data.geojson'));
-  await click('Download asset bundle');
+  await click('下载素材包');
   await page.waitForFunction(
     () =>
       document.querySelector('[data-director-dialog] [role=status]')
@@ -281,7 +281,7 @@ try {
       () =>
         document
           .querySelector('[data-director-dialog]')
-          .textContent.includes('bundled bytes verified') &&
+          .textContent.includes('字节已核验') &&
         window.__godsEyeView.sceneDirector.getSharingState().assets.count === 0,
     ),
   );

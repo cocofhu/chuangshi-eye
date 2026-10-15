@@ -109,7 +109,7 @@ export function _initGlobalContextPanel() {
         stats?.statusMessage ||
           (stats?.status === 'zoom-in'
             ? '放大地图以搜索标注站点'
-            : 'Nearby installations refreshed'),
+            : '附近标注站点已刷新'),
       );
       return true;
     }, '附近站点刷新失败；请重试').finally(() => {

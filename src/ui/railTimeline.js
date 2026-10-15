@@ -32,7 +32,7 @@ export function createRailTimeline({
     parent.appendChild(node);
     return node;
   };
-  const previous = makeButton('‹', 'Earlier observation', row);
+  const previous = makeButton('‹', '更早观测', row);
   const slider = document.createElement('input');
   slider.type = 'range';
   slider.className = `gev-quantitative-slider${sliderClassName ? ` ${sliderClassName}` : ''}`;
@@ -42,11 +42,11 @@ export function createRailTimeline({
   slider.value = '0';
   slider.setAttribute('aria-label', '观测历史');
   row.appendChild(slider);
-  const next = makeButton('›', 'Later observation', row);
+  const next = makeButton('›', '更晚观测', row);
   const controls = document.createElement('div');
   controls.className = 'rail-timeline-controls';
-  const latest = makeButton('Latest', 'Newest frame per product', controls);
-  const play = makeButton('Play', 'Replay observed history', controls);
+  const latest = makeButton('最新', '各产品最新帧', controls);
+  const play = makeButton('播放', '回放观测历史', controls);
   const readout = document.createElement('span');
   readout.className = 'rail-timeline-readout';
   controls.appendChild(readout);
@@ -128,7 +128,8 @@ export function createRailTimeline({
       `data-toggle-chip${props.mode === 'latest' ? ' active' : ''}`,
     );
     set(play, 'className', `data-toggle-chip${props.playing ? ' active' : ''}`);
-    set(play, 'textContent', props.playing ? 'Pause' : 'Play');
+    set(play, 'textContent', props.playing ? '暂停' : '播放');
+    set(play, 'title', props.playing ? '暂停回放' : '回放观测历史');
     for (const [node, active] of [
       [latest, props.mode === 'latest'],
       [play, props.playing],

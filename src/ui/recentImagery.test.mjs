@@ -826,7 +826,7 @@ test('clicks: a card previews and focuses the strip, a chip pins, SELECT BOX tog
   f.byAction('use-view').click();
   assert.equal(
     f.snap().boxError,
-    'Point the camera at the ground to use the view',
+    '请将镜头对准地面后再使用当前视野',
   );
   assert.equal(f.byAction('clear').disabled, false);
   f.byAction('clear').click();

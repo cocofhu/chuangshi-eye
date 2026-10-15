@@ -248,7 +248,7 @@ test('openNearest without the panel reports it instead of loading forever', asyn
   assert.equal(await layer.openNearest({ lat: 38.58, lon: -121.49 }), false);
   const { street } = layer.getUIState();
   assert.equal(street.loading, false);
-  assert.match(street.error, /Open the Street Level panel/);
+  assert.match(street.error, /请打开街景面板/);
   assert.equal(provider.calls.mount, 0);
 });
 
@@ -295,7 +295,7 @@ test('a provider withdraws only the error it reported', async (t) => {
   actions.reportError('Sequence images unavailable');
   await layer.openImage('mapillary', 'img1');
   actions.reportError(null);
-  assert.match(layer.getUIState().street.error, /Open the Street Level panel/);
+  assert.match(layer.getUIState().street.error, /请打开街景面板/);
 });
 
 test('closing the photo stops the globe flying to it', async (t) => {

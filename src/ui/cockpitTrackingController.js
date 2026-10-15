@@ -57,9 +57,7 @@ export function syncTr3bToggle(info) {
   this._tr3bSignature = signature;
   this.tr3bToggle.hidden = !icao24;
   this.tr3bToggle.setAttribute('aria-pressed', converted ? 'true' : 'false');
-  this.tr3bToggle.title = converted
-    ? 'Restore real aircraft'
-    : 'Reclassify as TR-3B';
+  this.tr3bToggle.title = converted ? '恢复真实机型' : '改标为 TR-3B';
 }
 
 export function syncEntry() {

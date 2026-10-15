@@ -903,12 +903,12 @@ try {
     'ACQUIRING DOM notice persists, ignores stale terminals, and clears on ownership completion',
     acquiringLifecycle.pending.hidden === false
       && acquiringLifecycle.pending.state === 'acquiring'
-      && acquiringLifecycle.pending.label === 'ACQUIRING'
-      && acquiringLifecycle.pending.detail === 'SHARED FLIGHT'
+      && acquiringLifecycle.pending.label === '正在捕获'
+      && acquiringLifecycle.pending.detail === '共享 flight'
       && acquiringLifecycle.followed.hidden === true
       && acquiringLifecycle.staleTerminal.hidden === false
       && acquiringLifecycle.staleTerminal.state === 'acquiring'
-      && acquiringLifecycle.staleTerminal.detail === 'SHARED MILITARY FLIGHT'
+      && acquiringLifecycle.staleTerminal.detail === '共享 military flight'
       && acquiringLifecycle.cancelled.hidden === true,
     JSON.stringify(acquiringLifecycle),
   );
@@ -968,7 +968,7 @@ try {
         label: 'flight',
       });
       const queuedNoticeReady = await waitForQueuedNotice(
-        'Shared flight could not be restored — feed unavailable',
+        '无法恢复共享跟踪：flight — 数据源不可用',
       );
       const shareFailureQueued = snapshot();
       styleManager._updateGlobalLoadingFeedback(baseNow + 5299);
@@ -1009,8 +1009,8 @@ try {
       && acquiringFailureArbitration.failureEnd.state === 'error'
       && acquiringFailureArbitration.failureEnd.label === 'LOAD FAILED'
       && acquiringFailureArbitration.shareFailureStart.state === 'error'
-      && acquiringFailureArbitration.shareFailureStart.label === 'Shared flight could not be restored — feed unavailable'
-      && acquiringFailureArbitration.shareFailureEnd.label === 'Shared flight could not be restored — feed unavailable'
+      && acquiringFailureArbitration.shareFailureStart.label === '无法恢复共享跟踪：flight — 数据源不可用'
+      && acquiringFailureArbitration.shareFailureEnd.label === '无法恢复共享跟踪：flight — 数据源不可用'
       && acquiringFailureArbitration.settled.hidden === true,
     JSON.stringify(acquiringFailureArbitration),
   );
@@ -1285,7 +1285,7 @@ try {
       locationTab.reached && hasVisibleControlFocus(locationClosed)
         && locationClosed.tag === 'BUTTON' && locationClosed.type === 'button'
         && locationClosed.controls === 'location-bar-popover' && locationClosed.popoverId === 'location-bar-popover'
-        && locationClosed.locationExpanded === 'false' && /^Expand Location$/i.test(locationClosed.locationLabel)
+        && locationClosed.locationExpanded === 'false' && /^展开位置$/.test(locationClosed.locationLabel)
         && locationClosed.transitions.length === 0, JSON.stringify({ locationTab, locationClosed }));
 
     await resetLocationTransitions();
@@ -1293,13 +1293,13 @@ try {
     const locationEnter = await locationState();
     check('Location: Enter opens once with visible focus and accurate name',
       hasVisibleControlFocus(locationEnter) && locationEnter.locationExpanded === 'true'
-        && /^Collapse Location$/i.test(locationEnter.locationLabel) && locationEnter.transitions.length === 1,
+        && /^收起位置$/.test(locationEnter.locationLabel) && locationEnter.transitions.length === 1,
       JSON.stringify(locationEnter));
     await page.keyboard.press('Escape');
     const locationEscape = await locationState();
     check('Location: Escape on the disclosure closes without retaining focus',
       locationEscape.focusedId === null && locationEscape.locationExpanded === 'false'
-        && /^Expand Location$/i.test(locationEscape.locationLabel), JSON.stringify(locationEscape));
+        && /^展开位置$/.test(locationEscape.locationLabel), JSON.stringify(locationEscape));
 
     await page.focus('#location-bar-toggle');
     await resetLocationTransitions();

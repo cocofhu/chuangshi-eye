@@ -949,7 +949,7 @@ export function createRecentImageryLayer({
     useCurrentView(viewer = _viewer) {
       const rectangle = viewer?.camera?.computeViewRectangle?.();
       if (!rectangle)
-        return refuseBox('Point the camera at the ground to use the view');
+        return refuseBox('请将镜头对准地面后再使用当前视野');
       const box = boxFromRectangle(rectangle);
       if (validateBox(box).reason === 'too-large') {
         const { width, height } = boxSideKm(box);
@@ -994,7 +994,7 @@ export function createRecentImageryLayer({
     /** A 10 km box centred on a point. */
     boxFromPinAt(lon, lat) {
       const box = boxFromPin(lon, lat);
-      return box ? chooseBox(box) : refuseBox('That point cannot anchor a box');
+      return box ? chooseBox(box) : refuseBox('该点无法作为选框中心');
     },
 
     /**

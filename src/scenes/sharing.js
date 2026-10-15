@@ -91,7 +91,7 @@ export function createSceneSharing(director) {
         dialog.status.textContent =
           error?.name === 'SceneDocumentError'
             ? error.message
-            : 'Could not complete this action. Check the file, references and selected assets.';
+            : '操作未完成。请检查文件、引用和所选素材。';
     } finally {
       if (alive(owner)) busy = false;
     }
@@ -103,29 +103,29 @@ export function createSceneSharing(director) {
       layerIds: director.dataManager.getAll().map((l) => l.id),
     });
     dialog.text(
-      `${report.scenes} scenes · ${report.shots} shots · ${report.packs.length} data packs`,
+      `${report.scenes} 个场景 · ${report.shots} 个镜头 · ${report.packs.length} 个数据包`,
     );
     for (const pack of report.packs)
       dialog.text(
-        `${pack.scene} / ${pack.id}: ${pack.status}. File: ${pack.path}. ${pack.attribution.text} · ${pack.attribution.license}`,
+        `${pack.scene} / ${pack.id}：${pack.status}。文件：${pack.path}。${pack.attribution.text} · ${pack.attribution.license}`,
       );
     if (report.missingLayers.length)
-      dialog.text(`Unavailable layers: ${report.missingLayers.join(', ')}`);
+      dialog.text(`不可用图层：${report.missingLayers.join(', ')}`);
     if (report.externalContent)
       dialog.text(
-        'This scene uses registered content or linked media. Those external files are not included in a scene bundle. Their original notices still apply.',
+        '本场景使用已登记内容或外部媒体。这些外部文件不在场景包内。原有声明仍然有效。',
       );
     if (report.bundledBytes)
       dialog.text(
-        `${report.bundledBytes} bundled bytes verified. Files stay in memory for this session. Reimport the bundle after reloading the app.`,
+        `${report.bundledBytes} 字节已核验。文件仅在本次会话留在内存中。重新加载应用后需再次导入素材包。`,
       );
     return report;
   }
   async function preview(file) {
-    const owner = open('Review scene import');
+    const owner = open('审阅场景导入');
     if (!owner) return;
     const expected = currentProject();
-    dialog.text('Nothing is loaded or changed until you apply this file.');
+    dialog.text('在应用此文件之前，不会加载或更改任何内容。');
     await run(owner, async () => {
       const input = await readSceneShare(file, { signal: owner.signal });
       if (!alive(owner)) return;
@@ -133,9 +133,9 @@ export function createSceneSharing(director) {
       inventory(input);
       dialog.status.textContent = '可以导入';
       dialog.text(
-        'Apply replaces the current project. Export your current project first if you want to keep both.',
+        '应用将替换当前项目。若需保留两者，请先导出当前项目。',
       );
-      const apply = dialog.button('Apply import', () =>
+      const apply = dialog.button('应用导入', () =>
         run(owner, async () => {
           if (expected !== currentProject()) throw new Error('Project changed');
           apply.disabled = true;
@@ -149,7 +149,7 @@ export function createSceneSharing(director) {
             else {
               apply.disabled = false;
               dialog.status.textContent =
-                'Import was not applied. The current project may have changed.';
+                '导入未应用。当前项目可能已变化。';
             }
           }
         }),
@@ -161,29 +161,29 @@ export function createSceneSharing(director) {
     const scene = director._getSelectedScene(),
       shot = scene?.shots.find((s) => s.id === director._selectedShotId);
     if (!scene || !shot) {
-      director._updateStatus('Select a scene and shot first');
+      director._updateStatus('请先选择场景和镜头');
       return;
     }
-    const owner = open('Edit scene details');
+    const owner = open('编辑场景详情');
     if (!owner) return;
     const original = structuredClone(director._project),
       expected = currentProject();
     dialog.text(
-      'Camera positions use degrees and meters above the ellipsoid. Drafts are validated before they replace your saved scene.',
+      '相机位置使用度和椭球高（米）。草稿经校验后才会替换已保存的场景。',
     );
     const sceneText = dialog.input(
-      'Anchors and data packs',
+      '锚点与数据包',
       json(subset(scene, sceneKeys)),
       { multiline: true },
     );
     const shotText = dialog.input(
-      'Shot camera, timing, packs and actions',
+      '镜头相机、时长、数据包与动作',
       json(subset(shot, shotKeys)),
       { multiline: true },
     );
-    const anchorName = dialog.input('New anchor ID', 'anchor-1');
+    const anchorName = dialog.input('新锚点 ID', 'anchor-1');
     dialog.button(
-      'Capture camera as anchor',
+      '将当前相机记为锚点',
       () =>
         run(owner, async () => {
           const details = JSON.parse(sceneText.value),
@@ -215,7 +215,7 @@ export function createSceneSharing(director) {
       dialog.body,
     );
     dialog.button(
-      'Set move start to current camera',
+      '将移动起点设为当前相机',
       () =>
         run(owner, async () => {
           const details = JSON.parse(shotText.value),
@@ -247,12 +247,12 @@ export function createSceneSharing(director) {
           );
           shotText.value = json(details);
           dialog.status.textContent =
-            'Move added to draft; destination remains the shot camera';
+            '移动已写入草稿；终点仍是镜头相机';
         }),
       dialog.body,
     );
     dialog.button(
-      'Use ordinary flight',
+      '改用普通飞行',
       () => {
         if (!alive(owner)) return;
         try {
@@ -265,7 +265,7 @@ export function createSceneSharing(director) {
       },
       dialog.body,
     );
-    const apply = dialog.button('Apply details', () =>
+    const apply = dialog.button('应用详情', () =>
       run(owner, async () => {
         if (expected !== currentProject()) throw new Error('Project changed');
         const project = editSceneDetails(
@@ -300,10 +300,10 @@ export function createSceneSharing(director) {
         director._selectedSceneId,
       );
     } catch {
-      director._updateStatus('Select a scene first');
+      director._updateStatus('请先选择场景');
       return;
     }
-    const owner = open('Share selected scene');
+    const owner = open('分享所选场景');
     if (!owner) return;
     const paths = new Set(
       project.scenes.flatMap((s) =>
@@ -320,19 +320,19 @@ export function createSceneSharing(director) {
     staged = { project, assets: existing };
     inventory(staged);
     dialog.text(
-      'Scene JSON preserves authored settings and attribution. It does not include asset files. Bundles include only pack files you choose here or previously imported bundle files.',
+      '场景 JSON 保留编排设置与归属说明，不含素材文件。素材包只包含在此选择的数据包文件，或此前已导入的包文件。',
     );
-    dialog.button('Download scene JSON', () => {
+    dialog.button('下载场景 JSON', () => {
       if (alive(owner)) download(stringifySceneDocument(project), 'scene.json');
     });
-    const files = dialog.input('Choose data-pack files', '', { type: 'file' });
+    const files = dialog.input('选择数据包文件', '', { type: 'file' });
     files.multiple = true;
-    const folder = dialog.input('Or choose a data-pack folder', '', {
+    const folder = dialog.input('或选择数据包文件夹', '', {
       type: 'file',
     });
     folder.multiple = true;
     folder.setAttribute('webkitdirectory', '');
-    dialog.button('Download asset bundle', () =>
+    dialog.button('下载素材包', () =>
       run(owner, async () => {
         const selected = [...files.files, ...folder.files];
         const packs = project.scenes.flatMap((s) => s.dataPacks || []);

@@ -82,11 +82,11 @@ test('identical updates write nothing; controls call actions and destruction can
   writes = 0;
   view.update({ ...props, index: 1 });
   assert.equal(writes, 0);
-  for (const label of ['‹', '›', 'Latest', 'Play'])
+  for (const label of ['‹', '›', '最新', '播放'])
     f.find((n) => n.textContent === label).click();
   assert.deepEqual(calls, [-1, 1, 'latest', 'play']);
   view.update({ ...props, playing: true });
-  assert.ok(f.find((n) => n.textContent === 'Pause'));
+  assert.ok(f.find((n) => n.textContent === '暂停'));
   const slider = f.find((n) => n.tagName === 'INPUT');
   slider.value = '0';
   slider.dispatchEvent(new Event('change'));

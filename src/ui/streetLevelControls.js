@@ -311,7 +311,7 @@ export class StreetLevelControls {
       wrap.classList.add('sl-viewer-wrap-expanded');
       wrap.setAttribute('role', 'dialog');
       wrap.setAttribute('aria-modal', 'true');
-      wrap.setAttribute('aria-label', 'Street-level image');
+      wrap.setAttribute('aria-label', '街景影像');
       wrap.tabIndex = -1;
       wrap.focus({ preventScroll: true });
       this._watchModal(true);
@@ -345,7 +345,7 @@ export class StreetLevelControls {
       if (icon) icon.textContent = on ? '⤡' : '⤢';
       if (text) text.textContent = on ? '缩小' : '放大';
       button.setAttribute('aria-pressed', String(on));
-      button.setAttribute('aria-label', on ? 'Shrink' : 'Expand');
+      button.setAttribute('aria-label', on ? '缩小' : '放大');
     }
     if (!on && dock) this.actions.dockPanel?.();
     this._requestResize();

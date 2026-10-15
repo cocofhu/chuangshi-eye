@@ -12,7 +12,7 @@ export function bindClearLayersControl(button, clear) {
       button.setAttribute('aria-busy', String(busy));
       button.setAttribute(
         'aria-label',
-        busy ? 'Clearing selected data layers' : 'Clear selected data layers',
+        busy ? '正在清除已选数据图层' : '清除已选数据图层',
       );
     },
     destroy() {

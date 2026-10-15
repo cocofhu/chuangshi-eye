@@ -1632,11 +1632,11 @@ test('awareness rescans only for invalidation, source change, or meaningful move
 
 test('installation summaries disclose viewport-scoped coverage', () => {
   const empty = summarizeInstallationViewport([], { available: true, stale: false });
-  assert.match(empty.reason, /viewport feed/i);
-  assert.match(empty.reason, /not a complete 250 km survey/i);
+  assert.match(empty.reason, /视野数据/);
+  assert.match(empty.reason, /并非完整的 250 公里普查/);
 
   const unavailable = summarizeInstallationViewport([], { available: false, stale: false });
-  assert.equal(unavailable.reason, 'feed unavailable');
+  assert.equal(unavailable.reason, '数据源不可用');
   const retrying = summarizeInstallationViewport([], { available: false, stats: {
     statusMessage: 'Overpass temporarily unavailable — retrying in 30s',
   } });
@@ -1648,14 +1648,14 @@ test('installation summaries name a subject window instead of the viewport', () 
   const stats = { coverage: { kind: 'subject', radiusM: 100_000 } };
   const empty = summarizeInstallationViewport([], { available: true, stale: false, stats });
   assert.equal(empty.count, 0);
-  assert.match(empty.reason, /none mapped within 100 km/);
-  assert.match(empty.reason, /not a complete 250 km survey/);
+  assert.match(empty.reason, /目标周边 100 公里内无标注/);
+  assert.match(empty.reason, /并非完整的 250 公里普查/);
   const found = summarizeInstallationViewport(
     [{ id: 'ofm:installation:1', label: 'Military area', distanceM: 1200 }],
     { available: true, stale: false, stats },
   );
   assert.equal(found.count, 1);
-  assert.equal(found.reason, 'mapped matches within 100 km of the subject');
+  assert.equal(found.reason, '目标周边 100 公里内的已标注匹配');
 });
 
 test('compact Context snapshots retain installation coverage', () => {

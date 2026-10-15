@@ -94,8 +94,8 @@ test('timeline stays visible with any observed product; native preview and trans
   assert.deepEqual(f.calls, []);
   slider.dispatchEvent(new Event('change'));
   assert.deepEqual(f.calls, [['target', ticks[0]]]);
-  f.find((n) => n.textContent === 'Latest' && n.tagName === 'BUTTON').click();
-  f.find((n) => n.textContent === 'Play').click();
+  f.find((n) => n.textContent === '最新' && n.tagName === 'BUTTON').click();
+  f.find((n) => n.textContent === '播放').click();
   assert.deepEqual(f.calls.slice(1), [['latest'], ['play']]);
   slider.dispatchEvent(new Event('input'));
   view.update([wind]);
