@@ -24,6 +24,7 @@ const BHOTE_KOSHI_NEPAL_BASE_RECIPE = Object.freeze({
   legacySceneBootstrap: {
     targetSceneTitle: 'Nepal Flood Incident',
     fromShotTitles: ['Shot 1', 'Shot 2', 'Shot 3'],
+    alsoFromShotTitles: [['镜头 1', '镜头 2', '镜头 3']],
     cameraPath: [
       {
         title: 'Global Incident Context',
@@ -583,7 +584,7 @@ const BHOTE_KOSHI_NEPAL_BOOTSTRAP_RECIPE = BHOTE_KOSHI_NEPAL_APPEND_RECIPE
           .slice(0, 3)
           .map((keyframe, index) => ({
             ...keyframe,
-            title: `Shot ${index + 1}`,
+            title: `镜头 ${index + 1}`,
           })),
     })
   : null;

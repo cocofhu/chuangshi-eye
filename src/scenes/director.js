@@ -540,17 +540,25 @@ export class SceneDirector {
     for (const recipe of SCENE_APPEND_RECIPES) {
       const bootstrap = recipe.legacySceneBootstrap;
       if (!bootstrap || !Array.isArray(bootstrap.cameraPath)) continue;
-      const expectedTitles = Array.isArray(bootstrap.fromShotTitles)
-        ? bootstrap.fromShotTitles
-        : [];
-      const scene = this._project.scenes.find(
-        (candidate) =>
-          candidate.title === bootstrap.targetSceneTitle &&
-          candidate.shots.length === expectedTitles.length &&
-          candidate.shots.every(
-            (shot, index) => shot.title === expectedTitles[index],
-          ),
-      );
+      const titleLists = [
+        ...(Array.isArray(bootstrap.fromShotTitles)
+          ? [bootstrap.fromShotTitles]
+          : []),
+        ...(Array.isArray(bootstrap.alsoFromShotTitles)
+          ? bootstrap.alsoFromShotTitles
+          : []),
+      ];
+      const scene = this._project.scenes.find((candidate) => {
+        if (candidate.title !== bootstrap.targetSceneTitle) return false;
+        return titleLists.some(
+          (titles) =>
+            Array.isArray(titles) &&
+            candidate.shots.length === titles.length &&
+            candidate.shots.every(
+              (shot, index) => shot.title === titles[index],
+            ),
+        );
+      });
       if (!scene) continue;
 
       const originalProject = deepClone(this._project);

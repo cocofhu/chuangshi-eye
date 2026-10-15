@@ -3428,7 +3428,7 @@ function describeTargetEntity(dataManager, target) {
             type: found.typeName || found.typeCode || '',
             route,
             altitude: Number.isFinite(found.altitudeM)
-              ? `${Math.round(found.altitudeM * 3.28084)} ft`
+              ? `${(Math.round(found.altitudeM / 100) * 100).toLocaleString('zh-CN')} 米`
               : '',
           }
         : { name, mmsi: found.mmsi || '', noradId: found.noradId || '' },

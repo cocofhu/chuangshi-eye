@@ -51,7 +51,7 @@ function visual(value, path, legacy) {
         optional(entry, name, field, (item, at) => {
           if (Array.isArray(type)) number(item, at, ...type, legacy);
           else if (type === 'string') string(item, at);
-          else if (typeof item !== 'boolean') fail(at, 'expected a boolean');
+          else if (typeof item !== 'boolean') fail(at, '需要布尔值');
         });
     });
 }
@@ -68,7 +68,7 @@ export function validateSceneDocument(project) {
   ]);
   const version = Object.hasOwn(project, 'version') ? project.version : 1;
   if (![1, 2, 3, 4, 5, 6].includes(version))
-    fail('$.version', 'unsupported scene project version');
+    fail('$.version', '不支持的场景项目版本');
   const legacy = version < 3;
   for (const key of ['createdAt', 'updatedAt'])
     optional(project, key, '$', string);
@@ -111,7 +111,7 @@ export function validateSceneDocument(project) {
     array(scene.shots, `${path}.shots`);
     shotCount += scene.shots.length;
     if (shotCount > SCENE_DOCUMENT_LIMITS.shots)
-      fail(`${path}.shots`, 'too many shots in project');
+      fail(`${path}.shots`, '项目镜头过多');
     const shotIds = new Set();
     scene.shots.forEach((shot, i) => {
       const at = `${path}.shots[${i}]`;
@@ -148,7 +148,7 @@ export function validateSceneDocument(project) {
           const p = `${field}.${id}`;
           fields(entry, p, ['enabled', 'params']);
           if (typeof entry.enabled !== 'boolean')
-            fail(`${p}.enabled`, 'expected a boolean');
+            fail(`${p}.enabled`, '需要布尔值');
           optional(entry, 'params', p, object);
         }
       });
@@ -167,12 +167,12 @@ export function parseSceneDocument(text) {
     text.length > SCENE_DOCUMENT_LIMITS.bytes ||
     new TextEncoder().encode(text).byteLength > SCENE_DOCUMENT_LIMITS.bytes
   )
-    fail('$', 'file exceeds 5 MiB');
+    fail('$', '文件超过 5 MiB');
   let parsed;
   try {
     parsed = JSON.parse(text);
   } catch {
-    fail('$', 'invalid JSON');
+    fail('$', 'JSON 无效');
   }
   return validateSceneDocument(parsed);
 }

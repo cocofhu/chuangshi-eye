@@ -20,28 +20,29 @@ import {
 
 const PANEL_ID = 'recent-imagery-panel';
 const OVERVIEW_MIN_BOX_KM = 25;
-const ESRI_NOTE = 'Imagery on Esri · Google 3D returns when cleared';
+const ESRI_NOTE = '影像在 Esri · 清除后恢复 Google 3D';
 const MODE_LABELS = [
-  ['image', 'IMAGE'],
-  ['basemap', 'VS BASEMAP'],
+  ['image', '影像'],
+  ['basemap', '对比底图'],
   ['ab', 'A / B'],
 ];
 const START_HERE_TITLES = {
-  clear: 'Newest low-cloud day for this box · scene cloud, not box cloud',
-  cloudy: 'Newest day covering this box · cloudier than 20%',
-  partial: 'Newest day with imagery for this box · partial coverage',
-  overview: 'Newest daily overview for this box',
+  clear: '此框最新低云日 · 场景云量，不是框内云量',
+  cloudy: '此框最新覆盖日 · 云量高于 20%',
+  partial: '此框最新有影像日 · 覆盖不全',
+  overview: '此框最新日概览',
 };
 const START_HERE_REASONS = {
-  clear: 'newest clear day',
-  cloudy: 'newest day (cloudy)',
-  partial: 'newest day (partial coverage)',
-  overview: 'newest overview',
+  clear: '最新晴日',
+  cloudy: '最新一日（多云）',
+  partial: '最新一日（覆盖不全）',
+  overview: '最新概览',
 };
+const COVERAGE_LABELS = { full: '完整', partial: '部分', unknown: '未知' };
 const PLACEHOLDERS = {
-  empty: 'No imagery',
-  error: 'Unavailable',
-  present: 'Loading',
+  empty: '无影像',
+  error: '不可用',
+  present: '加载中',
 };
 const KEY_STEPS = {
   ArrowLeft: (index) => index - 1,
@@ -68,35 +69,34 @@ const kmText = (km) =>
       : km.toFixed(1);
 
 function cloudText(candidate) {
-  if (candidate.thumbnail?.status === 'empty') return 'no imagery';
-  if (!candidate.cloud) return 'cloud unknown';
+  if (candidate.thumbnail?.status === 'empty') return '无影像';
+  if (!candidate.cloud) return '云量未知';
   const min = Math.round(candidate.cloud.min);
   const max = Math.round(candidate.cloud.max);
-  return min === max ? `${min}% cloud` : `${min}–${max}% cloud`;
+  return min === max ? `${min}% 云` : `${min}–${max}% 云`;
 }
 
 function countText(snapshot) {
-  if (!snapshot.box) return 'NO BOX';
-  if (snapshot.searching) return 'SEARCHING';
-  const count = snapshot.candidates.length;
-  return `${count} DAY${count === 1 ? '' : 'S'}`;
+  if (!snapshot.box) return '无选框';
+  if (snapshot.searching) return '搜索中';
+  return `${snapshot.candidates.length} 天`;
 }
 
 /** The one-line hint under the strip: the next thing to do, per state. */
 function hintText(snapshot) {
-  if (snapshot.zoomToFit) return 'Zoom in or draw a smaller box';
-  if (!snapshot.box) return 'Select a box or use the view';
-  if (snapshot.searching) return 'Searching the last 30 days';
-  if (!snapshot.candidates.length) return 'No days to show for this box';
+  if (snapshot.zoomToFit) return '拉近，或画一个更小的框';
+  if (!snapshot.box) return '框选，或使用当前视图';
+  if (snapshot.searching) return '正在搜索近 30 天';
+  if (!snapshot.candidates.length) return '此框没有可显示的日期';
   const { mode, pins, shown } = snapshot;
-  if (shown.swipe !== 'none') return 'Drag the divider · SWAP trades sides';
+  if (shown.swipe !== 'none') return '拖动分隔线 · 对调两侧';
   if (mode === 'ab') {
     if (!pins.a.key && !pins.b.key)
-      return '← → preview · A or B pins the focused day';
-    return '← → preview the other side · A or B pins it';
+      return '← → 预览 · A 或 B 固定焦点日';
+    return '← → 预览另一侧 · A 或 B 固定它';
   }
-  if (pins.a.key) return 'S on another day replaces it · × unpins';
-  return '← → preview · S shows the focused day';
+  if (pins.a.key) return '在其他日期按 S 替换 · × 取消固定';
+  return '← → 预览 · S 显示焦点日';
 }
 
 /**
@@ -173,7 +173,7 @@ export function createRecentImageryPanel({
 
   // ---- build: every block exists from the start, in its final order ----
   const root = el('section', 'recent-imagery-readout');
-  root.setAttribute('aria-label', 'Recent imagery');
+  root.setAttribute('aria-label', '近况影像');
 
   const actionsHost = el('div', 'ri-block ri-actions-row', root);
   actionsHost.id = 'ri-actions';
@@ -191,10 +191,10 @@ export function createRecentImageryPanel({
   noticeText.id = 'ri-notice-text';
   noticeText.setAttribute('role', 'status');
   noticeText.setAttribute('aria-live', 'polite');
-  const zoomIn = el('button', 'data-toggle-chip ri-zoom-in', notice, 'ZOOM IN');
+  const zoomIn = el('button', 'data-toggle-chip ri-zoom-in', notice, '拉近');
   zoomIn.id = 'ri-zoom-in';
   zoomIn.type = 'button';
-  zoomIn.title = 'Fly in until the view fits the 1,000 km limit';
+  zoomIn.title = '飞近，直到视野落入 1,000 公里上限';
 
   const strip = el('div', 'ri-block ri-strip', root);
   strip.id = 'ri-strip';
@@ -203,7 +203,7 @@ export function createRecentImageryPanel({
   strip.setAttribute('aria-orientation', 'horizontal');
   strip.setAttribute(
     'aria-label',
-    'Imagery days, newest first · arrows move, S or A and B pin',
+    '影像日期，最新在前 · 方向键移动，S 或 A、B 固定',
   );
   strip.setAttribute('aria-keyshortcuts', 'A B S');
   const stripEmpty = el('div', 'ri-strip-empty', strip);
@@ -213,11 +213,11 @@ export function createRecentImageryPanel({
 
   const selection = el('section', 'ri-block ri-selection', root);
   selection.id = 'ri-selection';
-  selection.setAttribute('aria-label', 'On the map');
+  selection.setAttribute('aria-label', '地图上');
   const modeGroup = el('div', 'ri-mode', selection);
   modeGroup.id = 'ri-mode';
   modeGroup.setAttribute('role', 'radiogroup');
-  modeGroup.setAttribute('aria-label', 'Mode');
+  modeGroup.setAttribute('aria-label', '模式');
   const modeButtons = new Map(
     MODE_LABELS.map(([mode, label]) => {
       const node = el('button', 'data-toggle-chip ri-mode-btn', modeGroup);
@@ -244,7 +244,7 @@ export function createRecentImageryPanel({
   const controls = el('div', 'ri-block ri-controls', root);
   controls.id = 'ri-controls';
   const opacityLabel = el('label', 'ri-opacity-label', controls);
-  el('span', '', opacityLabel, 'OPACITY');
+  el('span', '', opacityLabel, '不透明度');
   const opacityValue = el('span', 'ri-opacity-value', opacityLabel, '100%');
   const opacity = el('input', 'ri-opacity', controls);
   opacity.id = 'ri-opacity';
@@ -255,13 +255,13 @@ export function createRecentImageryPanel({
     step: '1',
     value: '100',
   });
-  opacity.setAttribute('aria-label', 'Imagery opacity');
+  opacity.setAttribute('aria-label', '影像不透明度');
   opacityLabel.htmlFor = 'ri-opacity';
   // Its slot is always there; it is only usable while a swipe is live.
-  const swap = el('button', 'data-toggle-chip ri-swap', controls, 'SWAP');
+  const swap = el('button', 'data-toggle-chip ri-swap', controls, '对调');
   swap.id = 'ri-swap';
   swap.type = 'button';
-  swap.title = 'Trade the two sides of the divider';
+  swap.title = '交换分隔线两侧';
   const exportHost = el('div', 'ri-exports', controls);
   const exports = createRailCardBlocks({
     container: exportHost,
@@ -318,7 +318,7 @@ export function createRecentImageryPanel({
         actions: [
           {
             id: 'select-box',
-            label: 'SELECT BOX',
+            label: '框选',
             title: '在地图上拖框（Esc 取消）',
             onClick: () => {
               exportError = null;
@@ -328,8 +328,8 @@ export function createRecentImageryPanel({
           },
           {
             id: 'use-view',
-            label: 'USE VIEW',
-            title: 'Use the current view as the box',
+            label: '当前视图',
+            title: '用当前视野作为选框',
             onClick: () => {
               exportError = null;
               layer.useCurrentView(viewer);
@@ -337,8 +337,8 @@ export function createRecentImageryPanel({
           },
           {
             id: 'clear',
-            label: 'CLEAR',
-            title: 'Forget the box and its images',
+            label: '清除',
+            title: '忘掉选框及其影像',
             disabled: !snapshot.box && !snapshot.boxError,
             onClick: () => {
               exportError = null;
@@ -388,7 +388,7 @@ export function createRecentImageryPanel({
     entry.thumb = el('div', 'ri-thumb', card);
     entry.placeholder = el('span', 'ri-thumb-text', entry.thumb);
     entry.flag = el('span', 'ri-card-flag', entry.thumb);
-    entry.start = el('span', 'ri-card-start', entry.thumb, 'START HERE');
+    entry.start = el('span', 'ri-card-start', entry.thumb, '从此开始');
     entry.date = el('div', 'ri-card-date', card);
     entry.sensor = el('div', 'ri-card-sensor', card);
     entry.cloud = el('div', 'ri-card-cloud', card);
@@ -432,13 +432,13 @@ export function createRecentImageryPanel({
     }
     if (entry.image) set(entry.image, 'hidden', !shown);
     set(entry.placeholder, 'hidden', shown);
-    set(entry.placeholder, 'textContent', PLACEHOLDERS[status] || 'Checking');
+    set(entry.placeholder, 'textContent', PLACEHOLDERS[status] || '检查中');
     if (entry.thumb.dataset.status !== status)
       entry.thumb.dataset.status = status;
     const flag = candidate.preview
-      ? 'PREVIEW'
+      ? '预览'
       : candidate.pending
-        ? 'LOADING'
+        ? '加载中'
         : '';
     set(entry.flag, 'textContent', flag);
     set(entry.flag, 'hidden', !flag);
@@ -449,7 +449,7 @@ export function createRecentImageryPanel({
         entry.start,
         'title',
         START_HERE_TITLES[snapshot.recommended.reason] ||
-          'Newest day with imagery for this box',
+          '此框最新有影像的一天',
       );
     set(entry.date, 'textContent', day);
     set(entry.sensor, 'textContent', sensorLine(candidate.product));
@@ -459,7 +459,7 @@ export function createRecentImageryPanel({
       const chip = entry.chips[slotId];
       const live = slotId === 'a' || ab;
       const on = candidate.pinned === slotId && live;
-      const label = slotId === 'a' ? (ab ? 'A' : 'SHOW') : 'B';
+      const label = slotId === 'a' ? (ab ? 'A' : '显示') : 'B';
       set(chip, 'textContent', label);
       set(chip, 'disabled', empty || !live);
       toggle(chip, 'active', on);
@@ -469,22 +469,22 @@ export function createRecentImageryPanel({
       attribute(
         chip,
         'aria-label',
-        ab ? `Pin ${day} as ${slotId.toUpperCase()}` : `Show ${day}`,
+        ab ? `将 ${day} 固定为 ${slotId.toUpperCase()}` : `显示 ${day}`,
       );
     }
     const state = candidate.pinned
       ? ab
-        ? ` · pinned ${candidate.pinned.toUpperCase()}`
+        ? ` · 已固定 ${candidate.pinned.toUpperCase()}`
         : candidate.pinned === 'a'
-          ? ' · shown'
+          ? ' · 已显示'
           : ''
       : candidate.preview
-        ? ' · preview'
+        ? ' · 预览'
         : '';
     attribute(
       card,
       'aria-label',
-      `${day} · ${sensorLine(candidate.product)} · ${cloudText(candidate)}${recommended ? ' · start here' : ''}${state}`,
+      `${day} · ${sensorLine(candidate.product)} · ${cloudText(candidate)}${recommended ? ' · 从此开始' : ''}${state}`,
     );
   }
 
@@ -512,14 +512,14 @@ export function createRecentImageryPanel({
       candidates.length
         ? ''
         : !snapshot.box
-          ? 'No box'
+          ? '无选框'
           : snapshot.searching
-            ? 'Searching'
+            ? '搜索中'
             : snapshot.hiddenCount
-              ? 'Every day is empty here'
+              ? '这里每天都是空的'
               : !snapshot.sources.hls && !snapshot.sources.viirs
-                ? 'Sources off'
-                : 'No imagery',
+                ? '数据源已关'
+                : '无影像',
     );
     set(stripEmpty, 'hidden', candidates.length > 0);
     if (candidates[snapshot.focusIndex])
@@ -596,16 +596,16 @@ export function createRecentImageryPanel({
       set(
         tag,
         'textContent',
-        ab ? slotId.toUpperCase() : slotId === 'a' ? 'IMAGE' : 'VS',
+        ab ? slotId.toUpperCase() : slotId === 'a' ? '影像' : '对比',
       );
-      let text = 'Not set';
-      if (basemapRow) text = 'Basemap';
+      let text = '未设置';
+      if (basemapRow) text = '底图';
       else if (image?.label)
-        text = `${image.sourceOff ? 'Source off · ' : ''}${image.label}${
+        text = `${image.sourceOff ? '数据源已关 · ' : ''}${image.label}${
           image.preview
-            ? ' · preview'
+            ? ' · 预览'
             : image.candidate && !image.drapable && !image.sourceOff
-              ? ' · loading'
+              ? ' · 加载中'
               : ''
         }`;
       set(value, 'textContent', text);
@@ -625,7 +625,7 @@ export function createRecentImageryPanel({
       attribute(
         unpin,
         'aria-label',
-        ab ? `Unpin ${slotId.toUpperCase()}` : 'Unpin the image',
+        ab ? `取消固定 ${slotId.toUpperCase()}` : '取消固定影像',
       );
       set(unpin, 'title', unpin.getAttribute('aria-label'));
     }
@@ -658,8 +658,8 @@ export function createRecentImageryPanel({
         type: 'actions',
         actions: ['a', 'b'].map((slotId) => ({
           id: `export-${slotId}`,
-          label: ab ? `EXPORT ${slotId.toUpperCase()}` : 'EXPORT',
-          title: `Download ${ab ? slotId.toUpperCase() : 'the image'} as a PNG`,
+          label: ab ? `导出 ${slotId.toUpperCase()}` : '导出',
+          title: `将${ab ? ` ${slotId.toUpperCase()} ` : '影像'}下载为 PNG`,
           disabled: !exportTarget(slotId) || exporting.has(slotId),
           onClick: () => void exportImage(slotId),
         })),
@@ -682,7 +682,7 @@ export function createRecentImageryPanel({
     if (snapshot.box)
       lines.push({
         id: 'box',
-        text: `Box ${kmText(snapshot.boxSizeKm?.width)} × ${kmText(snapshot.boxSizeKm?.height)} km`,
+        text: `选框 ${kmText(snapshot.boxSizeKm?.width)} × ${kmText(snapshot.boxSizeKm?.height)} 公里`,
       });
     if (focus) {
       lines.push({ id: 'readout', text: snapshot.readout || '' });
@@ -690,14 +690,16 @@ export function createRecentImageryPanel({
       if (focus.timeRange?.start) {
         const start = utcTime(focus.timeRange.start);
         const end = utcTime(focus.timeRange.end || focus.timeRange.start);
-        times.push(`Acquired ${start === end ? start : `${start}–${end}`}`);
+        times.push(`获取于 ${start === end ? start : `${start}–${end}`}`);
       } else if (focus.thumbnail?.acquisitionTime)
-        times.push(`Acquired ${utcTime(focus.thumbnail.acquisitionTime)}`);
-      times.push(`Coverage ${focus.coverage || 'unknown'}`);
+        times.push(`获取于 ${utcTime(focus.thumbnail.acquisitionTime)}`);
+      times.push(
+        `覆盖 ${COVERAGE_LABELS[focus.coverage] || focus.coverage || '未知'}`,
+      );
       lines.push({ id: 'acquired', text: times.join(' · ') });
       (focus.granules || []).forEach((granule, index) => {
         const cloud = Number.isFinite(granule.cloud)
-          ? ` · ${Math.round(granule.cloud)}% cloud`
+          ? ` · ${Math.round(granule.cloud)}% 云`
           : '';
         lines.push({
           id: `granule-${index}`,
@@ -707,7 +709,7 @@ export function createRecentImageryPanel({
       });
     }
     const reason = START_HERE_REASONS[snapshot.recommended?.reason];
-    if (reason) lines.push({ id: 'start', text: `START HERE · ${reason}` });
+    if (reason) lines.push({ id: 'start', text: `从此开始 · ${reason}` });
     for (const [index, note] of snapshot.notes.entries())
       lines.push({ id: `note-${index}`, text: note, muted: true });
     if (
@@ -718,12 +720,12 @@ export function createRecentImageryPanel({
     )
       lines.push({
         id: 'overview-scale',
-        text: 'Daily overview shows little detail in a box this small',
+        text: '日概览在这么小的框里几乎看不清',
         muted: true,
       });
     lines.push({
       id: 'credit',
-      text: 'Imagery: NASA GIBS and Worldview · HLS (Sentinel-2, Landsat 8/9) and VIIRS',
+      text: '影像：NASA GIBS 与 Worldview · HLS（Sentinel-2、Landsat 8/9）与 VIIRS',
       muted: true,
     });
     return lines;
@@ -735,9 +737,9 @@ export function createRecentImageryPanel({
     details.update([
       {
         id: 'details',
-        title: 'Details',
+        title: '详情',
         open: detailsOpen,
-        compact: snapshot.focus ? snapshot.readout : 'Times, coverage, sources',
+        compact: snapshot.focus ? snapshot.readout : '时间、覆盖、来源',
         blocks: [
           { id: 'lines', type: 'lines', lines: detailLines() },
           {
@@ -749,7 +751,7 @@ export function createRecentImageryPanel({
                 label: showing
                   ? '隐藏空日'
                   : `显示空日 · ${hidden}`,
-                title: 'Days the probe found empty in this box',
+                title: '探测在此框内为空的日期',
                 disabled: !showing && !hidden,
                 onClick: () => layer.setShowUnavailable(!showing),
               },
@@ -773,8 +775,8 @@ export function createRecentImageryPanel({
     const describe = (c) => (c ? `${sensorLine(c.product)} · ${c.day}` : '');
     // The two sides as [label, title, spoken name]; SWAP trades them.
     const sides = [
-      basemap ? ['IMAGE', describe(a), 'image'] : ['A', describe(a), 'A'],
-      basemap ? ['BASEMAP', 'The basemap', 'basemap'] : ['B', describe(b), 'B'],
+      basemap ? ['影像', describe(a), '影像'] : ['A', describe(a), 'A'],
+      basemap ? ['底图', '底图', '底图'] : ['B', describe(b), 'B'],
     ];
     const [before, after] = swapped ? [sides[1], sides[0]] : sides;
     const signature = live
@@ -799,10 +801,10 @@ export function createRecentImageryPanel({
       beforeTitle: before[1],
       afterTitle: after[1],
       ariaLabel: basemap
-        ? 'Recent imagery against the basemap divider'
-        : 'Recent imagery A and B divider',
+        ? '近况影像与底图的分隔线'
+        : '近况影像 A 与 B 的分隔线',
       formatValueText: (leftPercent, rightPercent) =>
-        `${before[2][0].toUpperCase()}${before[2].slice(1)} ${leftPercent} percent, ${after[2]} ${rightPercent} percent`,
+        `${before[2]} ${leftPercent}%，${after[2]} ${rightPercent}%`,
       getViewportWidth: () =>
         Number(viewer?.scene?.canvas?.clientWidth) ||
         Number(document.documentElement?.clientWidth) ||
@@ -895,7 +897,7 @@ export function createRecentImageryPanel({
       return true;
     } catch (error) {
       if (!destroyed)
-        exportError = `Export failed · ${error?.message || error}`;
+        exportError = `导出失败 · ${error?.message || error}`;
       return false;
     } finally {
       exporting.delete(slotId);

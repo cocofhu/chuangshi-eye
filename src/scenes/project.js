@@ -122,7 +122,7 @@ export function recipeToScene(recipe) {
     const mapStack = keyframe.mapStack || post.mapStack;
     return {
       id: uid('shot'),
-      title: keyframe.title || `Shot ${idx + 1}`,
+      title: keyframe.title || `镜头 ${idx + 1}`,
       durationSec: Math.max(
         0.2,
         keyframe.duration || DEFAULT_SHOT_DURATION_SEC,
@@ -171,7 +171,7 @@ export function recipeToScene(recipe) {
 
   return {
     id: recipe.id || uid('scene'),
-    title: recipe.title || 'Untitled Scene',
+    title: recipe.title || '未命名场景',
     releaseLayerIds: [
       ...new Set(
         (Array.isArray(recipe.releaseLayerIds)
@@ -225,7 +225,7 @@ export function normalizeShot(
 
   return {
     id: rawShot?.id || uid('shot'),
-    title: rawShot?.title || `Shot ${index + 1}`,
+    title: rawShot?.title || `镜头 ${index + 1}`,
     durationSec: Math.max(
       0.2,
       Number(rawShot?.durationSec) || DEFAULT_SHOT_DURATION_SEC,
@@ -349,7 +349,7 @@ export function normalizeProject(rawProject) {
       );
       return {
         id: scene?.id || uid('scene'),
-        title: scene?.title || `Scene ${sceneIdx + 1}`,
+        title: scene?.title || `场景 ${sceneIdx + 1}`,
         ...(scene?.dataPacks ? { dataPacks: deepClone(scene.dataPacks) } : {}),
         ...(scene?.anchors ? { anchors: deepClone(scene.anchors) } : {}),
         releaseLayerIds: [

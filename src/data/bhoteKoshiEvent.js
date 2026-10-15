@@ -34,6 +34,20 @@ export const BHOTE_KOSHI_CAMERA_HOLD_RATIO = 0.62;
 export const BHOTE_KOSHI_SCENE_PRESENTATION = 'scene-beat';
 const BHOTE_KOSHI_SCENE_PANEL_ONLY = 'panel-only';
 const BHOTE_KOSHI_SCENE_EVIDENCE_BEAT = 'evidence-beat';
+const PHASE_LABELS = Object.freeze({
+  initiation: '起始',
+  damming: '堰塞',
+  'secondary failure': '二次失稳',
+  'border arrival': '抵达口岸',
+  propagation: '传播',
+  'downstream passage': '下游通过',
+  'downstream consequence': '下游影响',
+  consequence: '影响',
+  evidence: '证据',
+});
+const phaseLabel = (phase) =>
+  PHASE_LABELS[String(phase || 'evidence').toLowerCase()] ||
+  String(phase || '证据');
 
 const EVENT_ASSET_ROOT = `${import.meta.env?.BASE_URL || '/'}events/bhote-koshi-2026/`;
 const FLOOD_RENDER_HOLD = 'bhote-koshi-playback';
@@ -641,7 +655,7 @@ function drawEvidenceFallback(ctx, observation, width, height) {
   }
   ctx.fillStyle = WORLD_OVERLAY_STYLE.accent;
   ctx.font = scaledOverlayFont(WORLD_OVERLAY_STYLE.fontLabel, 1.4);
-  ctx.fillText('NO PREVIEW', 20, 30);
+  ctx.fillText('无预览', 20, 30);
 }
 
 function ellipsizeEvidenceText(value, limit) {
@@ -712,11 +726,14 @@ export function updateEvidenceFrame(
   );
   ctx.fillStyle = WORLD_OVERLAY_STYLE.detail;
   ctx.font = scaledOverlayFont(WORLD_OVERLAY_STYLE.fontDetail);
-  const publisher = String(
-    observation.media?.publisher || 'SOURCE LINK',
-  ).toUpperCase();
+  const rawPublisher = String(observation.media?.publisher || '').trim();
+  const publisher =
+    {
+      'youtube source': 'YouTube 来源',
+      'facebook source': 'Facebook 来源',
+    }[rawPublisher.toLowerCase()] || rawPublisher || '来源链接';
   ctx.fillText(
-    `${ellipsizeEvidenceText(publisher, 24)} / OPEN`,
+    `${ellipsizeEvidenceText(publisher, 24)} / 打开`,
     16,
     infoY + 53,
   );
@@ -816,25 +833,25 @@ function collectPanelReferences(panel) {
 function createPanel(event, handlers) {
   const panel = document.createElement('aside');
   panel.id = 'bhote-koshi-event-panel';
-  panel.setAttribute('aria-label', 'Bhote Koshi flood reconstruction controls');
+  panel.setAttribute('aria-label', '波泰科西洪水重建控件');
   panel.innerHTML = `
     <div class="bhote-event-header">
       <div>
-        <div class="bhote-event-kicker">EVENT RECONSTRUCTION · 26 AUG 2026</div>
-        <div class="bhote-event-title">BHOTE KOSHI OUTBURST FLOOD</div>
+        <div class="bhote-event-kicker">事件重建 · 2026年8月26日</div>
+        <div class="bhote-event-title">波泰科西溃决洪水</div>
       </div>
-      <button class="bhote-event-icon-btn" type="button" data-action="close" title="Close event layer" aria-label="Close event layer">×</button>
+      <button class="bhote-event-icon-btn" type="button" data-action="close" title="关闭事件图层" aria-label="关闭事件图层">×</button>
     </div>
     <div class="bhote-event-status-row">
-      <span class="bhote-event-status observed">OBSERVED IMAGERY</span>
-      <span class="bhote-event-status reconstructed">SCHEMATIC CORRIDOR</span>
+      <span class="bhote-event-status observed">观测影像</span>
+      <span class="bhote-event-status reconstructed">示意廊道</span>
     </div>
     <section class="bhote-event-section" data-role="imagery-comparison">
       <div class="bhote-event-section-head">
-        <span>2021 HISTORICAL REFERENCE / 2026 POST-EVENT</span>
+        <span>2021 历史参照 / 2026 灾后</span>
         <span data-role="split-readout">50 / 50</span>
       </div>
-      <input class="bhote-event-range" data-role="split" type="range" min="0" max="100" value="50" aria-label="Historical reference and post-event image split" />
+      <input class="bhote-event-range" data-role="split" type="range" min="0" max="100" value="50" aria-label="历史参照与灾后影像的分割" />
       <div class="bhote-event-dates">
         <span data-role="before-date"></span>
         <span data-role="after-date"></span>
@@ -842,37 +859,37 @@ function createPanel(event, handlers) {
     </section>
     <section class="bhote-event-section">
       <div class="bhote-event-section-head">
-        <span data-role="timeline-label">RECONSTRUCTION CLOCK</span>
+        <span data-role="timeline-label">重建时钟</span>
         <span data-role="time"></span>
       </div>
-      <input class="bhote-event-range flood" data-role="progress" type="range" min="0" max="1000" value="0" aria-label="Schematic downstream progression" />
-      <div class="bhote-event-story-nav" aria-label="Story beat navigation">
-        <button type="button" data-action="previous-beat" title="Previous story beat" aria-label="Previous story beat">‹</button>
+      <input class="bhote-event-range flood" data-role="progress" type="range" min="0" max="1000" value="0" aria-label="示意下游推进" />
+      <div class="bhote-event-story-nav" aria-label="故事节拍导航">
+        <button type="button" data-action="previous-beat" title="上一故事节拍" aria-label="上一故事节拍">‹</button>
         <div class="bhote-event-story-current">
           <span data-role="beat-index">01 / 06</span>
-          <strong data-role="beat-title" aria-live="polite">CAUSE</strong>
-          <small data-role="beat-meta">CAPTURE TIME UNVERIFIED</small>
+          <strong data-role="beat-title" aria-live="polite">成因</strong>
+          <small data-role="beat-meta">拍摄时间未核验</small>
         </div>
-        <button type="button" data-action="next-beat" title="Next story beat" aria-label="Next story beat">›</button>
+        <button type="button" data-action="next-beat" title="下一故事节拍" aria-label="下一故事节拍">›</button>
       </div>
       <div class="bhote-event-actions">
-        <button type="button" data-action="play">▶ PLAY</button>
-        <button type="button" data-action="play-scene" hidden title="Play the next shot and continue through this scene">▶ PLAY SCENE</button>
-        <button type="button" data-action="cinematic" aria-pressed="false">◉ CINEMATIC</button>
-        <button type="button" data-action="story-replay">↺ FULL STORY</button>
-        <button type="button" data-action="open-source">↗ OPEN ORIGINAL</button>
-        <button type="button" data-action="corridor">⌖ LOWER GORGE</button>
+        <button type="button" data-action="play">▶ 播放</button>
+        <button type="button" data-action="play-scene" hidden title="播放下一镜头并继续本场景">▶ 播放场景</button>
+        <button type="button" data-action="cinematic" aria-pressed="false">◉ 电影</button>
+        <button type="button" data-action="story-replay">↺ 完整故事</button>
+        <button type="button" data-action="open-source">↗ 打开原片</button>
+        <button type="button" data-action="corridor">⌖ 下游峡谷</button>
       </div>
     </section>
     <details class="bhote-event-evidence">
-      <summary>FIELD REPORTS · ${event.fieldReports.length}</summary>
+      <summary>现场报告 · ${event.fieldReports.length}</summary>
       <div class="bhote-event-report-list"></div>
     </details>
     <div class="bhote-event-credit">
-      <span>GEOLOCATIONS · GEO GEORGE SHADRACH</span>
-      <button type="button" data-action="geolocation-map">↗ OPEN PUBLIC MAP</button>
+      <span>定位 · GEO GEORGE SHADRACH</span>
+      <button type="button" data-action="geolocation-map">↗ 打开公开地图</button>
     </div>
-    <p class="bhote-event-caveat"><span data-role="caveat"></span><span data-role="imagery-cloud-note"> Clouds are preserved from the source imagery.</span></p>
+    <p class="bhote-event-caveat"><span data-role="caveat"></span><span data-role="imagery-cloud-note"> 云层保留自源影像。</span></p>
   `;
 
   const refs = collectPanelReferences(panel);
@@ -1205,7 +1222,7 @@ export function createBhoteKoshiEventLayer({
       _embeddedMedia?.show?.({
         observation: {
           title: witness.title,
-          shortTitle: 'Rasuwagadhi witness',
+          shortTitle: '拉苏瓦加迪目击',
           media: { sourceUrl: witness.sourceUrl },
         },
         anchor,
@@ -2561,9 +2578,9 @@ export function createBhoteKoshiEventLayer({
       cssProperty: '--bhote-koshi-split',
       beforeTitle: event.imagery.before.label,
       afterTitle: event.imagery.after.label,
-      ariaLabel: 'Historical reference and post-event image divider',
+      ariaLabel: '历史参照与灾后影像的分隔线',
       formatValueText: (beforePercent, afterPercent) =>
-        `A historical reference ${beforePercent} percent, B post-event ${afterPercent} percent`,
+        `历史参照 ${beforePercent}%，灾后 ${afterPercent}%`,
       onChange: setSplit,
     });
   }
@@ -2595,7 +2612,7 @@ export function createBhoteKoshiEventLayer({
     setElementProperty(
       button,
       'textContent',
-      _cinematicActive ? '■ RELEASE CAMERA' : '◉ CINEMATIC',
+      _cinematicActive ? '■ 释放相机' : '◉ 电影',
     );
     setElementAttribute(button, 'aria-pressed', String(_cinematicActive));
   }
@@ -2961,13 +2978,13 @@ export function createBhoteKoshiEventLayer({
       _panelRefs.progressInput,
       'aria-label',
       sceneDirected
-        ? 'Seek Nepal scene clock'
-        : 'Schematic downstream progression',
+        ? '拖动尼泊尔场景时钟'
+        : '示意下游推进',
     );
     setElementProperty(
       _panelRefs.timelineLabel,
       'textContent',
-      sceneDirected ? 'NEPAL SCENE CLOCK' : 'RECONSTRUCTION CLOCK',
+      sceneDirected ? '尼泊尔场景时钟' : '重建时钟',
     );
     const sceneDuration = Number(_sceneContext?.sceneDurationSec) || 0;
     setElementProperty(
@@ -2980,22 +2997,22 @@ export function createBhoteKoshiEventLayer({
     );
     const playLabel = sceneDirected
       ? _sceneActionPending && _sceneActionPending.type !== 'scene'
-        ? '… PLAYING SHOT'
-        : '▶ PLAY SHOT'
+        ? '… 正在播放镜头'
+        : '▶ 播放镜头'
       : _playing
-        ? 'Ⅱ PAUSE'
+        ? 'Ⅱ 暂停'
         : _progress >= 1
           ? _cinematicReplayArmed
-            ? '↺ REPLAY CINEMATIC'
-            : '↺ REPLAY'
-          : '▶ PLAY';
+            ? '↺ 重播电影'
+            : '↺ 重播'
+          : '▶ 播放';
     setElementProperty(_panelRefs.playButton, 'textContent', playLabel);
     setElementProperty(
       _panelRefs.playSceneButton,
       'textContent',
       _sceneActionPending?.type === 'scene'
-        ? '… PLAYING SCENE'
-        : '▶ PLAY SCENE',
+        ? '… 正在播放场景'
+        : '▶ 播放场景',
     );
     setElementProperty(
       _panelRefs.playSceneButton,
@@ -3011,19 +3028,19 @@ export function createBhoteKoshiEventLayer({
     setElementAttribute(
       _panelRefs.playSceneButton,
       'aria-label',
-      `Continue ${_sceneContext?.sceneTitle || 'current scene'} from next shot`,
+      `从下一镜头继续${_sceneContext?.sceneTitle || '当前场景'}`,
     );
     setElementProperty(
       _panelRefs.storyReplayButton,
       'textContent',
-      '↺ FULL STORY',
+      '↺ 完整故事',
     );
     if (!sceneDirected) {
       setElementProperty(_panelRefs.storyReplayButton, 'disabled', false);
       setElementAttribute(
         _panelRefs.storyReplayButton,
         'aria-label',
-        'Replay the full reconstruction',
+        '重播完整重建',
       );
     }
     const beatIndex = currentEvidenceIndex();
@@ -3047,18 +3064,18 @@ export function createBhoteKoshiEventLayer({
       _panelRefs.beatTitle,
       'textContent',
       sceneDirected
-        ? _sceneContext?.shotTitle || 'SCENE SHOT'
-        : observation?.shortTitle || observation?.title || 'EVIDENCE',
+        ? _sceneContext?.shotTitle || '场景镜头'
+        : observation?.shortTitle || observation?.title || '证据',
     );
     const sourceCount = Math.max(
       0,
       Math.floor(Number(observation?.corroboration?.sourceCount) || 0),
     );
     const beatMeta = [
-      String(observation?.phase || 'EVIDENCE').toUpperCase(),
-      'TIME UNVERIFIED',
-      sourceCount > 1 ? `${sourceCount} SOURCES` : '',
-      observation?.imageryCoverage === 'outside' ? 'OUTSIDE IMAGERY SWIPE' : '',
+      phaseLabel(observation?.phase),
+      '时间未核验',
+      sourceCount > 1 ? `${sourceCount} 个来源` : '',
+      observation?.imageryCoverage === 'outside' ? '影像对比范围外' : '',
     ]
       .filter(Boolean)
       .join(' / ');
@@ -3066,7 +3083,7 @@ export function createBhoteKoshiEventLayer({
       _panelRefs.beatMeta,
       'textContent',
       sceneDirected
-        ? `${String(_sceneContext?.sceneTitle || 'NEPAL FLOOD INCIDENT').toUpperCase()} / AUTHORED SHOT`
+        ? `${_sceneContext?.sceneTitle || '尼泊尔洪水事件'} / 编创镜头`
         : beatMeta,
     );
     setElementProperty(
@@ -3093,18 +3110,18 @@ export function createBhoteKoshiEventLayer({
       _panelRefs.playButton,
       'aria-label',
       sceneDirected
-        ? `Play ${_sceneContext?.shotTitle || 'current scene shot'}`
-        : 'Play reconstruction',
+        ? `播放${_sceneContext?.shotTitle || '当前场景镜头'}`
+        : '播放重建',
     );
     setElementAttribute(
       _panelRefs.previousButton,
       'aria-label',
-      sceneDirected ? 'Load previous scene shot' : 'Previous story beat',
+      sceneDirected ? '载入上一场景镜头' : '上一故事节拍',
     );
     setElementAttribute(
       _panelRefs.nextButton,
       'aria-label',
-      sceneDirected ? 'Load next scene shot' : 'Next story beat',
+      sceneDirected ? '载入下一场景镜头' : '下一故事节拍',
     );
     setElementProperty(
       _panelRefs.openSourceButton,
@@ -3154,7 +3171,7 @@ export function createBhoteKoshiEventLayer({
     if (_panelRefs?.caveat) {
       _panelRefs.caveat.textContent = imageryAvailable
         ? _event?.reconstruction?.caveat || ''
-        : 'SCHEMATIC CORRIDOR, NOT MODELED ARRIVAL TIME.';
+        : '示意廊道，并非模拟到达时间。';
     }
     if (_panelRefs?.imageryCloudNote)
       _panelRefs.imageryCloudNote.hidden = !imageryAvailable;
@@ -3694,7 +3711,7 @@ export function createBhoteKoshiEventLayer({
 
   return {
     id: BHOTE_KOSHI_LAYER_ID,
-    name: 'Bhote Koshi Flood',
+    name: '波泰科西溃决洪水',
     // Scene-owned component; retain registration without a standalone menu row.
     showInTogglePanel: false,
     icon: '🌊',
@@ -3717,7 +3734,7 @@ export function createBhoteKoshiEventLayer({
         count: _enabled ? 1 : 0,
         status: _enabled ? 'nominal' : 'idle',
         source: 'Vantor + GeoPera',
-        coverage: _enabled ? 'Rasuwa · 26 Aug 2026' : 'Event reconstruction',
+        coverage: _enabled ? '拉苏瓦 · 2026年8月26日' : '事件重建',
       };
     },
     getPlaybackState() {

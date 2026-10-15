@@ -276,7 +276,7 @@ try {
   await page.waitForFunction(() =>
     document
       .querySelector('[data-director-dialog] [role=status]')
-      ?.textContent.includes('invalid JSON'),
+      ?.textContent.includes('JSON 无效'),
   );
   check(
     'Invalid import reports failure and preserves the current project',

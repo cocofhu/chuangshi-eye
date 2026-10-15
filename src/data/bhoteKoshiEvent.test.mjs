@@ -690,9 +690,9 @@ test('Bhote Koshi evidence fallback stays media-first and source-linked without 
     assert.ok(missingPosterFrame);
     assert.ok(failedPosterFrame);
     for (const context of contexts) {
-      assert.ok(context.text.includes('NO PREVIEW'));
+      assert.ok(context.text.includes('无预览'));
       assert.ok(context.text.includes('TIMURE'));
-      assert.ok(context.text.includes('YOUTUBE SOURCE / OPEN'));
+      assert.ok(context.text.includes('YouTube 来源 / 打开'));
       assert.doesNotMatch(context.text.join(' '), /CAPTURE TIME|GEOLOCATED|public viewpoints/);
     }
     assert.match(timure.media.sourceUrl, /^https:\/\//);
@@ -1187,14 +1187,14 @@ test('Bhote Koshi scene beats preserve photoreal and never take camera ownership
     assert.ok(splitLine);
     assert.equal(splitLine.hidden, true);
     assert.equal(panel.querySelector('[data-role="imagery-comparison"]').hidden, true);
-    assert.match(panel.querySelector('[data-role="caveat"]').textContent, /SCHEMATIC CORRIDOR/i);
-    assert.doesNotMatch(panel.querySelector('[data-role="caveat"]').textContent, /historical/i);
+    assert.match(panel.querySelector('[data-role="caveat"]').textContent, /示意廊道/);
+    assert.doesNotMatch(panel.querySelector('[data-role="caveat"]').textContent, /历史参照/);
     assert.equal(panel.querySelector('[data-role="imagery-cloud-note"]').hidden, true);
     const sceneClock = panel.querySelector('[data-role="progress"]');
     assert.equal(sceneClock.hidden, false);
     assert.equal(sceneClock.disabled, false);
-    assert.equal(sceneClock.getAttribute('aria-label'), 'Seek Nepal scene clock');
-    assert.equal(panel.querySelector('[data-role="timeline-label"]').textContent, 'NEPAL SCENE CLOCK');
+    assert.equal(sceneClock.getAttribute('aria-label'), '拖动尼泊尔场景时钟');
+    assert.equal(panel.querySelector('[data-role="timeline-label"]').textContent, '尼泊尔场景时钟');
     assert.equal(panel.querySelector('[data-role="time"]').textContent, '~0:00 / 2:00');
     publishSceneClock({
       sceneId: 'nepal-scene',
@@ -1210,12 +1210,12 @@ test('Bhote Koshi scene beats preserve photoreal and never take camera ownership
     assert.equal(panel.querySelector('[data-role="time"]').textContent, '~0:30 / 2:00');
     assert.equal(panel.querySelector('[data-role="beat-index"]').textContent, '01 / 14');
     assert.equal(panel.querySelector('[data-role="beat-title"]').textContent, 'Global Incident Context');
-    assert.equal(panel.querySelector('[data-action="play"]').textContent, '▶ PLAY SHOT');
+    assert.equal(panel.querySelector('[data-action="play"]').textContent, '▶ 播放镜头');
     const playScene = panel.querySelector('[data-action="play-scene"]');
     assert.equal(playScene.hidden, false);
     assert.equal(playScene.disabled, false);
-    assert.equal(playScene.textContent, '▶ PLAY SCENE');
-    assert.equal(playScene.getAttribute('aria-label'), 'Continue Nepal Flood Incident from next shot');
+    assert.equal(playScene.textContent, '▶ 播放场景');
+    assert.equal(playScene.getAttribute('aria-label'), '从下一镜头继续Nepal Flood Incident');
     assert.equal(panel.querySelector('[data-action="cinematic"]').hidden, true);
     assert.equal(panel.querySelector('[data-action="cinematic"]').disabled, true);
     assert.equal(panel.querySelector('[data-action="corridor"]').hidden, false);
@@ -1223,7 +1223,7 @@ test('Bhote Koshi scene beats preserve photoreal and never take camera ownership
     assert.doesNotMatch(panel.innerHTML, /data-action="witness"|◎ WITNESS/);
     assert.match(panel.innerHTML, /data-action="open-source"/);
     const fullStory = panel.querySelector('[data-action="story-replay"]');
-    assert.equal(fullStory.textContent, '↺ FULL STORY');
+    assert.equal(fullStory.textContent, '↺ 完整故事');
     assert.equal(fullStory.hidden, true, 'PLAY SCENE owns authored scene playback');
     assert.equal(fullStory.disabled, true);
     assert.equal(panel.querySelector('[data-action="open-source"]').hidden, true);
@@ -1297,9 +1297,9 @@ test('Bhote Koshi scene beats preserve photoreal and never take camera ownership
     ]);
     const run = playScene.dispatch('click');
     assert.equal(playScene.disabled, true);
-    assert.equal(playScene.textContent, '… PLAYING SCENE');
+    assert.equal(playScene.textContent, '… 正在播放场景');
     assert.equal(panel.querySelector('[data-action="play"]').disabled, true);
-    assert.equal(panel.querySelector('[data-action="play"]').textContent, '▶ PLAY SHOT');
+    assert.equal(panel.querySelector('[data-action="play"]').textContent, '▶ 播放镜头');
     await playScene.dispatch('click');
     assert.deepEqual(sceneCalls.at(-1), {
       action: 'scene', sceneId: 'nepal-scene', shotId: 'global-context',
@@ -1308,7 +1308,7 @@ test('Bhote Koshi scene beats preserve photoreal and never take camera ownership
     finishScene({ started: true });
     await run;
     assert.equal(playScene.disabled, false);
-    assert.equal(playScene.textContent, '▶ PLAY SCENE');
+    assert.equal(playScene.textContent, '▶ 播放场景');
     sceneClock.value = '500';
     sceneClock.dispatch('input');
     assert.equal(panel.querySelector('[data-role="time"]').textContent, '~1:00 / 2:00');
@@ -1490,10 +1490,10 @@ test('Bhote Koshi event pack keeps observations separate from reconstruction', a
   assert.equal(event.imagery.after.observedAt, '2026-08-27');
   assert.equal(
     event.reconstruction.label,
-    'SCHEMATIC DOWNSTREAM PROGRESSION, NOT MODELED ARRIVAL TIME',
+    '示意下游推进，并非模拟到达时间',
   );
-  assert.match(event.imagery.before.label, /^2021 HISTORICAL REFERENCE/);
-  assert.match(event.imagery.after.label, /^2026 POST-EVENT/);
+  assert.match(event.imagery.before.label, /^2021 历史参照/);
+  assert.match(event.imagery.after.label, /^2026 灾后/);
   assert.equal(
     event.geolocationMap.sourceUrl,
     'https://x.com/geogeorgeology/status/2093632283442053371',
@@ -1501,13 +1501,13 @@ test('Bhote Koshi event pack keeps observations separate from reconstruction', a
   assert.ok(event.reconstruction.corridor.length >= 100);
   assert.equal(event.witnessAnchors.length, 1);
   assert.ok(Number.isFinite(event.witnessAnchors[0].elevationM));
-  assert.match(event.witnessAnchors[0].title, /SOURCE GEO/);
+  assert.match(event.witnessAnchors[0].title, /来源已地理确认/);
   assert.equal(event.viewpoints.witness.imagery, 'before');
   assert.equal(
-    event.fieldReports.filter((report) => report.status.includes('WORLD-PINNED')).length,
+    event.fieldReports.filter((report) => report.status.includes('已钉在地球上')).length,
     1,
   );
-  assert.ok(event.fieldReports.some((report) => report.status.includes('UNVERIFIED')));
+  assert.ok(event.fieldReports.some((report) => report.status.includes('未核验')));
   assert.equal(event.evidenceSpine.length, 16);
   assert.equal(new Set(event.evidenceSpine.map(({ id }) => id)).size, 16);
   assert.deepEqual(event.evidenceSpine.map(({ sequence }) => sequence),
@@ -2122,9 +2122,9 @@ test('Bhote Koshi beat controls keep cards, flood, camera, and panel on the one 
   try {
     await layer.enable(viewer, { origin: 'local-restore' });
     const panel = body.children.find((element) => element.tagName === 'aside');
-    assert.match(panel.innerHTML, /2021 HISTORICAL REFERENCE \/ 2026 POST-EVENT/);
-    assert.match(panel.innerHTML, /RECONSTRUCTION CLOCK/);
-    assert.match(panel.innerHTML, /OPEN PUBLIC MAP/);
+    assert.match(panel.innerHTML, /2021 历史参照 \/ 2026 灾后/);
+    assert.match(panel.innerHTML, /重建时钟/);
+    assert.match(panel.innerHTML, /打开公开地图/);
     const entries = publications[0].entries;
     const cards = entries.filter((entry) => entry.variant === 'thumbnail');
     const breadcrumbs = entries.filter((entry) => entry.variant === 'label');
@@ -2149,7 +2149,7 @@ test('Bhote Koshi beat controls keep cards, flood, camera, and panel on the one 
     assert.equal(breadcrumbs.filter((entry) => entry.position()).length, 4);
     assert.equal(
       panel.querySelector('[data-role="beat-meta"]').textContent,
-      'PROPAGATION / TIME UNVERIFIED / 5 SOURCES',
+      '传播 / 时间未核验 / 5 个来源',
     );
     const flood = viewer._test.dataSources[0].entities.getById('bhote-koshi-flood-core');
     assert.ok(flood.polyline.positions.getValue().length > 1);
@@ -2422,7 +2422,7 @@ test('Bhote Koshi replay restores cinematic ownership unless the operator releas
     assert.equal(viewer._test.cameraTransforms.length, 1);
     assert.deepEqual(releases, ['bhote-koshi-playback']);
     const play = panel.querySelector('[data-action="play"]');
-    assert.equal(play.textContent, '↺ REPLAY CINEMATIC');
+    assert.equal(play.textContent, '↺ 重播电影');
 
     play.dispatch('click');
     assert.equal(layer.getCinematicState().active, true);

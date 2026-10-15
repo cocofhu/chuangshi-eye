@@ -17,20 +17,20 @@
     "before": {
       "path": "pre.webp",
       "observedAt": "2021-10-16",
-      "label": "2021 HISTORICAL REFERENCE · 16 OCT 2021",
+      "label": "2021 历史参照 · 2021年10月16日",
       "source": "Vantor WorldView-2 Open Data"
     },
     "after": {
       "path": "post.webp",
       "observedAt": "2026-08-27",
-      "label": "2026 POST-EVENT · 27 AUG 2026",
+      "label": "2026 灾后 · 2026年8月27日",
       "source": "Vantor WorldView-3 Open Data"
     }
   },
   "reconstruction": {
     "elapsedSeconds": 4170,
-    "label": "SCHEMATIC DOWNSTREAM PROGRESSION, NOT MODELED ARRIVAL TIME",
-    "caveat": "2021 historical reference versus 2026 post-event imagery; changes are cumulative and include the July 2025 Rasuwagadhi flood. Schematic downstream progression, not modeled arrival time; not an official hazard model.",
+    "label": "示意下游推进，并非模拟到达时间",
+    "caveat": "2021 年历史参照对照 2026 年灾后影像；变化是累积的，包含 2025 年 7 月拉苏瓦加迪洪水。示意下游推进，并非模拟到达时间，也不是官方灾害模型。",
     "corridor": [
       {
         "chainageM": 23705,
@@ -911,10 +911,10 @@
   "witnessAnchors": [
     {
       "id": "rasuwagadhi-geoconfirmed",
-      "title": "RASUWAGADHI · SOURCE GEOCONFIRMED",
+      "title": "拉苏瓦加迪 · 来源已地理确认",
       "details": [
         "28.279942 N · 85.377725 E",
-        "WITNESS VIDEO · OPEN ORIGINAL"
+        "目击视频 · 打开原片"
       ],
       "lat": 28.279942,
       "lon": 85.377725,
@@ -925,23 +925,23 @@
   ],
   "fieldReports": [
     {
-      "label": "Rasuwagadhi witness video",
-      "status": "SOURCE GEOCONFIRMED · WORLD-PINNED",
+      "label": "拉苏瓦加迪目击视频",
+      "status": "来源已地理确认 · 已钉在地球上",
       "url": "https://x.com/Indowatchosint/status/2092640554568007958"
     },
     {
-      "label": "Bhote Koshi valley footage · Nirmal Prasai",
-      "status": "SOURCE CREDITED · LOCATION UNRESOLVED",
+      "label": "波泰科西河谷影像 · Nirmal Prasai",
+      "status": "来源已署名 · 位置未确定",
       "url": "https://x.com/GlobalUpdates24/status/2092602195812470980"
     },
     {
-      "label": "Flood footage · Surajit",
-      "status": "SOURCE CREDITED · LOCATION UNRESOLVED",
+      "label": "洪水影像 · Surajit",
+      "status": "来源已署名 · 位置未确定",
       "url": "https://x.com/BNODesk/status/2092568283098575057"
     },
     {
-      "label": "Compilation and casualty claims",
-      "status": "REFERENCE ONLY · CLAIMS UNVERIFIED",
+      "label": "汇编与伤亡说法",
+      "status": "仅供参照 · 说法未核验",
       "url": "https://x.com/Emeka2026/status/2093196357242662947"
     }
   ],

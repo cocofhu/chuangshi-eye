@@ -22,17 +22,17 @@ export const fail = (path, reason) => {
 };
 export const object = (value, path) => {
   if (!value || typeof value !== 'object' || Array.isArray(value))
-    fail(path, 'expected an object');
+    fail(path, '应为对象');
 };
 export function fields(value, path, allowed) {
   object(value, path);
   for (const key of Object.keys(value)) {
-    if (!allowed.includes(key)) fail(`${path}.${key}`, 'unsupported field');
+    if (!allowed.includes(key)) fail(`${path}.${key}`, '不支持的字段');
   }
 }
 export function string(value, path, max = 256) {
   if (typeof value !== 'string' || !value.trim() || value.length > max)
-    fail(path, `expected nonempty text, at most ${max} characters`);
+    fail(path, `需要非空文本，最多 ${max} 个字符`);
 }
 export function number(value, path, min, max, legacy) {
   const numeric =
@@ -43,14 +43,14 @@ export function number(value, path, min, max, legacy) {
     numeric < min ||
     numeric > max
   )
-    fail(path, `expected a number from ${min} to ${max}`);
+    fail(path, `需要 ${min} 到 ${max} 之间的数字`);
 }
 export function optional(value, key, path, check) {
   if (Object.hasOwn(value, key)) check(value[key], `${path}.${key}`);
 }
 export function array(value, path, max = SCENE_DOCUMENT_LIMITS.collection) {
   if (!Array.isArray(value) || value.length > max)
-    fail(path, `expected an array of at most ${max} entries`);
+    fail(path, `需要最多 ${max} 项的数组`);
 }
 export function ids(value, path) {
   array(value, path);
@@ -59,7 +59,7 @@ export function ids(value, path) {
 export function uniqueId(value, path, seen) {
   if (!Object.hasOwn(value, 'id')) return; // Legacy omissions receive an ID once during migration.
   string(value.id, `${path}.id`);
-  if (seen.has(value.id)) fail(`${path}.id`, 'duplicate ID');
+  if (seen.has(value.id)) fail(`${path}.id`, '重复的 ID');
   seen.add(value.id);
 }
 export function jsonTree(value, path, budget, depth = 0) {
@@ -67,28 +67,28 @@ export function jsonTree(value, path, budget, depth = 0) {
     ++budget.nodes > SCENE_DOCUMENT_LIMITS.nodes ||
     depth > SCENE_DOCUMENT_LIMITS.depth
   )
-    fail(path, 'project complexity limit exceeded');
+    fail(path, '项目复杂度超限');
   if (value === null || typeof value === 'boolean') return;
   if (typeof value === 'string') {
     if (value.length > SCENE_DOCUMENT_LIMITS.string)
-      fail(path, 'text is too long');
+      fail(path, '文本过长');
     return;
   }
   if (typeof value === 'number' && Number.isFinite(value)) return;
-  if (!value || typeof value !== 'object') fail(path, 'expected a JSON value');
+  if (!value || typeof value !== 'object') fail(path, '需要 JSON 值');
   if (
     Object.getPrototypeOf(value) !== Object.prototype &&
     !Array.isArray(value) &&
     Object.getPrototypeOf(value) !== null
   )
-    fail(path, 'expected a JSON object');
+    fail(path, '需要 JSON 对象');
   const entries = Object.entries(value);
   if (entries.length > SCENE_DOCUMENT_LIMITS.collection)
-    fail(path, 'too many entries');
+    fail(path, '条目过多');
   for (const [key, child] of entries) {
     if (['__proto__', 'constructor', 'prototype'].includes(key))
-      fail(path, 'unsafe object key');
-    if (key.length > 256) fail(path, 'field name is too long');
+      fail(path, '不安全的对象键');
+    if (key.length > 256) fail(path, '字段名过长');
     jsonTree(child, `${path}.${key}`, budget, depth + 1);
   }
 }

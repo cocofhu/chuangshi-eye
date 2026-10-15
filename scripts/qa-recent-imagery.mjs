@@ -428,7 +428,7 @@ try {
     'the body is a rail scroller holding the readout, under a RECENT IMAGERY header',
     railPlacement.scroller &&
       railPlacement.readoutInBody &&
-      railPlacement.title === 'RECENT IMAGERY',
+      railPlacement.title === '近期影像',
     JSON.stringify(railPlacement),
   );
   const listOf = (selector, key) =>
@@ -471,7 +471,7 @@ try {
         document.querySelector('#recent-imagery-panel [data-action-id="clear"]')
           ?.disabled,
     )) === true &&
-      current.hintText === 'Select a box or use the view' &&
+      current.hintText === '框选，或使用当前视图' &&
       current.mode === 'image',
     `${current.hintText} ${current.mode}`,
   );
@@ -502,7 +502,7 @@ try {
   );
   check(
     'the header count reads the day count',
-    /^\d+ DAYS?$/.test(countText),
+    /^\d+ 天$/.test(countText),
     countText,
   );
   const startHere = await page.evaluate(() =>
@@ -529,7 +529,7 @@ try {
   current = await state();
   check(
     'row A reads the previewed day, row B reads the basemap',
-    /^IMAGE.+ · preview×$/.test(current.rowA) && current.rowB === 'VSBasemap×',
+    /^影像.+ · 预览×$/.test(current.rowA) && current.rowB === '对比底图×',
     `${current.rowA} | ${current.rowB}`,
   );
   onPhotorealOnly(
@@ -539,7 +539,7 @@ try {
   const esriNote = await until(
     () =>
       document.getElementById('ri-notice-text')?.textContent ===
-      'Imagery on Esri · Google 3D returns when cleared',
+      '影像在 Esri · 清除后恢复 Google 3D',
     undefined,
     5_000,
   );
@@ -641,7 +641,7 @@ try {
       )?.textContent,
     targetKey,
   );
-  check('the previewed card wears PREVIEW', flag === 'PREVIEW', flag);
+  check('the previewed card wears PREVIEW', flag === '预览', flag);
 
   // ── IMAGE: S pins the focused day; focus no longer moves the map ────────
   await pressOnStrip('s');
@@ -662,7 +662,7 @@ try {
   );
   check(
     'row A reads the pinned day without "preview"',
-    /^IMAGE.+×$/.test(current.rowA) && !/preview/.test(current.rowA),
+    /^影像.+×$/.test(current.rowA) && !/预览/.test(current.rowA),
     current.rowA,
   );
   await checkLayout('pinned');
@@ -698,7 +698,7 @@ try {
   check(
     'VS BASEMAP shows the divider, labelled IMAGE / BASEMAP',
     basemapSwipe &&
-      JSON.stringify(current.splitLabels) === '["IMAGE","BASEMAP"]',
+      JSON.stringify(current.splitLabels) === '["影像","底图"]',
     JSON.stringify(current.splitLabels),
   );
   check(
@@ -715,7 +715,7 @@ try {
   );
   check(
     'row B reads the basemap, lit',
-    current.rowB === 'VSBasemap×' &&
+    current.rowB === '对比底图×' &&
       (await page.evaluate(() =>
         document.getElementById('ri-slot-b').classList.contains('lit'),
       )),
@@ -728,7 +728,7 @@ try {
   );
   check(
     'the hint says SWAP trades the sides (VS BASEMAP)',
-    current.hintText === 'Drag the divider · SWAP trades sides',
+    current.hintText === '拖动分隔线 · 对调两侧',
     current.hintText,
   );
   await checkLayout('vs basemap');
@@ -745,7 +745,7 @@ try {
       current.pinA === targetKey &&
       !current.splitVisible &&
       /^A.+×$/.test(current.rowA) &&
-      current.rowB === 'BNot set×',
+      current.rowB === 'B未设置×',
     `${current.rowA} | ${current.rowB}`,
   );
   const chipLabels = await page.evaluate(
@@ -810,7 +810,7 @@ try {
   );
   check(
     'row B reads the pinned day',
-    /^B.+×$/.test(current.rowB) && !/Not set/.test(current.rowB),
+    /^B.+×$/.test(current.rowB) && !/未设置/.test(current.rowB),
     current.rowB,
   );
   onPhotorealOnly(
@@ -820,7 +820,7 @@ try {
   );
   check(
     'the hint says SWAP trades the sides (A / B)',
-    current.hintText === 'Drag the divider · SWAP trades sides',
+    current.hintText === '拖动分隔线 · 对调两侧',
     current.hintText,
   );
   await checkLayout('A / B, both pinned');
@@ -975,7 +975,7 @@ try {
   await clickAction('use-view');
   const refused = await until(
     () =>
-      /^View is/.test(
+      /^视野宽/.test(
         document.getElementById('ri-notice-text')?.textContent || '',
       ),
     undefined,
@@ -985,12 +985,12 @@ try {
   check(
     `an oversized USE VIEW (${Math.round(refusalWidth)} km) is refused in the notice line`,
     refused &&
-      /^View is [\d,]+ km wide · limit 1,000 km$/.test(current.noticeText),
+      /^视野宽 [\d,]+ 公里 · 上限 1,000 公里$/.test(current.noticeText),
     current.noticeText,
   );
   check(
     'the hint says to zoom in or draw a smaller box',
-    current.hintText === 'Zoom in or draw a smaller box',
+    current.hintText === '拉近，或画一个更小的框',
     current.hintText,
   );
   check('the refusal keeps the box', JSON.stringify(current.box) === boxBefore);
@@ -1092,7 +1092,7 @@ try {
   current = await state();
   check(
     'CLEAR empties the box, the pins and the preview',
-    clearedAll && current.noticeText === 'Box and images cleared',
+    clearedAll && current.noticeText === '选框和影像已清除',
     `box=${JSON.stringify(current.box)} owned=${current.diagnostics.ownedCount} notice=${current.noticeText}`,
   );
   onPhotorealOnly('CLEAR hands Google 3D back', await backOnPhotoreal());
@@ -1155,7 +1155,7 @@ try {
     );
     check(
       'the notice says the imagery stays on Esri until CLEAR, and fits',
-      current.noticeText === 'Imagery stays on Esri · CLEAR to use Google 3D' &&
+      current.noticeText === '影像仍在 Esri · 清除后使用 Google 3D' &&
         (await page.evaluate(() => {
           const text = document.getElementById('ri-notice-text');
           return text.scrollWidth <= text.clientWidth;

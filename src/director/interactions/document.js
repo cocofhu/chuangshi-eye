@@ -29,7 +29,7 @@ export function validateSceneInteractions(scene, path) {
           packs.get(item.target.packId)?.format !== 'geojson' ||
           !shot.dataPackIds?.includes(item.target.packId)
         )
-          fail(field, 'target must belong to a selected GeoJSON pack');
+          fail(field, '目标必须属于已选的 GeoJSON 素材包');
         const a = item.action;
         const specs = {
           card: ['text', 'url'],
@@ -38,7 +38,7 @@ export function validateSceneInteractions(scene, path) {
           layer: ['layerId', 'enabled'],
         };
         if (!a || !Object.hasOwn(specs, a.type))
-          fail(field, 'unsupported action');
+          fail(field, '不支持的操作');
         string(a.type, `${field}.action.type`);
         fields(a, `${field}.action`, ['type', ...specs[a.type]]);
         const reference = {
@@ -55,7 +55,7 @@ export function validateSceneInteractions(scene, path) {
             try {
               parsed = new URL(url);
             } catch {
-              fail(at, 'expected HTTPS source URL');
+              fail(at, '需要 HTTPS 来源网址');
             }
             if (
               parsed.protocol !== 'https:' ||
@@ -66,14 +66,14 @@ export function validateSceneInteractions(scene, path) {
             )
               fail(
                 at,
-                'expected HTTPS source URL without credentials, query or fragment',
+                '需要不含凭据、查询或片段的 HTTPS 来源网址',
               );
           });
         } else if (a.type === 'focus' && !anchors.has(a.anchorId))
-          fail(field, 'unknown anchor');
+          fail(field, '未知锚点');
         else if (a.type === 'shot') {
           const target = shots.get(a.shotId);
-          if (!target) fail(field, 'unknown shot');
+          if (!target) fail(field, '未知镜头');
           // A transition must restore every layer this shot can change.
           for (const entry of items)
             if (
@@ -82,13 +82,13 @@ export function validateSceneInteractions(scene, path) {
             )
               fail(
                 field,
-                'target shot must declare interactive layer baseline',
+                '目标镜头必须声明可交互图层基线',
               );
         } else if (a.type === 'layer') {
           if (!Object.hasOwn(shot.layers || {}, a.layerId))
-            fail(field, 'layer must have an explicit shot baseline');
+            fail(field, '图层必须有明确的镜头基线');
           if (typeof a.enabled !== 'boolean')
-            fail(field, 'expected enabled boolean');
+            fail(field, '需要启用状态的布尔值');
         }
       });
     });

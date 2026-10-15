@@ -105,7 +105,7 @@ test('invalid shapes, versions, unknown fields and unsafe keys fail with field p
   );
   project.scenes[0].shots[0].camera.lat = 1;
   project.scenes[0].shots.push(structuredClone(project.scenes[0].shots[0]));
-  assert.throws(() => validateSceneDocument(project), /duplicate ID/);
+  assert.throws(() => validateSceneDocument(project), /重复的 ID/);
 });
 test('document byte, nesting, collection, finite-number and string bounds are enforced', () => {
   assert.throws(
@@ -124,11 +124,11 @@ test('document byte, nesting, collection, finite-number and string bounds are en
   );
   const project = fixture();
   project.scenes[0].shots[0].camera.lat = Infinity;
-  assert.throws(() => validateSceneDocument(project), /JSON value/);
+  assert.throws(() => validateSceneDocument(project), /JSON 值/);
   project.scenes[0].shots[0].camera.lat = 1;
   let nested = project.scenes[0].shots[0].layers.traffic.params;
   for (let i = 0; i < 30; i++) nested = nested.child = {};
-  assert.throws(() => validateSceneDocument(project), /complexity/);
+  assert.throws(() => validateSceneDocument(project), /复杂度/);
   assert.throws(
     () => validateSceneDocument({ scenes: Array(257).fill({ shots: [] }) }),
     /256/,

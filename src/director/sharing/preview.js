@@ -16,11 +16,11 @@ export function describeSceneShare(
       status:
         pack.source.adapter === BUNDLE_SOURCE
           ? assets.has(pack.source.path)
-            ? 'Included in bundle'
-            : 'Missing bundle file — reimport its bundle'
+            ? '已包含在分享包中'
+            : '缺少分享包文件 — 请重新导入分享包'
           : sources.has(pack.source.adapter)
-            ? 'Source configured; file checked when loaded'
-            : 'Source unavailable',
+            ? '来源已配置；加载时再核对文件'
+            : '来源不可用',
     })),
   );
   return {

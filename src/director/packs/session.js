@@ -86,7 +86,7 @@ export function createDataPackSession({
       active = run;
       signal?.addEventListener('abort', cancel, { once: true });
       run.timer = setTimeout(
-        () => controller.abort(new Error('Asset load timed out')),
+        () => controller.abort(new Error('素材加载超时')),
         timeoutMs,
       );
       let total = 0;
@@ -95,7 +95,7 @@ export function createDataPackSession({
           const source = sourceMap.get(pack.source.adapter),
             adapter = adapterMap.get(pack.format);
           if (!source || !adapter)
-            throw new Error('Data pack adapter unavailable');
+            throw new Error('素材包适配器不可用');
           const asset = await untilAbort(
             source({
               path: pack.source.path,
@@ -112,10 +112,10 @@ export function createDataPackSession({
             bytes.length > PACK_LIMITS.bytes ||
             (pack.byteLength && bytes.length !== pack.byteLength)
           )
-            throw new Error('Asset byte length invalid');
+            throw new Error('素材字节长度无效');
           total += bytes.length;
           if (total > PACK_LIMITS.totalBytes)
-            throw new Error('Shot assets exceed byte limit');
+            throw new Error('镜头素材超过字节上限');
           if (pack.sha256) {
             const digest = await untilAbort(
               crypto.subtle.digest('SHA-256', bytes),
@@ -125,7 +125,7 @@ export function createDataPackSession({
               b.toString(16).padStart(2, '0'),
             ).join('');
             if (hex !== pack.sha256)
-              throw new Error('Asset integrity mismatch');
+              throw new Error('素材完整性不匹配');
           }
           const handle = await untilAbort(
             adapter({ pack, asset, anchors, signal: controller.signal }),
@@ -151,7 +151,7 @@ export function createDataPackSession({
         if (superseded) return false;
         // Source errors may include URLs; only stable messages reach the UI.
         throw new Error(
-          'Data pack could not load: check its source, format, size or integrity',
+          '素材包无法加载：请检查来源、格式、大小或完整性',
         );
       }
     },

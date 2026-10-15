@@ -46,10 +46,10 @@ export const SPLIT_PUBLISH_MS = 400;
 /** The three modes, in share-link order (`m` = index). */
 export const MODES = Object.freeze(['image', 'basemap', 'ab']);
 
-const COMPARISON_IN_USE = 'Comparison in use by another scene';
-const COMPARISON_UNAVAILABLE = 'Esri map unavailable · no swipe';
-const COMPARISON_NEEDS_GLOBE = 'Swipe needs a globe map';
-const ESRI_KEPT = 'Imagery stays on Esri · CLEAR to use Google 3D';
+const COMPARISON_IN_USE = '对比正被其他场景使用';
+const COMPARISON_UNAVAILABLE = 'Esri 地图不可用 · 无法对比';
+const COMPARISON_NEEDS_GLOBE = '对比需要地球地图';
+const ESRI_KEPT = '影像仍在 Esri · 清除后使用 Google 3D';
 /** ZOOM IN's flight time, in seconds. */
 const ZOOM_FIT_SECONDS = 1.2;
 const DEFAULT_SPLIT = 0.5;
@@ -630,7 +630,7 @@ export function createRecentImageryLayer({
     } catch (error) {
       if (abort.signal.aborted) return;
       resetCatalog();
-      _catalogError = error?.message || 'Imagery catalog unavailable';
+      _catalogError = error?.message || '影像目录不可用';
     } finally {
       if (_searchAbort === abort) {
         _searchAbort = null;
@@ -748,15 +748,15 @@ export function createRecentImageryLayer({
 
   function notes() {
     const out = [];
-    if (_truncated) out.push('Catalog truncated · a newer clear day may exist');
+    if (_truncated) out.push('目录已截断 · 可能还有更新的晴日');
     for (const error of _catalogErrors) {
       const label = PRODUCTS[error.product]?.label || error.product;
-      out.push(`${label} catalog unavailable · ${error.message}`);
+      out.push(`${label} 目录不可用 · ${error.message}`);
     }
     const today = utcDay(now());
     const viirsToday = candidateFor(`VIIRS:${today}`);
     if (viirsToday?.availability === 'unknown' && _sources.viirs)
-      out.push('Daily overview for today may still be empty until the pass');
+      out.push('今日日概览在过境前可能仍为空');
     return out;
   }
 
@@ -1227,7 +1227,7 @@ export function createRecentImageryLayer({
         _alpha = 1;
         for (const slotId of SLOT_IDS) renderer.setAlpha(slotId, 1);
       }
-      _notice = 'Box and images cleared';
+      _notice = '选框和影像已清除';
       syncRender();
       publish([...BOX_EDGES, 'a', 'b', 'split']);
       notify();

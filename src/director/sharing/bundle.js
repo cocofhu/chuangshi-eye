@@ -42,7 +42,7 @@ function decode(value) {
     /[^A-Za-z0-9+/=]/.test(value) ||
     (value.includes('=') && !/^[A-Za-z0-9+/]+={1,2}$/.test(value))
   )
-    fail('assets', 'invalid or oversized base64 asset');
+    fail('assets', 'base64 素材无效或过大');
   return Uint8Array.from(atob(value), (c) => c.charCodeAt(0));
 }
 function checkBytes(bytes, total) {
@@ -52,10 +52,10 @@ function checkBytes(bytes, total) {
     bytes.length > PACK_LIMITS.bytes ||
     total > PACK_LIMITS.totalBytes
   )
-    fail('assets', 'asset byte limit exceeded');
+    fail('assets', '素材超过字节上限');
 }
 function checkMime(mimeType) {
-  if (!MIME.has(mimeType)) fail('assets', 'unsupported media type');
+  if (!MIME.has(mimeType)) fail('assets', '不支持的媒体类型');
 }
 
 /** Read inert scene JSON or a bounded asset bundle, verifying bytes before admission. */
@@ -66,17 +66,17 @@ export async function parseSceneShare(text, { signal } = {}) {
     text.length > SHARE_LIMITS.bytes ||
     new TextEncoder().encode(text).length > SHARE_LIMITS.bytes
   )
-    fail('$', 'share exceeds 50 MiB');
+    fail('$', '分享超过 50 MiB');
   let input;
   try {
     input = JSON.parse(text);
   } catch {
-    fail('$', 'invalid JSON');
+    fail('$', 'JSON 无效');
   }
   if (input?.format !== 'gev-scene-bundle')
     return { project: parseSceneDocument(text), assets: new Map() };
   fields(input, '$', ['format', 'version', 'project', 'assets']);
-  if (input.version !== 1) fail('version', 'unsupported bundle version');
+  if (input.version !== 1) fail('version', '不支持的分享包版本');
   const project = parseSceneDocument(JSON.stringify(input.project));
   array(input.assets, 'assets', SHARE_LIMITS.assets);
   const assets = new Map();
@@ -86,19 +86,19 @@ export async function parseSceneShare(text, { signal } = {}) {
     fields(entry, 'assets', ['path', 'mimeType', 'base64', 'sha256']);
     validateAssetPath(entry.path);
     checkMime(entry.mimeType);
-    if (assets.has(entry.path)) fail('assets', 'duplicate asset path');
+    if (assets.has(entry.path)) fail('assets', '重复的素材路径');
     const bytes = decode(entry.base64);
     total += bytes.length;
     checkBytes(bytes, total);
     const hash = await digest(bytes);
     checkAbort(signal);
-    if (entry.sha256 !== hash) fail('assets', 'asset integrity mismatch');
+    if (entry.sha256 !== hash) fail('assets', '素材完整性不匹配');
     assets.set(entry.path, { bytes, mimeType: entry.mimeType, sha256: hash });
   }
   const used = new Set();
   for (const pack of packsOf(project)) {
     if (pack.source.adapter !== BUNDLE_SOURCE)
-      fail('project', 'bundle must include every declared pack');
+      fail('project', '分享包必须包含每个已声明的素材包');
     const asset = assets.get(pack.source.path);
     used.add(pack.source.path);
     if (
@@ -106,9 +106,9 @@ export async function parseSceneShare(text, { signal } = {}) {
       pack.byteLength !== asset.bytes.length ||
       pack.sha256 !== asset.sha256
     )
-      fail('project', 'missing or mismatched bundle asset');
+      fail('project', '分享包素材缺失或不匹配');
   }
-  if (used.size !== assets.size) fail('assets', 'unreferenced bundle asset');
+  if (used.size !== assets.size) fail('assets', '存在未被引用的分享包素材');
   return { project, assets };
 }
 
@@ -121,8 +121,8 @@ export async function readSceneShare(file, options) {
     fail(
       '$',
       limit === SHARE_LIMITS.bytes
-        ? 'share exceeds 50 MiB'
-        : 'file exceeds 5 MiB',
+        ? '分享超过 50 MiB'
+        : '文件超过 5 MiB',
     );
   checkAbort(options?.signal);
   const text = await withShareSignal(file.text(), options?.signal);
@@ -146,13 +146,13 @@ export async function createSceneBundle(
     let entry = known.get(key);
     if (!entry) {
       if (assets.length >= SHARE_LIMITS.assets)
-        fail('assets', 'too many bundled assets');
+        fail('assets', '打包素材过多');
       const asset = await withShareSignal(
         resolveAsset(pack, { signal }),
         signal,
       );
       checkAbort(signal);
-      if (!asset) fail('assets', 'select a file for every declared data pack');
+      if (!asset) fail('assets', '请为每个已声明的素材包选择文件');
       const bytes = asset.bytes;
       total += bytes?.length || 0;
       checkBytes(bytes, total);
@@ -163,7 +163,7 @@ export async function createSceneBundle(
         (pack.byteLength && pack.byteLength !== bytes.length) ||
         (pack.sha256 && pack.sha256 !== sha256)
       )
-        fail('assets', 'selected file does not match declared integrity');
+        fail('assets', '所选文件与声明的完整性不符');
       const path = `files/${assets.length}-${pack.source.path.split('/').at(-1).slice(0, 160)}`;
       entry = {
         path,
@@ -178,7 +178,7 @@ export async function createSceneBundle(
       (pack.byteLength && pack.byteLength !== entry.byteLength) ||
       (pack.sha256 && pack.sha256 !== entry.sha256)
     )
-      fail('assets', 'conflicting shared asset integrity');
+      fail('assets', '共享素材的完整性冲突');
     pack.source = { adapter: BUNDLE_SOURCE, path: entry.path };
     pack.byteLength = entry.byteLength;
     pack.sha256 = entry.sha256;
@@ -190,7 +190,7 @@ export async function createSceneBundle(
     assets: assets.map(({ byteLength, ...entry }) => entry),
   });
   if (new TextEncoder().encode(text).length > SHARE_LIMITS.bytes)
-    fail('$', 'share exceeds 50 MiB');
+    fail('$', '分享超过 50 MiB');
   return text;
 }
 
@@ -214,7 +214,7 @@ export function createBundleAssets() {
       validateAssetPath(path);
       const asset = assets.get(path);
       if (!asset || asset.bytes.length > maxBytes)
-        throw new Error('Bundle asset unavailable — reimport the bundle');
+        throw new Error('分享包素材不可用 — 请重新导入分享包');
       return { bytes: asset.bytes.slice(), mimeType: asset.mimeType };
     },
   };
