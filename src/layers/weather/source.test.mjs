@@ -85,7 +85,7 @@ test('weather tile URLs carry only supported optional pixel sizes', () => {
     assert.equal(url.searchParams.get('time'), time);
   }
   for (const size of [0, 257, 2048, '1024', null])
-    assert.throws(() => weatherTileUrl('radar', time, { size }), /tile size/);
+    assert.throws(() => weatherTileUrl('radar', time, { size }), /瓦片尺寸/);
 });
 
 test('whole-extent image URLs are same origin and omit the default largest size', () => {
@@ -121,13 +121,13 @@ test('whole-extent image URLs are same origin and omit the default largest size'
     { width: 512, height: 256 },
     { width: '1024', height: 512 },
   ])
-    assert.throws(() => weatherImageUrl('lightning', time, size), /size/);
+    assert.throws(() => weatherImageUrl('lightning', time, size), /尺寸/);
   assert.throws(
     () => weatherImageUrl('clouds', time, { width: 4096, height: 2048 }),
-    /size/,
+    /尺寸/,
   );
-  assert.throws(() => weatherImageUrl('other', time), /frame/);
-  assert.throws(() => weatherImageUrl('radar', 'latest'), /frame/);
+  assert.throws(() => weatherImageUrl('other', time), /帧/);
+  assert.throws(() => weatherImageUrl('radar', 'latest'), /帧/);
 });
 
 test('detail-window image URLs carry the bbox and omit the default detail size', () => {
@@ -156,10 +156,10 @@ test('detail-window image URLs carry the bbox and omit the default detail size',
     { ...box, east: Number.NaN },
     { west: -102, south: 34, east: -96 },
   ])
-    assert.throws(() => weatherImageUrl('radar', time, {}, bad), /window/);
+    assert.throws(() => weatherImageUrl('radar', time, {}, bad), /窗口/);
   assert.throws(
     () => weatherImageUrl('radar', time, { width: 8192, height: 4096 }, box),
-    /size/,
+    /尺寸/,
   );
 });
 

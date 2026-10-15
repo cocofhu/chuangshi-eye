@@ -54,7 +54,7 @@ test('switching models clears old data and ignores an abort-insensitive late sou
   assert.equal(calls.find(([name]) => name === 'setField')[1].model, 'ifs');
   assert.match(
     layer.getRowControls().info,
-    /IFS forecast[\s\S]*Valid: 2026-09-14 18:00 UTC[\s\S]*Issued: 2026-09-14 12:00 UTC/,
+    /IFS 预报[\s\S]*有效 2026-09-14 18:00 UTC[\s\S]*发布 2026-09-14 12:00 UTC/,
   );
   layer.destroy();
 });
@@ -131,7 +131,7 @@ test('local appearance and units reuse the loaded field; optional scalar request
   assert.equal(requests.length, 2);
   assert.equal(requests[1].overlay, 'pressure');
   assert.equal(layer.getStats().overlay, 'pressure');
-  assert.ok(layer.getRowControls().info.includes('(hPa)'));
+  assert.ok(layer.getRowControls().info.includes('（hPa）'));
   assert.equal(layer.getRowControls().legend.at(-1).label, '1050+');
   layer.destroy();
 });

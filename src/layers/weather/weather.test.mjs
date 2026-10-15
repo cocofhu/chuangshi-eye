@@ -1706,7 +1706,7 @@ test('one row steps every registered observation; missing frames hide and latest
   radar.stages.at(-1).finish();
   satellite.stages.at(-1).finish();
   await flush();
-  assert.match(satellite.layer.getRowControls().summary.detail, /synced/);
+  assert.match(satellite.layer.getRowControls().summary.detail, /已同步/);
   assert.ok(satelliteChanges > 0);
   assert.deepEqual(transport(radar), []);
   assert.deepEqual(transport(satellite), []);
@@ -1718,7 +1718,7 @@ test('one row steps every registered observation; missing frames hide and latest
   assert.equal(satellite.layer.getDiagnostics().hidden, true);
   assert.match(
     satellite.layer.getRowControls().summary.status,
-    /No frame within 30 min of 09-15 20:00 UTC/,
+    /09-15 20:00 UTC 前后 30 分钟内无帧/,
   );
   radar.layer.setParams({ step: 1 });
   await flush();
@@ -1843,7 +1843,7 @@ test('satellite global selection uses the three-hour gap and preserves the share
   await flush();
   assert.equal(clock.getState().target, times[0]);
   assert.equal(h.layer.getDiagnostics().hidden, false);
-  assert.match(h.layer.getRowControls().summary.detail, /18:00 UTC.*nearest/);
+  assert.match(h.layer.getRowControls().summary.detail, /18:00 UTC.*最近/);
   const params = h.layer.getParams();
   assert.equal(params.product, 'clouds');
   assert.equal(params.target, undefined);
