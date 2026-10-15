@@ -189,7 +189,7 @@ export function createIngestion({ state, parts, source }) {
       // A stale or aborted load reports nothing: its failure belongs to a
       // lifecycle the user already left.
       if (owns() && error?.name !== 'AbortError') {
-        state._error = error?.message || 'TeleGeography load failed';
+        state._error = error?.message || 'TeleGeography 数据加载失败';
         console.warn(
           '[Data:telegeography-submarine-cables]',
           state._error,

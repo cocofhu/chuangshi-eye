@@ -1925,11 +1925,11 @@ async function main() {
       return { freshLabel, staleLabel, recoveredLabel };
     });
     record('stale-readout: tracked label carries STALE cue during grace',
-      !!staleCheck.staleLabel && staleCheck.staleLabel.includes('STALE')
-        && !!staleCheck.freshLabel && !staleCheck.freshLabel.includes('STALE'),
+      !!staleCheck.staleLabel && staleCheck.staleLabel.includes('过期')
+        && !!staleCheck.freshLabel && !staleCheck.freshLabel.includes('过期'),
       `fresh="${staleCheck.freshLabel && staleCheck.freshLabel.split('\n')[0]}" stale="${staleCheck.staleLabel && staleCheck.staleLabel.split('\n')[0]}"`);
     record('stale-readout: STALE cue clears when the plane reappears',
-      !!staleCheck.recoveredLabel && !staleCheck.recoveredLabel.includes('STALE'),
+      !!staleCheck.recoveredLabel && !staleCheck.recoveredLabel.includes('过期'),
       `recovered="${staleCheck.recoveredLabel && staleCheck.recoveredLabel.split('\n')[0]}"`);
 
     // ============================================================

@@ -245,7 +245,7 @@ test('military poll refreshes tracked callsign/altitude/kts and marks a missed p
     assert.match(entity.gevLabelModel.details.join(' · '), /400 kt/);
 
     await militaryFlightsLayer.update(viewer);
-    assert.match(entity.gevLabelModel.title, /STALE/);
+    assert.match(entity.gevLabelModel.title, /过期/);
   } finally {
     globalThis.fetch = realFetch;
   }

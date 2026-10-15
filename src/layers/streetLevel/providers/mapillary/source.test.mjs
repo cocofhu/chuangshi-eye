@@ -100,7 +100,7 @@ test('graph API errors carry the upstream message and status', async () => {
     (error) =>
       error instanceof MapillarySourceError &&
       error.status === 400 &&
-      /Invalid OAuth/.test(error.message),
+      /Mapillary 图数据请求失败（HTTP 400）/.test(error.message),
   );
 });
 

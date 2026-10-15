@@ -9,7 +9,7 @@ export function createUsgsEarthquakeSource({
     async getSnapshot({ signal } = {}) {
       signal?.throwIfAborted();
       const response = await fetchImpl(API_URL, { signal });
-      if (!response.ok) throw new Error(`USGS HTTP ${response.status}`);
+      if (!response.ok) throw new Error(`USGS 请求失败（HTTP ${response.status}）`);
       const payload = await response.json();
       signal?.throwIfAborted();
       const rows = normalizeEarthquakeSnapshot(payload);

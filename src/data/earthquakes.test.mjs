@@ -325,7 +325,7 @@ test('earthquake refresh reports failure and clears it only after a successful r
     layer.enable(viewer);
     globalThis.fetch = async () => ({ ok: false, status: 503 });
     assert.equal(await layer.update(viewer), false);
-    assert.equal(layer.getStats().error, 'USGS HTTP 503');
+    assert.equal(layer.getStats().error, 'USGS 请求失败（HTTP 503）');
 
     globalThis.fetch = async () => ({
       ok: true,

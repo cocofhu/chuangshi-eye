@@ -1336,7 +1336,7 @@ test('buildSelectedVesselCard: full detail card with MMSI + position time', () =
   assert.equal(card.title, 'EVER GIVEN');
   assert.deepEqual(card.details, [
     'CONTAINER SHIP · 14.5KT · 231°',
-    'MMSI 353136000 · POS: 11:22:33Z',
+    'MMSI 353136000 · 位置：11:22:33Z',
   ]);
 });
 
@@ -1450,7 +1450,7 @@ test('buildSelectedVesselCard: destination line + STALE marker; placeholders for
   assert.deepEqual(card.details, [
     'TANKER · --KT · --°',
     '→ ROTTERDAM',
-    'MMSI 353136000 · POS: LIVE · STALE',
+    'MMSI 353136000 · 位置：实时 · 过期',
   ]);
 });
 

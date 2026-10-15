@@ -81,7 +81,7 @@ export function createErrorRecord(source, error, extra = {}) {
       rtcError?.message ||
       extra.errorText ||
       String(error?.message || '').trim() ||
-      'No browser error message supplied',
+      '浏览器未提供错误说明',
     errorDetail: rtcError?.errorDetail || null,
     sctpCauseCode: rtcError?.sctpCauseCode ?? null,
     receivedAlert: rtcError?.receivedAlert ?? null,

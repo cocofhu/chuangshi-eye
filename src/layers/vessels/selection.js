@@ -204,7 +204,7 @@ export function createSelection({
       return registerEntityContext(record, {
         id: `ais-${record.mmsi}`,
         layerId: 'ais-live-vessels',
-        layerName: 'Live AIS Vessels',
+        layerName: '实时船舶',
         source: aisLiveVesselsLayer.source,
         label: components.cards.displayVesselName(record),
         latitude: record.lat,

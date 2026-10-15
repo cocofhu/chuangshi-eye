@@ -440,16 +440,16 @@ export function classifyAircraft({ typeCode, category } = {}) {
 
 /** Readable name of each class, for cards and readouts. */
 export const AIRCRAFT_CLASS_LABELS = Object.freeze({
-  light: 'Light aircraft',
-  glider: 'Glider',
-  turboprop: 'Turboprop',
-  airliner: 'Airliner',
-  widebody: 'Widebody',
-  quadjet: 'Four-engine jet',
-  helicopter: 'Helicopter',
-  fastjet: 'Fast jet',
-  bizjet: 'Business jet',
-  uav: 'Drone',
+  light: '轻型飞机',
+  glider: '滑翔机',
+  turboprop: '涡桨',
+  airliner: '客机',
+  widebody: '宽体客机',
+  quadjet: '四发喷气',
+  helicopter: '直升机',
+  fastjet: '战斗机',
+  bizjet: '公务机',
+  uav: '无人机',
 });
 
 /** Billboard scale multipliers (skylight GLYPH_SCALE, + fastjet). */

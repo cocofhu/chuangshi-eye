@@ -310,7 +310,7 @@ export function createLocalAdsbLayer({
       id,
       layerId: LAYER_ID,
       dataSource,
-      layerName: LAYER_NAME,
+      layerName: '本地 ADS-B',
       source: localAdsbSourceText(record),
       label: localAdsbTitle(record),
       latitude: marker.lat ?? record.lat,

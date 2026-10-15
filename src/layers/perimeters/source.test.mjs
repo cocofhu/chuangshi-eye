@@ -85,7 +85,7 @@ test('an upstream failure surfaces its HTTP status', async () => {
   const source = createWfigsPerimeterSource({
     fetchImpl: async () => ({ ok: false, status: 503 }),
   });
-  await assert.rejects(source.getSnapshot(), /WFIGS HTTP 503/);
+  await assert.rejects(source.getSnapshot(), /火场范围请求失败（HTTP 503）/);
 });
 
 test('a malformed successful response is never accepted as an empty snapshot', async () => {
@@ -93,7 +93,7 @@ test('a malformed successful response is never accepted as an empty snapshot', a
     const source = createWfigsPerimeterSource({
       fetchImpl: async () => Response.json(payload),
     });
-    await assert.rejects(source.getSnapshot(), /Malformed perimeter snapshot/);
+    await assert.rejects(source.getSnapshot(), /火场范围快照无效/);
   }
 });
 
