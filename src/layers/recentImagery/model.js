@@ -20,7 +20,7 @@ const KM_PER_DEG_LAT = 111.32;
 const QUANTUM = 100000;
 const DAY_MS = 86_400_000;
 const PRODUCT_ORDER = ['S30', 'L30', 'VIIRS'];
-const MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
+const MONTHS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
 /**
  * Keyless, browser-direct imagery products. HLS products are searched via
@@ -54,7 +54,7 @@ export const PRODUCTS = Object.freeze({
   }),
   VIIRS: Object.freeze({
     label: 'VIIRS',
-    name: 'Daily overview',
+    name: '日概览',
     source: 'viirs',
     sensor: 'VIIRS NOAA-21',
     resolutionM: 250,
@@ -120,21 +120,21 @@ const refuse = (reason, message) => ({ ok: false, reason, message });
  */
 export function validateBox(box) {
   const normalized = normalizeBox(box);
-  if (!normalized) return refuse('invalid', 'Box edges must be finite');
+  if (!normalized) return refuse('invalid', '选框边界必须是有限数');
   const { west, south, east, north } = normalized;
   if (Math.abs(west) > 180 || Math.abs(east) > 180)
-    return refuse('invalid', 'Longitudes must be within ±180°');
-  if (west > east) return refuse('dateline', 'Select one side of the dateline');
+    return refuse('invalid', '经度必须在 ±180° 以内');
+  if (west > east) return refuse('dateline', '请选择日界线的一侧');
   if (
     Math.abs(south) > MERCATOR_LAT_LIMIT ||
     Math.abs(north) > MERCATOR_LAT_LIMIT
   )
     return refuse(
       'polar',
-      `Imagery stops at ±${MERCATOR_LAT_LIMIT.toFixed(2)}° latitude`,
+      `影像止于 ±${MERCATOR_LAT_LIMIT.toFixed(2)}° 纬度`,
     );
   if (east === west || north === south)
-    return refuse('degenerate', 'Box must enclose an area');
+    return refuse('degenerate', '选框必须围住一块区域');
   const { width, height } = boxSideKm(normalized);
   if (width > MAX_BOX_SIDE_KM || height > MAX_BOX_SIDE_KM)
     return refuse('too-large', tooLargeMessage(Math.max(width, height)));
@@ -145,12 +145,12 @@ const formatKm = (km) => Math.round(Number(km) || 0).toLocaleString('en-US');
 
 // One short line each: the panel's hint says what to do about it.
 function tooLargeMessage(sideKm) {
-  return `Box is ${formatKm(sideKm)} km wide · limit ${formatKm(MAX_BOX_SIDE_KM)} km`;
+  return `选框宽 ${formatKm(sideKm)} 公里 · 上限 ${formatKm(MAX_BOX_SIDE_KM)} 公里`;
 }
 
 /** The refusal for USE VIEW when the camera sees more than the cap allows. */
 export function viewTooLargeMessage(sideKm) {
-  return `View is ${formatKm(sideKm)} km wide · limit ${formatKm(MAX_BOX_SIDE_KM)} km`;
+  return `视野宽 ${formatKm(sideKm)} 公里 · 上限 ${formatKm(MAX_BOX_SIDE_KM)} 公里`;
 }
 
 /**
@@ -262,10 +262,12 @@ export function utcDay(value) {
     : null;
 }
 
-/** `Sep 18` for a `YYYY-MM-DD` day; '' otherwise. */
+/** `9月18日` for a `YYYY-MM-DD` day; '' otherwise. */
 export function shortDay(day) {
   const match = /^\d{4}-(\d{2})-(\d{2})$/.exec(String(day || ''));
-  return match ? `${MONTHS[Number(match[1]) - 1]} ${Number(match[2])}` : '';
+  return match
+    ? `${MONTHS[Number(match[1]) - 1]}月${Number(match[2])}日`
+    : '';
 }
 
 /** `17:12` (UTC) for an ISO timestamp; '' when unparseable. */
@@ -486,20 +488,20 @@ function daysAgoLabel(day, now) {
     (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${day}T00:00:00Z`)) /
       DAY_MS,
   );
-  if (delta <= 0) return 'today';
-  return delta === 1 ? 'yesterday' : `${delta} days ago`;
+  if (delta <= 0) return '今天';
+  return delta === 1 ? '昨天' : `${delta} 天前`;
 }
 
 function cloudLabel(cloud) {
-  if (!cloud) return 'cloud unknown';
+  if (!cloud) return '云量未知';
   const min = Math.round(cloud.min);
   const max = Math.round(cloud.max);
-  return min === max ? `${min}% scene cloud` : `${min}–${max}% scene cloud`;
+  return min === max ? `${min}% 场景云` : `${min}–${max}% 场景云`;
 }
 
 /**
  * One-line UTC readout, e.g.
- * `Sep 18, 2026 17:12Z · 3 days ago · Sentinel-2 via HLS · 30 m · 12% scene cloud`.
+ * `2026年9月18日 17:12Z · 3 天前 · Sentinel-2 via HLS · 30 m · 12% 场景云`.
  * @param {object} candidate
  * @param {string | number | Date} [now]
  * @returns {string}
@@ -508,7 +510,7 @@ export function formatCandidateReadout(candidate, now = new Date()) {
   const product = PRODUCTS[candidate?.product];
   if (!product || !candidate?.day) return '';
   const [y, m, d] = candidate.day.split('-').map(Number);
-  let when = `${MONTHS[m - 1]} ${d}, ${y}`;
+  let when = `${y}年${MONTHS[m - 1]}月${d}日`;
   if (candidate.timeRange?.start) {
     const start = hhmm(candidate.timeRange.start);
     const end = candidate.timeRange.end ? hhmm(candidate.timeRange.end) : start;
@@ -521,7 +523,7 @@ export function formatCandidateReadout(candidate, now = new Date()) {
   const ago = daysAgoLabel(candidate.day, now);
   if (ago) parts.push(ago);
   parts.push(product.sensor, `${product.resolutionM} m`);
-  if (product.overview) parts.push('overview');
+  if (product.overview) parts.push('概览');
   parts.push(cloudLabel(candidate.cloud));
   return parts.join(' · ');
 }

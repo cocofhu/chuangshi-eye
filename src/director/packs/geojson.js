@@ -10,7 +10,7 @@ export function decodePackGeoJSON(bytes) {
     !Array.isArray(value.features) ||
     value.features.length > PACK_LIMITS.features
   )
-    throw new Error('Expected a bounded FeatureCollection');
+    throw new Error('需要有界的 FeatureCollection');
   let positions = 0;
   const ids = new Set();
   function position(p) {
@@ -23,15 +23,15 @@ export function decodePackGeoJSON(bytes) {
       (p.length === 3 && (p[2] < -12000 || p[2] > 1e9)) ||
       ++positions > PACK_LIMITS.positions
     )
-      throw new Error('Invalid geographic position');
+      throw new Error('地理坐标无效');
     return [p[0], p[1], p[2] ?? 0];
   }
   function line(points, ring = false) {
     if (!Array.isArray(points) || points.length < (ring ? 4 : 2))
-      throw new Error('Invalid line');
+      throw new Error('线段无效');
     const normalized = points.map(position);
     if (ring && normalized[0].some((v, i) => v !== normalized.at(-1)[i]))
-      throw new Error('Unclosed ring');
+      throw new Error('环未闭合');
     return normalized;
   }
   return value.features.map((feature) => {
@@ -43,7 +43,7 @@ export function decodePackGeoJSON(bytes) {
       id.length > 256 ||
       ids.has(id)
     )
-      throw new Error('Features require distinct string IDs');
+      throw new Error('要素需要互不相同的字符串 ID');
     ids.add(id);
     const g = feature.geometry;
     let coordinates;
@@ -56,7 +56,7 @@ export function decodePackGeoJSON(bytes) {
       g.coordinates.length <= 128
     )
       coordinates = g.coordinates.map((ring) => line(ring, true));
-    else throw new Error('Unsupported geometry');
+    else throw new Error('不支持的几何类型');
     return { id, type: g.type, coordinates };
   });
 }

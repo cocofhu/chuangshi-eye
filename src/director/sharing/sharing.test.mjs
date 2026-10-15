@@ -108,17 +108,17 @@ test('asset caps and declared integrity are enforced before creating a downloada
       bytes: new Uint8Array(8 * 1024 * 1024 + 1),
       mimeType: 'image/png',
     })),
-    /limit/,
+    /上限/,
   );
   const p = fixture();
   p.scenes[0].dataPacks[0].sha256 = '0'.repeat(64);
   await assert.rejects(
     createSceneBundle(p, () => asset()),
-    /integrity/,
+    /完整性/,
   );
   await assert.rejects(
     createSceneBundle(fixture(), () => null),
-    /select a file/,
+    /选择文件/,
   );
 });
 
@@ -138,7 +138,7 @@ test('duplicate pack paths share one asset and reject conflicting integrity', as
   p.scenes[0].dataPacks[1].byteLength = 1;
   await assert.rejects(
     createSceneBundle(p, () => asset()),
-    /integrity/,
+    /完整性/,
   );
 });
 
@@ -148,12 +148,12 @@ test('preview reports unavailable sources/layers and missing bundle assets witho
     { project: p, assets: new Map() },
     { sourceIds: [], layerIds: [] },
   );
-  assert.equal(report.packs[0].status, 'Source unavailable');
+  assert.equal(report.packs[0].status, '来源不可用');
   assert.deepEqual(report.missingLayers, ['traffic']);
   p.scenes[0].dataPacks[0].source.adapter = BUNDLE_SOURCE;
   assert.match(
     describeSceneShare({ project: p, assets: new Map() }).packs[0].status,
-    /Missing bundle/,
+    /缺少分享包文件/,
   );
 });
 
@@ -172,7 +172,7 @@ test('bundle byte owner releases replacement data and has no network fallback', 
   assert.throws(() => store.source({ path, signal: controller.signal }));
   store.clear();
   assert.deepEqual(store.getState(), { count: 0, bytes: 0 });
-  assert.throws(() => store.source({ path }), /unavailable/);
+  assert.throws(() => store.source({ path }), /不可用/);
 });
 
 test('oversized files fail before reading and cancellation settles a stalled file without a late result', async () => {

@@ -148,6 +148,6 @@ test('unknown anchors, duplicate IDs, mixed references, bad easing and unspecifi
   old.version = 3;
   assert.throws(
     () => parseSceneDocument(JSON.stringify(old)),
-    /unsupported field/,
+    /不支持的字段/,
   );
 });

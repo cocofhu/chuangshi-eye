@@ -68,11 +68,11 @@ test('validateBox refuses dateline, polar, degenerate, invalid and oversized box
   // Refusals fit the one-line notice.
   assert.equal(
     validateBox({ west: 0, south: 84, east: 0.5, north: 85.05111 }).message,
-    'Imagery stops at ±85.05° latitude',
+    '影像止于 ±85.05° 纬度',
   );
   assert.equal(
     validateBox({ west: 179, south: 0, east: -179, north: 1 }).message,
-    'Select one side of the dateline',
+    '请选择日界线的一侧',
   );
   assert.equal(
     validateBox({ west: 0, south: 84.9, east: 0.05, north: 85 }).ok,
@@ -91,7 +91,7 @@ test('validateBox refuses dateline, polar, degenerate, invalid and oversized box
   // The cap is 1,000 km a side, and the refusal says how big the box is.
   const tall = validateBox({ west: 0, south: 0, east: 0.1, north: 10 });
   assert.equal(tall.reason, 'too-large');
-  assert.equal(tall.message, 'Box is 1,113 km wide · limit 1,000 km');
+  assert.equal(tall.message, '选框宽 1,113 公里 · 上限 1,000 公里');
   assert.equal(
     reason({ west: 0, south: 0, east: 10, north: 0.1 }),
     'too-large',
@@ -99,7 +99,7 @@ test('validateBox refuses dateline, polar, degenerate, invalid and oversized box
   assert.equal(validateBox({ west: 0, south: 0, east: 8, north: 8 }).ok, true);
   assert.equal(
     viewTooLargeMessage(2400),
-    'View is 2,400 km wide · limit 1,000 km',
+    '视野宽 2,400 公里 · 上限 1,000 公里',
   );
   // Latitudes are ordered; longitudes are never swapped.
   assert.deepEqual(
@@ -209,7 +209,7 @@ test('days and candidate keys are real UTC calendar days', () => {
   });
   assert.equal(parseCandidateKey('X30:2026-09-10'), null);
   assert.equal(parseCandidateKey('S30:2026-02-30'), null);
-  assert.equal(shortDay('2026-09-18'), 'Sep 18');
+  assert.equal(shortDay('2026-09-18'), '9月18日');
   assert.equal(shortDay('nope'), '');
 });
 
@@ -372,7 +372,7 @@ test('the readout is one UTC line with age, sensor, resolution and scene cloud',
     formatCandidateReadout(groupGranulesByDay(granules)[0], now);
   assert.equal(
     readout([granule({ timeStart: '2026-09-18T17:12:10Z' })]),
-    'Sep 18, 2026 17:12Z · 3 days ago · Sentinel-2 via HLS · 30 m · 12% scene cloud',
+    '2026年9月18日 17:12Z · 3 天前 · Sentinel-2 via HLS · 30 m · 12% 场景云',
   );
   assert.equal(
     readout([
@@ -384,7 +384,7 @@ test('the readout is one UTC line with age, sensor, resolution and scene cloud',
         timeEnd: '2026-09-18T17:20:30Z',
       }),
     ]),
-    'Sep 18, 2026 17:12–17:20Z · 3 days ago · Sentinel-2 via HLS · 30 m · 12–18% scene cloud',
+    '2026年9月18日 17:12–17:20Z · 3 天前 · Sentinel-2 via HLS · 30 m · 12–18% 场景云',
   );
   assert.equal(
     readout([
@@ -395,11 +395,11 @@ test('the readout is one UTC line with age, sensor, resolution and scene cloud',
         timeEnd: null,
       }),
     ]),
-    'Sep 20, 2026 16:05Z · yesterday · Landsat 8/9 via HLS · 30 m · cloud unknown',
+    '2026年9月20日 16:05Z · 昨天 · Landsat 8/9 via HLS · 30 m · 云量未知',
   );
   assert.equal(
     formatCandidateReadout(viirsCandidates('2026-09-21', 1)[0], now),
-    'Sep 21, 2026 · today · VIIRS NOAA-21 · 250 m · overview · cloud unknown',
+    '2026年9月21日 · 今天 · VIIRS NOAA-21 · 250 m · 概览 · 云量未知',
   );
   assert.equal(formatCandidateReadout(null), '');
 });
