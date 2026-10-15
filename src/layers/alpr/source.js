@@ -184,7 +184,7 @@ export function createAlprTileSource({
       for (const source of sources) source.clear();
       precision.clear();
     },
-    label: 'OpenStreetMap · community mapped',
+    label: 'OpenStreetMap · 社区标注',
     attribution: {
       name: 'OpenStreetMap',
       description: '© OpenStreetMap contributors, ODbL',
@@ -260,10 +260,10 @@ export function createOverpassAlprSource({
   }
   return {
     fetch: fetchAlprNodes,
-    label: 'OpenStreetMap · community mapped',
+    label: 'OpenStreetMap · 社区标注',
     attribution: {
       name: 'OpenStreetMap',
-      description: 'OpenStreetMap contributors (ODbL 1.0; community mapped)',
+      description: 'OpenStreetMap 贡献者（ODbL 1.0；社区标注）',
       text: '© OpenStreetMap contributors',
       href: 'https://www.openstreetmap.org/copyright',
     },

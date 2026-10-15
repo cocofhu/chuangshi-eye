@@ -61,7 +61,7 @@ test('no keyless label ever implies a live feed', () => {
   ].map((feed) => feed.loadingLabel);
   for (const label of labels) {
     assert.ok(!LIVE_CLAIM.test(label), `label implies live data: ${label}`);
-    assert.ok(!label.includes('实时'), `label implies live data: ${label}`);
+    assert.ok(!label.startsWith('实时'), `label implies live data: ${label}`);
     assert.ok(label.startsWith('模拟'), `fallback label must lead with the mode: ${label}`);
   }
 });

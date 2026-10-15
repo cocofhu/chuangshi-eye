@@ -340,7 +340,7 @@ test('a rate limit keeps the drawn tiles and asks again once the wait is over', 
   await Promise.resolve();
   await Promise.resolve();
   await Promise.resolve();
-  assert.match(state.coverage.lastError, /rate-limited/);
+  assert.match(state.coverage.lastError, /限流/);
   viewer.view.lon += 0.05;
   coverage.refresh();
   assert.equal(source.calls.length, 1, 'held: nothing is requested');

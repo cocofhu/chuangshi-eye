@@ -18,7 +18,7 @@ const camera = (id, latitude, longitude, extra = {}) => ({
   ...extra,
 });
 const alpr = (result) => ({
-  label: 'OpenStreetMap · community mapped',
+  label: 'OpenStreetMap · 社区标注',
   attribution: { text: 'OpenStreetMap contributors' },
   boxes: [],
   async fetch(box) {
@@ -63,7 +63,7 @@ test('mapped cameras are listed nearest first with their details', async () => {
     last_verified: '2026-05-01',
     distance_km: 5.09,
   });
-  assert.equal(result.data.source, 'OpenStreetMap · community mapped');
+  assert.equal(result.data.source, 'OpenStreetMap · 社区标注');
   assert.ok(source.boxes[0].north - source.boxes[0].south < 1);
 });
 

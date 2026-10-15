@@ -154,12 +154,12 @@ test('costs near a unit boundary promote to the larger unit', () => {
   };
   const costLine = (costToDate) =>
     buildIncidentCard({ ...base, costToDate }, 0).details.find((line) =>
-      line.includes('to date'),
+      line.includes('累计'),
     );
-  assert.equal(costLine(999500), '$1M to date');
-  assert.equal(costLine(999499), '$999K to date');
-  assert.equal(costLine(999600000), '$1B to date');
-  assert.equal(costLine(4200000), '$4.2M to date');
+  assert.equal(costLine(999500), '$1M 累计');
+  assert.equal(costLine(999499), '$999K 累计');
+  assert.equal(costLine(999600000), '$1B 累计');
+  assert.equal(costLine(4200000), '$4.2M 累计');
 });
 
 test('a complex member names its complex on the card', () => {
@@ -183,7 +183,7 @@ test('a complex member names its complex on the card', () => {
     },
     1758000000000,
   );
-  assert.ok(card.details.includes('part of Rowe Creek Complex'));
+  assert.ok(card.details.includes('属于 Rowe Creek Complex'));
 });
 
 test('a card without a link is not interactive', () => {

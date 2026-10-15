@@ -1058,7 +1058,7 @@ export function createDirectionsLayer({ services, source }) {
       [
         {
           type: 'route',
-          label: 'Directions',
+          label: '路径规划',
           path: _route.geometry.map(([lon, lat]) => ({ lon, lat, height: 0 })),
         },
       ],
