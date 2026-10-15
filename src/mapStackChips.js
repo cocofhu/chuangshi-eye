@@ -124,7 +124,7 @@ export function renderMapStackChips(
     if (!model.available) {
       chip.setAttribute(
         'aria-label',
-        `${model.label} unavailable: ${model.unavailableHint}`,
+        `${model.label}不可用：${model.unavailableHint}`,
       );
     }
 

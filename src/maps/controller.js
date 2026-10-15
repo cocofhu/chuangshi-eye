@@ -76,7 +76,7 @@ export class MapSourceController {
   _unavailableReason(stack) {
     return (
       this._sources.get(stack?.id)?.unavailableReason ||
-      `${stack?.label || 'This map stack'} is unavailable`
+      `${stack?.label || '此地图栈'}不可用`
     );
   }
   /** Return the shown supplied or controller-owned tileset, if any. */

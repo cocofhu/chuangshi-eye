@@ -43,8 +43,8 @@ test('awareness cohorts reject negative and non-finite distances as unavailable 
 
 test('unavailable and stale feeds remain unknown', () => {
   assert.equal(AWARENESS_RELATIONSHIP.OUTSIDE_RANGE, 'OUTSIDE_RANGE');
-  assert.equal(summarizeAwarenessCohort([], { available: false }).reason, 'feed unavailable');
-  assert.equal(summarizeAwarenessCohort([], { stale: true }).reason, 'feed stale');
+  assert.equal(summarizeAwarenessCohort([], { available: false }).reason, '数据源不可用');
+  assert.equal(summarizeAwarenessCohort([], { stale: true }).reason, '数据源陈旧');
 });
 
 test('navigation prioritizes nearby targets from the selected cohort', () => {

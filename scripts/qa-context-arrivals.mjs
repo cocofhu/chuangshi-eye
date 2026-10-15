@@ -336,7 +336,7 @@ async function contacts() {
       ].find(
         (candidate) =>
           candidate.querySelector('strong')?.textContent?.trim() ===
-          'Mapped installations',
+          '军事设施',
       );
       const ds = window.__godsEyeView.viewer.dataSources.getByName(
         'military-installations',
@@ -457,7 +457,7 @@ async function contacts() {
   };
   check(
     'Cockpit scope names the installation window',
-    /INSTALLATIONS WITHIN \d+ KM/.test(scope || ''),
+    /设施 目标周边 \d+ 公里/.test(scope || ''),
     scope || 'no scope',
   );
   check(

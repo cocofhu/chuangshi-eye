@@ -78,7 +78,7 @@ export function createViewerHost({ state, parts }) {
         const reused =
           active?.id === entry.def.id || mounting?.id === entry.def.id;
         if (!reused) adapter.unmount();
-        throw new Error('Street-level viewer was closed');
+        throw new Error('街景查看器已关闭');
       }
       // Listen only once current: an outdated mount releasing the same
       // `applyPose` would otherwise unhook the mount that replaced it.
@@ -107,7 +107,7 @@ export function createViewerHost({ state, parts }) {
     if (!state.street.host) {
       // A nearest-image lookup may have set it; nothing is loading now.
       state.street.loading = false;
-      state.street.error = 'Open the Street Level panel to view imagery';
+      state.street.error = '请打开街景面板以查看影像';
       notify();
       return false;
     }
@@ -133,7 +133,7 @@ export function createViewerHost({ state, parts }) {
       if (ticket && !state.street.follow) parts.follow.lookAtPosition(ticket);
     } catch (error) {
       if (current())
-        state.street.error = error?.message || 'Image could not be opened';
+        state.street.error = error?.message || '影像无法打开';
     } finally {
       if (current()) state.street.loading = false;
       notify();

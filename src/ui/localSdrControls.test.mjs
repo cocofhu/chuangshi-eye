@@ -114,7 +114,7 @@ test('starting internet radio stops local FM, and local FM stops internet radio'
   radio.emit({ audioState: 'loading' });
   assert.deepEqual(receiver.calls.at(-1), [
     'stop',
-    { message: 'Local FM stopped: internet radio started' },
+    { message: '本地调频已停止：网络电台已开始' },
   ]);
 
   radio.emit({ audioState: 'playing' });

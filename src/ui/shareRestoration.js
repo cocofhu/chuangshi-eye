@@ -188,9 +188,9 @@ export class ShareRestoration {
     if (result.classification === 'pending') {
       this._shareTrackingNoticeGeneration += 1;
       this._shareTrackingAcquiringKey = trackingKey;
-      this.showStatus('ACQUIRING', {
+      this.showStatus('正在捕获', {
         state: 'acquiring',
-        detail: `SHARED ${String(result.label || 'SUBJECT').toUpperCase()}`,
+        detail: `共享 ${result.label || '目标'}`,
         persistent: true,
       });
       return;
@@ -214,13 +214,13 @@ export class ShareRestoration {
     const noticeGeneration = ownsAcquiringNotice
       ? this._shareTrackingNoticeGeneration
       : ++this._shareTrackingNoticeGeneration;
-    const subject = result.label || 'entity';
+    const subject = result.label || '目标';
     const message =
       result.classification === 'expired'
-        ? `Shared ${subject} follow expired`
+        ? `共享跟踪已过期：${subject}`
         : result.classification === 'source-unavailable'
-          ? `Shared ${subject} could not be restored — feed unavailable`
-          : `Shared ${subject} is unavailable`;
+          ? `无法恢复共享跟踪：${subject} — 数据源不可用`
+          : `共享目标不可用：${subject}`;
     const showAfterStartupCover = () => {
       this._lifetime.frame(() => {
         if (

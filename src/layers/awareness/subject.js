@@ -78,11 +78,11 @@ export function createSubject({ state: layerState, services, parts, source }) {
       cohorts: [
         {
           id: 'flights',
-          label: 'Flights',
+          label: '民航航班',
           source: flightsState.stats.source || SOURCE_LABEL.flights,
           provenance: retainedProvenance(
             'flights',
-            'Flights',
+            '民航航班',
             flightsState,
             SOURCE_LABEL.flights,
           ),
@@ -97,11 +97,11 @@ export function createSubject({ state: layerState, services, parts, source }) {
         },
         {
           id: 'military',
-          label: 'Military flights',
+          label: '军用航空器',
           source: militaryState.stats.source || SOURCE_LABEL.military,
           provenance: retainedProvenance(
             'military',
-            'Military flights',
+            '军用航空器',
             militaryState,
             SOURCE_LABEL.military,
           ),
@@ -116,11 +116,11 @@ export function createSubject({ state: layerState, services, parts, source }) {
         },
         {
           id: 'ais-live-vessels',
-          label: 'AIS vessels',
+          label: '实时船舶',
           source: vesselsState.stats.source || SOURCE_LABEL['ais-live-vessels'],
           provenance: retainedProvenance(
             'ais-live-vessels',
-            'AIS vessels',
+            '实时船舶',
             vesselsState,
             SOURCE_LABEL['ais-live-vessels'],
           ),
@@ -131,18 +131,18 @@ export function createSubject({ state: layerState, services, parts, source }) {
         },
         {
           id: 'military-installations',
-          label: 'Mapped installations',
+          label: '军事设施',
           source:
             installationsState.stats.source ||
             SOURCE_LABEL['military-installations'],
           provenance: retainedProvenance(
             'military-installations',
-            'Mapped installations',
+            '军事设施',
             installationsState,
             SOURCE_LABEL['military-installations'],
           ),
           coverage:
-            installationsState.stats.coverageLabel || 'CURRENT VIEWPORT ONLY',
+            installationsState.stats.coverageLabel || '仅当前视野',
           summary: parts.queries.summarizeInstallationViewport(
             installations,
             installationsState,

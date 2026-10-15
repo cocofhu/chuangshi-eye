@@ -461,7 +461,7 @@ async function main() {
         && uncertainPresentation.prevDisabled
         && uncertainPresentation.playDisabled
         && uncertainPresentation.volumeDisabled
-        && /compact Radio controls/i.test(uncertainPresentation.disclosureLabel)
+        && /紧凑电台/.test(uncertainPresentation.disclosureLabel)
         && /uncertain/i.test(uncertainPresentation.compactPowerLabel)
         && uncertainPresentation.compactPowerText === 'RECONCILE'
         && /uncertain/i.test(uncertainPresentation.fullLabel)
@@ -527,7 +527,7 @@ async function main() {
         && disablingPresentation.presentationActive === false
         && disablingPresentation.markerSourceVisible === false
         && disablingPresentation.full === 'DISABLING'
-        && /compact Radio controls/i.test(disablingPresentation.disclosure)
+        && /紧凑电台/.test(disablingPresentation.disclosure)
         && disablingPresentation.compactPower === 'DISABLING'
         && disablingPresentation.layerState === 'DISABLING'
         && /disabling/i.test(disablingPresentation.message)
@@ -603,7 +603,7 @@ async function main() {
         && enablingPresentation.presentationActive === false
         && enablingPresentation.markerSourceVisible === false
         && enablingPresentation.full === 'ENABLING'
-        && enablingPresentation.disclosure === 'Go to expanded Radio section'
+        && enablingPresentation.disclosure === '转到已展开的电台'
         && enablingPresentation.disclosureControls === 'radio-panel'
         && enablingPresentation.disclosureExpanded === 'true'
         && enablingPresentation.compactPower === 'ENABLING'
@@ -4548,7 +4548,7 @@ async function main() {
       'expanded Context Radio icon reveals and scrolls to embedded Radio without an overlay or playback/camera theft',
       expandedContextRadioAfter.ariaControls === 'radio-panel'
         && expandedContextRadioAfter.expanded === 'true'
-        && expandedContextRadioAfter.label === 'Go to expanded Radio section'
+        && expandedContextRadioAfter.label === '转到已展开的电台'
         && !expandedContextRadioAfter.radioCollapsed
         && expandedContextRadioAfter.compactHidden
         && expandedContextRadioAfter.scrollTop > expandedContextRadioBefore.scrollTop

@@ -353,12 +353,12 @@ test('weather rail orders between CCTV and Context, resets positions, observes a
     assert.equal(weather.classList.contains('panel-dragging'), false);
     assert.equal(weather.button.textContent, '◀');
     assert.equal(weather.button.getAttribute('aria-expanded'), 'false');
-    assert.equal(weather.button.title, 'Expand WEATHER');
+    assert.equal(weather.button.title, '展开WEATHER');
     weather.classList.remove('collapsed');
     PanelChrome.prototype._syncPanelCollapseButton.call(chrome, weather);
     assert.equal(weather.button.textContent, '▶');
     assert.equal(weather.button.getAttribute('aria-expanded'), 'true');
-    assert.equal(weather.button.getAttribute('aria-label'), 'Collapse WEATHER');
+    assert.equal(weather.button.getAttribute('aria-label'), '收起WEATHER');
     owner.destroy();
     assert.equal(observed.size, 0);
     assert.equal(f.frames.size, 0);

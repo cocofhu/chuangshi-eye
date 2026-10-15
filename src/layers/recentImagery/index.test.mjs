@@ -944,7 +944,7 @@ test('USE VIEW takes the camera rectangle and refuses a view over the cap instea
   assert.equal(f.layer.useCurrentView(), false);
   assert.equal(
     f.snap().boxError,
-    'Point the camera at the ground to use the view',
+    '请将镜头对准地面后再使用当前视野',
   );
   const rad = (deg) => (deg * Math.PI) / 180;
   const view = (west, south, east, north) => () => ({

@@ -695,7 +695,7 @@ export function createCoverage({ state, source }) {
       bbox = [-180, -85, 180, 85];
     if (zoom == null || !bbox) {
       state.coverage.hint =
-        'Point the camera at the globe for street-level coverage';
+        '请将镜头对准地球以查看街景覆盖';
       clear();
       notify();
       return;

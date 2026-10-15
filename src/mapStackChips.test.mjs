@@ -314,7 +314,7 @@ test('keyless ion stacks stay focusable, aria-disabled, and say why', () => {
   assert.equal(bingAerial.getAttribute('aria-disabled'), 'true');
   assert.equal(
     bingAerial.getAttribute('aria-label'),
-    'Bing Aerial unavailable: Needs CESIUM_ION_TOKEN — add it in Provider Settings',
+    'Bing Aerial不可用：Needs CESIUM_ION_TOKEN — add it in Provider Settings',
   );
   assert.ok(bingAerial.classList.contains('unavailable'));
   assert.equal(
@@ -357,7 +357,7 @@ test('a non-ion stack that fails never claims an ion token is required', () => {
   assert.equal(google.getAttribute('aria-disabled'), 'true');
   assert.equal(
     google.getAttribute('aria-label'),
-    'Google 3D unavailable: Needs GOOGLE_MAPS_API_KEY — add it in Provider Settings',
+    'Google 3D不可用：Needs GOOGLE_MAPS_API_KEY — add it in Provider Settings',
   );
   assert.equal(
     chipText(google),

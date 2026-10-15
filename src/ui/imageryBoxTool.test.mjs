@@ -85,12 +85,12 @@ test('a sky press, a click without a drag and Escape each say why', async () => 
   f.fire('LEFT_DOWN', { position: { x: 250, y: 10 } });
   assert.deepEqual(f.cancels.at(-1), [
     'sky',
-    'Press on the ground, not the sky',
+    '请点在地面上，不要点天空',
   ]);
   assert.equal(f.tool.isActive(), true, 'a sky press keeps the session');
   f.fire('LEFT_DOWN', { position: { x: 250, y: 125 } });
   f.fire('LEFT_UP', { position: { x: 250, y: 125 } });
-  assert.deepEqual(f.cancels.at(-1), ['degenerate', 'Drag to size the box']);
+  assert.deepEqual(f.cancels.at(-1), ['degenerate', '拖动以确定选框大小']);
   f.tool.start();
   assert.equal(f.key('Escape').prevented, true);
   assert.deepEqual(f.cancels.at(-1), ['escape', undefined]);

@@ -708,7 +708,7 @@ test('reports bounded installation requests as loading and clears on settlement'
     assert.equal(militaryInstallationsLayer.getStats().loading, true);
     assert.equal(
       militaryInstallationsLayer.getStats().loadingLabel,
-      'loading mapped installation context',
+      '正在加载军事设施',
     );
     resolveInstallations({
       ok: true,
@@ -852,13 +852,13 @@ test('a Contacts anchor replaces the viewport and ignores small subject moves', 
         .map((key) => [key, Number(url.searchParams.get(key))]));
     };
     const centre = (href) => (box(href).south + box(href).north) / 2;
-    assert.equal(run.stats().coverageLabel, 'CURRENT VIEWPORT ONLY');
+    assert.equal(run.stats().coverageLabel, '仅当前视野');
     assert.equal(militaryInstallationsLayer.setContextAnchor({ latitude: 30.3125, longitude: -97.765 }), true);
     await new Promise((resolve) => setTimeout(resolve, 650));
     const anchored = box(run.requests.at(-1));
     assert.ok(Math.abs(centre(run.requests.at(-1)) - 30.3125) < 0.01);
     assert.ok(anchored.north - anchored.south > 1.5, 'window reaches ~100 km each way');
-    assert.equal(run.stats().coverageLabel, 'WITHIN 100 KM');
+    assert.equal(run.stats().coverageLabel, '目标周边 100 公里');
     assert.equal(run.stats().coverage.kind, 'subject');
     const count = run.requests.length;
     assert.equal(militaryInstallationsLayer.setContextAnchor({ latitude: 30.35, longitude: -97.765 }), false,
@@ -872,7 +872,7 @@ test('a Contacts anchor replaces the viewport and ignores small subject moves', 
     await new Promise((resolve) => setTimeout(resolve, 650));
     assert.deepEqual(box(run.requests.at(-1)), { south: 30, west: -98, north: 31, east: -97 },
       'clearing the subject returns to the viewport');
-    assert.equal(run.stats().coverageLabel, 'CURRENT VIEWPORT ONLY');
+    assert.equal(run.stats().coverageLabel, '仅当前视野');
   } finally { run.restore(); }
 });
 
