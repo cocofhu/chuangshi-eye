@@ -214,17 +214,17 @@ export function createPanel({ state: layerState, services, parts, source }) {
               ? payload.operator
               : null,
             Number.isFinite(payload.massKg)
-              ? `${payload.massKg.toLocaleString()} KG`
+              ? `${payload.massKg.toLocaleString()} 千克`
               : null,
           ]
             .filter(Boolean)
             .join(' · ');
-          return `<tr><td>${escapeMissionText(payload.name)}${payload.amount > 1 ? ` ×${payload.amount}` : ''}${detail ? `<small>${escapeMissionText(detail)}</small>` : ''}</td><td>${escapeMissionText(payload.type || 'UNSPECIFIED')}</td><td>${escapeMissionText(payload.destination || launch.orbit?.name || 'UNAVAILABLE')}</td></tr>`;
+          return `<tr><td>${escapeMissionText(payload.name)}${payload.amount > 1 ? ` ×${payload.amount}` : ''}${detail ? `<small>${escapeMissionText(detail)}</small>` : ''}</td><td>${escapeMissionText(payload.type || '未标明')}</td><td>${escapeMissionText(payload.destination || launch.orbit?.name || '未知')}</td></tr>`;
         })
       : [];
     if (launch.payloads.length > 5) {
       payloadRows.push(
-        `<tr><td colspan="3" class="mission-table-empty">+${launch.payloads.length - 5} additional payload records</td></tr>`,
+        `<tr><td colspan="3" class="mission-table-empty">另有 ${launch.payloads.length - 5} 条载荷记录</td></tr>`,
       );
     }
     layerState._missionPanel.querySelector(
@@ -236,17 +236,17 @@ export function createPanel({ state: layerState, services, parts, source }) {
         stage.destination ||
         (endpoint?.accuracy === 'PAD / RTLS'
           ? launch.launchSite
-          : 'UNAVAILABLE');
+          : '未知');
       const position = endpoint
         ? `${endpoint.lat.toFixed(2)}, ${endpoint.lon.toFixed(2)} · ${endpoint.accuracy}`
         : stage.downrangeKm > 0
-          ? `${stage.downrangeKm.toLocaleString()} KM DOWNRANGE`
-          : 'POSITION UNAVAILABLE';
+          ? `航程 ${stage.downrangeKm.toLocaleString()} 公里`
+          : '位置未知';
       const stageDetail = [
         Number.isFinite(stage.flightNumber)
-          ? `FLIGHT ${stage.flightNumber}`
+          ? `第 ${stage.flightNumber} 次飞行`
           : null,
-        stage.reused ? 'REUSED' : null,
+        stage.reused ? '复用' : null,
         stage.recoveryType,
       ]
         .filter(Boolean)
@@ -254,7 +254,7 @@ export function createPanel({ state: layerState, services, parts, source }) {
       return `<tr><td>${escapeMissionText(stage.name)}${stageDetail ? `<small>${escapeMissionText(stageDetail)}</small>` : ''}</td><td>${escapeMissionText(stage.status)}</td><td>${escapeMissionText(destination)}<small>${escapeMissionText(position)}</small></td></tr>`;
     });
     layerState._missionPanel.querySelector('[data-mission-stages]').innerHTML =
-      missionTableRows(stageRows, 3, 'NO STAGE RE-ENTRY / RECOVERY DATA');
+      missionTableRows(stageRows, 3, '暂无级段再入 / 回收数据');
     const stageSection = layerState._missionPanel.querySelector(
       '[data-mission-stages-section]',
     );
@@ -290,7 +290,7 @@ export function createPanel({ state: layerState, services, parts, source }) {
     );
     if (!entries.length) {
       list.innerHTML =
-        '<div class="space-mission-roster-empty">NO MISSIONS AVAILABLE IN THE CURRENT 30-DAY WINDOW</div>';
+        '<div class="space-mission-roster-empty">当前 30 日窗口内没有任务</div>';
       restoreMissionRosterFocus(
         list,
         focusSnapshot,
@@ -302,13 +302,15 @@ export function createPanel({ state: layerState, services, parts, source }) {
     }
     list.innerHTML = entries
       .map(({ launch, index }) => {
-        const color = parts.model.missionMarkerColor(launch).toCssColorString();
-        const date = launch.launchTime?.slice(0, 10) || 'DATE UNAVAILABLE';
-        const provider = launch.provider || 'UNSPECIFIED OPERATOR';
+        const color = safeCssColor(
+          parts.model.missionMarkerColor(launch).toCssColorString(),
+        );
+        const date = launch.launchTime?.slice(0, 10) || '日期未知';
+        const provider = launch.provider || '运营方未标明';
         const label = parts.overlays
           .shortMissionLabel(launch.name, 27)
           .toUpperCase();
-        return `<button type="button" class="space-mission-roster-item" data-mission-roster-index="${index}" data-mission-roster-id="${escapeMissionText(launch.id)}" aria-label="Select ${escapeMissionText(label)}"><span class="space-mission-roster-marker" style="--mission-roster-color:${color}" aria-hidden="true"></span><span class="space-mission-roster-copy"><strong>${escapeMissionText(label)}</strong><small>${escapeMissionText(provider)} · ${escapeMissionText(date)}</small></span><span class="space-mission-roster-chevron" aria-hidden="true">›</span></button>`;
+        return `<button type="button" class="space-mission-roster-item" data-mission-roster-index="${index}" data-mission-roster-id="${escapeMissionText(launch.id)}" aria-label="选择 ${escapeMissionText(label)}"><span class="space-mission-roster-marker" style="--mission-roster-color:${color}" aria-hidden="true"></span><span class="space-mission-roster-copy"><strong>${escapeMissionText(label)}</strong><small>${escapeMissionText(provider)} · ${escapeMissionText(date)}</small></span><span class="space-mission-roster-chevron" aria-hidden="true">›</span></button>`;
       })
       .join('');
     list.querySelectorAll('[data-mission-roster-index]').forEach((button) => {
@@ -327,6 +329,19 @@ export function createPanel({ state: layerState, services, parts, source }) {
         '[data-mission-roster-focus-continuation]',
       ),
     );
+  }
+
+  /** Cesium colors are css functions; reject anything else before a style attribute. */
+  function safeCssColor(value) {
+    const color = String(value ?? '').trim();
+    if (
+      /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(color) ||
+      /^(?:rgb|hsl)a?\(\s*(?:\d{1,3}%?\s*,\s*){2}\d{1,3}%?(?:\s*,\s*(?:\d+(?:\.\d+)?%?))?\s*\)$/i.test(
+        color,
+      )
+    )
+      return color;
+    return '#22e6e6';
   }
 
   function escapeMissionText(value) {
@@ -450,7 +465,7 @@ export function createPanel({ state: layerState, services, parts, source }) {
     layerState._missionPanel.className = 'context-space-mission-detail';
     layerState._missionPanel.setAttribute(
       'aria-label',
-      'Selected Space Mission',
+      '已选航天任务',
     );
     layerState._missionPanel.innerHTML = `<div class="space-mission-view-header"><span>已选航天任务</span><button type="button" data-mission-close title="显示全部任务" aria-label="取消选中任务">×</button></div><div class="space-mission-detail"><strong data-mission-title>任务</strong><span data-mission-field data-mission-provider></span><span data-mission-field>状态 · <b data-mission-status></b></span><span data-mission-field>发射场 · <b data-mission-site></b></span><span data-mission-field>发射时间 · <b data-mission-time></b></span><span data-mission-field>轨道 · <b data-mission-orbit></b></span><span>上升轨迹 · <b data-mission-ascent-source></b></span><span data-mission-field>距地距离 · <b data-mission-distance></b></span><span data-mission-field>卫星速度 · <b data-mission-speed></b></span></div><section class="mission-data-section"><h4>有效载荷</h4><div class="mission-table-scroll"><table class="mission-data-table"><thead><tr><th>名称</th><th>类型</th><th>目的地</th></tr></thead><tbody data-mission-payloads></tbody></table></div></section><section class="mission-data-section" data-mission-stages-section><h4>级段 / 再入 / 回收</h4><div class="mission-table-scroll"><table class="mission-data-table"><thead><tr><th>级段</th><th>状态</th><th>最终位置</th></tr></thead><tbody data-mission-stages></tbody></table></div></section><div class="mission-replay-speed-control"><div class="mission-replay-speed-header"><label for="space-mission-replay-speed">回放速度</label><output class="gev-slider-value" for="space-mission-replay-speed" data-mission-replay-speed-output>1×</output></div><input id="space-mission-replay-speed" class="gev-quantitative-slider" type="range" min="0.25" max="4" step="0.25" value="1" data-mission-replay-speed aria-label="回放速度倍数"><div class="mission-replay-speed-scale" aria-hidden="true"><span>0.25×</span><span>1×</span><span>4×</span></div></div><div class="mission-action-row"><button type="button" class="mission-focus-button" data-mission-focus>聚焦</button><button type="button" class="mission-replay-button" data-mission-replay aria-pressed="false">回放上升</button></div><div class="space-mission-nav"><button type="button" class="mission-nav-button" data-mission-prev title="上一个任务"><span aria-hidden="true">‹</span> 上一个</button><span class="mission-nav-index" data-mission-index>—</span><button type="button" class="mission-nav-button" data-mission-next title="下一个任务">下一个 <span aria-hidden="true">›</span></button></div><button type="button" class="panel-layer-toggle" data-mission-show-all>显示全部 / 取消选中</button>`;
     layerState._missionPanel
@@ -458,8 +473,8 @@ export function createPanel({ state: layerState, services, parts, source }) {
       .insertAdjacentHTML(
         'beforeend',
         `<div class="mission-replay-transport" data-mission-replay-transport hidden>
-      <button type="button" data-mission-replay-toggle title="Pause replay" aria-label="Pause replay">Ⅱ</button>
-      <button type="button" class="cancel" data-mission-replay-cancel title="Cancel replay" aria-label="Cancel replay"><span aria-hidden="true">×</span></button>
+      <button type="button" data-mission-replay-toggle title="暂停回放" aria-label="暂停回放">Ⅱ</button>
+      <button type="button" class="cancel" data-mission-replay-cancel title="取消回放" aria-label="取消回放"><span aria-hidden="true">×</span></button>
     </div>`,
       );
     host.appendChild(layerState._missionPanel);

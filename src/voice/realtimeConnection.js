@@ -179,9 +179,9 @@ export class RealtimeConnection {
         if (!ownsChannel()) return;
         const detail = this.input.pushToTalkMode
           ? this.input.pushToTalkKeyHeld
-            ? 'Release Space to send'
-            : 'Hold Space to talk'
-          : 'Ask or command';
+            ? '松开空格发送'
+            : '按住空格说话'
+          : '提问或下达指令';
         this.setStatus('listening', detail);
         this.debugLog('data_channel.open', {
           connection: this.connectionDiagnostics(dataChannel),

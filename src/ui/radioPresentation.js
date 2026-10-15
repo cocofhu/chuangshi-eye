@@ -30,22 +30,23 @@ export function renderRadioState(state) {
   }
   this._syncContextRadioLauncherState();
   this._radioLayerState?.classList.toggle('active', enabled);
+  const lifecycleLabel = { enabling: '开启中', disabling: '关闭中' };
   if (this._radioLayerState) {
     this._radioLayerState.textContent = transitioning
-      ? lifecycleState.toUpperCase()
+      ? lifecycleLabel[lifecycleState] || lifecycleState
       : uncertain
         ? '不确定'
         : state.loading
-          ? 'SYNC'
+          ? '同步'
           : enabled
             ? `${state.filteredCount}/${state.stationCount}`
-            : 'OFF';
+            : '关';
   }
   if (this._radioEnableBtn) {
     this._radioEnableBtn.classList.toggle('active', enabled);
     this._radioEnableBtn.setAttribute('aria-pressed', String(enabled));
     this._radioEnableBtn.textContent = transitioning
-      ? lifecycleState.toUpperCase()
+      ? lifecycleLabel[lifecycleState] || lifecycleState
       : uncertain
         ? '对齐'
         : enabled
@@ -68,7 +69,7 @@ export function renderRadioState(state) {
       String(enabled),
     );
     this._contextRadioMiniEnableBtn.textContent = transitioning
-      ? lifecycleState.toUpperCase()
+      ? lifecycleLabel[lifecycleState] || lifecycleState
       : uncertain
         ? '对齐'
         : enabled
@@ -94,7 +95,7 @@ export function renderRadioState(state) {
     this._cockpitRadioEnableBtn.classList.toggle('active', enabled);
     this._cockpitRadioEnableBtn.setAttribute('aria-pressed', String(enabled));
     this._cockpitRadioEnableBtn.textContent = transitioning
-      ? lifecycleState.toUpperCase()
+      ? lifecycleLabel[lifecycleState] || lifecycleState
       : uncertain
         ? '对齐'
         : enabled
@@ -157,7 +158,7 @@ export function renderRadioState(state) {
     this._radioTunerBandLabel.textContent =
       state.filter === 'all'
         ? '目录波段'
-        : `${String(activeCategory?.label || state.filter).toUpperCase()} BAND`;
+        : `${String(activeCategory?.label || state.filter).toUpperCase()} 波段`;
   }
   this._radioTuner?.classList.toggle('is-static', Boolean(state.tuningStatic));
   if (tunerAvailable) this._refreshRadioTunerBand?.();
@@ -196,7 +197,7 @@ export function renderRadioState(state) {
   if (this._radioStationTags) {
     const tags = Array.isArray(selected?.tags) ? selected.tags.slice(0, 8) : [];
     this._radioStationTags.textContent = tags.length
-      ? `TAGS · ${tags.join(' · ')}`
+      ? `标签 · ${tags.join(' · ')}`
       : '';
   }
   if (this._radioStationHomepage) {
@@ -220,45 +221,45 @@ export function renderRadioState(state) {
     this._cockpitRadioNextBtn.disabled = !interactive || !hasStations;
   if (this._radioPlayBtn) {
     const action = activePlayback
-      ? 'Pause'
+      ? '暂停'
       : state.audioState === 'paused'
-        ? 'Resume'
-        : 'Play';
+        ? '继续'
+        : '播放';
     this._radioPlayBtn.disabled = !interactive || !hasStations;
     this._radioPlayBtn.classList.toggle('active', activePlayback);
-    this._radioPlayBtn.textContent = action.toUpperCase();
+    this._radioPlayBtn.textContent = action;
     this._radioPlayBtn.setAttribute(
       'aria-label',
-      `${action} ${selected ? 'selected' : 'nearest'} radio station`,
+      `${action}${selected ? '所选' : '最近'}电台`,
     );
   }
   if (this._contextRadioMiniPlayBtn) {
     const action = activePlayback
-      ? 'Pause'
+      ? '暂停'
       : state.audioState === 'paused'
-        ? 'Resume'
-        : 'Play';
+        ? '继续'
+        : '播放';
     this._contextRadioMiniPlayBtn.disabled = !interactive || !hasStations;
     this._contextRadioMiniPlayBtn.classList.toggle('active', activePlayback);
     this._contextRadioMiniPlayBtn.textContent = activePlayback ? 'Ⅱ' : '▶';
     this._contextRadioMiniPlayBtn.setAttribute(
       'aria-label',
-      `${action} ${selected ? 'selected' : 'nearest'} radio station`,
+      `${action}${selected ? '所选' : '最近'}电台`,
     );
     this._contextRadioMiniPlayBtn.title = action;
   }
   if (this._cockpitRadioPlayBtn) {
     const action = activePlayback
-      ? 'Pause'
+      ? '暂停'
       : state.audioState === 'paused'
-        ? 'Resume'
-        : 'Play';
+        ? '继续'
+        : '播放';
     this._cockpitRadioPlayBtn.disabled = !interactive || !hasStations;
     this._cockpitRadioPlayBtn.classList.toggle('active', activePlayback);
     this._cockpitRadioPlayBtn.textContent = activePlayback ? 'Ⅱ' : '▶';
     this._cockpitRadioPlayBtn.setAttribute(
       'aria-label',
-      `${action} ${selected ? 'selected' : 'nearest'} radio station`,
+      `${action}${selected ? '所选' : '最近'}电台`,
     );
     this._cockpitRadioPlayBtn.title = action;
   }

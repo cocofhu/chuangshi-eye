@@ -319,7 +319,7 @@ test('push-to-talk starts once at 500ms and repeat does not reset the threshold'
   assert.equal(f.controller.pushToTalkKeyHeld, false);
   assert.equal(f.microphone.enabled, false);
   assert.equal(f.controller.ui.root.dataset.pushToTalk, undefined);
-  assert.equal(f.controller.ui.detail.textContent, 'Hold Space to talk');
+  assert.equal(f.controller.ui.detail.textContent, '按住空格说话');
 });
 
 test('push-to-talk treats a Space release before 500ms as a background tap', (t) => {
@@ -482,12 +482,12 @@ test('mic clicks are ignored while Space is physically held', () => {
 test('voice control help tray reflects the push-to-talk key state', () => {
   assert.equal(
     resolveVoiceControlHint(false, false),
-    'Hold Space to speak · tap Space to activate focused controls',
+    '按住空格说话 · 点按空格以激活焦点控件',
   );
-  assert.equal(resolveVoiceControlHint(true, true), 'Release Space to send');
+  assert.equal(resolveVoiceControlHint(true, true), '松开空格发送');
   assert.equal(
     resolveVoiceControlHint(true, false),
-    'Hold Space to speak · tap Space to activate focused controls',
+    '按住空格说话 · 点按空格以激活焦点控件',
   );
 });
 
@@ -3192,7 +3192,7 @@ test('F1: the toggle still records the next-session preference while live', () =
   assert.equal(controller.voiceTier, 'mini');
   assert.equal(ui.tierButton.textContent, 'MINI');
   // ...and says so, rather than implying the live session switched.
-  assert.match(ui.tierButton.title, /this session stays on/i);
+  assert.match(ui.tierButton.title, /本次会话仍使用/);
 });
 
 test('OAuth cloud sessions report unknown cost and usage without tripping the API spend guard', () => {
@@ -3203,7 +3203,7 @@ test('OAuth cloud sessions report unknown cost and usage without tripping the AP
   controller.syncCostUi();
   const before = controller.costTracker.state();
   assert.equal(ui.costValue.hidden, false);
-  assert.equal(ui.costValue.textContent, 'COST UNKNOWN');
+  assert.equal(ui.costValue.textContent, '费用未知');
   assert.deepEqual(controller.recordUsage(usdUsage(100)), {
     responses: 1,
     input: 0,
@@ -3214,11 +3214,11 @@ test('OAuth cloud sessions report unknown cost and usage without tripping the AP
   const after = controller.costTracker.state();
   assert.equal(after.totalUsd, before.totalUsd);
   assert.equal(controller.costCapStopped, false);
-  assert.match(ui.costValue.title, /1 response\(s\).*1562500 output tokens/);
+  assert.match(ui.costValue.title, /1 次响应.*输出 1562500 token/);
   controller.dc = {};
   controller.responseActive = true;
   controller.stop();
-  assert.match(ui.costValue.title, /Usage is incomplete/);
+  assert.match(ui.costValue.title, /用量不完整/);
 });
 
 test('OAuth cloud sessions count caption transcriptions without pricing them into the API cap', () => {
@@ -3239,8 +3239,8 @@ test('OAuth cloud sessions count caption transcriptions without pricing them int
   assert.equal(after.totalUsd, before.totalUsd);
   assert.equal(after.capReached, false);
   assert.equal(controller.costCapStopped, false);
-  assert.equal(ui.costValue.textContent, 'COST UNKNOWN');
-  assert.match(ui.costValue.title, /1 caption transcription\(s\)/);
+  assert.equal(ui.costValue.textContent, '费用未知');
+  assert.match(ui.costValue.title, /字幕转写 1 次/);
 });
 
 test('F1: when idle, toggling does re-price the preview meter', () => {

@@ -297,7 +297,7 @@ test('common button and annotation bindings work with an alternate adapter and c
     assert.equal(calls, 1);
     assert.equal(ui.tierButton.hidden, true);
     assert.equal(ui.costValue.hidden, true);
-    assert.equal(ui.helpDetail.textContent, 'Activate to toggle voice');
+    assert.equal(ui.helpDetail.textContent, '激活以开关语音');
     assert.equal(ui.status.textContent, '聆听');
     assert.equal(ui.detail.textContent, 'Ready');
     subscribed({ status: 'resolved' });

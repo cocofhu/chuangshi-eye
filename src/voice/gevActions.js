@@ -1460,7 +1460,7 @@ function controlScene(sceneDirector, args = {}) {
     };
   }
   if (sceneAction === 'stop') {
-    sceneDirector.stopScene('Stopped by voice');
+    sceneDirector.stopScene('语音已停止');
     return { ok: true, action: 'control_scene', running: false };
   }
   if (sceneAction === 'next') {
@@ -3673,7 +3673,7 @@ async function aircraftProximityWindowForQuery(
     action: 'analyst_query',
     count: selection.count,
     complete,
-    scopeLabel: `within ${radiusKm} km of ${label}`,
+    scopeLabel: `距 ${label} ${radiusKm} 公里内`,
     listed: items.length,
     items,
     summary: selection.summary,
@@ -3681,7 +3681,7 @@ async function aircraftProximityWindowForQuery(
       ? { partial: true, unanswered: [...(result.unanswered || [])] }
       : {}),
     display: {
-      scope: `within ${radiusKm} km of ${label} (Contacts window)`,
+      scope: `距 ${label} ${radiusKm} 公里内（目标情境窗口）`,
     },
     coverage,
     // (D) The answer always says whose window it is and which engine produced it.

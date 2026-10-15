@@ -1078,7 +1078,7 @@ test('generic layer visibility exposes lifecycle truth for every manager phase a
     lifecycleUncertain: false,
   });
   // The voice envelope is additive and states the failure plainly.
-  assert.equal(say, "Couldn't turn on radio.");
+  assert.equal(say, '无法开启 radio。');
   assert.equal(display.title, 'radio');
 });
 
@@ -2997,7 +2997,7 @@ test('front5: a nearby ask centres on the Contacts SUBJECT, not the selected dat
       scope: { kind: 'radius', km: 250 },
     });
     assert.equal(subjectCentred.count, 116, 'the subject-centred count is the window cohort');
-    assert.equal(subjectCentred.scopeLabel, 'within 250 km of N546PC');
+    assert.equal(subjectCentred.scopeLabel, '距 N546PC 250 公里内');
     assert.equal(subjectCentred.window.engine, 'contacts-window');
     assert.equal(subjectCentred.window.centeredOn, 'N546PC');
   });
@@ -3435,7 +3435,7 @@ test('analyst_query counts the whole loaded set, not a 2,000-record slice', asyn
   assert.equal(result.items[0].id, 'F8113');
   assert.equal(typeof result.items[0].lat, 'number', 'items carry lat/lon for a follow-up fly-to');
   assert.equal(typeof result.items[0].lon, 'number');
-  assert.equal(result.display.scope, 'anywhere in the loaded data');
+  assert.equal(result.display.scope, '已加载数据范围内');
   assert.equal(result.truncated, undefined, 'list length is reported as listed, not as data truncation');
   assert.equal(result.listed, 1);
 });
@@ -3509,7 +3509,7 @@ test('the Contacts window ranks, filters and formats like any analyst answer', a
     assert.equal(farthest.items[0].distanceKm, 20);
     assert.equal(typeof farthest.items[0].lat, 'number');
     assert.equal(farthest.listed, 1);
-    assert.match(farthest.display.scope, /Contacts window/);
+    assert.match(farthest.display.scope, /目标情境窗口/);
     const high = await runner('analyst_query', {
       layers: ['flights'], scope: { kind: 'radius', km: 250 }, filters: [{ field: 'altitudeM', op: 'gte', value: 15000 }],
     });
@@ -3652,7 +3652,7 @@ test('a capped Contacts snapshot is a lower bound from one immutable cohort', as
       total: null,
       truncated: true,
     });
-    assert.match(result.say, /^At least 20,000 aircraft within 250 km/);
+    assert.match(result.say, /^至少 20,000 航空器 距/);
     assert.equal(result.window.flights, 20_000);
     assert.equal(result.window.complete, false);
     assert.equal(result.contactsWindow.aircraft, 20_000);
@@ -3693,19 +3693,19 @@ test('Contacts follow-ups filter the cohort that was actually displayed', async 
     });
     assert.equal(followUp.count, 1);
     assert.equal(followUp.items[0].id, 'F3');
-    assert.equal(followUp.scopeLabel, 'within 250 km of N546PC');
+    assert.equal(followUp.scopeLabel, '距 N546PC 250 公里内');
     assert.equal(
       followUp.display.scope,
-      'within 250 km of N546PC (Contacts window)',
+      '距 N546PC 250 公里内（目标情境窗口）',
     );
     assert.equal(followUp.coverage.scope, 'window:250km@N546PC');
     assert.equal(
       presentResult('analyst_query', followUp).display.title,
-      '1 aircraft within 250 km of N546PC',
+      '1 航空器 距 N546PC 250 公里内',
     );
     assert.equal(
       attachVoiceResult('analyst_query', followUp).say,
-      '1 aircraft within 250 km of N546PC.',
+      '1 航空器 距 N546PC 250 公里内.',
     );
   });
 });

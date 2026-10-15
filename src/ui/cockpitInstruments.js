@@ -106,12 +106,17 @@ export function updateHud(
     const signature = divisions.join(',');
     if (signature !== this.lastCompassSignature) {
       this.lastCompassSignature = signature;
-      this.compassTape.innerHTML = divisions
-        .map((division, index) => {
+      this.compassTape.replaceChildren(
+        ...divisions.map((division, index) => {
           const slot = index - 3;
-          return `<span class="${slot === 0 ? 'active' : ''}" style="--slot:${slot};--depth:${Math.abs(slot)}">${formatCompassDivision(division)}</span>`;
-        })
-        .join('');
+          const mark = document.createElement('span');
+          if (slot === 0) mark.className = 'active';
+          mark.style.setProperty('--slot', String(slot));
+          mark.style.setProperty('--depth', String(Math.abs(slot)));
+          mark.textContent = formatCompassDivision(division);
+          return mark;
+        }),
+      );
     }
   }
   if (this.clock)

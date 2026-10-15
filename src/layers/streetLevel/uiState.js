@@ -29,7 +29,7 @@ export function summarizeCoverage(providers) {
     loading: active.some((p) => p.loading),
     hint:
       providers.length === 0
-        ? 'No street-level imagery providers configured'
+        ? '未配置街景影像来源'
         : active.find((p) => p.hint)?.hint || '',
     error: active.find((p) => p.error)?.error || null,
     keyRequired:

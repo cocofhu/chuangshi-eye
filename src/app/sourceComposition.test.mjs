@@ -97,7 +97,7 @@ test('empty Street Level uses the shared unavailable lifecycle without initializ
   assert.equal(manager.layers.get('street-level').initialized, false);
   const row = manager.getAll()[0];
   assert.equal(row.stats.status, 'unavailable');
-  assert.equal(row.stats.error, 'No street-level imagery providers configured');
+  assert.equal(row.stats.error, '未配置街景影像来源');
   assert.equal(await manager.setEnabled('street-level', false), true);
   const configured = catalog(createStandaloneLayerSources(), t);
   assert.equal(

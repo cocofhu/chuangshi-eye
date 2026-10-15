@@ -18,7 +18,7 @@ function caption(viewer, pack) {
   card.append(title);
   if (pack.attribution.url) {
     const link = document.createElement('a');
-    link.textContent = 'Source';
+    link.textContent = '来源';
     link.href = pack.attribution.url;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';

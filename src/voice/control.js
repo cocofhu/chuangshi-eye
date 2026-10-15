@@ -15,11 +15,11 @@ export function createVoiceControl({ reset = false } = {}) {
         <div class="gev-voice-kicker">语音</div>
         <div id="gev-voice-status">关</div>
         <div class="gev-voice-cost">
-          <button id="gev-voice-tier" class="gev-voice-tier-btn" type="button" aria-pressed="false" title="Voice model tier — applies next session">STD</button>
-          <span id="gev-voice-cost-value" class="gev-voice-cost-value" data-level="ok" title="Estimated session cost">~$0.00</span>
+          <button id="gev-voice-tier" class="gev-voice-tier-btn" type="button" aria-pressed="false" title="语音模型档位 — 下次会话生效">STD</button>
+          <span id="gev-voice-cost-value" class="gev-voice-cost-value" data-level="ok" title="估计会话费用">~$0.00</span>
         </div>
       </div>
-      <button id="gev-voice-button" type="button" aria-label="Voice control — activate to toggle voice; hold Space to speak" aria-describedby="gev-voice-help">
+      <button id="gev-voice-button" type="button" aria-label="语音控制 — 激活以开关语音；按住空格说话" aria-describedby="gev-voice-help">
         <span class="gev-mic-orbit"><img src="/mic.svg" alt="" /></span>
         <span class="gev-mic-label">语音</span>
       </button>
@@ -30,26 +30,26 @@ export function createVoiceControl({ reset = false } = {}) {
         <div id="gev-voice-detail">语音待命</div>
       </div>
       <div id="gev-voice-help" class="gev-voice-help-tray" role="tooltip">
-        <span class="gev-voice-help-kicker">VOICE CONTROL</span>
-        <span class="gev-voice-help-detail">Hold Space to speak · tap Space to activate focused controls</span>
+        <span class="gev-voice-help-kicker">语音控制</span>
+        <span class="gev-voice-help-detail">按住空格说话 · 点按空格以激活焦点控件</span>
       </div>
-      <section id="gev-voice-card" class="gev-voice-card" hidden aria-label="Voice assistant">
+      <section id="gev-voice-card" class="gev-voice-card" hidden aria-label="语音助手">
         <div class="gev-voice-card-header">
-          <span class="gev-voice-card-kicker">VOICE</span>
+          <span class="gev-voice-card-kicker">语音</span>
           <span id="gev-voice-card-phase" class="gev-voice-card-phase"></span>
-          <button id="gev-voice-card-dismiss" class="gev-voice-card-dismiss" type="button" aria-label="Dismiss voice card">×</button>
+          <button id="gev-voice-card-dismiss" class="gev-voice-card-dismiss" type="button" aria-label="关闭语音卡片">×</button>
         </div>
-        <p id="gev-voice-card-user" class="gev-voice-card-caption" data-role="user" hidden><span class="gev-voice-card-who">YOU</span><span id="gev-voice-card-user-text" class="gev-voice-card-text"></span></p>
-        <p id="gev-voice-card-pointer" class="gev-voice-card-pointer" hidden><span id="gev-voice-card-pointer-kind" class="gev-voice-card-who">THIS</span><span class="gev-voice-card-sr">: </span><span id="gev-voice-card-pointer-text" class="gev-voice-card-pointer-label"></span></p>
+        <p id="gev-voice-card-user" class="gev-voice-card-caption" data-role="user" hidden><span class="gev-voice-card-who">你</span><span id="gev-voice-card-user-text" class="gev-voice-card-text"></span></p>
+        <p id="gev-voice-card-pointer" class="gev-voice-card-pointer" hidden><span id="gev-voice-card-pointer-kind" class="gev-voice-card-who">此</span><span class="gev-voice-card-sr">: </span><span id="gev-voice-card-pointer-text" class="gev-voice-card-pointer-label"></span></p>
         <p id="gev-voice-card-assistant" class="gev-voice-card-caption" data-role="assistant" hidden><span class="gev-voice-card-who">GEV</span><span id="gev-voice-card-assistant-text" class="gev-voice-card-text"></span></p>
-        <ol id="gev-voice-card-plan" class="gev-voice-card-plan" aria-label="Plan" hidden></ol>
+        <ol id="gev-voice-card-plan" class="gev-voice-card-plan" aria-label="计划" hidden></ol>
         <div id="gev-voice-card-result" class="gev-voice-card-result" hidden>
           <div id="gev-voice-card-result-title" class="gev-voice-card-result-title"></div>
           <div id="gev-voice-card-chips" class="gev-voice-card-chips" hidden></div>
           <ul id="gev-voice-card-lines" class="gev-voice-card-lines"></ul>
-          <ol id="gev-voice-card-referents" class="gev-voice-card-referents" aria-label="Referenced items" hidden></ol>
+          <ol id="gev-voice-card-referents" class="gev-voice-card-referents" aria-label="引用项" hidden></ol>
           <details id="gev-voice-card-notes" class="gev-voice-card-notes" hidden>
-            <summary>NOTES &amp; SOURCES</summary>
+            <summary>备注与来源</summary>
             <ul id="gev-voice-card-note-list" class="gev-voice-card-lines"></ul>
           </details>
         </div>
@@ -57,11 +57,11 @@ export function createVoiceControl({ reset = false } = {}) {
       </section>
       <div class="gev-voice-error-tray" role="alert" aria-live="assertive">
         <div class="gev-voice-error-header">
-          <span>VOICE SYSTEM ERROR</span>
-          <button class="gev-voice-error-dismiss" type="button">DISMISS</button>
+          <span>语音系统错误</span>
+          <button class="gev-voice-error-dismiss" type="button">关闭</button>
         </div>
         <div id="gev-voice-error-detail"></div>
-        <div class="gev-voice-error-hint">Check microphone permission and network access, then try again.</div>
+        <div class="gev-voice-error-hint">请检查麦克风权限和网络，然后重试。</div>
       </div>
     `;
     const commandDock = document.getElementById('command-dock');

@@ -1,5 +1,5 @@
   <!-- Aircraft first-person view. It can be entered from the visible view switcher. -->
-  <section id="cockpit-hud" aria-label="Aircraft cockpit view" hidden>
+  <section id="cockpit-hud" aria-label="驾驶舱视图" hidden>
     <!-- One optical coordinate system: every targeting mark shares this center.
          Decorative only; telemetry and interactive panels remain separate. -->
     <svg class="cockpit-frame-lines" viewBox="0 0 1200 720" preserveAspectRatio="none" aria-hidden="true" focusable="false">
@@ -61,19 +61,19 @@
         <span>+20</span><span>+10</span><span class="active">00</span><span>−10</span><span>−20</span>
       </div>
       <div class="cockpit-horizon-guide">
-        <span></span><small>LEVEL</small><span></span>
+        <span></span><small>水平</small><span></span>
       </div>
-      <div id="cockpit-route-direction" class="cockpit-route-direction" hidden aria-label="Estimated destination direction">
+      <div id="cockpit-route-direction" class="cockpit-route-direction" hidden aria-label="估计目的地方向">
         <svg class="cockpit-route-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M12 2 4.58 19.93c-.34.83.51 1.63 1.31 1.27L12 18.47l6.11 2.73c.8.36 1.65-.44 1.31-1.27L12 2Z" />
         </svg>
-        <small id="cockpit-route-direction-label">DEST ---°</small>
+        <small id="cockpit-route-direction-label">目的 ---°</small>
       </div>
-      <div class="cockpit-visor-status cockpit-visor-status-left">OPTICAL PLANE · 01</div>
-      <div class="cockpit-visor-status cockpit-visor-status-right">VISOR LOCK · ACTIVE</div>
+      <div class="cockpit-visor-status cockpit-visor-status-left">光学平面 · 01</div>
+      <div class="cockpit-visor-status cockpit-visor-status-right">面罩锁定 · 生效</div>
     </div>
     <div id="cockpit-speed-rim" class="cockpit-altitude-rim cockpit-speed-rim">
-      <span class="cockpit-altitude-rim-label">GROUND SPEED · KTS</span>
+      <span class="cockpit-altitude-rim-label">地速 · 节</span>
       <div class="cockpit-altitude-rim-rail"></div>
       <div class="cockpit-altitude-rim-scale">
         <span data-speed-rim-tick><b></b><i></i></span>
@@ -92,7 +92,7 @@
       </div>
     </div>
     <div id="cockpit-altitude-rim" class="cockpit-altitude-rim">
-      <span class="cockpit-altitude-rim-label">ALTITUDE · FT</span>
+      <span class="cockpit-altitude-rim-label">高度 · 英尺</span>
       <div class="cockpit-altitude-rim-rail"></div>
       <div class="cockpit-altitude-rim-scale">
         <span data-altitude-rim-tick><b></b><i></i></span>
@@ -137,13 +137,13 @@
         <div class="cockpit-readout cockpit-speed">
           <span class="cockpit-readout-label">地速</span>
           <strong id="cockpit-speed-value">---</strong>
-          <span class="cockpit-readout-unit">KTS</span>
+          <span class="cockpit-readout-unit">节</span>
         </div>
         <div class="cockpit-heading-value"><span id="cockpit-heading-value">---</span><small>°</small></div>
         <div class="cockpit-readout cockpit-altitude">
           <span class="cockpit-readout-label">高度</span>
           <strong id="cockpit-altitude-value">-----</strong>
-          <span class="cockpit-readout-unit">FT</span>
+          <span class="cockpit-readout-unit">英尺</span>
         </div>
       </div>
       <span class="cockpit-heading-caret material-symbols-outlined" aria-hidden="true">arrow_drop_down</span>
@@ -217,7 +217,7 @@
           <span class="cockpit-route-arrow material-symbols-outlined" aria-hidden="true">east</span>
           <div class="cockpit-route-airport">
             <span>到达</span>
-            <strong id="cockpit-route-to">UNKNOWN</strong>
+            <strong id="cockpit-route-to">未知</strong>
           </div>
         </div>
       </section>
@@ -269,22 +269,22 @@
         </section>
       </div>
       <footer class="cockpit-signal-footer">
-        <span id="cockpit-brief-source">SOURCE-BACKED EVENTS · NO SYNTHETIC NEWS</span>
+        <span id="cockpit-brief-source">来源事件 · 无合成新闻</span>
         <nav class="cockpit-brief-tabs" aria-label="Cockpit briefing pages">
-          <button type="button" data-cockpit-brief-index="0" aria-label="Show Live Signals" aria-current="true">SIG</button>
-          <button type="button" data-cockpit-brief-index="1" aria-label="Show Regional News">NEWS</button>
-          <button type="button" data-cockpit-brief-index="2" aria-label="Show Local Info">LOCAL</button>
+          <button type="button" data-cockpit-brief-index="0" aria-label="显示实时信号" aria-current="true">信号</button>
+          <button type="button" data-cockpit-brief-index="1" aria-label="显示区域新闻">新闻</button>
+          <button type="button" data-cockpit-brief-index="2" aria-label="显示本地信息">本地</button>
         </nav>
       </footer>
     </aside>
-    <aside id="cockpit-utility-controls" class="cockpit-utility-controls" aria-label="Cockpit display and Radio controls">
+    <aside id="cockpit-utility-controls" class="cockpit-utility-controls" aria-label="驾驶舱显示与电台">
       <div class="cockpit-utility-control">
         <div class="cockpit-utility-launcher" data-cockpit-launcher="display">
           <span>显示</span>
           <span class="cockpit-utility-divider" aria-hidden="true"></span>
-          <button id="cockpit-display-toggle-btn" class="cockpit-utility-glyph" type="button" aria-expanded="false" aria-controls="cockpit-display-panel" aria-label="Expand Cockpit display options" title="Expand Cockpit display options">◀</button>
+          <button id="cockpit-display-toggle-btn" class="cockpit-utility-glyph" type="button" aria-expanded="false" aria-controls="cockpit-display-panel" aria-label="展开驾驶舱显示" title="展开驾驶舱显示">◀</button>
         </div>
-        <div id="cockpit-display-panel" class="cockpit-utility-popover" role="group" aria-label="Cockpit display options" hidden>
+        <div id="cockpit-display-panel" class="cockpit-utility-popover" role="group" aria-label="驾驶舱显示选项" hidden>
           <div class="cockpit-display-slot" data-cockpit-display-slot="hud"></div>
           <div class="cockpit-display-slot" data-cockpit-display-slot="detection"></div>
           <div class="cockpit-display-slot" data-cockpit-display-slot="parameters"></div>
@@ -293,21 +293,21 @@
       </div>
       <div class="cockpit-utility-control">
         <div class="cockpit-utility-launcher" data-cockpit-launcher="radio">
-          <span>RADIO</span>
+          <span>电台</span>
           <span class="cockpit-utility-divider" aria-hidden="true"></span>
-          <button id="cockpit-radio-toggle-btn" class="cockpit-utility-glyph" type="button" aria-expanded="false" aria-controls="cockpit-radio-panel" aria-label="Expand Cockpit Radio controls" title="Expand Cockpit Radio controls">◀</button>
+          <button id="cockpit-radio-toggle-btn" class="cockpit-utility-glyph" type="button" aria-expanded="false" aria-controls="cockpit-radio-panel" aria-label="展开驾驶舱电台" title="展开驾驶舱电台">◀</button>
         </div>
-        <div id="cockpit-radio-panel" class="cockpit-utility-popover cockpit-radio-compact" role="group" aria-label="Cockpit compact Radio controls" hidden>
+        <div id="cockpit-radio-panel" class="cockpit-utility-popover cockpit-radio-compact" role="group" aria-label="驾驶舱精简电台" hidden>
           <strong id="cockpit-radio-station" class="cockpit-radio-station">就绪</strong>
-          <button id="cockpit-radio-enable-btn" class="panel-layer-toggle" type="button" aria-pressed="false">ENABLE</button>
+          <button id="cockpit-radio-enable-btn" class="panel-layer-toggle" type="button" aria-pressed="false">开启</button>
           <div class="cockpit-radio-transport">
-            <button id="cockpit-radio-prev-btn" type="button" aria-label="Previous filtered radio station" disabled>◀◀</button>
-            <button id="cockpit-radio-play-btn" type="button" aria-label="Play selected radio station" disabled>▶</button>
-            <button id="cockpit-radio-next-btn" type="button" aria-label="Next filtered radio station" disabled>▶▶</button>
+            <button id="cockpit-radio-prev-btn" type="button" aria-label="上一台已筛选电台" disabled>◀◀</button>
+            <button id="cockpit-radio-play-btn" type="button" aria-label="播放所选电台" disabled>▶</button>
+            <button id="cockpit-radio-next-btn" type="button" aria-label="下一台已筛选电台" disabled>▶▶</button>
           </div>
           <label class="cockpit-radio-volume" for="cockpit-radio-volume">
-            <span>VOLUME</span>
-            <input id="cockpit-radio-volume" class="gev-quantitative-slider" type="range" min="0" max="100" value="80" aria-label="Cockpit Radio volume" disabled />
+            <span>音量</span>
+            <input id="cockpit-radio-volume" class="gev-quantitative-slider" type="range" min="0" max="100" value="80" aria-label="驾驶舱电台音量" disabled />
             <output id="cockpit-radio-volume-value" class="gev-slider-value" for="cockpit-radio-volume">80%</output>
           </label>
         </div>
@@ -316,10 +316,10 @@
     <div class="cockpit-help">ESC 退出 <span>·</span> C 切换</div>
   </section>
 
-  <nav id="view-switcher" aria-label="View switcher">
-    <button id="cockpit-reset-globe" type="button" aria-label="Reset cockpit to full globe view" title="Exit cockpit and return to full globe view" hidden>
+  <nav id="view-switcher" aria-label="视图切换">
+    <button id="cockpit-reset-globe" type="button" aria-label="退出驾驶舱并回到全球视角" title="退出驾驶舱并回到全球视角" hidden>
       <span class="material-symbols-outlined" aria-hidden="true">public</span>
-      <span>RESET</span>
+      <span>重置</span>
     </button>
     <button id="map-view-switch" type="button" aria-label="退出驾驶舱" aria-keyshortcuts="Escape C" title="退出驾驶舱" hidden>
       <span class="material-symbols-outlined" aria-hidden="true">close_fullscreen</span>

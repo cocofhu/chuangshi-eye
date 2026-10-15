@@ -203,5 +203,5 @@ test('the card shows one read-only decoder-feed line after a single probe', asyn
   });
   await new Promise((resolve) => setTimeout(resolve, 30));
   assert.equal(line.hidden, false);
-  assert.equal(line.textContent, 'Decoder feeds: 1090 live · 978 live');
+  assert.equal(line.textContent, '解码馈源：1090 在线 · 978 在线');
 });

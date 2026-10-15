@@ -73,7 +73,7 @@ function presentProviders(state) {
   return (state.providers || []).map((provider) => {
     const keyRequired = provider.keyRequired === true;
     const on = enabled && provider.on === true;
-    let title = `${provider.name} imagery ${on ? 'on' : 'off'}`;
+    let title = `${provider.name} 影像${on ? '开' : '关'}`;
     if (provider.keyRejected && provider.error)
       title = `${provider.name}: ${provider.error}`;
     else if (keyRequired && provider.requiresKeyId)
@@ -109,7 +109,7 @@ function presentViewer(state) {
     open: street.open === true,
     loading: street.loading === true && !street.imageId,
     renderMode: street.renderMode === 'fill' ? 'fill' : 'letterbox',
-    captionLeft: street.creator ? `Image by ${street.creator}` : '',
+    captionLeft: street.creator ? `影像作者 ${street.creator}` : '',
     captionRight: right.join(' · '),
     link: street.externalUrl || null,
     linkLabel: street.providerLabel ? `${street.providerLabel} ↗` : '',
@@ -118,7 +118,7 @@ function presentViewer(state) {
       disabled: street.open !== true || street.followAvailable !== true,
       title:
         street.followAvailable === true
-          ? 'Camera follows view: move the globe camera wherever the street-level view looks'
+          ? '相机跟随：街景朝向哪里，地球相机跟到哪里'
           : '跟随相机需要 Google 3D 地图：请在「地图来源」里选择 Google 3D',
     },
   };
@@ -126,13 +126,13 @@ function presentViewer(state) {
 
 function presentMeta(state) {
   if (state.providers.length === 0) return state.coverage.hint || '';
-  if (!state.enabled) return 'Switch a provider on to draw its coverage.';
+  if (!state.enabled) return '打开来源以绘制覆盖。';
   if (state.sequence.selectedId)
     return state.sequence.loading
       ? '正在加载该序列…'
-      : `${state.sequence.images.toLocaleString()} images in this sequence · Esc clears`;
+      : `${state.sequence.images.toLocaleString()} 张序列影像 · Esc 清除`;
   if (state.coverage.count > 0)
-    return `${state.coverage.count.toLocaleString()} sequences in view · click a line for its photos`;
+    return `视野内 ${state.coverage.count.toLocaleString()} 条序列 · 点击线段查看照片`;
   return state.coverage.hint || '';
 }
 

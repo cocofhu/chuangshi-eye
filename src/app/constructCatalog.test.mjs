@@ -161,7 +161,7 @@ test('Mapillary can be omitted or replaced without changing catalog membership',
   );
   assert.match(
     catalog.get('street-level').getUIState().coverage.hint,
-    /No street-level imagery providers/,
+    /未配置街景影像来源/,
   );
   const provider = fakeStreetLevelProvider({
     id: 'example',

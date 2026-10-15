@@ -59,7 +59,7 @@ const AWARENESS_DEPENDENCIES = [
 test('Contacts labels a capped cohort as a lower bound', () => {
   assert.equal(
     formatAwarenessCount({ count: 20_000, complete: false, truncated: true }),
-    'At least 20,000',
+    '至少 20,000',
   );
   assert.equal(
     formatAwarenessCount({ count: 19_999, complete: true, truncated: false }),
@@ -314,7 +314,7 @@ test('Contacts continuation target is the visible explanatory note', () => {
   const source = readLayerSource(new URL('./militaryAwareness.js', import.meta.url));
   assert.match(
     source,
-    /<p class="military-awareness-note" tabindex="-1" data-awareness-focus-continuation>Open-source mapped\/observed context\./,
+    /<p class="military-awareness-note" tabindex="-1" data-awareness-focus-continuation>公开来源的已标绘与观测情境。/,
   );
   assert.doesNotMatch(source, /<span[^>]*data-awareness-focus-continuation/);
 });
@@ -1682,7 +1682,7 @@ test('expanded Context results omit the redundant status heading', () => {
   assert.doesNotMatch(militaryAwarenessSource, /military-awareness-heading/);
   assert.doesNotMatch(militaryAwarenessSource, /GLOBAL CONTEXT <span>CONTEXT ONLY<\/span>/);
   assert.match(militaryAwarenessSource, /military-awareness-subject/);
-  assert.match(militaryAwarenessSource, /FLIGHT \/ VESSEL WINDOW/);
+  assert.match(militaryAwarenessSource, /航空 \/ 船舶窗口/);
   assert.match(militaryAwarenessSource, /military-awareness-controls/);
 });
 
@@ -3155,7 +3155,7 @@ test('a selected installation card keeps every member name and escapes source te
     });
     militaryAwarenessLayer.update();
     const html = runtime.panel().innerHTML;
-    assert.match(html, /Named areas \(4\)/);
+    assert.match(html, /命名区域（4）/);
     for (const name of ['Area one', 'Area two', 'Area three', '&lt;Area four&gt;']) assert.ok(html.includes(name));
     assert.ok(!html.includes('<Area four>'));
   } finally {

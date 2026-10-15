@@ -168,12 +168,12 @@ try {
           !window.__godsEyeView.sceneDirector.running,
       )),
   );
-  await click('EDIT DETAILS');
+  await click('编辑详情');
   await click('Capture camera as anchor');
   await page.waitForFunction(() =>
     document
       .querySelector('[data-director-dialog] [role=status]')
-      .textContent.includes('Anchor added'),
+      .textContent.includes('锚点已加入'),
   );
   await click('Set move start to current camera');
   await page.waitForFunction(() =>
@@ -232,7 +232,7 @@ try {
       return create(blob);
     };
   });
-  await click('SHARE SCENE');
+  await click('分享场景');
   await click('Download scene JSON');
   const exported = await page.evaluate(async () =>
     JSON.parse(await window.__shareExports.at(-1)),
@@ -259,7 +259,7 @@ try {
   await page.waitForFunction(
     () =>
       document.querySelector('[data-director-dialog] [role=status]')
-        .textContent === 'Asset bundle downloaded',
+        .textContent === '素材包已下载',
   );
   const bundle = await page.evaluate(
     async () => await window.__shareExports.at(-1),
@@ -338,7 +338,7 @@ try {
         () => window.__godsEyeView.sceneDirector.getDataPackState().count === 1,
       )),
   );
-  await click('EDIT DETAILS');
+  await click('编辑详情');
   await page.evaluate(() => {
     window.__godsEyeView.sceneDirector._project.scenes[0].title = 'Newer edit';
   });
@@ -352,7 +352,7 @@ try {
     ),
   );
   await page.keyboard.press('Escape');
-  await click('SHARE SCENE');
+  await click('分享场景');
   await page.setViewport({ width: 390, height: 844 });
   check(
     'modal remains within a narrow viewport',
@@ -415,7 +415,7 @@ try {
     'cancelling Apply during pending scene cleanup preserves saved project and bundle bytes',
     cancelledApply,
   );
-  await click('EDIT DETAILS');
+  await click('编辑详情');
   await page.evaluate(() => {
     const fields = [
       ...document.querySelectorAll('[data-director-dialog] textarea'),

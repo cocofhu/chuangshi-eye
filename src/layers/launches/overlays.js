@@ -119,8 +119,8 @@ export function createOverlays({ state: layerState, services, parts, source }) {
     const details = selected
       ? [
           siteName
-            ? `LAUNCH SITE · ${shortMissionLabel(siteName, 20).toUpperCase()}`
-            : 'LAUNCH SITE',
+            ? `发射场 · ${shortMissionLabel(siteName, 20).toUpperCase()}`
+            : '发射场',
         ]
       : [];
     return {
@@ -586,27 +586,27 @@ export function createOverlays({ state: layerState, services, parts, source }) {
     const mission = shortMissionLabel(launch.name, 22).toUpperCase();
     const siteName = compactLaunchSiteName(launch.launchSite);
     const siteCallout = siteName
-      ? `LAUNCH SITE · ${shortMissionLabel(siteName, 20).toUpperCase()}`
-      : 'LAUNCH SITE';
+      ? `发射场 · ${shortMissionLabel(siteName, 20).toUpperCase()}`
+      : '发射场';
     let title = mission;
     let detail = siteCallout;
     if (mode === 'countdown') {
       title = `T−${String(state.countdownSeconds).padStart(2, '0')} · ${mission}`;
-      detail = `LAUNCH STANDBY\n${siteCallout}`;
+      detail = `发射待命\n${siteCallout}`;
     } else if (mode === 'ascent') {
       title =
         state.elapsedSinceStart < 1
-          ? `LIFTOFF · ${mission}`
-          : `${launch.trajectory.length > 1 ? 'ASCENT REPLAY' : 'ASCENT ESTIMATE'} · ${mission}`;
+          ? `起飞 · ${mission}`
+          : `${launch.trajectory.length > 1 ? '上升回放' : '上升估计'} · ${mission}`;
       detail = parts.policyHelpers.formatMissionEventTime(state.eventTime);
     } else if (mode === 'recovery') {
-      title = `STAGE RE-ENTRY / RECOVERY · ${mission}`;
+      title = `级段再入 / 回收 · ${mission}`;
       detail = parts.policyHelpers.formatMissionEventTime(state.eventTime);
     } else if (mode === 'orbit') {
-      title = `ORBIT REPLAY · ${mission}`;
+      title = `轨道回放 · ${mission}`;
       detail = parts.policyHelpers.formatMissionEventTime(state.eventTime);
     }
-    if (layerState._replayPaused) title = `PAUSED · ${title}`;
+    if (layerState._replayPaused) title = `已暂停 · ${title}`;
     const nextText = `${title}\n${detail}`;
     if (nextText !== layerState._replayVehicleOverlayText) {
       layerState._replayVehicleOverlayText = nextText;

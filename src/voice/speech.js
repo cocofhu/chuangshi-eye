@@ -53,11 +53,11 @@ function listPhrase(items) {
   return `${list.slice(0, -1).join('、')}和${list.at(-1)}`;
 }
 
-function feet(meters) {
+function metersPhrase(meters) {
   const value = Number(meters);
   if (!Number.isFinite(value)) return null;
-  const rounded = Math.round((value * 3.28084) / 100) * 100;
-  return `${rounded.toLocaleString('zh-CN')} 英尺`;
+  const rounded = Math.round(value / 100) * 100;
+  return `${rounded.toLocaleString('zh-CN')} 米`;
 }
 
 function kilometers(km) {
@@ -129,12 +129,12 @@ function flyToLocation(result) {
   if (result?.cancelled) return null;
   if (!result?.ok) {
     return {
-      say: sentence(`Couldn't find ${label}`),
+      say: sentence(`找不到 ${label}`),
       display: { title: label, lines: [result?.error].filter(Boolean) },
     };
   }
   return {
-    say: sentence(result.arrived ? `Over ${label}` : `Flying to ${label}`),
+    say: sentence(result.arrived ? `已在 ${label} 上空` : `正在飞往 ${label}`),
     display: {
       title: label,
       lines: result.rangeM
@@ -222,7 +222,7 @@ function selectNearestAircraft(result) {
   const aircraft = result.aircraft || {};
   const name = spokenLabel(aircraft.callsign || result.label || aircraft.id);
   const distance = kilometers(aircraft.distanceKm);
-  const altitude = feet(aircraft.altitudeM);
+  const altitude = metersPhrase(aircraft.altitudeM);
   const tag = feedTag(feed.state);
   const say = sentence(
     [
@@ -253,12 +253,12 @@ function selectNearestAircraft(result) {
 
 function routeText(properties) {
   const route = spokenLabel(properties.route || '', 40);
-  if (route) return route.replace(/\s*(?:-|→|>)\s*/g, ' to ');
+  if (route) return route.replace(/\s*(?:-|→|>)\s*/g, ' 至 ');
   const origin = spokenLabel(properties.routeOrigin || '', 12);
   const destination = spokenLabel(properties.routeDestination || '', 12);
-  if (origin && destination) return `${origin} to ${destination}`;
-  if (origin) return `from ${origin}`;
-  if (destination) return `to ${destination}`;
+  if (origin && destination) return `${origin} 至 ${destination}`;
+  if (origin) return `从 ${origin}`;
+  if (destination) return `至 ${destination}`;
   return null;
 }
 
@@ -493,23 +493,23 @@ export function planStepLabel(name, args = {}) {
     case 'annotate_map': {
       const targets = annotationTargets(args);
       return targets.length
-        ? `Mark ${listPhrase(targets.slice(0, 2))}${targets.length > 2 ? ` +${targets.length - 2}` : ''}`
+        ? `标记 ${listPhrase(targets.slice(0, 2))}${targets.length > 2 ? ` +${targets.length - 2}` : ''}`
         : '在地图上标记';
     }
     case 'fly_to_location':
-      return `Fly to ${displayName(args.query || args.locationId || 'location', 40)}`;
+      return `飞往 ${displayName(args.query || args.locationId || '地点', 40)}`;
     case 'select_nearest_aircraft':
-      return `Nearest aircraft to ${displayName(args.locationQuery || args.locationId || 'here', 32)}`;
+      return `距 ${displayName(args.locationQuery || args.locationId || '此处', 32)} 最近的航空器`;
     case 'set_layer_visibility':
       return `${displayName(args.layerId || '图层', 32)}${args.enabled === false ? '关闭' : '开启'}`;
     case 'get_entity_context':
-      return 'Read the view';
+      return '读取当前视图';
     case 'get_current_view_state':
-      return 'Check view state';
+      return '查看视野状态';
     case 'frame_overhead':
-      return `Frame ${spokenLabel(args.target || 'flights', 24)}`;
+      return `框选 ${spokenLabel(args.target || '航空器', 24)}`;
     default:
-      return spokenLabel(String(name || 'Action').replace(/_/g, ' '), 40);
+      return spokenLabel(String(name || '操作').replace(/_/g, ' '), 40);
   }
 }
 
@@ -535,7 +535,7 @@ const STEP_LABELS = Object.freeze({
   resolve: '正在查找地点',
   outline: '正在描边轮廓',
   search: '正在查询地点',
-  fly: 'Flying',
+  fly: '正在飞行',
   layer: '正在开启图层',
   refresh: '正在加载航空器',
   nearest: '正在选取最近目标',
@@ -543,7 +543,7 @@ const STEP_LABELS = Object.freeze({
 
 /** On-screen label for a progress step. */
 export function progressStepLabel(step, label) {
-  const base = STEP_LABELS[step] || spokenLabel(step || 'Working', 24);
+  const base = STEP_LABELS[step] || spokenLabel(step || '处理中', 24);
   return label ? `${base}: ${spokenLabel(label, 32)}` : base;
 }
 
@@ -559,7 +559,7 @@ export function progressLine(step, label) {
     case 'search':
       return place ? `正在查询 ${place}。` : null;
     case 'fly':
-      return place ? `Heading to ${place}.` : null;
+      return place ? `正在飞往 ${place}。` : null;
     case 'layer':
       return place ? `正在开启 ${place}。` : null;
     case 'refresh':
@@ -567,7 +567,7 @@ export function progressLine(step, label) {
     case 'nearest':
       return '正在选取最近航空器。';
     case 'still':
-      return place ? `Still working on ${place}.` : 'Still working on it.';
+      return place ? `仍在处理 ${place}。` : '仍在处理。';
     default:
       return null;
   }

@@ -76,14 +76,14 @@ export function createPolicyHelpers({
       : 0;
     return {
       orbit: orbitName
-        ? `${orbitAllowed ? '' : 'PLANNED · '}${orbitName}`
+        ? `${orbitAllowed ? '' : '计划 · '}${orbitName}`
         : null,
       ascent:
         suppliedTrajectoryPoints > 1
-          ? 'SUPPLIED TRAJECTORY POINTS'
+          ? '提供的轨迹点'
           : replayAvailable
-            ? 'RECONSTRUCTED ESTIMATE'
-            : 'UNAVAILABLE',
+            ? '重建估计'
+            : '未知',
       replayAvailable: Boolean(replayAvailable),
     };
   }
@@ -196,7 +196,7 @@ export function createPolicyHelpers({
 
   function formatMissionEventTime(launchTime) {
     const date = new Date(launchTime);
-    if (!launchTime || !Number.isFinite(date.getTime())) return 'UNAVAILABLE';
+    if (!launchTime || !Number.isFinite(date.getTime())) return '未知';
     return `${date.toISOString().slice(0, 10)}\n${date.toISOString().slice(11, 19)} UTC`;
   }
 

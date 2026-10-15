@@ -16,14 +16,14 @@
 import { voiceLayer } from './layerManifest.js';
 
 const LAYER_NOUNS = Object.freeze({
-  flights: 'aircraft',
-  military: 'military aircraft',
-  'local-adsb': 'aircraft',
-  'ais-live-vessels': 'ships',
-  satellites: 'satellites',
-  'rocket-launches': 'launches',
-  earthquakes: 'earthquakes',
-  'local-firms': 'fires',
+  flights: '航空器',
+  military: '军用航空器',
+  'local-adsb': '航空器',
+  'ais-live-vessels': '船舶',
+  satellites: '卫星',
+  'rocket-launches': '发射',
+  earthquakes: '地震',
+  'local-firms': '火点',
 });
 
 /** Split "a; b" caveat text into separate notes. */
@@ -45,9 +45,9 @@ function notesOf(...values) {
 
 export function analystNounFor(layerKeys) {
   const keys = [...new Set(layerKeys.filter(Boolean))];
-  if (keys.length !== 1) return 'results';
+  if (keys.length !== 1) return '结果';
   const key = keys[0];
-  return LAYER_NOUNS[key] || voiceLayer(key)?.aliases?.[0] || 'results';
+  return LAYER_NOUNS[key] || voiceLayer(key)?.aliases?.[0] || '结果';
 }
 
 /** The count/scope headline shared by the analyst card and spoken answer. */
@@ -66,7 +66,7 @@ export function analystHeadline(result) {
     (layer) => layer.layerKey,
   );
   const count = Number(result?.count) || 0;
-  const floor = result?.complete === false ? 'At least ' : '';
+  const floor = result?.complete === false ? '至少 ' : '';
   return boundedHeadline(
     `${floor}${count.toLocaleString('en-US')} ${analystNounFor(keys)} ${result?.scopeLabel || ''}`,
   );
@@ -101,7 +101,7 @@ function analystCard(result) {
         ...(result.feedState && result.feedState !== 'nominal'
           ? [{ label: result.feedState }]
           : []),
-        ...(result.partial ? [{ label: 'partial' }] : []),
+        ...(result.partial ? [{ label: '部分' }] : []),
       ],
       // Coverage qualifications lead the feed detail. The bounded card groups
       // overflow in its existing Notes disclosure rather than dropping them.
@@ -109,7 +109,7 @@ function analystCard(result) {
       notes: [
         ...notesOf(result.coverage?.note, display.caveat),
         ...(unanswered.length
-          ? [`Not answered: ${unanswered.join(', ')}`]
+          ? [`未回答：${unanswered.join('、')}`]
           : []),
       ],
       sources,
