@@ -217,7 +217,7 @@ test('the DENSE row chip is stateless and declares the params to apply', () => {
     _setDenseCatalogStateForTest({});
     const chip = satellitesLayer.getRowControls().chips.find((entry) => entry.id === 'catalog');
     assert.equal(chip.id, 'catalog');
-    assert.equal(chip.label, 'DENSE');
+    assert.equal(chip.label, '密集');
     assert.equal(chip.active, false);
     assert.equal(chip.busy, false);
     assert.equal(chip.state, 'idle');
@@ -256,7 +256,7 @@ test('DENSE reports loading, then ACTIVE only once the points exist', async () =
     const settled = await settleChip();
     assert.equal(settled.active, true, 'active once the dense points are on screen');
     assert.equal(settled.state, 'active');
-    assert.equal(settled.label, 'DENSE');
+    assert.equal(settled.label, '密集');
     assert.deepEqual(settled.params, { catalog: 'core' }, 'a settled chip toggles back off');
 
     // The completion pushed a refresh, and the legend gained COMMS with it —
@@ -285,7 +285,7 @@ test('a failed DENSE load reverts the mode rather than leaving an active chip', 
 
     assert.equal(settled.active, false, 'a 502 must never present as a live dense catalog');
     assert.equal(settled.state, 'error');
-    assert.equal(settled.label, 'DENSE ✕');
+    assert.equal(settled.label, '密集 ✕');
     assert.match(settled.title, /502/, 'the chip explains why');
     assert.equal(satellitesLayer.getParams().catalog, 'core', 'the mode reverts to reality');
     assert.deepEqual(settled.params, { catalog: 'dense' }, 'clicking retries');
@@ -331,7 +331,7 @@ test('a 200 that yields no usable satellites is a failure, not a live catalog', 
       assert.equal(chip.active, false, `${name}: never active with zero dense points`);
       assert.equal(chip.state, 'error', `${name}: reported as a failure`);
       assert.equal(satellitesLayer.getParams().catalog, 'core', `${name}: mode reverted`);
-      assert.match(chip.title, /no satellites/, `${name}: says why`);
+      assert.match(chip.title, /没有可用卫星/, `${name}: says why`);
       _clearDenseCatalogStateForTest();
     }
 
@@ -367,7 +367,7 @@ test('an explicit return to core clears a failure the user never caused', async 
     satellitesLayer.setParams({ catalog: 'core', showPoints: true, showOrbits: true });
     const restored = satellitesLayer.getRowControls().chips[0];
     assert.equal(restored.state, 'idle', 'the error does not survive the restore');
-    assert.equal(restored.label, 'DENSE');
+    assert.equal(restored.label, '密集');
     assert.doesNotMatch(restored.title, /502/);
   } finally {
     console.warn = warn;

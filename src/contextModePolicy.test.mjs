@@ -241,7 +241,7 @@ test('Space Missions blocks unrelated layer enables before replay data can mix',
   const change = { layerId: 'flights', enabled: true, origin: 'user' };
   assert.match(
     contextLayerEnableBlockReason({ contextMode: 'space-missions', change, layerName: 'Live Flights' }),
-    /Exit the mode to enable Live Flights/,
+    /退出该模式后再开启 Live Flights/,
   );
   assert.equal(contextLayerEnableBlockReason({
     contextMode: 'space-missions',

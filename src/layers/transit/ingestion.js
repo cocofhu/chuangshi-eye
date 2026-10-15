@@ -472,7 +472,7 @@ export function createIngestion({ state, services, parts, source }) {
           `[Data:Transit] ${feed.id} poll failed:`,
           error?.message || error,
         );
-        status.error = `${feed.name} feed unavailable`;
+        status.error = `${feed.name} 数据源不可用`;
         status.retryInSec = Number.isFinite(error?.retryInSec)
           ? error.retryInSec
           : null;

@@ -2304,7 +2304,7 @@ export class LayerLifecycle {
   async _visibilityBlockReason(change) {
     const availability = this._sourceAvailability(change.layerId);
     if (change.enabled && availability?.available === false)
-      return availability.reason || 'Data source unavailable';
+      return availability.reason || '数据源不可用';
     for (const callback of this._visibilityGuards) {
       try {
         const result = await callback(change);

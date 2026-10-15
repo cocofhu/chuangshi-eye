@@ -136,17 +136,17 @@ test('length and area come out in metres on a local grid', () => {
 
 test('the measure and the hint follow the shape and the vertex count', () => {
   const area = createDrawSession('area');
-  assert.equal(drawHint(area), 'Click 3 more points.');
+  assert.equal(drawHint(area), '再点 3 个点。');
   [
     { lon: 0, lat: 0 },
     { lon: 0.01, lat: 0 },
     { lon: 0.01, lat: 0.01 },
   ].forEach((v) => addVertex(area, v));
   assert.match(formatMeasure(area), /ha$|km²$|m²$/);
-  assert.match(drawHint(area), /double-click or Enter to finish/);
+  assert.match(drawHint(area), /双击或 Enter 完成/);
   const pin = createDrawSession('pin');
-  assert.equal(drawHint(pin), 'Click where the pin goes.');
-  assert.equal(drawHint(null), 'Pick a shape, then click the map.');
+  assert.equal(drawHint(pin), '点击放置标记。');
+  assert.equal(drawHint(null), '先选形状，再点击地图。');
 });
 
 test('a vertex must be a finite coordinate on the globe', () => {
@@ -180,7 +180,7 @@ test('one shape holds at most MAX_VERTICES points', () => {
     added: false,
     reason: 'full',
   });
-  assert.match(drawHint(line), /512-point limit reached/);
+  assert.match(drawHint(line), /已达 512 点上限/);
 
   // A pin replaces its one vertex forever: the ceiling cannot strand it.
   const pin = createDrawSession('pin');
@@ -197,7 +197,7 @@ test('a shape that encloses nothing is refused, with a reason', () => {
   assert.equal(finishReason(collinear), 'degenerate');
   assert.equal(canFinish(collinear), false);
   assert.equal(finishSpec(collinear), null);
-  assert.match(drawHint(collinear), /in a line/);
+  assert.match(drawHint(collinear), /在一条线上/);
 
   // Moving one point off that line makes it a shape again.
   collinear.vertices[2].lon = 0.001;
@@ -211,7 +211,7 @@ test('a shape that encloses nothing is refused, with a reason', () => {
   assert.equal(stub.vertices.length, 2);
   assert.equal(finishReason(stub), 'degenerate');
   assert.equal(finishSpec(stub), null);
-  assert.match(drawHint(stub), /no length/);
+  assert.match(drawHint(stub), /没有长度/);
 
   // And the states in between are named, not lumped together.
   assert.equal(finishReason(createDrawSession('area')), 'too-few');

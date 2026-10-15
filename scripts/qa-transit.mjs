@@ -557,8 +557,8 @@ try {
     check(
       `${city.label}: clicking a vehicle raises a card with its details on screen`,
       cardLines.length >= 3 &&
-        /Route |Vehicle /.test(cardLines[0] || '') &&
-        cardLines.some((line) => /Reported /.test(line)) &&
+        /线路 |车辆 /.test(cardLines[0] || '') &&
+        cardLines.some((line) => /秒前报告|分钟前报告/.test(line)) &&
         selected.painted > 0,
       selected
         ? `${selected.key} — "${cardLines.slice(0, 4).join(' / ')}" over ${selected.painted} painted overlay samples`

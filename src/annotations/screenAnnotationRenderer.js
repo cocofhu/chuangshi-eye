@@ -163,7 +163,7 @@ export function createScreenAnnotationRenderer(
       group.appendChild(parts.poly);
       parts.label = makeCallout(
         anno.outlineUnavailable
-          ? `${anno.label || ''} · Detailed outline unavailable`
+          ? `${anno.label || ''} · 详细轮廓不可用`
           : anno.label,
         c,
       );
@@ -181,7 +181,7 @@ export function createScreenAnnotationRenderer(
       group.appendChild(parts.path);
       parts.label = makeCallout(
         anno.outlineUnavailable
-          ? `${anno.label || ''} · Detailed outline unavailable`
+          ? `${anno.label || ''} · 详细轮廓不可用`
           : anno.label,
         c,
       );
@@ -215,7 +215,7 @@ export function createScreenAnnotationRenderer(
       });
       parts.label = makeCallout(
         anno.outlineUnavailable
-          ? `${anno.label || ''} · Detailed outline unavailable`
+          ? `${anno.label || ''} · 详细轮廓不可用`
           : anno.label,
         c,
       );
@@ -259,7 +259,7 @@ export function createScreenAnnotationRenderer(
       group.appendChild(parts.leader);
       parts.label = makeCallout(
         anno.outlineUnavailable
-          ? `${anno.label || ''} · Detailed outline unavailable`
+          ? `${anno.label || ''} · 详细轮廓不可用`
           : anno.label,
         c,
       );
@@ -322,7 +322,7 @@ export function createScreenAnnotationRenderer(
     }
     rec.anno = anno;
     if (anno.outlineUnavailable && rec.parts.label) {
-      rec.parts.label.text.textContent = `${anno.label || ''} · Detailed outline unavailable`;
+      rec.parts.label.text.textContent = `${anno.label || ''} · 详细轮廓不可用`;
       sizeCallout(rec.parts.label);
     }
 

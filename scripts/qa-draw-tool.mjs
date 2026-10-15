@@ -587,7 +587,7 @@ try {
   const degenerate = await drawState();
   check(
     'three points in a line are refused with a reason, not placed',
-    degenerate.marks === 0 && /in a line/.test(degenerate.hint),
+    degenerate.marks === 0 && /在一条线上/.test(degenerate.hint),
     `${degenerate.marks} marks, hint "${degenerate.hint}"`,
   );
 

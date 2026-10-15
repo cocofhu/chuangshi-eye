@@ -89,9 +89,9 @@ function panelHtml(runtime, panelKey) {
 </style>
 </head>
 <body>
-<div id="status">Waiting for a view…</div>
+<div id="status">等待视图…</div>
 <div id="actions">
-<button id="expand" type="button" hidden>Expand</button>
+<button id="expand" type="button" hidden>展开</button>
 <button id="open" type="button" hidden>在创世之眼中打开</button>
 </div>
 <script>${script}</script>

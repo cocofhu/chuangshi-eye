@@ -9,7 +9,7 @@ import * as Cesium from 'cesium';
 import { pickWorldFromScreen } from '../annotations/annotationResolver.js';
 import {
   claimPointer,
-  pointerOwner,
+  pointerOwnerLabel,
   releasePointer,
 } from '../data/inputOwnership.js';
 import { validateBox } from '../layers/recentImagery/model.js';
@@ -238,7 +238,7 @@ export function initImageryBoxTool({
       if (!lease) {
         onCancel?.(
           'pointer-busy',
-          `${pointerOwner()} is using the pointer — close it first`,
+          `${pointerOwnerLabel()} 正在占用指针 — 请先关闭`,
         );
         return active;
       }

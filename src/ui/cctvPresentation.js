@@ -2,11 +2,11 @@ import { createCctvVideoSurface } from './cctvVideo.js';
 export function _calBadgeLabel(badge) {
   switch (badge) {
     case 'calibrated':
-      return 'CALIBRATED';
+      return '已校准';
     case 'curated':
-      return 'CURATED';
+      return '精选';
     case 'raw-prior':
-      return 'RAW PRIOR';
+      return '原始';
     default:
       return '--';
   }
@@ -133,8 +133,8 @@ export function _renderCctvState(state) {
     const badge = activeCamera?.calBadge || null;
     const dirty = !!activeCamera?.calDirty;
     this._cctvQualityChip.textContent = dirty
-      ? 'CAL · EDITED (UNSAVED)'
-      : `CAL · ${this._calBadgeLabel(badge)}`;
+      ? '校准 · 已编辑（未保存）'
+      : `校准 · ${this._calBadgeLabel(badge)}`;
     this._cctvQualityChip.dataset.calBadge = dirty ? 'edited' : badge || '';
   }
 

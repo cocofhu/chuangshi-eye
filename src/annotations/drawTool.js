@@ -34,6 +34,7 @@ import { pickWorldFromScreen } from './annotationResolver.js';
 import {
   claimPointer,
   pointerOwner,
+  pointerOwnerLabel,
   releasePointer,
 } from '../data/inputOwnership.js';
 import {
@@ -197,10 +198,10 @@ export function initDrawTool({ viewer, annotations }) {
     // a limit rather than the harmless tail of a double-click.
     if (reason === 'full')
       setHint(
-        `That shape already has ${MAX_VERTICES} points — finish it or press Backspace.`,
+        `该图形已有 ${MAX_VERTICES} 个点 — 完成它，或按 Backspace。`,
       );
     else if (reason === 'invalid')
-      setHint('That point is off the globe — click on the world.');
+      setHint('该点不在地球上 — 请点在地面上。');
   };
   const onMove = (event) => {
     if (!session || session.shape === 'pin' || destroyed) return;
@@ -236,11 +237,11 @@ export function initDrawTool({ viewer, annotations }) {
         flyTo: false,
       });
       if (destroyed || attempt !== generation) return result;
-      if (result?.drawn === 0) setHint('That shape could not be placed.');
+      if (result?.drawn === 0) setHint('无法放置该图形。');
       return result;
     } catch (error) {
       if (destroyed || attempt !== generation) return null;
-      setHint(`Could not place the shape: ${error?.message || error}`);
+      setHint(`无法放置该图形：${error?.message || error}`);
       return null;
     }
   };
@@ -258,7 +259,7 @@ export function initDrawTool({ viewer, annotations }) {
     if (session) session = createDrawSession(shape);
     annotations.clear();
     syncPreview();
-    if (!destroyed && !active) setHint('Board cleared.');
+    if (!destroyed && !active) setHint('画板已清空。');
   };
 
   // ---- keys: only while drawing, never while typing in another field ----
@@ -324,7 +325,7 @@ export function initDrawTool({ viewer, annotations }) {
         // Somebody else is using the pointer — possibly an older instance of
         // this same tool that has not finished tearing down. Say so instead of
         // half-starting.
-        setHint(`${pointerOwner()} is using the pointer — close it first.`);
+        setHint(`${pointerOwnerLabel()} 正在占用指针 — 请先关闭。`);
         return active;
       }
     }

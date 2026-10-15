@@ -335,8 +335,8 @@ export function contextLayerEnableBlockReason({
   ) {
     return null;
   }
-  const label = String(layerName || change.layerId || 'that layer');
-  return `Space Missions isolates replay data. Exit the mode to enable ${label}.`;
+  const label = String(layerName || change.layerId || '该图层');
+  return `航天任务模式隔离回放数据。退出该模式后再开启 ${label}。`;
 }
 
 /**

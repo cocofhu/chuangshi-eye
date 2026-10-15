@@ -13,7 +13,7 @@ export function createQueries({ state: layerState, services, parts, source }) {
     const capacity = Number.isFinite(record.capacity) ? record.capacity : '?';
     // Render record stores the station name under `stationName` (see the render-map
     // shape), so `record.name` was always undefined → every label read "Dock N".
-    const label = record.stationName || `Dock ${record.stationId}`;
+    const label = record.stationName || `桩位 ${record.stationId}`;
     // Truncate long station names to keep HUD readable
     const short = label.length > 24 ? label.slice(0, 22) + '…' : label;
     return `🚲 ${short} [${bikes}/${capacity}]`;

@@ -1878,13 +1878,13 @@ test('the detection metric says what the display is doing, not what the feed cla
   const [contact] = app.layer.getDetectableObjects({ maxCount: 5, seed: 0 });
   assert.ok(contact, 'the vehicle is a contact');
   assert.equal(
-    contact.metric.includes('STOPPED'),
+    contact.metric.includes('停驶'),
     false,
     `a moving vehicle is not stopped, got "${contact.metric}"`,
   );
   assert.equal(contact.id, 'GREEN-C');
   assert.ok(
-    contact.klass.includes('METRO') || contact.klass.includes('TRAM'),
+    contact.klass.includes('地铁') || contact.klass.includes('有轨'),
     `the class carries the mode, got "${contact.klass}"`,
   );
 });
@@ -1915,11 +1915,11 @@ test('the card keeps the operator claim as a report and says the mode plainly', 
   const card = app.overlaySources.get('transit-selected')?.[0];
   assert.ok(card, 'a card is shown');
   const text = card.details.join(' | ');
-  assert.match(text, /Subway/, 'the mode is said in words');
-  assert.match(text, /Last report: stopped at stop 49001/);
+  assert.match(text, /地铁/, 'the mode is said in words');
+  assert.match(text, /最近报告：停靠站点 49001/);
   assert.match(
     text,
-    /Shown at street level/,
+    /按街道平面显示/,
     'and the surface caveat is stated',
   );
 });

@@ -318,6 +318,22 @@ export function aggregateTransitFeedHealth(statuses, nowMs) {
   };
 }
 
+const TRANSIT_OCCUPANCY_LABEL = Object.freeze({
+  EMPTY: '空载',
+  MANY_SEATS_AVAILABLE: '大量空座',
+  FEW_SEATS_AVAILABLE: '少量空座',
+  STANDING_ROOM_ONLY: '仅站席',
+  CRUSHED_STANDING_ROOM_ONLY: '拥挤',
+  FULL: '满载',
+  NOT_ACCEPTING_PASSENGERS: '不载客',
+});
+
+/** GTFS occupancy enum → a short card phrase, or null when the feed has none. */
+function transitOccupancyLabel(value) {
+  if (!value || value === 'NO_DATA_AVAILABLE') return null;
+  return TRANSIT_OCCUPANCY_LABEL[value] || null;
+}
+
 /**
  * Build the human lines of the selection card from a vehicle record.
  * @param {object} feed Registry entry.
@@ -337,10 +353,10 @@ export function buildTransitSelectionCopy(
 ) {
   const icon = TRANSIT_MODE_ICON[mode] || TRANSIT_MODE_ICON.unknown;
   const routeLabel = record.routeId
-    ? `Route ${record.routeId}`
+    ? `线路 ${record.routeId}`
     : record.label
-      ? `Vehicle ${record.label}`
-      : `Vehicle ${record.id}`;
+      ? `车辆 ${record.label}`
+      : `车辆 ${record.id}`;
   const title = `${icon} ${routeLabel}`;
   // The mode is said in words on its own line. A glyph and a route id do not
   // tell a reader that the dot on Tremont Street is a subway train, and a
@@ -350,39 +366,38 @@ export function buildTransitSelectionCopy(
   const motion = [];
   // What the SCREEN is doing leads, because that is what the reader can check.
   const shown = entry ? displayMotion(entry, nowMs) : null;
-  if (shown?.word === 'STOPPED') motion.push('Stopped');
-  else if (shown?.word === 'NO FIX') motion.push('No recent fix');
-  else if (shown?.word === 'WAITING') motion.push('Waiting for update');
-  else if (shown) motion.push('Moving');
+  if (shown?.word === '停驶') motion.push('停驶');
+  else if (shown?.word === '无定位') motion.push('无近期定位');
+  else if (shown?.word === '等待') motion.push('等待更新');
+  else if (shown) motion.push('移动中');
   if (motion.length) details.push(motion.join(' · '));
   const reportedMotion = [];
   if (Number.isFinite(record.speedMps))
-    reportedMotion.push(`reported ${Math.round(record.speedMps * 3.6)} km/h`);
+    reportedMotion.push(`报告 ${Math.round(record.speedMps * 3.6)} km/h`);
   if (Number.isFinite(record.bearing))
-    reportedMotion.push(`reported hdg ${Math.round(record.bearing)}°`);
+    reportedMotion.push(`报告航向 ${Math.round(record.bearing)}°`);
   // The operator's own claim, kept as a REPORT rather than as the live state.
   // It describes the moment of the report, which the display may not have
   // reached yet; presenting it as "now" is what put STOPPED on a moving metro.
   const state = [];
   if (record.status === 'STOPPED_AT' && record.stopId)
-    state.push(`Last report: stopped at stop ${record.stopId}`);
+    state.push(`最近报告：停靠站点 ${record.stopId}`);
   else if (record.status === 'INCOMING_AT' && record.stopId)
-    state.push(`Last report: arriving at stop ${record.stopId}`);
+    state.push(`最近报告：即将到达站点 ${record.stopId}`);
   else if (record.status === 'IN_TRANSIT_TO' && record.stopId)
-    state.push(`Last report: next stop ${record.stopId}`);
-  if (record.occupancy && record.occupancy !== 'NO_DATA_AVAILABLE') {
-    state.push(record.occupancy.toLowerCase().replaceAll('_', ' '));
-  }
+    state.push(`最近报告：下一站 ${record.stopId}`);
+  const occupancy = transitOccupancyLabel(record.occupancy);
+  if (occupancy) state.push(occupancy);
   if (reportedMotion.length) details.push(reportedMotion.join(' · '));
   if (state.length) details.push(state.join(' · '));
   // Underground services are drawn on the surface directly above themselves.
   // That is a deliberate choice — a train nobody can see is not worth drawing —
   // but it has to be stated, or a metro sitting on a road looks like an error.
   if (UNDERGROUND_MODES.has(mode)) {
-    details.push('Shown at street level · depth not in the feed');
+    details.push('按街道平面显示 · 数据不含深度');
   }
   details.push(
-    `Vehicle ${record.id}${record.label && record.label !== record.id ? ` · ${record.label}` : ''}`,
+    `车辆 ${record.id}${record.label && record.label !== record.id ? ` · ${record.label}` : ''}`,
   );
   const ageS = Math.round(
     (Number.isFinite(entry?.sample?.latestReportAgeMs)
@@ -391,8 +406,8 @@ export function buildTransitSelectionCopy(
   );
   const reported =
     ageS < 90
-      ? `Reported ${ageS} s ago`
-      : `Reported ${Math.round(ageS / 60)} min ago`;
+      ? `${ageS} 秒前报告`
+      : `${Math.round(ageS / 60)} 分钟前报告`;
   // A time the feed did not give for THIS vehicle is labelled, so the card
   // never presents a borrowed or inferred time as the vehicle's own report.
   const ownTime =
@@ -404,11 +419,11 @@ export function buildTransitSelectionCopy(
   const lagS = Number.isFinite(entry?.sample?.actualDelayMs)
     ? Math.max(0, Math.round(entry.sample.actualDelayMs / 1000))
     : null;
-  const behind = lagS === null ? '' : ` · shown ${lagS} s behind`;
+  const behind = lagS === null ? '' : ` · 显示滞后 ${lagS} 秒`;
   details.splice(
     motion.length ? 2 : 1,
     0,
-    (ownTime ? reported : `${reported} (feed time)`) + behind,
+    (ownTime ? reported : `${reported}（数据时间）`) + behind,
   );
   if (entry?.track?.count) {
     const duration = Math.max(
@@ -416,7 +431,7 @@ export function buildTransitSelectionCopy(
       Math.min(entry.playT, entry.fixes.at(-1).t) - entry.fixes[0].t,
     );
     details.push(
-      `Available trail: ${Math.round(duration / 60000)} min${entry.track.truncated || entry.trailTruncated ? ' (limited)' : ''}`,
+      `可用轨迹：${Math.round(duration / 60000)} 分钟${entry.track.truncated || entry.trailTruncated ? '（已截断）' : ''}`,
     );
   }
   return { title, details };
@@ -461,22 +476,22 @@ export const UNDERGROUND_MODES = new Set(['subway']);
 
 /** The mode in plain words, for a card a person reads rather than scans. */
 export const TRANSIT_MODE_WORD = Object.freeze({
-  bus: 'Bus',
-  tram: 'Tram',
-  subway: 'Subway',
-  rail: 'Train',
-  ferry: 'Ferry',
-  unknown: 'Transit vehicle',
+  bus: '公交',
+  tram: '有轨电车',
+  subway: '地铁',
+  rail: '列车',
+  ferry: '轮渡',
+  unknown: '公交车辆',
 });
 
 /** Short, fixed-width mode word for the detection card's class field. */
 export const TRANSIT_MODE_ABBR = Object.freeze({
-  bus: 'BUS',
-  tram: 'TRAM',
-  subway: 'METRO',
-  rail: 'RAIL',
-  ferry: 'FERRY',
-  unknown: 'TRANSIT',
+  bus: '公交',
+  tram: '有轨',
+  subway: '地铁',
+  rail: '列车',
+  ferry: '轮渡',
+  unknown: '公交',
 });
 
 /**
