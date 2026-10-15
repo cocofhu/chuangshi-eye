@@ -366,7 +366,7 @@ test('the readout mounts in the rail body, hides while the layer is off and open
   assert.equal(panel.hidden, false);
   assert.equal(f.collapse.clicked, 1, 'first appearance expands');
   assert.equal(panel.classList.contains('collapsed'), false);
-  assert.equal(f.count.textContent, '4 DAYS');
+  assert.equal(f.count.textContent, '4 天');
   f.collapse.click();
   f.layer.disable();
   f.layer.enable();

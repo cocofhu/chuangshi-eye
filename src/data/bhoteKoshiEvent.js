@@ -404,7 +404,7 @@ export function evidenceCorroborationLabel(observation) {
     0,
     Math.floor(Number(observation?.corroboration?.sourceCount) || 0),
   );
-  return count > 1 ? `${count} GEOLOCATED SOURCE-MAP PLACEMENTS` : '';
+  return count > 1 ? `${count} 个已定位来源` : '';
 }
 
 /** Interpolate headings across north using the shortest angular path. */

@@ -1542,10 +1542,10 @@ test('Bhote Koshi event pack keeps observations separate from reconstruction', a
   assert.equal(timure.corroboration.kind, 'multi-source geolocation cluster');
   assert.equal(timure.corroboration.sourceCount, 5);
   assert.equal(timure.corroboration.displayedSourceCount, 1);
-  assert.equal(evidenceCorroborationLabel(timure), '5 GEOLOCATED SOURCE-MAP PLACEMENTS');
-  assert.match(event.reconstruction.caveat, /2021 historical reference versus 2026 post-event/i);
-  assert.match(event.reconstruction.caveat, /not modeled arrival time/i);
-  assert.match(event.reconstruction.caveat, /2025 Rasuwagadhi flood/i);
+  assert.equal(evidenceCorroborationLabel(timure), '5 个已定位来源');
+  assert.match(event.reconstruction.caveat, /2021 年历史参照对照 2026 年灾后影像/);
+  assert.match(event.reconstruction.caveat, /并非模拟到达时间/);
+  assert.match(event.reconstruction.caveat, /2025 年 7 月拉苏瓦加迪洪水/);
   assert.equal(SCENE_RECIPES.some((recipe) => recipe.id === 'bhote-koshi-flood'), false);
   assert.ok(SCENE_RECIPES.some((recipe) => recipe.id === 'bhote-koshi-nepal-scene'));
 });
@@ -2437,7 +2437,7 @@ test('Bhote Koshi replay restores cinematic ownership unless the operator releas
     assert.equal(layer.getCinematicState().active, false);
     assert.equal(viewer._test.cameraTransforms.length, 2);
     animationCallbacks[1](91001);
-    assert.equal(play.textContent, '↺ REPLAY');
+    assert.equal(play.textContent, '↺ 重播');
     const cameraLookCount = viewer._test.cameraLooks.length;
     play.dispatch('click');
     assert.equal(layer.getPlaybackState().playing, true);

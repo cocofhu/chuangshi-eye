@@ -356,7 +356,7 @@ test('failed responses release their body and an already-cancelled source sends 
       );
     },
   });
-  await assert.rejects(source({ path: 'a.json' }), /unavailable/);
+  await assert.rejects(source({ path: 'a.json' }), /不可用/);
   assert.equal(cancelled, 1);
   const controller = new AbortController();
   controller.abort();
