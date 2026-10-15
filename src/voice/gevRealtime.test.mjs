@@ -3366,7 +3366,7 @@ test('F5: a response in flight at teardown marks the accounting INCOMPLETE', () 
   const state = controller.costTracker.state();
   assert.equal(state.incomplete, true);
   assert.equal(state.display, '~$1.00*', 'see-note mark, not a direction claim');
-  assert.match(state.note, /incomplete/i, 'the tooltip explains why');
+  assert.match(state.note, /估算不完整/, 'the tooltip explains why');
   assert.doesNotMatch(state.note, /at least|lower bound|floor/i, 'no floor claim');
 });
 

@@ -41,7 +41,7 @@ test('wind source rejects foreign URLs, excessive grids and non-finite values', 
         return response(bad);
       },
     });
-    await assert.rejects(source.getSnapshot(), /Malformed/);
+    await assert.rejects(source.getSnapshot(), /格式无效/);
     assert.equal(calls, 1);
   }
   const source = createWindSource({
@@ -52,7 +52,7 @@ test('wind source rejects foreign URLs, excessive grids and non-finite values', 
           : Float32Array.from([NaN, 2, 3, 4]).buffer,
       ),
   });
-  await assert.rejects(source.getSnapshot(), /Malformed/);
+  await assert.rejects(source.getSnapshot(), /格式无效/);
 });
 test('wind source timeout aborts the underlying fetch', async () => {
   const source = createWindSource({
@@ -64,7 +64,7 @@ test('wind source timeout aborts the underlying fetch', async () => {
         }),
       ),
   });
-  await assert.rejects(source.getSnapshot(), /timed out/);
+  await assert.rejects(source.getSnapshot(), /超时/);
 });
 
 test('wind source requests optional companions and splits exact U/V/scalar byte regions', async () => {
@@ -133,7 +133,7 @@ test('wind source rejects scalar contract mismatches before fetching a grid', as
     });
     await assert.rejects(
       source.getSnapshot({ overlay: 'temperature' }),
-      /Malformed/,
+      /格式无效/,
     );
     assert.equal(calls, 1);
   }
@@ -144,11 +144,11 @@ test('wind source rejects scalar contract mismatches before fetching a grid', as
       return response(base);
     },
   });
-  await assert.rejects(source.getSnapshot({ overlay: 'humidity' }), /Unknown/);
+  await assert.rejects(source.getSnapshot({ overlay: 'humidity' }), /未知/);
   assert.equal(calls, 0);
   await assert.rejects(
     source.getSnapshot(),
-    /Malformed/,
+    /格式无效/,
     'wind-only does not accept an unsolicited scalar',
   );
 });
@@ -173,7 +173,7 @@ test('wind source bounds optional scalar length and rejects non-finite scalar va
     });
     await assert.rejects(
       source.getSnapshot({ overlay: 'pressure' }),
-      /Malformed|budget/,
+      /格式无效|budget/,
     );
   }
 });

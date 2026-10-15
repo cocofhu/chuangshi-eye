@@ -27,8 +27,16 @@ export function windStats(manifest) {
     count: manifest?.grid ? manifest.grid.nx * manifest.grid.ny : 0,
     lastUpdate: Number.isFinite(run) ? run : null,
     error:
-      manifest?.reason || (manifest?.unavailable ? 'Wind unavailable' : null),
+      manifest?.reason || (manifest?.unavailable ? '风场不可用' : null),
   };
+}
+
+/** Server scalar errors stay English in the manifest contract; the panel shows Chinese. */
+function displayedFieldError(value) {
+  if (value === 'Temperature field unavailable') return '气温场不可用';
+  if (value === 'Mean sea level pressure field unavailable')
+    return '海平面气压场不可用';
+  return value;
 }
 
 /** Construct one wind layer with an explicit source and owned animation. */
@@ -68,12 +76,12 @@ export function createWindLayer({
       overlay,
       model: model === 'ifs' ? 'ECMWF' : 'GFS',
       validTime:
-        formatWindValidTime(manifest?.cycle?.validIso) || 'Unavailable',
+        formatWindValidTime(manifest?.cycle?.validIso) || '不可用',
       status: loading
-        ? 'Loading forecast'
+        ? '正在加载预报'
         : error ||
           manifest?.reason ||
-          (manifest?.stale ? 'Cached forecast · stale' : 'Model forecast'),
+          (manifest?.stale ? '缓存预报 · 已过期' : '模式预报'),
     });
     sampledPosition = reading.position || position || null;
     inspectionMarker?.show(sampledPosition);
@@ -86,9 +94,9 @@ export function createWindLayer({
   const unsubscribeClock = clock?.subscribe(notify);
   const layer = {
     id: 'wind',
-    name: 'Wind',
+    name: '风场',
     icon: '🌬',
-    source: 'GFS / ECMWF IFS · FORECAST',
+    source: 'GFS / ECMWF IFS · 预报',
     updateInterval: 3600_000,
     init(nextViewer) {
       viewer = nextViewer;
@@ -172,7 +180,7 @@ export function createWindLayer({
         return true;
       } catch (cause) {
         if (controller.signal.aborted || request !== controller) return false;
-        error = cause?.message || 'Wind source unavailable';
+        error = cause?.message || '风源不可用';
         return true;
       } finally {
         signal?.removeEventListener('abort', abort);
@@ -242,7 +250,7 @@ export function createWindLayer({
     getRowControls() {
       const historyStatus =
         clock?.getState().mode === 'history'
-          ? 'Forecast · does not follow history'
+          ? '预报 · 不跟随历史'
           : null;
       const valid = formatWindValidTime(manifest?.cycle?.validIso);
       const run = formatWindValidTime(manifest?.cycle?.runIso);
@@ -261,10 +269,10 @@ export function createWindLayer({
       const imageryError =
         enabled && !loading ? diagnostic?.imageryError : null;
       const label = {
-        none: 'Wind motion',
-        speed: 'Wind speed',
-        pressure: 'Sea-level pressure',
-        temperature: 'Air temperature · 2 m',
+        none: '风场流动',
+        speed: '风速',
+        pressure: '海平面气压',
+        temperature: '2 米气温',
       }[overlay];
       const kind = ['temperature', 'pressure'].includes(overlay)
         ? overlay
@@ -290,19 +298,19 @@ export function createWindLayer({
         readout: true,
         summary: {
           label,
-          coverage: 'Global · 1° grid',
+          coverage: '全球 · 1° 网格',
           validTime: manifest?.cycle?.validIso,
           issuedTime: manifest?.cycle?.runIso,
-          detail: `${model === 'ifs' ? 'ECMWF IFS' : 'GFS'} forecast · ${valid || 'Unavailable'}`,
+          detail: `${model === 'ifs' ? 'ECMWF IFS' : 'GFS'} 预报 · ${valid || '不可用'}`,
           status: loading
-            ? 'Loading forecast'
+            ? '正在加载预报'
             : preparing
-              ? 'Preparing flow'
+              ? '正在准备流场'
               : error ||
                 manifest?.reason ||
                 imageryError ||
-                (scalarMissing ? 'Selected field unavailable' : null) ||
-                (manifest?.stale ? 'Cached forecast · stale' : null),
+                (scalarMissing ? '所选场不可用' : null) ||
+                (manifest?.stale ? '缓存预报 · 已过期' : null),
           units: legendUnit,
         },
         chips: [
@@ -313,37 +321,36 @@ export function createWindLayer({
             params: { model: value },
             title:
               value === 'ifs'
-                ? 'ECMWF IFS surface forecast'
-                : 'NOAA GFS surface forecast',
+                ? 'ECMWF IFS 地面预报'
+                : 'NOAA GFS 地面预报',
           })),
           {
             id: 'motion',
             label: diagnostic?.reducedMotion
-              ? 'Reduced motion'
+              ? '减弱动态'
               : paused
-                ? 'Resume'
-                : 'Pause',
+                ? '继续'
+                : '暂停',
             active: motionPaused,
             disabled: Boolean(diagnostic?.reducedMotion),
             params: { paused: !paused },
-            title:
-              'Pause visual flow; forecast time does not advance with animation',
+            title: '暂停流动；动画不推进预报时刻',
           },
           ...['none', 'speed', 'pressure', 'temperature'].map((value) => ({
             id: `overlay-${value}`,
             label: {
-              none: 'None',
-              speed: 'Speed',
-              pressure: 'Pressure',
-              temperature: 'Temperature',
+              none: '无',
+              speed: '风速',
+              pressure: '气压',
+              temperature: '气温',
             }[value],
             active: overlay === value,
             params: { overlay: value },
             title: {
-              none: 'Wind trails with no field shading',
-              speed: 'How hard the surface wind is blowing',
-              pressure: 'Sea-level air pressure: broad highs and lows',
-              temperature: 'Air temperature two meters above the surface',
+              none: '只显示风迹',
+              speed: '地面风的强弱',
+              pressure: '海平面气压：大范围高低压',
+              temperature: '地面以上 2 米气温',
             }[value],
           })),
           ...(speedLegendVisible ||
@@ -356,15 +363,14 @@ export function createWindLayer({
             label: value,
             active: units === value,
             params: { units: value },
-            title: 'Wind speed units',
+            title: '风速单位',
           })),
           {
             id: 'read-wind',
-            label: 'Read wind at map center',
+            label: '读取地图中心',
             params: { inspect: true },
             disabled: loading || !manifest?.u || manifest?.unavailable,
-            title:
-              'Read the forecast at the center of the map without changing selection',
+            title: '读取地图中心的预报，不改变当前选择',
           },
         ],
         legend:
@@ -373,9 +379,9 @@ export function createWindLayer({
           (overlay === 'none' && !speedLegendVisible)
             ? []
             : legend,
-        info: `${model === 'ifs' ? 'ECMWF IFS' : 'GFS'} forecast · ${label} (${legendUnit})${historyStatus ? `\n${historyStatus}` : ''}\nValid: ${valid || 'Unavailable'}${loading ? ' · loading' : preparing ? ' · preparing' : ''}\nIssued: ${run || 'Unavailable'}${manifest?.stale ? ' · STALE' : ''}${error ? '\n' + error : ''}${scalarMissing ? '\nSelected field unavailable · wind remains visible' : ''}${imageryError && !scalarMissing ? '\n' + imageryError + ' · wind remains visible' : ''}`,
+        info: `${model === 'ifs' ? 'ECMWF IFS' : 'GFS'} 预报 · ${label}（${legendUnit}）${historyStatus ? `\n${historyStatus}` : ''}\n有效 ${valid || '不可用'}${loading ? ' · 加载中' : preparing ? ' · 准备中' : ''}\n发布 ${run || '不可用'}${manifest?.stale ? ' · 已过期' : ''}${error ? '\n' + error : ''}${scalarMissing ? '\n所选场不可用 · 风场仍可见' : ''}${imageryError && !scalarMissing ? '\n' + imageryError + ' · 风场仍可见' : ''}`,
         infoTitle:
-          'Surface wind at 10 m. Approximately 1° global grid. Curves follow the 10 m wind field, lifted 12 km for visibility; display height is not weather altitude. View lighting is for readability. Animation shows flow through one fixed forecast; it does not advance time. Color fields drape the globe basemap or the active photorealistic 3D Tiles.',
+          '10 米地面风。约 1° 全球网格。曲线跟随 10 米风场，抬升 12 公里以便看见；显示高度不是天气高度。视角光照仅为可读。动画展示一份固定预报中的流动，不推进时间。色场铺在地球底图或当前实景三维瓦片上。',
       };
       controls.summary.reading = reading;
       controls.summary.result = reading ? windReadingResult(reading) : null;
@@ -385,12 +391,12 @@ export function createWindLayer({
         chips: controls.chips.filter((chip) => chip.id.startsWith(prefix)),
       });
       controls.summary.settings = [
-        setting('model', 'MODEL', 'model-'),
-        setting('field', 'FIELD', 'overlay-'),
+        setting('model', '模型', 'model-'),
+        setting('field', '场', 'overlay-'),
         ...(controls.chips.some(({ id }) => id.startsWith('units-'))
-          ? [{ id: 'units', label: 'UNITS', chips: windUnitChips(units) }]
+          ? [{ id: 'units', label: '单位', chips: windUnitChips(units) }]
           : []),
-        setting('motion', 'MOTION', 'motion'),
+        setting('motion', '动态', 'motion'),
       ];
       controls.summary.actions = controls.chips.filter(
         ({ id }) => id === 'read-wind',
@@ -425,7 +431,7 @@ export function createWindLayer({
           : null;
       return {
         ...windStats(manifest),
-        countLabel: 'Forecast',
+        countLabel: '预报',
         loading: loading || Boolean(preparing),
         model: model.toUpperCase(),
         overlay,
@@ -433,11 +439,13 @@ export function createWindLayer({
         stale: Boolean(manifest?.stale),
         source: model === 'ifs' ? 'ECMWF IFS' : 'NOAA GFS',
         validTime:
-          formatWindValidTime(manifest?.cycle?.validIso) || 'Unavailable',
+          formatWindValidTime(manifest?.cycle?.validIso) || '不可用',
         error:
           error ||
           windStats(manifest).error ||
-          (requestedScalar() !== 'none' ? manifest?.scalarError : null) ||
+          (requestedScalar() !== 'none'
+            ? displayedFieldError(manifest?.scalarError)
+            : null) ||
           imageryError,
       };
     },

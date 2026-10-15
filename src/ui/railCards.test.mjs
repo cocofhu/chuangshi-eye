@@ -243,7 +243,7 @@ test('labelled rows, lists and results retain focus and dispatch current params'
   assert.deepEqual(calls.at(-1), ['a', { stormId: 'b', focus: true }]);
   const clear = f.find((n) => n.dataset.actionId === 'clear');
   assert.equal(clear.textContent, '×');
-  assert.equal(clear.getAttribute('aria-label'), 'Clear reading');
+  assert.equal(clear.getAttribute('aria-label'), '清除读数');
   clear.click();
   assert.deepEqual(calls.at(-1), ['a', { inspect: false }]);
   assert.equal(f.find((n) => n.dataset.lineId === 'wind').children.length, 0);

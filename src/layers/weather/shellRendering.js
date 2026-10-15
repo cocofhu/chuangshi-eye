@@ -630,7 +630,7 @@ export function createWeatherShell({
     if (incoming !== frame) return;
     incoming = null;
     close(frame);
-    lastError = 'Weather tiles unavailable · previous frame retained';
+    lastError = '天气瓦片不可用 · 保留上一帧';
     frame.resolve(false);
     scene.requestRender();
     onChange();

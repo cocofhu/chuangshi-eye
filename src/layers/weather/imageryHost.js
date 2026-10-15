@@ -7,7 +7,7 @@ export function resolveImageryHost({ viewer, tileset }) {
   return { collection: null, kind: 'none' };
 }
 
-export const NO_IMAGERY_HOST = 'Hidden by this map source · choose a globe map';
+export const NO_IMAGERY_HOST = '当前地图源已隐藏 · 请改用地球地图';
 
 /** Report imagery suspension without changing or detaching the resolved host. */
 export function imageryHostStatus(host) {
