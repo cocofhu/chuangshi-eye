@@ -163,7 +163,7 @@ test('nonempty adsb.lol payload with zero usable rows cannot prove share target 
     assert.equal(resolution.status, 'source-unavailable');
     assert.match(
       militaryFlightsLayer.getStats().error,
-      /Malformed adsb\.lol aircraft rows/,
+      /adsb\.lol 航空器记录无效/,
     );
     assert.equal(
       militaryFlightsLayer.getAnalystRecords().length,

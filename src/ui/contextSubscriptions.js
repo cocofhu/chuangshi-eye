@@ -124,7 +124,9 @@ export function connectContextManager(manager) {
                 restoreError,
               );
             }
-            return `${entryMode === 'space-missions' ? 'Space Missions' : 'Context'} could not start because another layer did not stop cleanly`;
+            return entryMode === 'space-missions'
+              ? '航天任务未能启动：另一图层未干净停止'
+              : '情境未能启动：另一图层未干净停止';
           } finally {
             if (ownsNotificationToken) {
               this._userFacingContextNotificationTokens.delete(

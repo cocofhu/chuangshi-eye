@@ -22,12 +22,12 @@ export function createDirectionsSource({
       if (response.status === 429) {
         throw new Error(
           typeof payload?.error === 'string' && payload.error
-            ? `${payload.error} — try again in a moment`
-            : 'Routing is rate limited — try again in a moment',
+            ? `${payload.error} — 请稍后再试`
+            : '路径规划限流 — 请稍后再试',
         );
       }
       if (!response.ok && !payload?.error)
-        throw new Error(`Routing unavailable (HTTP ${response.status})`);
+        throw new Error(`路径规划不可用（HTTP ${response.status}）`);
       return payload;
     },
   };

@@ -340,7 +340,7 @@ export function bindRadioControls() {
             origin: 'user',
             notificationToken,
           }),
-        `Radio could not ${enabling ? 'start' : 'stop'} cleanly`,
+        `电台未能干净${enabling ? '开启' : '关闭'}`,
       );
       if (this.destroyed || toggled === false) return;
       if (

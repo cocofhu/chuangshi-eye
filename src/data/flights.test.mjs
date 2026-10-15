@@ -203,7 +203,7 @@ test('nonempty OpenSky payload with zero usable rows cannot prove share target a
     assert.equal(resolution.status, 'source-unavailable');
     assert.match(
       flightsLayer.getStats().error,
-      /Malformed OpenSky aircraft rows/,
+      /OpenSky 航空器记录无效/,
     );
     assert.equal(
       flightsLayer.getAnalystRecords().length,

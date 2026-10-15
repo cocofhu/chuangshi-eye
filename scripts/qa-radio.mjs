@@ -1174,7 +1174,7 @@ async function main() {
     });
     check(
       'user-facing chip, real Context entry rollback, and installation Search failures settle safely',
-      userFacingFailures.semanticFalseMessage === 'Radio could not stop cleanly'
+      userFacingFailures.semanticFalseMessage === '电台未能干净关闭'
         && userFacingFailures.contextFailures.length === 8
         && userFacingFailures.contextFailures.every((failure) => (
           failure.result === false
@@ -1188,7 +1188,7 @@ async function main() {
         ))
         && userFacingFailures.directEntryFailures.length === 4
         && userFacingFailures.directEntryFailures.every((failure) => (
-          failure.reason.includes('could not start')
+          failure.reason.includes('未能启动')
           && failure.retryReason === null
           && failure.toastMessages.length === 1
           && failure.toastMessages[0] === failure.reason
@@ -1207,7 +1207,7 @@ async function main() {
         && userFacingFailures.directActivationRollbackFailures.length === 2
         && userFacingFailures.directActivationRollbackFailures.every((failure) => (
           failure.toastMessages.length === 1
-          && failure.toastMessages[0] === `${failure.layerId} could not start cleanly`
+          && failure.toastMessages[0] === `${failure.layerId === 'rocket-launches' ? '航天任务' : '目标情境'}未能干净开启`
           && failure.retryRetained
         ))
         && userFacingFailures.contextExitFailures.length === 2
@@ -1228,7 +1228,7 @@ async function main() {
         ))
         && userFacingFailures.unrelatedManagerFailure.result === false
         && userFacingFailures.unrelatedManagerFailure.toastMessages.length === 1
-        && userFacingFailures.unrelatedManagerFailure.toastMessages[0].includes('qa-unrelated-manager-failure could not start cleanly')
+        && userFacingFailures.unrelatedManagerFailure.toastMessages[0].includes('qa-unrelated-manager-failure未能干净开启')
         && userFacingFailures.installationFalseMessage.includes('could not be refreshed')
         && userFacingFailures.installationFalseReleased
         && userFacingFailures.installationEnableRejectionMessage.includes('could not be refreshed')

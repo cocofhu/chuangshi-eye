@@ -1,3 +1,14 @@
+const LAYER_VISIBILITY_LABEL = Object.freeze({
+  'military-awareness': '目标情境',
+  'rocket-launches': '航天任务',
+  radio: '网络电台',
+});
+
+function layerVisibilityFailure(change) {
+  const label = LAYER_VISIBILITY_LABEL[change.layerId] || change.layerId;
+  return `${label}未能干净${change.enabled ? '开启' : '关闭'}`;
+}
+
 import {
   cockpitEntryAllowed,
   isExplicitUserIntentOrigin,
@@ -91,7 +102,7 @@ export function _handleContextLayerChange(change) {
     return;
   }
   if (change?.type === 'visibility-failed') {
-    const failureMessage = `${change.layerId} could not ${change.enabled ? 'start' : 'stop'} cleanly`;
+    const failureMessage = layerVisibilityFailure(change);
     // A failed direct Context-shell START has already had its siblings
     // cleared by the visibility guard. Wait outside the synchronous manager
     // notification for this queue to settle, then reconcile the complete

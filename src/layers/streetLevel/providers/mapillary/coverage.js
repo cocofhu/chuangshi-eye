@@ -569,7 +569,7 @@ export function createCoverage({ state, source }) {
         state.coverage.pending.get(key) !== controller
       )
         return;
-      state.coverage.lastError = error?.message || 'Coverage tile failed';
+      state.coverage.lastError = error?.message || '覆盖瓦片失败';
       if (error?.keyRequired) state.keyRequired = true;
       if (error?.keyRejected) {
         // Every other tile would be refused too: stop asking.

@@ -75,8 +75,7 @@ export function createPlayback({ state: layerState, services, parts, source }) {
       const attempt = layerState._activePlaybackAttempt;
       if (tryRadioFallback(failedId, attempt?.origin, attempt?.id)) return;
       layerState._audioState = 'error';
-      layerState._audioError =
-        'Broadcaster stream is unavailable or blocked by the browser.';
+      layerState._audioError = '广播源不可用或被浏览器拦截。';
       parts.presentation.emitState();
     });
   }
@@ -202,8 +201,8 @@ export function createPlayback({ state: layerState, services, parts, source }) {
       layerState._audioState = 'error';
       layerState._audioError =
         error?.name === 'NotAllowedError'
-          ? 'Playback requires a direct click or tap.'
-          : 'Broadcaster stream could not be started.';
+          ? '播放需要直接点击或点按。'
+          : '广播流未能开始。';
       parts.presentation.emitState();
       return false;
     }

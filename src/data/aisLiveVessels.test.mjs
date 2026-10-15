@@ -1414,7 +1414,7 @@ test('vessel real layer lifecycle publishes protected selection and leaves no st
     assert.equal(publication.entries[0].variant, 'selected');
     assert.equal(publication.entries[0].protected, true);
     assert.equal(publication.entries[0].collisionGroup, 'ambient-card');
-    assert.match(publication.entries[0].accessibilityLabel, /Focus vessel EVER GIVEN, MMSI 353136000/);
+    assert.match(publication.entries[0].accessibilityLabel, /聚焦船舶 EVER GIVEN，MMSI 353136000/);
     assert.equal(publication.entries[0].activate(), true);
     assert.equal(focusRequests.length, 1);
     assert.equal(focusRequests[0].id, '353136000');

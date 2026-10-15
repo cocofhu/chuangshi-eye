@@ -79,7 +79,7 @@ test('civil acquisition publishes source time and uses a replaced source on the 
   assert.equal(calls, 1);
   assert.equal(probe.feed._lastUpdate, 1250);
   assert.equal(probe.feed._backoff, true);
-  assert.equal(probe.feed._lastError, 'Source snapshot time unavailable');
+  assert.equal(probe.feed._lastError, '快照时间不可用');
   assert.deepEqual(probe.labels, ['First', 'Second']);
   assert.equal(probe.restores.length, 2);
 });

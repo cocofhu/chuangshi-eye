@@ -225,12 +225,10 @@ export function clearSelectedLayers() {
         this.showToast('没有已选数据图层');
       } else if (result.notClearedIds.length > 0) {
         this.showToast(
-          `${result.notClearedIds.length} data layer${result.notClearedIds.length === 1 ? '' : 's'} could not be cleared`,
+          `${result.notClearedIds.length} 个数据图层未能清除`,
         );
       } else {
-        this.showToast(
-          `Cleared ${result.clearedIds.length} data layer${result.clearedIds.length === 1 ? '' : 's'}`,
-        );
+        this.showToast(`已清除 ${result.clearedIds.length} 个数据图层`);
       }
       return result;
     })

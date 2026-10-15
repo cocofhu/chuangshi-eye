@@ -4,7 +4,11 @@ import {
   satelliteClassLegend,
 } from '../../data/satelliteClass.js';
 import * as Cesium from 'cesium';
-import { ISS_NORAD, POINT_STYLES } from './policy.js';
+import {
+  ISS_NORAD,
+  POINT_STYLES,
+  SATELLITE_CATALOG_UNREACHABLE,
+} from './policy.js';
 
 export function createControls({ state: layerState, services, parts, source }) {
   const { isExplicitLayerStateOrigin } = services.layerState;
@@ -539,7 +543,7 @@ export function createControls({ state: layerState, services, parts, source }) {
         lastUpdate: layerState._lastUpdate,
         stale: false,
         status:
-          layerState._lastError === 'CelesTrak unreachable'
+          layerState._lastError === SATELLITE_CATALOG_UNREACHABLE
             ? 'unavailable'
             : layerState._lastError
               ? 'degraded'

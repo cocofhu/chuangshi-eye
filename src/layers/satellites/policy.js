@@ -15,6 +15,14 @@ import { satelliteClassColor } from '../../data/satelliteClass.js';
 
 export const ISS_NORAD = 25544;
 
+/** Painted on the satellite row when every CelesTrak group fails. */
+export const SATELLITE_CATALOG_UNREACHABLE = 'CelesTrak 不可达';
+
+/** @param {number} count Failed CelesTrak groups that still leave a partial catalog. */
+export function satelliteGroupsUnavailableMessage(count) {
+  return `${count} 个 CelesTrak 分组不可用`;
+}
+
 export const ISS_OVERLAY_SOURCE_ID = 'satellites-iss';
 
 export const ISS_OVERLAY_SOURCE_OPTIONS = Object.freeze({

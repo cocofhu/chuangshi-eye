@@ -130,9 +130,7 @@ export function createIngestion({
         (activated === false ||
           !layerState._dataManager.isEnabled('satellites'))
       ) {
-        throw new Error(
-          'Space Missions requires the satellites layer, which failed to start',
-        );
+        throw new Error('航天任务需要卫星图层，但该图层未能启动');
       }
     } finally {
       if (

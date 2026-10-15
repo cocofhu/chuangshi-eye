@@ -27,24 +27,24 @@ function openSkyError(response) {
     header(response, 'x-opensky-auth-reason') || '',
   ).toLowerCase();
   if (response.status === 429 && (!mode || mode === 'anon'))
-    error.message = 'OpenSky rate limited (anonymous)';
+    error.message = 'OpenSky 匿名限流';
   if (response.status === 401 || response.status === 403) {
     const reasons = {
-      oauth_invalid_or_missing: 'OpenSky OAuth client missing/invalid',
-      oauth_invalid_credentials: 'OpenSky OAuth rejected credentials',
-      basic_invalid_credentials: 'OpenSky username/password rejected',
-      missing_basic_creds: 'OpenSky auth missing',
-      missing_oauth_and_basic_creds: 'OpenSky auth missing',
-      auth_required: 'OpenSky auth required',
-      forced_anonymous: 'OpenSky auth required',
+      oauth_invalid_or_missing: 'OpenSky OAuth 客户端缺失或无效',
+      oauth_invalid_credentials: 'OpenSky OAuth 拒绝了凭据',
+      basic_invalid_credentials: 'OpenSky 用户名或密码被拒绝',
+      missing_basic_creds: '缺少 OpenSky 认证',
+      missing_oauth_and_basic_creds: '缺少 OpenSky 认证',
+      auth_required: '需要 OpenSky 认证',
+      forced_anonymous: '需要 OpenSky 认证',
     };
     error.message =
       reasons[reason] ||
       (/^(oauth_|basic_)/.test(reason)
-        ? 'OpenSky auth invalid'
+        ? 'OpenSky 认证无效'
         : mode === 'anon'
-          ? 'OpenSky auth required'
-          : 'OpenSky auth failed');
+          ? '需要 OpenSky 认证'
+          : 'OpenSky 认证失败');
   }
   return error;
 }
@@ -109,7 +109,7 @@ export function createFlightSource({
     },
     async getEnrichment(query, { signal } = {}) {
       if (!['type', 'route'].includes(query.kind))
-        throw new LiveSourceError('unsupported', 'Enrichment unavailable');
+        throw new LiveSourceError('unsupported', '富集数据不可用');
       const { response, payload } = await readResponse(
         fetchImpl,
         `/api/adsbdb/${query.kind}/${encodeURIComponent(query.id)}`,

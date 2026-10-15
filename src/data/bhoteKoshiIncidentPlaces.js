@@ -5,7 +5,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
   [
     [
       'immediate-collapse-viewpoint',
-      'COLLAPSE VIEWPOINT',
+      '崩塌视点',
       28.3632333,
       85.4423639,
       2850,
@@ -13,7 +13,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'debris-dammed-lake',
-      'DAMMED LAKE',
+      '堰塞湖',
       28.3346111,
       85.4861389,
       2750,
@@ -21,7 +21,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'second-landslide',
-      'SECOND LANDSLIDE',
+      '第二处滑坡',
       28.3379706,
       85.4688823,
       2750,
@@ -29,25 +29,25 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'gyirong-border-gate',
-      'BORDER GATE',
+      '口岸',
       28.2808338,
       85.3780248,
       1818,
       'right',
     ],
-    ['timure-cluster', 'TIMURE', 28.2519361, 85.3665833, 1689, 'left'],
+    ['timure-cluster', '蒂穆雷', 28.2519361, 85.3665833, 1689, 'left'],
     [
       'syabru-besi',
-      'SYABRU BESI',
+      '夏布鲁贝西',
       28.1602583333333,
       85.3325666666667,
       1417,
       'right',
     ],
-    ['dhunche', 'DHUNCHE', 28.1131861111111, 85.2953305555556, 1300, 'left'],
+    ['dhunche', '东切', 28.1131861111111, 85.2953305555556, 1300, 'left'],
     [
       'mailung-upper-trishuli',
-      'UPPER TRISHULI',
+      '特里苏里上游',
       28.090925,
       85.2322916666667,
       950,
@@ -55,7 +55,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'mailung-bazzar',
-      'MAILUNG',
+      '迈隆',
       28.0761666666667,
       85.2125277777778,
       800,
@@ -63,7 +63,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'dandagaun',
-      'DANDAGAUN',
+      '丹达冈',
       28.0751944444444,
       85.2076944444444,
       780,
@@ -71,7 +71,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'dandagaun-viewpoint',
-      'DANDAGAUN VIEWPOINT',
+      '丹达冈观景',
       28.0354,
       85.1894361111111,
       700,
@@ -79,7 +79,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'betrawati-bazaar',
-      'BETRAWATI',
+      '贝特拉瓦蒂',
       27.9758992572246,
       85.1835331689033,
       600,
@@ -87,7 +87,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'bhainse',
-      'BHAINSE',
+      '拜恩塞',
       27.9623111111111,
       85.1739777777778,
       500,
@@ -95,7 +95,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'bidur-trishuli-bridge',
-      'BIDUR BRIDGE',
+      '比杜尔桥',
       27.920858,
       85.148029,
       510,
@@ -103,7 +103,7 @@ export const INCIDENT_OVERVIEW_PLACES = Object.freeze(
     ],
     [
       'devighat-taadi-khola-bridge',
-      'DEVIGHAT BRIDGE',
+      '德维加特桥',
       27.8585278,
       85.1090318,
       350,

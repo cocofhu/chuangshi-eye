@@ -47,7 +47,7 @@ export function readCodexOAuthAccessToken({
   nowMs = Date.now(),
 } = {}) {
   const unavailable =
-    'ChatGPT sign-in is unavailable. Sign in to Codex or the ChatGPT desktop app and try again.';
+    'ChatGPT 登录不可用。请在 Codex 或 ChatGPT 桌面应用中登录后再试。';
   let parsed;
   try {
     parsed = JSON.parse(readFile(authPath, 'utf8'));
@@ -101,7 +101,7 @@ export function readCodexOAuthAccessToken({
   }
   if (!Number.isFinite(expiresAtMs) || expiresAtMs <= nowMs + 60_000) {
     throw codexOAuthError(
-      'ChatGPT sign-in has expired. Re-authenticate in Provider Settings or run codex login and try again.',
+      'ChatGPT 登录已过期。请在提供者设置中重新登录，或单独运行 codex login。',
       'CODEX_OAUTH_REAUTH_REQUIRED',
     );
   }
@@ -170,7 +170,7 @@ export function startCodexChatGptLogin({
   ) {
     return Promise.reject(
       codexOAuthError(
-        'CODEX_AUTH_JSON does not match the Codex login storage path. Set CODEX_HOME to the matching directory or sign in to Codex separately.',
+        'CODEX_AUTH_JSON 与 Codex 登录存储路径不一致。请把 CODEX_HOME 设到对应目录，或单独登录 Codex。',
         'CODEX_OAUTH_STORAGE_MISMATCH',
       ),
     );
@@ -186,7 +186,7 @@ export function startCodexChatGptLogin({
     const fail = () => {
       reject(
         codexOAuthError(
-          'Could not start ChatGPT sign-in. Check that Codex is installed, or set CODEX_BIN to its executable.',
+          '无法启动 ChatGPT 登录。请确认已安装 Codex，或用 CODEX_BIN 指定可执行文件。',
           'CODEX_OAUTH_LOGIN_FAILED',
         ),
       );
@@ -245,14 +245,14 @@ export function createCodexOAuthLogin({
       const code = error?.code || 'CODEX_OAUTH_UNAVAILABLE';
       return {
         available: false,
-        error: error?.message || 'ChatGPT sign-in is unavailable',
+        error: error?.message || 'ChatGPT 登录不可用',
         code,
         reauthRequired: code === 'CODEX_OAUTH_REAUTH_REQUIRED',
       };
     }
     return {
       available: false,
-      error: 'ChatGPT sign-in is unavailable',
+      error: 'ChatGPT 登录不可用',
       code: 'CODEX_OAUTH_UNAVAILABLE',
       reauthRequired: false,
     };
@@ -275,7 +275,7 @@ export function createCodexOAuthLogin({
   async function start() {
     if (disposed)
       throw codexOAuthError(
-        'ChatGPT sign-in is unavailable because the server has stopped.',
+        '服务器已停止，ChatGPT 登录不可用。',
         'CODEX_OAUTH_LOGIN_FAILED',
       );
     if (credentials().available)
@@ -290,7 +290,7 @@ export function createCodexOAuthLogin({
       finish(attempt, {
         code: 'CODEX_OAUTH_LOGIN_TIMEOUT',
         error:
-          'ChatGPT sign-in timed out. Click USE CHATGPT OAUTH to try again.',
+          'ChatGPT 登录超时。请再点一次「使用 ChatGPT 登录」。',
       });
       attempt.process?.cancel();
     }, loginTimeoutMs);
@@ -312,13 +312,13 @@ export function createCodexOAuthLogin({
             finish(attempt, {
               code: 'CODEX_OAUTH_LOGIN_FAILED',
               error:
-                'ChatGPT sign-in did not complete. Try again in Provider Settings, or run codex login separately.',
+                'ChatGPT 登录未完成。请在提供者设置中重试，或单独运行 codex login。',
             });
           } else if (!credentials().available) {
             finish(attempt, {
               code: 'CODEX_OAUTH_STORAGE_UNAVAILABLE',
               error:
-                'Codex sign-in finished, but its configured auth.json has no usable ChatGPT token. Check CODEX_HOME and Codex credential storage. GEV can read file storage only.',
+                'Codex 登录已结束，但配置的 auth.json 没有可用的 ChatGPT 令牌。请检查 CODEX_HOME 与凭据存储。本应用只能读取文件存储。',
             });
           } else finish(attempt, null);
         },
@@ -326,7 +326,7 @@ export function createCodexOAuthLogin({
           finish(attempt, {
             code: 'CODEX_OAUTH_LOGIN_FAILED',
             error:
-              'ChatGPT sign-in did not complete. Try again in Provider Settings.',
+              'ChatGPT 登录未完成。请在提供者设置中重试。',
           }),
       );
       return { available: false, started: true, pending: true };
@@ -340,7 +340,7 @@ export function createCodexOAuthLogin({
         error:
           code === 'CODEX_OAUTH_STORAGE_MISMATCH'
             ? error.message
-            : 'Could not start ChatGPT sign-in. Check that Codex is installed, or set CODEX_BIN to its executable.',
+            : '无法启动 ChatGPT 登录。请确认已安装 Codex，或用 CODEX_BIN 指定可执行文件。',
       });
       return { ...status(), started: false, pending: false };
     }

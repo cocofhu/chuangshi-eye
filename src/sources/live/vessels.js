@@ -35,7 +35,7 @@ export function vesselSnapshot(
   } = {},
 ) {
   if (!Array.isArray(payload?.rows))
-    throw new LiveSourceError('malformed', 'Malformed vessel response');
+    throw new LiveSourceError('malformed', '船舶响应无效');
   const rows = payload.rows;
   const records = [],
     ids = new Set();

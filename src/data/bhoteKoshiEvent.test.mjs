@@ -691,7 +691,7 @@ test('Bhote Koshi evidence fallback stays media-first and source-linked without 
     assert.ok(failedPosterFrame);
     for (const context of contexts) {
       assert.ok(context.text.includes('无预览'));
-      assert.ok(context.text.includes('TIMURE'));
+      assert.ok(context.text.includes('蒂穆雷'));
       assert.ok(context.text.includes('YouTube 来源 / 打开'));
       assert.doesNotMatch(context.text.join(' '), /CAPTURE TIME|GEOLOCATED|public viewpoints/);
     }
@@ -2138,7 +2138,7 @@ test('Bhote Koshi beat controls keep cards, flood, camera, and panel on the one 
     assert.match(cards.find((entry) => entry.position()).id, /debris-dammed-lake/);
     assert.equal(breadcrumbs.filter((entry) => entry.position()).length, 1);
     assert.equal(panel.querySelector('[data-role="beat-index"]').textContent, '02 / 16');
-    assert.equal(panel.querySelector('[data-role="beat-title"]').textContent, 'Dammed lake');
+    assert.equal(panel.querySelector('[data-role="beat-title"]').textContent, '堰塞湖');
 
     next.dispatch('click');
     next.dispatch('click');

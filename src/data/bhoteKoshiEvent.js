@@ -2337,7 +2337,7 @@ export function createBhoteKoshiEventLayer({
         collisionGroup: 'ambient-card',
         zIndex: 60,
         interactive: true,
-        accessibilityLabel: `Open original source for ${observation.title}; capture time unverified`,
+        accessibilityLabel: `打开 ${observation.title} 的原始来源；拍摄时间未核验`,
         activate: () => openExternal(observation.media.sourceUrl),
         minDistance: 0,
         maxDistance: 220000,
