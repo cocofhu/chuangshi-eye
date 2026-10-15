@@ -109,7 +109,7 @@ test('unknown cameras, video-only feeds and oversized frames are reported', asyn
     composeCatalog({ tools: coreTools, services: { cctv: cctv(frame) } });
   await assert.rejects(
     catalog().call('get_cctv_snapshot', { camera_id: 'nope' }),
-    /No camera has id nope; use find_cctv_cameras first/,
+    /没有编号为 nope 的摄像头/,
   );
   await assert.rejects(
     catalog({ contentType: 'video/mp2t', bytes: PNG }).call(
@@ -117,14 +117,14 @@ test('unknown cameras, video-only feeds and oversized frames are reported', asyn
       { camera_id: 'austin-2' },
     ),
     (error) =>
-      error.code === 'unavailable' && /no still image/.test(error.message),
+      error.code === 'unavailable' && /当前没有静止画面/.test(error.message),
   );
   await assert.rejects(
     catalog({
       contentType: 'image/jpeg',
       bytes: new Uint8Array(3 * 1024 * 1024 + 1),
     }).call('get_cctv_snapshot', { camera_id: 'austin-2' }),
-    /too large/,
+    /图像过大/,
   );
 });
 

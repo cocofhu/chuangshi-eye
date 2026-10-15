@@ -135,18 +135,18 @@ export const getCctvSnapshot = defineTool({
     if (!camera)
       throw new ToolError(
         'invalid_arguments',
-        `No camera has id ${args.camera_id}; use find_cctv_cameras first`,
+        `没有编号为 ${args.camera_id} 的摄像头；请先查找公开摄像头`,
       );
     const frame = await services.cctv.getFrame(camera, { signal });
     if (!FRAME_TYPES.has(frame.contentType))
       throw new ToolError(
         'unavailable',
-        `Camera ${camera.name || camera.id} has no still image right now`,
+        `摄像头 ${camera.name || camera.id} 当前没有静止画面`,
       );
     if (frame.bytes.byteLength > MAX_FRAME_BYTES)
       throw new ToolError(
         'unavailable',
-        'The camera image is too large to return',
+        '摄像头图像过大，无法返回',
       );
     const name = text(camera.name) || camera.id;
     return {

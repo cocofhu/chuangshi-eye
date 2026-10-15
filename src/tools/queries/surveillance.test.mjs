@@ -92,7 +92,7 @@ test('coverage, size and zoom limits are reported', async () => {
     zoom.call('find_alpr_cameras', {
       area: { lat: 30, lon: -97, radius_km: 100 },
     }),
-    /smaller, city-sized area/,
+    /请改用更小的城市范围/,
   );
 });
 
