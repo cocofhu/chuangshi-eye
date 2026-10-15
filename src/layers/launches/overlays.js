@@ -71,7 +71,7 @@ export function createOverlays({ state: layerState, services, parts, source }) {
   }
 
   function shortMissionLabel(name, maxLength = 24) {
-    const text = String(name || 'Unnamed mission')
+    const text = String(name || '未命名任务')
       .replace(/\s+/g, ' ')
       .trim()
       .split(' | ')[0];

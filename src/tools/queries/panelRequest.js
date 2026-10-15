@@ -289,7 +289,7 @@ export const panelRequest = defineTool({
           'That response is no longer held; request the path again',
         );
       return {
-        summary: `Part of ${entry.path}`,
+        summary: `部分内容 · ${entry.path}`,
         data: part(entry.response, entry.bytes, args.offset ?? 0),
       };
     }

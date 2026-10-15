@@ -66,6 +66,22 @@ export function pointerOwner() {
   return currentLease ? currentLease.owner : null;
 }
 
+/** Claim ids stay stable; this is only the label a person reads. */
+const POINTER_OWNER_LABELS = Object.freeze({
+  draw: '标绘',
+  directions: '路径规划',
+  'recent-imagery-box': '近期影像框选',
+});
+
+/**
+ * @param {string|null} [owner]
+ * @returns {string|null} Chinese label for a known claim, else the raw id.
+ */
+export function pointerOwnerLabel(owner = pointerOwner()) {
+  if (!owner) return null;
+  return POINTER_OWNER_LABELS[owner] || owner;
+}
+
 /** @returns {boolean} True when no tool holds the pointer. */
 export function isPointerFree() {
   return currentLease === null;

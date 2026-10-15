@@ -304,13 +304,13 @@ export function applyDisplayCourse(entry, nowMs) {
 export function displayMotion(entry, nowMs) {
   if (!entry) return { moving: false, word: '' };
   const sample = entry.sample;
-  if (!sample) return { moving: false, word: 'WAITING' };
+  if (!sample) return { moving: false, word: '等待' };
   if (sample.latestReportAgeMs > MOTION_UNKNOWN_AFTER_MS)
-    return { moving: false, word: 'NO FIX' };
-  if (sample.phase !== 'playing') return { moving: false, word: 'WAITING' };
-  if (sample.motion === 'stopped') return { moving: false, word: 'STOPPED' };
+    return { moving: false, word: '无定位' };
+  if (sample.phase !== 'playing') return { moving: false, word: '等待' };
+  if (sample.motion === 'stopped') return { moving: false, word: '停驶' };
   return {
     moving: sample.motion === 'moving',
-    word: sample.motion === 'moving' ? 'EN ROUTE' : 'WAITING',
+    word: sample.motion === 'moving' ? '在途' : '等待',
   };
 }

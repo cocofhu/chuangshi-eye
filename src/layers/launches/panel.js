@@ -193,7 +193,7 @@ export function createPanel({ state: layerState, services, parts, source }) {
     setMissionPanelField('[data-mission-status]', launch.status);
     setMissionPanelField(
       '[data-mission-site]',
-      launch.launchSite && launch.launchSite !== 'Unknown launch site'
+      launch.launchSite && launch.launchSite !== '未知发射场'
         ? launch.launchSite
         : null,
     );
@@ -234,7 +234,7 @@ export function createPanel({ state: layerState, services, parts, source }) {
       const endpoint = stage.endpoint;
       const destination =
         stage.destination ||
-        (endpoint?.accuracy === 'PAD / RTLS'
+        (endpoint?.accuracy === '发射台回收'
           ? launch.launchSite
           : '未知');
       const position = endpoint
@@ -281,7 +281,7 @@ export function createPanel({ state: layerState, services, parts, source }) {
     const count = layerState._missionRoster.querySelector(
       '[data-mission-roster-count]',
     );
-    if (count) count.textContent = `${layerState._launches.length} / 30D`;
+    if (count) count.textContent = `${layerState._launches.length} / 30 日`;
     if (!list) return;
     const focusSnapshot = captureMissionRosterFocus(list);
     layerState._missionRosterPreviewOwnership?.reset();

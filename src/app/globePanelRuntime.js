@@ -19,7 +19,7 @@ export function panelRuntime(config) {
   };
   let blocked = null;
   document.addEventListener('securitypolicyviolation', (event) => {
-    blocked = `${event.effectiveDirective} blocked ${event.blockedURI || 'a resource'}`;
+    blocked = `${event.effectiveDirective} 拦截了 ${event.blockedURI || '一项资源'}`;
   });
 
   // JSON-RPC with the host.
@@ -482,8 +482,8 @@ export function panelRuntime(config) {
     if (!response.ok)
       throw new Error(
         response.status === 404
-          ? 'the app has no panel build (npm run build:panel)'
-          : `the app answered ${response.status}`,
+          ? '应用没有面板构建（npm run build:panel）'
+          : `应用返回了 ${response.status}`,
       );
     const built = new DOMParser().parseFromString(
       await response.text(),
@@ -541,9 +541,8 @@ export function panelRuntime(config) {
         const notice = document.createElement('div');
         notice.id = 'status';
         notice.textContent =
-          "This panel lost its 3D graphics, likely because other God's Eye " +
-          "View panels in this conversation hold them. Use Open in God's " +
-          'Eye View above, or show it in a new conversation.';
+          '此面板失去了三维图形，可能是因为本对话中的其他创世之眼面板占用了它们。' +
+          '请使用上方的「在创世之眼中打开」，或在新对话中显示。';
         document.body.appendChild(notice);
       },
       { capture: true, once: true },
@@ -568,16 +567,16 @@ export function panelRuntime(config) {
     queued = view;
     if (started) return;
     started = true;
-    say("Loading God's Eye View…");
+    say('正在加载创世之眼…');
     startApp(url, view).catch((error) =>
-      say(`God's Eye View could not load here: ${error?.message || error}.`),
+      say(`创世之眼无法在此加载：${error?.message || error}。`),
     );
     setTimeout(() => {
       if (!ready)
         say(
-          "God's Eye View did not load here" +
-            (blocked ? ` (${blocked})` : '') +
-            ". Use Open in God's Eye View above.",
+          '创世之眼未在此加载' +
+            (blocked ? `（${blocked}）` : '') +
+            '。请使用上方的「在创世之眼中打开」。',
         );
     }, config.loadTimeoutMs);
   }
@@ -616,7 +615,7 @@ export function panelRuntime(config) {
     if (context?.displayMode) displayMode = context.displayMode;
     if (context?.availableDisplayModes)
       expand.hidden = !context.availableDisplayModes.includes('fullscreen');
-    expand.textContent = displayMode === 'fullscreen' ? 'Collapse' : 'Expand';
+    expand.textContent = displayMode === 'fullscreen' ? '收起' : '展开';
   };
   expand.addEventListener('click', () => {
     request('ui/request-display-mode', {
@@ -640,7 +639,7 @@ export function panelRuntime(config) {
     appCapabilities: { availableDisplayModes: ['inline', 'fullscreen'] },
     appInfo: {
       name: 'gods-eye-view',
-      title: "God's Eye View",
+      title: '创世之眼',
       version: '1.0.0',
     },
     protocolVersion: config.protocolVersion,
@@ -655,8 +654,8 @@ export function panelRuntime(config) {
     },
     (error) =>
       say(
-        "This client did not accept the God's Eye View panel" +
-          (error?.message ? `: ${error.message}` : '.'),
+        '此客户端未接受创世之眼面板' +
+          (error?.message ? `：${error.message}` : '。'),
       ),
   );
 }

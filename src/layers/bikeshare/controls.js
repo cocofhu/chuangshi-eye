@@ -40,7 +40,7 @@ export function createControls({ state: layerState, services, parts, source }) {
         if (!Number.isFinite(info?.lat) || !Number.isFinite(info?.lon))
           continue;
         result.push({
-          id: record.stationName || `Dock ${record.stationId}`,
+          id: record.stationName || `桩位 ${record.stationId}`,
           name: record.stationName || null,
           city: record.cityId || null,
           lat: info.lat,

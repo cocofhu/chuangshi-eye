@@ -722,7 +722,7 @@ test('normalizes detailed payload and stage recovery records', () => {
   assert.equal(launches[0].payloads[0].amount, 2);
   assert.equal(launches[0].payloads[0].massKg, 420);
   assert.equal(launches[0].recoveryStages[0].name, 'Core · B1099');
-  assert.equal(launches[0].recoveryStages[0].status, 'RECOVERED');
+  assert.equal(launches[0].recoveryStages[0].status, '已回收');
   assert.equal(launches[0].recoveryStages[0].downrangeKm, 610);
   assert.equal(launches[0].recoveryStages[0].lat, 30.1);
   assert.equal(launches[0].recoveryStages[0].lon, -76.2);
@@ -1414,7 +1414,7 @@ test('missing payload details stay unknown without inventing mass or classificat
     const [launch] = normalizeRocketLaunches([{ id: 'mass', pad: { latitude: 1, longitude: 2 }, net: '2026-07-20T10:00:00Z',
       payloads: [{ mass }] }], NOW);
     assert.equal(launch.payloads[0].massKg, expected);
-    assert.equal(launch.payloads[0].name, 'Unnamed payload');
+    assert.equal(launch.payloads[0].name, '未命名载荷');
   }
   const [launch] = normalizeRocketLaunches([{ id: 'missing', pad: { latitude: 1, longitude: 2 }, net: '2026-07-20T10:00:00Z' }], NOW);
   assert.deepEqual(launch.payloads, []);

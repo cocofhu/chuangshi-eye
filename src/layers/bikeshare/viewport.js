@@ -172,7 +172,7 @@ export function createViewport({ state: layerState, services, parts, source }) {
     } catch (error) {
       if (error?.name === 'AbortError') return;
       console.warn(`[Data:Bikeshare] ${cityId} activate error:`, error);
-      layerState._error = 'GBFS fetch error';
+      layerState._error = '共享单车数据获取失败';
       deactivateCity(cityId);
       layerState._activeCityIds.delete(cityId);
     } finally {

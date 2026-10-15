@@ -53,9 +53,9 @@ test('orientation alone smooths at 120 degrees/s and waiting/stale override movi
   applyDisplayCourse(e, 100);
   assert.equal(e.courseDeg, 12);
   updatePlayback(e, 45000, 15000);
-  assert.equal(displayMotion(e, 45000).word, 'WAITING');
+  assert.equal(displayMotion(e, 45000).word, '等待');
   updatePlayback(e, 200000, 170000);
-  assert.equal(displayMotion(e, 200000).word, 'NO FIX');
+  assert.equal(displayMotion(e, 200000).word, '无定位');
 });
 
 test('display copy never borrows a future bearing and follows anchored freshness after a wall jump', () => {
@@ -76,17 +76,17 @@ test('display copy never borrows a future bearing and follows anchored freshness
       e,
     );
   const before = copy(35000);
-  assert.equal(before.details[1], 'Moving');
-  assert.ok(before.details.includes('reported hdg 270°'));
+  assert.equal(before.details[1], '移动中');
+  assert.ok(before.details.includes('报告航向 270°'));
   assert.ok(!before.details[1].includes('270'));
   updatePlayback(e, 3600000, 16);
   assert.equal(e.sample.motion, 'moving');
   assert.equal(e.sample.latestReportAgeMs, 10016);
-  assert.equal(displayMotion(e, 3600000).word, 'EN ROUTE');
+  assert.equal(displayMotion(e, 3600000).word, '在途');
   assert.equal(copy(3600000).details[2], before.details[2]);
   assert.match(
     copy(3600000).details[2],
-    /Reported 10 s ago · shown 25 s behind/,
+    /10 秒前报告 · 显示滞后 25 秒/,
   );
 });
 
