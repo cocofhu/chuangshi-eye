@@ -18,10 +18,10 @@ const MAX_NOTES = 6;
 const MAX_CAPTION = 220;
 
 const STATUS_TEXT = Object.freeze({
-  running: 'in progress',
-  done: 'done',
-  failed: 'failed',
-  cancelled: 'cancelled',
+  running: '进行中',
+  done: '完成',
+  failed: '失败',
+  cancelled: '已取消',
 });
 
 /** An empty, hidden card. */
@@ -119,7 +119,7 @@ export function reduceVoiceCard(state, event) {
       if (!pointer && !state.pointer) return state;
       if (!pointer) return { ...state, pointer };
       // The live region says what "this" meant, as the chip does.
-      const kind = pointer.kind === 'here' ? 'Here' : 'This';
+      const kind = pointer.kind === 'here' ? '此处' : '此';
       return reveal({
         ...state,
         pointer,
@@ -267,14 +267,14 @@ export function voiceCardView(state) {
   return {
     visible: Boolean(state.visible),
     busy: running,
-    phase: running ? 'WORKING' : state.steps.length ? 'DONE' : '',
+    phase: running ? '进行中' : state.steps.length ? '完成' : '',
     user: {
       visible: state.user !== null,
       text: state.user || '…',
     },
     pointer: {
       visible: Boolean(state.pointer),
-      kind: state.pointer?.kind === 'here' ? 'HERE' : 'THIS',
+      kind: state.pointer?.kind === 'here' ? '此处' : '此',
       text: spokenLabel(state.pointer?.label || '', 32),
     },
     assistant: {

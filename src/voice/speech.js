@@ -18,7 +18,7 @@
  * returned unchanged.
  */
 
-import { analystHeadline } from './resultDisplay.js';
+import { analystHeadline, feedChipLabel } from './resultDisplay.js';
 
 const LAYER_NOUNS = Object.freeze({
   flights: '航空器',
@@ -78,7 +78,8 @@ function feedTag(state) {
 
 /** A feed chip only when the state is worth seeing; nominal is the default. */
 function feedChips(state) {
-  return state && state !== 'nominal' ? [{ label: state }] : [];
+  const label = feedChipLabel(state);
+  return label ? [{ label }] : [];
 }
 
 /** Ids such as `austin` or `local-firms` read as names on screen. */
@@ -105,7 +106,7 @@ function setLayerVisibility(result, args = {}) {
     const wanted = args.enabled === false ? '关闭' : '开启';
     return {
       say: `无法${wanted} ${label}。`,
-      display: { title: label, lines: [result?.error].filter(Boolean) },
+      display: { title: label, lines: [`无法${wanted} ${label}。`] },
     };
   }
   const on = result.enabled !== false;
@@ -130,7 +131,7 @@ function flyToLocation(result) {
   if (!result?.ok) {
     return {
       say: sentence(`找不到 ${label}`),
-      display: { title: label, lines: [result?.error].filter(Boolean) },
+      display: { title: label, lines: [sentence(`找不到 ${label}`)] },
     };
   }
   return {
@@ -163,7 +164,7 @@ function frameOverhead(result) {
       say,
       display: {
         title: `框选${noun}`,
-        lines: [result?.error].filter(Boolean),
+        lines: [say],
       },
     };
   }
@@ -213,7 +214,7 @@ function selectNearestAircraft(result) {
       say,
       display: {
         title: `最近${noun}`,
-        lines: [result?.error].filter(Boolean),
+        lines: [say],
         chips: feedChips(feed.state),
         sources,
       },
@@ -353,7 +354,7 @@ function getCurrentViewState(result) {
       title: '视图状态',
       lines: enabled.map(
         (layer) =>
-          `${spokenLabel(layer.name || layer.id, 32)} · ${layer.count ?? 0} · ${layer.feedState || 'nominal'}`,
+          `${spokenLabel(layer.name || layer.id, 32)} · ${layer.count ?? 0} · ${feedChipLabel(layer.feedState) || '正常'}`,
       ),
     },
     schedule: 'silent',
@@ -509,9 +510,39 @@ export function planStepLabel(name, args = {}) {
     case 'frame_overhead':
       return `框选 ${spokenLabel(args.target || '航空器', 24)}`;
     default:
-      return spokenLabel(String(name || '操作').replace(/_/g, ' '), 40);
+      return (
+        TOOL_STEP_LABELS[name] ||
+        spokenLabel(String(name || '操作').replace(/_/g, ' '), 40)
+      );
   }
 }
+
+/** On-screen plan labels for tools that have no argument-specific phrasing. */
+const TOOL_STEP_LABELS = Object.freeze({
+  adjust_camera_zoom: '调整缩放',
+  zoom_to_globe: '回到全球',
+  show_data_layers_menu: '打开图层菜单',
+  set_panel_open: '切换面板',
+  set_context_mode: '切换情境',
+  control_cockpit: '座舱',
+  set_visual_style: '切换风格',
+  set_hud: '切换 HUD',
+  set_cyber_sonar: '声呐',
+  set_detection: '检测',
+  set_map_stack: '底图',
+  set_post_processing: '画面处理',
+  control_scene: '场景',
+  control_cctv: '监控',
+  control_radio: '电台',
+  track_entity: '跟踪目标',
+  stop_tracking: '停止跟踪',
+  clear_annotations: '清除标记',
+  move_camera: '移动相机',
+  fly_route: '沿路径飞行',
+  analyst_query: '查询态势',
+  next_iss_pass: '国际空间站过境',
+  next_satellite_pass: '卫星过境',
+});
 
 /**
  * The spoken subject of a tool call for "Still working on …", or '' when the

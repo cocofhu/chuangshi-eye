@@ -1092,7 +1092,7 @@ async function runDeixisBehavior(page, run, settle) {
     report(
       turn.snapshot?.entity?.id === aircraft.id &&
         turn.chipVisible &&
-        turn.chipKind === 'THIS' &&
+        turn.chipKind === '此' &&
         turn.reticleVisible,
       'deixis: pointer on an aircraft resolves "this" with chip and reticle',
       `entity=${turn.snapshot?.entity?.id}/${turn.snapshot?.entity?.label} expected=${aircraft.id} chip=${turn.chipKind}:${turn.chipText} reticle=${turn.reticleVisible}`,
@@ -1170,7 +1170,7 @@ async function runDeixisBehavior(page, run, settle) {
   }
   report(
     groundTurn?.snapshot?.target === 'ground' &&
-      groundTurn.chipKind === 'HERE' &&
+      groundTurn.chipKind === '此处' &&
       /-?\d+\.\d\d, -?\d+\.\d\d/.test(groundTurn.chipText) &&
       groundTurn.reticleVisible,
     'deixis: pointer on bare ground resolves "here" to coordinates',

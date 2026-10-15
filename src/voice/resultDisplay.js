@@ -50,6 +50,21 @@ export function analystNounFor(layerKeys) {
   return LAYER_NOUNS[key] || voiceLayer(key)?.aliases?.[0] || '结果';
 }
 
+/** Feed-state ids stay stable; this is only the chip a person reads. */
+export const FEED_CHIP_LABEL = Object.freeze({
+  loading: '加载中',
+  degraded: '降级',
+  stale: '陈旧',
+  partial: '部分',
+  fallback: '备用',
+  unavailable: '不可用',
+});
+
+/** @param {string|null|undefined} state */
+export function feedChipLabel(state) {
+  return FEED_CHIP_LABEL[state] || null;
+}
+
 /** The count/scope headline shared by the analyst card and spoken answer. */
 const ANALYST_HEADLINE_MAX = 64;
 
@@ -98,8 +113,8 @@ function analystCard(result) {
         display.window,
       ].filter(Boolean),
       chips: [
-        ...(result.feedState && result.feedState !== 'nominal'
-          ? [{ label: result.feedState }]
+        ...(feedChipLabel(result.feedState)
+          ? [{ label: feedChipLabel(result.feedState) }]
           : []),
         ...(result.partial ? [{ label: '部分' }] : []),
       ],
