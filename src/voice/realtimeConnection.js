@@ -59,7 +59,7 @@ export class RealtimeConnection {
     this.input.pushToTalkKeyHeld = pushToTalkKeyHeld;
     this.input.spaceKeyHeld = spaceKeyHeld;
     if (!window.RTCPeerConnection || !navigator.mediaDevices?.getUserMedia) {
-      this.setStatus('error', 'WebRTC microphone support unavailable');
+      this.setStatus('error', '当前浏览器不支持 WebRTC 麦克风');
       return;
     }
 
@@ -78,7 +78,7 @@ export class RealtimeConnection {
     // — this is what "applies next session" means.
     this.cost.prepareSession();
     this.syncCostUi();
-    this.setStatus('connecting', 'Requesting microphone');
+    this.setStatus('connecting', '正在请求麦克风');
     this.debugLog('session.starting', {
       epoch,
       tier: this.cost.voiceTier,
@@ -154,12 +154,12 @@ export class RealtimeConnection {
       };
       this.pc.oniceconnectionstatechange = () => {
         if (ownsConnection() && this.pc?.iceConnectionState === 'failed') {
-          this.fatalError('ICE connection', null, this.connectionDiagnostics());
+          this.fatalError('ICE 连接', null, this.connectionDiagnostics());
         }
       };
       this.pc.onicecandidateerror = (event) => {
         if (!ownsConnection()) return;
-        this.reportError('ICE candidate', event, {
+        this.reportError('ICE 候选', event, {
           errorCode: event.errorCode,
           errorText: event.errorText,
           address: event.address,
@@ -196,7 +196,7 @@ export class RealtimeConnection {
         // channel error tears the session down so the mic doesn't stay live (H8).
         if (this._tearingDown || !ownsChannel()) return;
         this.fatalError(
-          'Realtime data channel',
+          '实时数据通道',
           event,
           this.connectionDiagnostics(dataChannel),
         );
@@ -209,7 +209,7 @@ export class RealtimeConnection {
           this.status !== 'error'
         ) {
           this.fatalError(
-            'Realtime data channel closed',
+            '实时数据通道已关闭',
             null,
             this.connectionDiagnostics(dataChannel),
           );
@@ -248,7 +248,7 @@ export class RealtimeConnection {
       }
       const diagnostics = this.connectionDiagnostics();
       this.stop({ preserveStatus: true });
-      this.reportError('Realtime connection', error, diagnostics);
+      this.reportError('实时连接', error, diagnostics);
     }
   }
 
@@ -283,7 +283,7 @@ export class RealtimeConnection {
   handleConnectionStateChange() {
     const state = this.pc?.connectionState;
     if (state === 'failed') {
-      this.fatalError('WebRTC connection', null, this.connectionDiagnostics());
+      this.fatalError('WebRTC 连接', null, this.connectionDiagnostics());
       return;
     }
     if (state === 'disconnected') {
@@ -297,7 +297,7 @@ export class RealtimeConnection {
         // Still not recovered after the grace window → treat as a real drop.
         if (this.pc?.connectionState === 'disconnected') {
           this.fatalError(
-            'WebRTC connection lost',
+            'WebRTC 连接中断',
             null,
             this.connectionDiagnostics(),
           );

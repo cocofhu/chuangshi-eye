@@ -449,24 +449,24 @@ test('all manufacturers share one ALPR title and color; only supplied metadata a
       1,
     );
     assert.deepEqual(entities[0].gevLabelModel.details, [
-      'OSM MAPPED',
+      'OSM 已标注',
       'FLOCK SAFETY · CITY POLICE · FIXED',
-      'PUBLIC MAP DATA',
+      '公开地图数据',
     ]);
     assert.deepEqual(entities[1].gevLabelModel.details, [
-      'OSM MAPPED',
+      'OSM 已标注',
       'MOTOROLA SOLUTIONS',
-      'PUBLIC MAP DATA',
+      '公开地图数据',
     ]);
     assert.deepEqual(
       entities[2].gevLabelModel.details,
-      ['OSM MAPPED', 'PUBLIC MAP DATA'],
+      ['OSM 已标注', '公开地图数据'],
       'unknown metadata is not guessed, but the source is always named',
     );
     for (const entity of entities) {
       h.click(entity.id);
       assert.equal(getSelectedEntityContext().label, '车牌识别摄像头');
-      assert.equal(getSelectedEntityContext().layerName, 'ALPR Cameras');
+      assert.equal(getSelectedEntityContext().layerName, '已标注车牌识别摄像头');
     }
   } finally {
     h.restore();
@@ -897,7 +897,7 @@ test('two factories keep their requests, records and destruction independent', a
     assert.equal(second.source, 'Test camera directory');
     assert.ok(
       b.source.entities.values[0].gevLabelModel.details.includes(
-        'Source: Test directory',
+        '来源：Test directory',
       ),
     );
     assert.equal(a.viewer.camera.moveEnd.numberOfListeners, 0);

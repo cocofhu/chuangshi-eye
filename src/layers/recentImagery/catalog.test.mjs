@@ -188,7 +188,7 @@ test('both HLS collections fold with the VIIRS days; one failing product is repo
     ),
   });
   assert.deepEqual(result.errors, [
-    { product: 'L30', message: 'HTTP 503 from CMR' },
+    { product: 'L30', message: 'CMR 请求失败（HTTP 503）' },
   ]);
   assert.equal(result.truncated, false);
   assert.equal(calls[0].init.signal, signal);

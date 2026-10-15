@@ -6,6 +6,7 @@ import {
   shouldCaptureContextSession,
   shouldDeferContextEntryDuringClear,
 } from '../contextModePolicy.js';
+import { panelLabel } from './layerPanel.js';
 
 export function connectContextManager(manager) {
   this.disconnect();
@@ -59,9 +60,8 @@ export function connectContextManager(manager) {
     this._dataManagerVisibilityGuardUnsubscribe =
       this._dataManager.addVisibilityGuard(async (change) => {
         if (this.destroyed) return null;
-        const layerName =
-          this._dataManager?.layers?.get(change.layerId)?.module?.name ||
-          change.layerId;
+        const module = this._dataManager?.layers?.get(change.layerId)?.module;
+        const layerName = module?.id ? panelLabel(module) : change.layerId;
         const reason = contextLayerEnableBlockReason({
           contextMode: this._contextModeEntering || this._contextMode,
           change,

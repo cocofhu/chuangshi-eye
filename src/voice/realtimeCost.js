@@ -240,7 +240,7 @@ export class RealtimeCost {
     try {
       this.stop({ preserveStatus: true });
     } finally {
-      this.setStatus('idle', `Session ended — cost cap ${state.display}`);
+      this.setStatus('idle', `会话已结束 — 费用达到上限 ${state.display}`);
       this.syncCostUi();
     }
   }

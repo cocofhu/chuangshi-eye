@@ -95,7 +95,7 @@ export function createTracking({
     return {
       id: icao24,
       layerId: 'military',
-      layerName: 'Military Flights',
+      layerName: '军用航空器',
       source: flightState.feed._lastSource,
       label,
       latitude: described.latitude,
@@ -219,7 +219,7 @@ export function createTracking({
   function _buildTrackedLabel(info, icao24) {
     const stale =
       flightState.records.missingPolls.get(icao24) || flightState.feed._backoff
-        ? ' · STALE'
+        ? ' · 过期'
         : '';
     const callsign =
       (parts.queries._toCleanText(info?.callsign) ||
@@ -229,12 +229,12 @@ export function createTracking({
     // what the Easter egg replaces the real type with.
     const type = tr3bTypeLabel(
       icao24,
-      parts.queries._toCleanText(info?.type) || 'Type unknown',
+      parts.queries._toCleanText(info?.type) || '机型未知',
     );
     const registration =
-      parts.queries._toCleanText(info?.registration) || 'Reg unknown';
+      parts.queries._toCleanText(info?.registration) || '注册号未知';
     const operator =
-      parts.queries._toCleanText(info?.operator) || 'Operator unknown';
+      parts.queries._toCleanText(info?.operator) || '运营方未知';
     const altitude = parts.queries._formatAltitude(info?.altitudeFt);
     const speedKt = info?.speedMps ? Math.round(info.speedMps * 1.944) : null;
     const tail = speedKt ? `${altitude} · ${speedKt} kt` : altitude;

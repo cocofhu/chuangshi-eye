@@ -74,9 +74,9 @@ export function localAdsbReceiverLine(record) {
 export function localAdsbSourceText(record) {
   const sources = recordSources(record);
   if (sources.includes('webusb') && sources.includes('feed'))
-    return 'Your RTL-SDR receiver and decoder feed';
-  if (sources.includes('feed')) return 'Your decoder feed';
-  return 'Your RTL-SDR receiver';
+    return '本机 RTL-SDR 与解码馈源';
+  if (sources.includes('feed')) return '本机解码馈源';
+  return '本机 RTL-SDR';
 }
 
 /**

@@ -10,12 +10,12 @@ export const ENTITY_PREFIX = `${LAYER_ID}:`;
 export const LOCAL_ADSB_TICK_MS = 1_000;
 /** Coalesce receiver bursts into at most one scene sync per interval. */
 export const LOCAL_ADSB_SYNC_MS = 200;
-export const HEARD_BY_RECEIVER = 'Heard by your receiver';
+export const HEARD_BY_RECEIVER = '本机接收到';
 export const BAND_LABELS = Object.freeze({
   1090: '1090 MHz',
   978: '978 MHz UAT',
 });
 export const SOURCE_LABELS = Object.freeze({
-  webusb: 'browser SDR',
-  feed: 'decoder feed',
+  webusb: '浏览器 SDR',
+  feed: '解码馈源',
 });

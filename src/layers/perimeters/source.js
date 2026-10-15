@@ -8,7 +8,7 @@ export function createWfigsPerimeterSource({
     async getSnapshot({ signal } = {}) {
       signal?.throwIfAborted();
       const response = await fetchImpl('/api/fire-perimeters', { signal });
-      if (!response.ok) throw new Error(`WFIGS HTTP ${response.status}`);
+      if (!response.ok) throw new Error(`火场范围请求失败（HTTP ${response.status}）`);
       const payload = await readResponseJsonCapped(
         response,
         80 * 1024 * 1024,
@@ -16,7 +16,7 @@ export function createWfigsPerimeterSource({
       );
       signal?.throwIfAborted();
       if (!Array.isArray(payload?.rows))
-        throw new Error('Malformed perimeter snapshot');
+        throw new Error('火场范围快照无效');
       return payload.rows;
     },
   };

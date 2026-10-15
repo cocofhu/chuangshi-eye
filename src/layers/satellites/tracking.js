@@ -228,7 +228,7 @@ export function createTracking({ state: layerState, services, parts, source }) {
     return {
       id: String(noradId),
       layerId: 'satellites',
-      layerName: 'Satellites',
+      layerName: '卫星轨道',
       source: 'CelesTrak',
       label: name,
       latitude: pos.latitude,

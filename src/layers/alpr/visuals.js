@@ -38,19 +38,19 @@ export const BRACKETS_IMAGE = new URL(
 
 /** Compact display label; selection identity always uses the full record id. */
 export function alprDisplayId(record) {
-  if (!Number.isSafeInteger(record.osmId)) return 'ALPR CAMERA';
+  if (!Number.isSafeInteger(record.osmId)) return '车牌摄像头';
   return `ALPR-${String(record.osmId).slice(-4).padStart(4, '0')}`;
 }
 
 /** Show only supplied metadata, with the actual source named for custom adapters. */
 export function alprLabelDetails(record, source) {
   const sourceName =
-    source.attribution?.name || source.label || 'Camera source';
+    source.attribution?.name || source.label || '摄像头来源';
   const details = [
-    sourceName === 'OpenStreetMap' ? 'OSM MAPPED' : `Source: ${sourceName}`,
+    sourceName === 'OpenStreetMap' ? 'OSM 已标注' : `来源：${sourceName}`,
   ];
   if (Number.isFinite(record.directionDeg))
-    details.push(`DIRECTION ${Math.round(record.directionDeg)}°`);
+    details.push(`朝向 ${Math.round(record.directionDeg)}°`);
   const equipment = [
     ...new Set(
       [record.manufacturer, record.operator, record.cameraType]
@@ -63,7 +63,7 @@ export function alprLabelDetails(record, source) {
     ),
   ];
   if (equipment.length) details.push(equipment.join(' · '));
-  if (sourceName === 'OpenStreetMap') details.push('PUBLIC MAP DATA');
+  if (sourceName === 'OpenStreetMap') details.push('公开地图数据');
   return details;
 }
 

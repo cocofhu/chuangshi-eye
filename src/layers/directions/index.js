@@ -21,6 +21,7 @@ import {
   formatRouteDistance,
   formatRouteDuration,
 } from '../../data/routeSteps.js';
+import { routeErrorText } from './source.js';
 
 export const DIRECTIONS_STEP_OVERLAY_SOURCE_ID = 'directions-step';
 export const DIRECTIONS_STEP_OVERLAY_SOURCE_OPTIONS = Object.freeze({
@@ -838,12 +839,7 @@ export function createDirectionsLayer({ services, source }) {
         _route = null;
         clearRouteGraphics();
         _status = 'error';
-        _error =
-          payload?.error === 'no route found'
-            ? 'A 与 B 之间没有路线'
-            : payload?.error
-              ? `规划失败：${payload.error}`
-              : 'A 与 B 之间没有路线';
+        _error = routeErrorText(payload?.error, 'A 与 B 之间没有路线');
         return;
       }
       _route = route;

@@ -8,7 +8,7 @@ test('launch sources preserve last-good eligibility by rejecting malformed snaps
     const source = createLaunchSource({
       fetchImpl: async () => new Response(JSON.stringify(payload)),
     });
-    await assert.rejects(source.getLaunches(), /Malformed launch snapshot/);
+    await assert.rejects(source.getLaunches(), /发射快照无效/);
   }
 });
 

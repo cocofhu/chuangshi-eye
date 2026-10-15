@@ -7,6 +7,23 @@ import {
   SEQUENCE_IMAGES_LIMIT,
 } from './policy.js';
 
+const MAPILLARY_ERROR_TEXT = Object.freeze({
+  no_key: '需要 MAPILLARY_CLIENT_TOKEN',
+  'Too many tile requests': '瓦片请求过多',
+  'Tile path must be /coverage/{z}/{x}/{y}': '瓦片路径无效',
+  'Mapillary rejected the access token': 'Mapillary 拒绝了访问令牌',
+  'Mapillary is rate-limiting tile requests': 'Mapillary 正在限流瓦片请求',
+  'Mapillary token not configured': '未配置 Mapillary 令牌',
+});
+
+function mapillaryErrorText(error) {
+  if (typeof error === 'string' && MAPILLARY_ERROR_TEXT[error])
+    return MAPILLARY_ERROR_TEXT[error];
+  if (error && typeof error === 'object' && typeof error.message === 'string')
+    return MAPILLARY_ERROR_TEXT[error.message] || null;
+  return null;
+}
+
 /** HTTP error flagged `keyRequired`, `keyRejected` or `retryAfterSec` (429). */
 export class MapillarySourceError extends Error {
   constructor(message, { status = 0, payload = null, retryAfterSec } = {}) {
@@ -31,9 +48,8 @@ async function readJsonOrThrow(response, label) {
   }
   if (!response.ok)
     throw new MapillarySourceError(
-      payload?.error?.message ||
-        payload?.error ||
-        `${label} HTTP ${response.status}`,
+      mapillaryErrorText(payload?.error) ||
+        `${label}请求失败（HTTP ${response.status}）`,
       { status: response.status, payload },
     );
   return payload;
@@ -58,7 +74,7 @@ export function createMapillarySource({
 
   async function graph(path, params = {}, { signal } = {}) {
     if (!token)
-      throw new MapillarySourceError('Mapillary token not configured', {
+      throw new MapillarySourceError('未配置 Mapillary 令牌', {
         status: 503,
         payload: { keyRequired: true },
       });
@@ -66,7 +82,7 @@ export function createMapillarySource({
     const response = await fetchImpl(`${urls.graph}/${path}?${search}`, {
       signal,
     });
-    return readJsonOrThrow(response, 'Mapillary graph');
+    return readJsonOrThrow(response, 'Mapillary 图数据');
   }
 
   return {
@@ -80,7 +96,7 @@ export function createMapillarySource({
         signal,
         cache: 'no-store',
       });
-      return readJsonOrThrow(response, 'Mapillary status');
+      return readJsonOrThrow(response, 'Mapillary 状态');
     },
 
     /** Raw protobuf bytes for one tile; an empty array means no data. */
@@ -100,7 +116,8 @@ export function createMapillarySource({
           /* ignore */
         }
         throw new MapillarySourceError(
-          payload?.error || `Tile HTTP ${response.status}`,
+          mapillaryErrorText(payload?.error) ||
+            `瓦片请求失败（HTTP ${response.status}）`,
           {
             status: response.status,
             payload,

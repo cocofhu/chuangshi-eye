@@ -107,7 +107,7 @@ const PANEL_LABELS = {
   radio: '网络电台',
 };
 
-function panelLabel(layer) {
+export function panelLabel(layer) {
   return PANEL_LABELS[layer.id] || layer.name;
 }
 

@@ -98,7 +98,7 @@ export function createTracking({
     return {
       id: icao24,
       layerId: 'flights',
-      layerName: 'Live Flights',
+      layerName: '民航航班',
       source: flightState.feed._lastSource,
       label: parts.queries._contactLabel(
         icao24,
@@ -755,7 +755,7 @@ export function createTracking({
     const spd = info.velocity ? `${Math.round(info.velocity * 1.944)} kts` : '';
     const stale =
       flightState.records.missingPolls.get(icao24) || flightState.feed._backoff
-        ? 'STALE'
+        ? '过期'
         : '';
     const lines = [[cs, fl, spd, stale].filter(Boolean).join(' · ')];
     // Converted contacts report their class as TR-3B and nothing else — the

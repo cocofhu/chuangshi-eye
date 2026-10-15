@@ -265,7 +265,7 @@ test('local aircraft use their class silhouette and scale in magenta', async (t)
     ),
     'the helicopter keeps the local magenta',
   );
-  assert.equal(heli.gevLabelModel.details[1], 'Helicopter · A7');
+  assert.equal(heli.gevLabelModel.details[1], '直升机 · A7');
 
   // On the ground the silhouette shrinks like a grounded public flight.
   receiver.set({
@@ -481,13 +481,13 @@ test('adsbdb type, operator and route reach the card for the selected aircraft o
   const entity = sources[0].entities.getById('local-adsb:a0b702');
   assert.deepEqual(entity.gevLabelModel.details.slice(0, 4), [
     'ICAO A0B702 · EVC145',
-    'Helicopter · A7',
+    '直升机 · A7',
     'Air Evac · Bell 407',
     'AUS → SAT',
   ]);
   assert.equal(
     entity.gevLabelModel.details.at(-1),
-    'Heard by your receiver · 1090 MHz · browser SDR',
+    '本机接收到 · 1090 MHz · 浏览器 SDR',
   );
   layer.selectAircraft('a0b702');
   await layer.update();
@@ -643,9 +643,9 @@ test('the click card lists identity, kinematics, freshness and the receiver line
     'ALT 1,600 FT · GS 130 KT · TRK 331°',
     'V/S +64 FPM',
     'POSITION 4 S AGO · 48 MSGS',
-    'Heard by your receiver · 1090 MHz · browser SDR',
+    '本机接收到 · 1090 MHz · 浏览器 SDR',
   ]);
-  assert.equal(HEARD_BY_RECEIVER, 'Heard by your receiver');
+  assert.equal(HEARD_BY_RECEIVER, '本机接收到');
   const bare = localAdsbCardModel(
     record({
       callsign: null,
@@ -697,26 +697,26 @@ test('layer stats guide the operator to the Radio card until ADS-B is streaming'
 
 test('the receiver line names every band and source that heard the aircraft', () => {
   const line = (overrides) => localAdsbReceiverLine(record(overrides));
-  assert.equal(line({}), 'Heard by your receiver · 1090 MHz · browser SDR');
+  assert.equal(line({}), '本机接收到 · 1090 MHz · 浏览器 SDR');
   assert.equal(
     line({ band: '1090', source: 'feed' }),
-    'Heard by your receiver · 1090 MHz · decoder feed',
+    '本机接收到 · 1090 MHz · 解码馈源',
   );
   assert.equal(
     line({ band: '978', source: 'feed' }),
-    'Heard by your receiver · 978 MHz UAT · decoder feed',
+    '本机接收到 · 978 MHz UAT · 解码馈源',
   );
   assert.equal(
     line({ bands: ['1090', '978'], sources: ['feed'] }),
-    'Heard by your receiver · 1090 MHz + 978 MHz UAT · decoder feed',
+    '本机接收到 · 1090 MHz + 978 MHz UAT · 解码馈源',
   );
   assert.equal(
     line({ bands: ['1090'], sources: ['webusb', 'feed'] }),
-    'Heard by your receiver · 1090 MHz · browser SDR + decoder feed',
+    '本机接收到 · 1090 MHz · 浏览器 SDR + 解码馈源',
   );
   assert.equal(
     line({ bands: ['1090', '978'], sources: ['webusb', 'feed'] }),
-    'Heard by your receiver · 1090 MHz + 978 MHz UAT · browser SDR + decoder feed',
+    '本机接收到 · 1090 MHz + 978 MHz UAT · 浏览器 SDR + 解码馈源',
   );
   assert.equal(
     localAdsbReceiverLine({ icao: 'abc123' }),
@@ -725,7 +725,7 @@ test('the receiver line names every band and source that heard the aircraft', ()
   );
 });
 
-test('feed records merge with browser SDR records by ICAO and UAT-only aircraft get a ring', async (t) => {
+test('feed records merge with 浏览器 SDR records by ICAO and UAT-only aircraft get a ring', async (t) => {
   const receiver = fakeReceiver({ mode: 'adsb', connected: true });
   const feeds = fakeFeeds();
   const clock = { now: 100_000 };
@@ -761,7 +761,7 @@ test('feed records merge with browser SDR records by ICAO and UAT-only aircraft 
   assert.equal(shared.point, undefined, 'heard on 1090 too: no UAT ring');
   assert.equal(
     shared.gevLabelModel.details.at(-1),
-    'Heard by your receiver · 1090 MHz + 978 MHz UAT · browser SDR + decoder feed',
+    '本机接收到 · 1090 MHz + 978 MHz UAT · 浏览器 SDR + 解码馈源',
   );
   assert.ok(uat.point, 'a UAT-only aircraft carries the ring');
   assert.equal(uat.point.outlineWidth.getValue(), 1.5);
@@ -777,7 +777,7 @@ test('feed records merge with browser SDR records by ICAO and UAT-only aircraft 
   );
   assert.equal(
     uat.gevLabelModel.details.at(-1),
-    'Heard by your receiver · 978 MHz UAT · decoder feed',
+    '本机接收到 · 978 MHz UAT · 解码馈源',
   );
   const stats = layer.getStats();
   assert.equal(stats.source, 'WebUSB + 解码数据源');
@@ -788,7 +788,7 @@ test('feed records merge with browser SDR records by ICAO and UAT-only aircraft 
   assert.deepEqual(feeds.calls, ['start', 'stop']);
 });
 
-test('row status reflects decoder feeds and the browser SDR together', () => {
+test('row status reflects 解码馈源s and the 浏览器 SDR together', () => {
   const idle = {
     webUsbSupported: true,
     connected: false,
@@ -865,7 +865,7 @@ test('row status reflects decoder feeds and the browser SDR together', () => {
   );
 });
 
-test('a stale decoder feed does not mark a streaming browser receiver degraded', () => {
+test('a stale 解码馈源 does not mark a streaming browser receiver degraded', () => {
   // Owner field test: dump1090 stopped so the browser could take the dongle.
   const stats = localAdsbStatus({
     receiver: {

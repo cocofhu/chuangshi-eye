@@ -23,10 +23,10 @@ const CLASS_BY_MILITARY_TAG = {
  * attribution and the details panel read it.
  */
 const LABEL_BY_CLASS = {
-  airfield: 'Military airfield',
-  naval_base: 'Naval base',
-  range: 'Firing range',
-  military_land: 'Military land',
+  airfield: '军用机场',
+  naval_base: '海军基地',
+  range: '靶场',
+  military_land: '军事用地',
 };
 
 const MAX_FOOTPRINT_POINTS = 400;
@@ -44,7 +44,7 @@ export function humanizeInstallationClass(klass) {
   const words = key.replaceAll('_', ' ').trim();
   return words
     ? `${words[0].toUpperCase()}${words.slice(1)}`
-    : 'Mapped installation';
+    : '已标注设施';
 }
 
 function finiteLatitude(value) {
