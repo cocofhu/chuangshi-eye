@@ -181,15 +181,15 @@ export function enter() {
   this.showBriefPage(0);
   this.startBriefRotation();
   const trackLabel =
-    info.callsign || info.registration || info.icao24 || 'AIRCRAFT';
+    info.callsign || info.registration || info.icao24 || '航空器';
   const trackHeading = String(
     Math.round(normalizeHeading(info.track ?? 0)),
   ).padStart(3, '0');
   this.pushCockpitSignal(
     'track',
     'track',
-    'TRACK ACQUIRED',
-    `${trackLabel} · COURSE ${trackHeading}°`,
+    '已锁定航迹',
+    `${trackLabel} · 航向 ${trackHeading}°`,
   );
   this.updateHud(info, performance.now(), true);
   this.setVisionMode(this.getInitialVisionMode());

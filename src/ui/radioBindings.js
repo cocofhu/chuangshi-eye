@@ -139,7 +139,7 @@ export function bindRadioControls() {
     syncTunerTape(resolvedCoordinate);
     if (this._radioTunerValue) {
       this._radioTunerValue.textContent = station
-        ? `CH ${String(slot.stationIndex + 1).padStart(2, '0')} / ${String(this._radioTunerStations.length).padStart(2, '0')}`
+        ? `频道 ${String(slot.stationIndex + 1).padStart(2, '0')} / ${String(this._radioTunerStations.length).padStart(2, '0')}`
         : '暂无电台';
     }
     if (this._radioTunerStation)
@@ -149,7 +149,7 @@ export function bindRadioControls() {
       this._radioTunerSlider.setAttribute(
         'aria-valuetext',
         station
-          ? `${station.name}, station ${slot.stationIndex + 1} of ${this._radioTunerStations.length}`
+          ? `${station.name}，第 ${slot.stationIndex + 1} 个，共 ${this._radioTunerStations.length} 个`
           : '暂无可用电台',
       );
     }

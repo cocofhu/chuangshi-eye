@@ -52,13 +52,13 @@ export const COCKPIT_BRIEF_PAGES = [
     id: 'news',
     kicker: '区域新闻',
     subtitle: '最新位置匹配报道',
-    source: 'GOOGLE NEWS RSS · 位置查询 · 近期',
+    source: 'Google News · 位置查询 · 近期',
   },
   {
     id: 'local',
     kicker: '本地信息',
     subtitle: '地点 / 气象 / 位置',
-    source: 'NATURAL EARTH · OPEN-METEO · UTC',
+    source: '地名 Natural Earth · 天气 OPEN-METEO · UTC',
   },
 ];
 
