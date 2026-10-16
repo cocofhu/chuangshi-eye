@@ -1,6 +1,7 @@
 import { syncChipGroup } from './chipGroup.js';
 import { syncRowList } from './rowList.js';
 import { layerFeedState } from '../data/feedState.js';
+import { paintedFeedCoverage } from '../sources/live/coverageLabel.js';
 export { layerFeedState } from '../data/feedState.js';
 import { GUIDANCE_STATUSES } from '../loadingFeedback.js';
 import { keySetupRequirement } from '../keySetupCore.mjs';
@@ -588,7 +589,7 @@ export class LayerPanel {
       const detail =
         typeof stats.loadingLabel === 'string' && stats.loadingLabel.trim()
           ? stats.loadingLabel.trim()
-          : stats.coverage || ago;
+          : paintedFeedCoverage(stats.coverage) || ago;
       return `${stateLabel} · ${source} · ${detail}`;
     }
     if (feedState === 'partial') {

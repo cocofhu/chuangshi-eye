@@ -349,7 +349,7 @@ test('a regional fallback feed is named in the answer', async () => {
   }).call('aircraft_in_area', {
     area: { lat: 37.6, lon: -122.3, radius_km: 20 },
   });
-  assert.match(result.summary, /（区域数据源：250nm regional fallback）。$/);
+  assert.match(result.summary, /（区域数据源：250 nm 区域回退）。$/);
 });
 
 test('aircraft searches say when a feed that answered is stale', async () => {

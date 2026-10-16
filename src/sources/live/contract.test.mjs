@@ -296,7 +296,7 @@ test('identity lookup validates its response and honors body-parse cancellation'
   const malformed = createMilitarySource({
     fetchImpl: async () => response({ ac: [{}] }),
   });
-  await assert.rejects(malformed.getIdentities(), /Malformed/);
+  await assert.rejects(malformed.getIdentities(), /航空器记录无效/);
   const abort = new AbortController();
   const source = createMilitarySource({
     fetchImpl: async () => ({

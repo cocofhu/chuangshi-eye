@@ -81,7 +81,7 @@ export async function readResponse(
   fetchImpl,
   url,
   { signal, ...init } = {},
-  source = 'Live source',
+  source = '实时数据源',
 ) {
   signal?.throwIfAborted();
   let response;

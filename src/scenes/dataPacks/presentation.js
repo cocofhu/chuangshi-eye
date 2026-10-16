@@ -131,7 +131,7 @@ export function createPackPresentations(viewer, targets = new Map()) {
   return {
     geojson: guarded(renderPackGeometry),
     image: guarded(async ({ asset, pack, signal }, handle) => {
-      if (asset.mimeType !== 'image/png') throw new Error('Expected PNG image');
+      if (asset.mimeType !== 'image/png') throw new Error('需要 PNG 图像');
       const bytes = asset.bytes;
       if (
         bytes.length < 24 ||
@@ -139,7 +139,7 @@ export function createPackPresentations(viewer, targets = new Map()) {
           (v, i) => bytes[i] === v,
         )
       )
-        throw new Error('Invalid PNG header');
+        throw new Error('PNG 文件头无效');
       const header = new DataView(
         bytes.buffer,
         bytes.byteOffset,
@@ -148,7 +148,7 @@ export function createPackPresentations(viewer, targets = new Map()) {
       const width = header.getUint32(16),
         height = header.getUint32(20);
       if (!width || !height || width > 4096 || height > 4096)
-        throw new Error('Image dimensions exceed limit');
+        throw new Error('图像尺寸超出限制');
       const image = new Image();
       image.src = handle.url(new Blob([asset.bytes], { type: asset.mimeType }));
       const abort = () => {
@@ -162,7 +162,7 @@ export function createPackPresentations(viewer, targets = new Map()) {
       }
       signal.throwIfAborted();
       if (image.naturalWidth * image.naturalHeight > 16 * 1024 * 1024)
-        throw new Error('Image dimensions exceed limit');
+        throw new Error('图像尺寸超出限制');
       handle.primitive(
         new Cesium.Primitive({
           asynchronous: false,
@@ -196,11 +196,11 @@ export function createPackPresentations(viewer, targets = new Map()) {
           'audio/webm',
         ].includes(asset.mimeType)
       )
-        throw new Error('Unsupported media');
+        throw new Error('不支持该媒体');
       const anchor = anchors.find(
         (item) => item.id === pack.placement.anchorId,
       );
-      if (!anchor) throw new Error('Missing media anchor');
+      if (!anchor) throw new Error('缺少媒体锚点');
       handle.add({
         name: pack.id,
         position: xyz([anchor.lon, anchor.lat, anchor.alt]),

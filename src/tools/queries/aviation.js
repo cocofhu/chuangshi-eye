@@ -15,6 +15,7 @@ import {
   isoTime,
   thinEvenly,
 } from '../results.js';
+import { paintedFeedCoverage } from '../../sources/live/coverageLabel.js';
 
 const ICAO24_SCHEMA = Object.freeze({
   type: 'string',
@@ -120,9 +121,11 @@ export const aircraftInArea = defineTool({
     const kind = args.military ? '军用航空器' : '航空器';
     // A regional fallback feed covers only part of the world around the
     // area's center; say so rather than imply a worldwide answer.
-    const regional = /regional/i.test(snapshot.coverage || '');
+    const coverageLabel = paintedFeedCoverage(snapshot.coverage);
+    const regional =
+      /regional/i.test(snapshot.coverage || '') || /区域回退/.test(coverageLabel);
     const notes = [
-      ...(regional ? [`区域数据源：${snapshot.coverage}`] : []),
+      ...(regional && coverageLabel ? [`区域数据源：${coverageLabel}`] : []),
       ...(snapshot.freshness === 'stale' ? ['数据可能已过期'] : []),
     ];
     return {

@@ -83,7 +83,7 @@ export function createSceneInteractions(
       ) {
         items = [];
         targets.clear();
-        throw new Error('Interaction feature is missing from the loaded pack');
+        throw new Error('已加载数据包中缺少交互要素');
       }
       panel = document.createElement('section');
       panel.dataset.directorInteractions = '';

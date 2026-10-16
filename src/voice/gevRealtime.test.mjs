@@ -3190,7 +3190,7 @@ test('F1: the toggle still records the next-session preference while live', () =
   controller.status = 'listening';
   controller.setVoiceTier('mini');
   assert.equal(controller.voiceTier, 'mini');
-  assert.equal(ui.tierButton.textContent, 'MINI');
+  assert.equal(ui.tierButton.textContent, '轻量');
   // ...and says so, rather than implying the live session switched.
   assert.match(ui.tierButton.title, /本次会话仍使用/);
 });
@@ -3444,7 +3444,7 @@ test('F4: two clicks during a live session return to the original preference', (
 
   controller.toggleVoiceTier();
   assert.equal(controller.voiceTier, 'standard', 'second click switches back');
-  assert.equal(ui.tierButton.textContent, 'STD');
+  assert.equal(ui.tierButton.textContent, '标准');
 });
 
 test('F4: the toggle alternates across many clicks mid-session', () => {

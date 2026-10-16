@@ -258,3 +258,29 @@ test('an omitted source is visibly unavailable and cannot be toggled on', async 
     'an active layer can always be switched off',
   );
 });
+
+test('flight fallback coverage paints in Chinese on the layer row', async () => {
+  const { LayerPanel } = await import('./layerPanel.js');
+  const text = LayerPanel.prototype._buildMetaText({
+    enabled: true,
+    stats: {
+      source: 'adsb.lol',
+      coverage: '250nm regional fallback',
+      count: 3,
+      lastUpdate: Date.now(),
+    },
+  });
+  assert.equal(text, '回退 · adsb.lol · 250 nm 区域回退');
+  assert.equal(
+    LayerPanel.prototype._buildMetaText({
+      enabled: true,
+      stats: {
+        source: 'adsb.lol',
+        coverage: 'worldwide upstream snapshot',
+        count: 1,
+        lastUpdate: 1,
+      },
+    }),
+    '回退 · adsb.lol · 全球上游快照',
+  );
+});
