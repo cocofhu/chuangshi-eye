@@ -272,17 +272,17 @@ export async function runBostonMatrix({
     {
       name: 'white-hot',
       style: 'thermal',
-      params: { 'WHOT/BHOT': 0, Ironbow: 0 },
+      params: { '白热/黑热': 0, '铁红': 0 },
     },
     {
       name: 'black-hot',
       style: 'thermal',
-      params: { 'WHOT/BHOT': 1, Ironbow: 0 },
+      params: { '白热/黑热': 1, '铁红': 0 },
     },
     {
       name: 'ironbow',
       style: 'thermal',
-      params: { 'WHOT/BHOT': 0, Ironbow: 1 },
+      params: { '白热/黑热': 0, '铁红': 1 },
     },
   ];
   // Actual Boston views. Acceptance checks the measured background; a tile/key
@@ -487,7 +487,7 @@ export async function runBostonLive({
       altitude: 120,
       heading: 0,
       pitch: -20,
-      params: { 'WHOT/BHOT': 0, Ironbow: 0 },
+      params: { '白热/黑热': 0, '铁红': 0 },
     },
     {
       name: 'nvg',

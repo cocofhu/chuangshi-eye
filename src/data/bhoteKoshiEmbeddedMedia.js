@@ -71,7 +71,7 @@ function loadYouTubeApi(documentRef, globalRef) {
         finish(
           typeof globalRef.YT?.Player === 'function'
             ? null
-            : new Error('YouTube API unavailable'),
+            : new Error('YouTube 接口不可用'),
         );
       }
     };
@@ -80,11 +80,11 @@ function loadYouTubeApi(documentRef, globalRef) {
     script.async = true;
     script.addEventListener(
       'error',
-      () => finish(new Error('YouTube API unavailable')),
+      () => finish(new Error('YouTube 接口不可用')),
       { once: true },
     );
     timer = globalRef.setTimeout(
-      () => finish(new Error('YouTube API timed out')),
+      () => finish(new Error('YouTube 接口超时')),
       5000,
     );
     documentRef.head.append(script);
@@ -240,7 +240,7 @@ function loadFacebookSdk(documentRef, globalRef = globalThis) {
         prior?.();
       } finally {
         if (facebookSdkReady(globalRef.FB)) finish();
-        else finish(new Error('Facebook player API did not initialize.'));
+        else finish(new Error('Facebook 播放器接口未能初始化。'));
       }
     };
     globalRef.fbAsyncInit = ready;
@@ -256,12 +256,12 @@ function loadFacebookSdk(documentRef, globalRef = globalThis) {
     }
     script.addEventListener?.(
       'error',
-      () => finish(new Error('Facebook player API could not load.')),
+      () => finish(new Error('Facebook 播放器接口无法加载。')),
       { once: true },
     );
     timer =
       globalRef.setTimeout?.(
-        () => finish(new Error('Facebook player API timed out.')),
+        () => finish(new Error('Facebook 播放器接口超时。')),
         EMBED_TIMEOUT_MS,
       ) ?? null;
   }).catch((error) => {
@@ -398,7 +398,7 @@ function loadXWidgets(documentRef, globalRef = globalThis) {
     };
     const ready = () => {
       if (xWidgetsReady(globalRef.twttr)) finish();
-      else finish(new Error('X embed API did not initialize.'));
+      else finish(new Error('X 嵌入接口未能初始化。'));
     };
     let script = documentRef.querySelector?.(`script[src="${X_WIDGET_URL}"]`);
     if (!script) {
@@ -411,7 +411,7 @@ function loadXWidgets(documentRef, globalRef = globalThis) {
     }
     script.addEventListener?.(
       'error',
-      () => finish(new Error('X embed could not load.')),
+      () => finish(new Error('X 嵌入无法加载。')),
       {
         once: true,
       },
@@ -440,7 +440,7 @@ function loadXWidgets(documentRef, globalRef = globalThis) {
         },
       );
     timer = setTimeout(
-      () => finish(new Error('X embed timed out.')),
+      () => finish(new Error('X 嵌入超时。')),
       EMBED_TIMEOUT_MS,
     );
   }).catch((error) => {
@@ -452,7 +452,7 @@ function loadXWidgets(documentRef, globalRef = globalThis) {
 
 function providerLabel(provider) {
   return (
-    { youtube: 'YOUTUBE', facebook: 'FACEBOOK', x: 'X' }[provider] || 'SOURCE'
+    { youtube: 'YouTube', facebook: 'Facebook', x: 'X' }[provider] || '来源'
   );
 }
 
@@ -737,7 +737,7 @@ export function createBhoteKoshiEmbeddedMedia({
           globalRef.setTimeout?.(() => {
             if (!session.active || session.ready) return;
             session.error = new Error(
-              'Facebook embed unavailable. The post may be private, removed, region-restricted, or blocked.',
+              'Facebook 嵌入不可用。帖子可能不公开、已删除、有地区限制或被拦截。',
             );
             session.onError?.(session.error);
           }, EMBED_TIMEOUT_MS) ?? null;
@@ -857,7 +857,7 @@ export function createBhoteKoshiEmbeddedMedia({
       startAtSec,
       endAtSec,
     });
-    iframe.title = `Preloading ${providerLabel(source.provider)} media`;
+    iframe.title = `正在预加载 ${providerLabel(source.provider)} 影像`;
     iframe.tabIndex = -1;
     iframe.setAttribute('aria-hidden', 'true');
     iframe.loading = 'eager';
@@ -868,7 +868,7 @@ export function createBhoteKoshiEmbeddedMedia({
   }
 
   async function mountX(current, token) {
-    current.status.textContent = 'LOADING X POST…';
+    current.status.textContent = '正在加载 X 帖子…';
     try {
       const api = await xLoader(documentRef, globalRef);
       if (token !== generation || record !== current) return;
@@ -885,13 +885,13 @@ export function createBhoteKoshiEmbeddedMedia({
       );
       if (token !== generation || record !== current) return;
       if (!widget)
-        throw new Error('The X post is unavailable or cannot be embedded.');
-      current.status.textContent = 'X POST · PROVIDER CONTROLS';
+        throw new Error('该 X 帖子不可用或无法嵌入。');
+      current.status.textContent = 'X 帖子 · 由提供方控制';
       position();
     } catch (error) {
       if (token !== generation || record !== current) return;
       current.card.classList.add('is-unavailable');
-      current.status.textContent = `${String(error?.message || 'X embed unavailable')} OPEN ORIGINAL.`;
+      current.status.textContent = `${String(error?.message || 'X 嵌入不可用')} 打开原片。`;
       position();
     }
   }
@@ -904,19 +904,19 @@ export function createBhoteKoshiEmbeddedMedia({
     session.shouldPlay = autoplay === true;
     session.onReady = () => {
       if (token !== generation || record !== current) return;
-      current.status.textContent = 'FACEBOOK · PROVIDER CONTROLS';
+      current.status.textContent = 'Facebook · 由提供方控制';
       current.card.classList.remove('is-unavailable');
       position();
     };
     session.onError = (error) => {
       if (token !== generation || record !== current) return;
       current.card.classList.add('is-unavailable');
-      current.status.textContent = `${String(error?.message || 'Facebook embed unavailable')} OPEN ORIGINAL.`;
+      current.status.textContent = `${String(error?.message || 'Facebook 嵌入不可用')} 打开原片。`;
       position();
     };
     session.onPlaybackBlocked = () => {
       if (token !== generation || record !== current) return;
-      current.status.textContent = 'AUTOPLAY BLOCKED · USE PROVIDER CONTROLS';
+      current.status.textContent = '自动播放被阻止 · 请使用提供方控件';
     };
     if (session.ready) session.onReady();
     else if (session.error) session.onError(session.error);
@@ -968,7 +968,7 @@ export function createBhoteKoshiEmbeddedMedia({
     card.dataset.provider = source.provider;
     card.setAttribute(
       'aria-label',
-      `Embedded ${providerLabel(source.provider)} media for ${observation?.title || 'witness source'}`,
+      `${observation?.title || '目击来源'} 的嵌入 ${providerLabel(source.provider)} 影像`,
     );
     const leader = documentRef.createElementNS(
       'http://www.w3.org/2000/svg',
@@ -983,16 +983,16 @@ export function createBhoteKoshiEmbeddedMedia({
     const footer = documentRef.createElement('footer');
     const title = documentRef.createElement('strong');
     title.textContent = String(
-      observation?.shortTitle || observation?.title || 'Witness source',
+      observation?.shortTitle || observation?.title || '目击来源',
     ).toUpperCase();
     const status = documentRef.createElement('small');
     status.setAttribute('role', 'status');
-    status.textContent = `${providerLabel(source.provider)} · EMBEDDED SOURCE`;
+    status.textContent = `${providerLabel(source.provider)} · 嵌入来源`;
     const link = documentRef.createElement('a');
     link.href = source.url;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    link.textContent = 'OPEN ORIGINAL ↗';
+    link.textContent = '打开原片 ↗';
     footer.append(title, status, link);
     const body = documentRef.createElement('div');
     body.className = 'bhote-embedded-callout-body';
@@ -1032,7 +1032,7 @@ export function createBhoteKoshiEmbeddedMedia({
           url.searchParams.set('origin', globalRef.location.origin);
         iframe.src = url.href;
       }
-      iframe.title = `${providerLabel(source.provider)} media: ${observation?.title || 'witness source'}`;
+      iframe.title = `${providerLabel(source.provider)} 影像：${observation?.title || '目击来源'}`;
       iframe.allow =
         'autoplay; encrypted-media; picture-in-picture; fullscreen';
       iframe.allowFullscreen = true;
@@ -1049,7 +1049,7 @@ export function createBhoteKoshiEmbeddedMedia({
               record.youtubeSession.getState().phase,
             )
           ) {
-            status.textContent = `${providerLabel(source.provider)} · PROVIDER CONTROLS`;
+            status.textContent = `${providerLabel(source.provider)} · 由提供方控制`;
           }
           position();
         },
@@ -1067,7 +1067,13 @@ export function createBhoteKoshiEmbeddedMedia({
           isCurrent: () => token === generation && record === current,
           onStatus: (phase) => {
             if (phase !== 'completed')
-              status.textContent = `YOUTUBE ${phase.toUpperCase()} · OPEN ORIGINAL`;
+              status.textContent = `YouTube ${
+                {
+                  unavailable: '不可用',
+                  timeout: '超时',
+                  blocked: '自动播放被阻止',
+                }[phase] || '状态未识别'
+              } · 打开原片`;
           },
         });
       }

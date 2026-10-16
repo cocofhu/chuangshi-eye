@@ -872,7 +872,7 @@ try {
         new Promise((resolve) => { setTimeout(() => resolve({ settled: false, value: null }), ms); }),
       ]);
       const row = () => [...document.querySelectorAll('#military-awareness-panel .military-awareness-row')]
-        .find((candidate) => candidate.querySelector('strong')?.textContent?.trim() === 'Mapped installations');
+        .find((candidate) => candidate.querySelector('strong')?.textContent?.trim() === '军事设施');
       const installationCount = () => row()?.querySelector('b')?.textContent?.trim() || null;
       /** The REASON text, which is what tracks availability: the cohort engine
        *  answers 'feed unavailable' / 'feed stale' when it refuses to count. */

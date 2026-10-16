@@ -343,7 +343,7 @@ export function createRendering({
               stageId: stage.id,
               phase: 'ATMOSPHERIC_REENTRY',
               altitudeM: STAGE_REENTRY_ALTITUDE_M,
-              source: 'Estimated 100 km atmospheric interface',
+              source: '估计 100 km 大气界面',
             },
           });
           const reentryPosition = path[reentryIndex];
@@ -351,7 +351,7 @@ export function createRendering({
             parts.overlays.createRocketMissionElementOverlayEntry({
               id: `reentry:${launch.id}:${stageIndex}`,
               position: reentryPosition,
-              text: 'STAGE RE-ENTRY',
+              text: '级段再入',
               accent: '#ffd166',
               priority: 700_000 - stageIndex,
               gapPx: 8,
@@ -453,9 +453,7 @@ export function createRendering({
           phase: satelliteTrack
             ? 'CURRENT_SATELLITE_POSITION'
             : 'ESTIMATED_ORBIT_POSITION',
-          source: satelliteTrack
-            ? 'Satellites layer'
-            : 'Approximate mission orbit',
+          source: satelliteTrack ? '卫星图层' : '近似任务轨道',
         },
       });
       overlayRecord.liveEventTime = () => liveTime;
@@ -464,7 +462,7 @@ export function createRendering({
           ? parts.overlays
               .shortMissionLabel(satelliteTrack.name, 22)
               .toUpperCase()
-          : 'EST. ORBIT POSITION';
+          : '估计轨道位置';
         return parts.overlays.createRocketMissionElementOverlayEntry({
           id: `payload-position:${launch.id}`,
           position: () => livePosition,
@@ -500,7 +498,7 @@ export function createRendering({
             launchId: launch.id,
             satelliteName: '',
             noradId: '',
-            source: 'Approximate mission orbit',
+            source: '近似任务轨道',
           },
         });
       }
@@ -520,7 +518,7 @@ export function createRendering({
         parts.overlays.createRocketMissionElementOverlayEntry({
           id: `orbit:${launch.id}`,
           position: orbitLabelPosition,
-          text: satelliteTrack ? 'ORBIT' : 'PROJECTED ORBIT',
+          text: satelliteTrack ? '轨道' : '预计轨道',
           accent: satelliteTrack ? '#22e6e6' : '#c084fc',
           priority: 800_000,
           gapPx: 8,
@@ -539,9 +537,7 @@ export function createRendering({
           launchId: launch.id,
           noradId: satelliteTrack?.noradId || '',
           phase: 'ASCENT_THEN_ORBIT',
-          source: satelliteTrack
-            ? 'Satellite trajectory animation'
-            : 'Approximate trajectory animation',
+          source: satelliteTrack ? '卫星轨迹动画' : '近似轨迹动画',
         },
       });
       layerState._dataSource.entities.add({
@@ -562,9 +558,7 @@ export function createRendering({
         properties: {
           launchId: launch.id,
           phase: 'APPROXIMATE_TRANSFER',
-          source: satelliteTrack
-            ? 'Launch site to propagated insertion'
-            : 'Launch site to forward projected insertion',
+          source: satelliteTrack ? '发射场至推演入轨' : '发射场至前向外推入轨',
         },
       });
     }

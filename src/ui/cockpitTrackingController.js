@@ -57,9 +57,7 @@ export function syncTr3bToggle(info) {
   this._tr3bSignature = signature;
   this.tr3bToggle.hidden = !icao24;
   this.tr3bToggle.setAttribute('aria-pressed', converted ? 'true' : 'false');
-  this.tr3bToggle.title = converted
-    ? 'Restore real aircraft'
-    : 'Reclassify as TR-3B';
+  this.tr3bToggle.title = converted ? '恢复真实机型' : '改标为 TR-3B';
 }
 
 export function syncEntry() {
@@ -183,15 +181,15 @@ export function enter() {
   this.showBriefPage(0);
   this.startBriefRotation();
   const trackLabel =
-    info.callsign || info.registration || info.icao24 || 'AIRCRAFT';
+    info.callsign || info.registration || info.icao24 || '航空器';
   const trackHeading = String(
     Math.round(normalizeHeading(info.track ?? 0)),
   ).padStart(3, '0');
   this.pushCockpitSignal(
     'track',
     'track',
-    'TRACK ACQUIRED',
-    `${trackLabel} · COURSE ${trackHeading}°`,
+    '已锁定航迹',
+    `${trackLabel} · 航向 ${trackHeading}°`,
   );
   this.updateHud(info, performance.now(), true);
   this.setVisionMode(this.getInitialVisionMode());

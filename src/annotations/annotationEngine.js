@@ -737,7 +737,7 @@ export function createAnnotationEngine({
             ? 'resolved'
             : 'failed',
         ...(anno.outlineUnavailable
-          ? { message: 'Detailed outline unavailable' }
+          ? { message: '详细轮廓不可用' }
           : {}),
         ...(fp && anno.synthesized ? { approximate: true } : {}),
       });
@@ -767,7 +767,7 @@ export function createAnnotationEngine({
       // missing outline a failure.
       ...(anno.pendingOutline ? { outlinePending: true } : {}),
       ...(anno.outlineUnavailable
-        ? { outlineUnavailable: true, message: 'Detailed outline unavailable' }
+        ? { outlineUnavailable: true, message: '详细轮廓不可用' }
         : {}),
       // approximate=true means the area was SYNTHESIZED (a buffered blob around a label
       // point), not a real OSM boundary — so the voice layer can be honest.
@@ -1580,13 +1580,13 @@ function composeRouteLabel(baseLabel, distM, durS, mode, fallback) {
   const dist = formatDistance(distM);
   if (!dist) return baseLabel;
   const min = Number.isFinite(durS) ? Math.max(1, Math.round(durS / 60)) : null;
-  const word = mode === 'car' ? 'drive' : mode === 'bike' ? 'ride' : 'walk';
+  const word = mode === 'car' ? '驾车' : mode === 'bike' ? '骑行' : '步行';
   if (mode === 'manual') return baseLabel ? `${baseLabel} — ${dist}` : dist;
   // Fallback = routing was unavailable, so we drew a straight line: label it as a
   // direct line with no travel time (never claim an "X min walk" we didn't compute).
   let metrics;
-  if (fallback) metrics = `${dist} · direct line (no route)`;
-  else metrics = min != null ? `${dist} · ${min} min ${word}` : dist;
+  if (fallback) metrics = `${dist} · 直线（无路径）`;
+  else metrics = min != null ? `${dist} · ${min} 分钟${word}` : dist;
   return baseLabel ? `${baseLabel} — ${metrics}` : metrics;
 }
 

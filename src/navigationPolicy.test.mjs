@@ -128,7 +128,7 @@ test('cockpit refuses without stamping or releasing anything', () => {
     const s = spy();
     const result = runExplicitNavigation({ cockpitActive: true, noun, ...s });
     assert.equal(result, false);
-    assert.deepEqual(s.log, [`toast:Exit cockpit to fly to a ${noun}`]);
+    assert.deepEqual(s.log, [`toast:请先退出驾驶舱再飞往${noun}`]);
   }
 });
 
@@ -190,7 +190,7 @@ test('deferred handoff: cockpit taken mid-flight refuses and explains', () => {
     generation: 4, currentGeneration: 4, cockpitActive: true, ...s,
   });
   assert.equal(ok, false);
-  assert.deepEqual(s.log, ['toast:Exit cockpit to fly to a location']);
+  assert.deepEqual(s.log, ['toast:请先退出驾驶舱再飞往地点']);
 });
 
 test('deferred handoff: supersession is checked before cockpit, so it stays silent', () => {

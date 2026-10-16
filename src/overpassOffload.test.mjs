@@ -411,7 +411,7 @@ test('annotation capability miss keeps its pin and exposes the unavailable label
   assert.equal(updated.outlineUnavailable, true);
   assert.ok(!updated.ring && !updated.synthesized);
   assert.equal(engine.list()[0].outlineUnavailable, true);
-  assert.equal(event.message, 'Detailed outline unavailable');
+  assert.equal(event.message, '详细轮廓不可用');
 });
 
 test('configured URL credentials stay server-side and never appear in returned metadata', async () => {

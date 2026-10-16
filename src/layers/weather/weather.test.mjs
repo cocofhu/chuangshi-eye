@@ -823,7 +823,7 @@ test('historical observations do not relabel a fresh lightning feed as stale', a
   h.stages[1].finish();
   await flush();
   assert.equal(h.layer.getStats().stale, false);
-  assert.match(h.layer.getRowControls().summary.detail, /History/);
+  assert.match(h.layer.getRowControls().summary.detail, /历史/);
   h.layer.destroy();
 });
 
@@ -837,13 +837,13 @@ test('history loading updates an existing info line and preserves summary status
   h.layer.setParams({ step: -1 });
   await flush();
   const loading = h.layer.getRowControls();
-  assert.match(loading.info, /History: [^\n]+\n[^\n]+ · loading/);
-  assert.equal(loading.summary.status, 'Loading next frame…');
+  assert.match(loading.info, /历史：[^\n]+\n[^\n]+ · 加载中/);
+  assert.equal(loading.summary.status, '正在加载下一帧…');
   h.stages.at(-1).finish();
   await flush();
   const ready = h.layer.getRowControls();
   assert.equal(ready.info.split('\n').length, loading.info.split('\n').length);
-  assert.doesNotMatch(ready.info, / · loading/);
+  assert.doesNotMatch(ready.info, / · 加载中/);
   h.layer.destroy();
 });
 
@@ -1598,7 +1598,7 @@ test('satellite mode chips restage history without changing time or latest-follo
       .getRowControls()
       .chips.slice(0, 4)
       .map((chip) => chip.label),
-    ['N. America', 'Global', 'Clouds only', 'Full'],
+    ['北美', '全球', '仅云', '完整'],
   );
   h.stages[2].finish();
   await flush();
@@ -1706,7 +1706,7 @@ test('one row steps every registered observation; missing frames hide and latest
   radar.stages.at(-1).finish();
   satellite.stages.at(-1).finish();
   await flush();
-  assert.match(satellite.layer.getRowControls().summary.detail, /synced/);
+  assert.match(satellite.layer.getRowControls().summary.detail, /已同步/);
   assert.ok(satelliteChanges > 0);
   assert.deepEqual(transport(radar), []);
   assert.deepEqual(transport(satellite), []);
@@ -1718,7 +1718,7 @@ test('one row steps every registered observation; missing frames hide and latest
   assert.equal(satellite.layer.getDiagnostics().hidden, true);
   assert.match(
     satellite.layer.getRowControls().summary.status,
-    /No frame within 30 min of 09-15 20:00 UTC/,
+    /09-15 20:00 UTC 前后 30 分钟内无帧/,
   );
   radar.layer.setParams({ step: 1 });
   await flush();
@@ -1843,7 +1843,7 @@ test('satellite global selection uses the three-hour gap and preserves the share
   await flush();
   assert.equal(clock.getState().target, times[0]);
   assert.equal(h.layer.getDiagnostics().hidden, false);
-  assert.match(h.layer.getRowControls().summary.detail, /18:00 UTC.*nearest/);
+  assert.match(h.layer.getRowControls().summary.detail, /18:00 UTC.*最近/);
   const params = h.layer.getParams();
   assert.equal(params.product, 'clouds');
   assert.equal(params.target, undefined);
@@ -1878,9 +1878,9 @@ test('switching to history cancels a still-loading latest refresh and a later ta
 
 test('observed descriptors keep configuration only and label satellite clouds by coverage', () => {
   for (const [id, coverage] of [
-    ['weather-radar', 'CONUS'],
-    ['weather-satellite', 'North America'],
-    ['weather-lightning', 'Americas + Pacific'],
+    ['weather-radar', '美国本土'],
+    ['weather-satellite', '北美'],
+    ['weather-lightning', '美洲与太平洋'],
   ]) {
     const h = layerHarness({ id });
     const controls = h.layer.getRowControls();
@@ -1889,7 +1889,7 @@ test('observed descriptors keep configuration only and label satellite clouds by
     assert.equal(controls.summary.sections, undefined);
     assert.deepEqual(
       controls.summary.settings.map(({ label }) => label),
-      id === 'weather-satellite' ? ['REGION', 'IMAGE', 'OPACITY'] : ['OPACITY'],
+      id === 'weather-satellite' ? ['区域', '图像', '不透明度'] : ['不透明度'],
     );
     assert.deepEqual(
       controls.summary.settings.flatMap(({ chips }) => chips),
@@ -1906,20 +1906,20 @@ test('observed descriptors keep configuration only and label satellite clouds by
       false,
     );
     if (id === 'weather-satellite') {
-      assert.equal(h.layer.name, 'Satellite clouds');
-      assert.equal(controls.summary.label, 'Satellite clouds');
+      assert.equal(h.layer.name, '卫星云图');
+      assert.equal(controls.summary.label, '卫星云图');
       assert.match(
         controls.infoTitle,
-        /GOES-19\/18 longwave infrared Band 14 regional; NESDIS global longwave mosaic/,
+        /GOES-19\/18 长波红外 Band 14 区域图；NESDIS 全球长波拼图/,
       );
       assert.equal(
         controls.chips.find(({ id }) => id === 'filtered').title,
-        'Dim everything but the bright, cold cloud tops; a brightness filter, not a cloud mask',
+        '压暗亮冷云顶以外的部分；这是亮度过滤，不是云掩膜',
       );
       h.layer.setParams({ product: 'clouds' });
       assert.equal(
         h.layer.getRowControls().summary.coverage,
-        'Global · 60°S–60°N',
+        '全球 · 60°S–60°N',
       );
       assert.equal(h.layer.getRowControls().summary.maxGapMinutes, 180);
     }

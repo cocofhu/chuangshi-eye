@@ -45,7 +45,7 @@ test('weather describes current conditions at a point or place', async () => {
   });
   assert.equal(
     result.summary,
-    'Weather at Austin, Texas: overcast, 26°C, wind 5 km/h.',
+    'Austin, Texas：阴，26°C，风 5 km/h。',
   );
   assert.deepEqual(result.data.weather, {
     observed_at: '2026-10-01T19:15:00.000Z',
@@ -90,7 +90,7 @@ test('the regional brief returns place, weather and at most ten headlines', asyn
   });
   assert.equal(
     result.summary,
-    'Edwards Plateau: overcast, 26°C, wind 5 km/h; 10 recent headlines.',
+    'Edwards Plateau：阴，26°C，风 5 km/h；10 条近期标题。',
   );
   assert.equal(result.data.articles.length, 10);
   assert.deepEqual(result.data.articles[0], {
@@ -134,7 +134,7 @@ test('cyclones are listed strongest first and can be limited to an area', async 
   const all = await catalogWith({ cyclones }).call('get_cyclones', {});
   assert.equal(
     all.summary,
-    '2 active tropical cyclones; strongest Beta at 120 kt.',
+    '2 个活跃热带气旋；最强 Beta，120 kt。',
   );
   assert.deepEqual(
     all.data.storms.map((row) => row.id),
@@ -145,7 +145,7 @@ test('cyclones are listed strongest first and can be limited to an area', async 
   });
   assert.equal(
     atlantic.summary,
-    '1 active tropical cyclone in the requested box; strongest Alpha at 65 kt.',
+    '1 个活跃热带气旋，位于 指定范围；最强 Alpha，65 kt。',
   );
   const down = { getSnapshot: async () => ({ unavailable: true, storms: [] }) };
   await assert.rejects(
@@ -203,7 +203,7 @@ test('fire perimeters are placed by their outline and sorted by size', async () 
   });
   assert.equal(
     result.summary,
-    '2 mapped wildfire perimeters in the requested box.',
+    '2 个已标注山火范围，位于 指定范围。',
   );
   assert.deepEqual(
     result.data.rows.map((row) => row.id),
@@ -241,7 +241,7 @@ test('terrain heights are returned in request order', async () => {
   const one = await catalogWith({ terrain }).call('get_terrain_height', {
     points: [{ lat: 27.9881, lon: 86.925 }],
   });
-  assert.equal(one.summary, 'Ground elevation is 2798.8 m at 27.9881, 86.925.');
+  assert.equal(one.summary, '地面高程 2798.8 米，位于 27.9881, 86.925。');
   const many = await catalogWith({ terrain }).call('get_terrain_height', {
     points: [
       { lat: 1, lon: 1 },
@@ -305,7 +305,7 @@ test('military installations need a bounded area and are nearest first', async (
   });
   assert.equal(
     result.summary,
-    '2 mapped military installations in 20 km around 32.700, -117.200.',
+    '2 个已标注军事设施，位于 32.700, -117.200 周边 20 km。',
   );
   assert.deepEqual(
     result.data.rows.map((row) => row.id),
@@ -322,7 +322,7 @@ test('military installations need a bounded area and are nearest first', async (
   assert.equal(partial.data.complete, false);
   assert.match(
     partial.summary,
-    /\(partial: the source returned only some sites\)\.$/,
+    /（部分结果：来源只返回了部分站点）。$/,
   );
   await assert.rejects(
     catalog.call('find_military_installations', {
@@ -366,7 +366,7 @@ test('map features name what is at a location and report an unconfigured server'
   });
   assert.equal(
     result.summary,
-    '2 named features (administrative areas) at 30.2700, -97.7400.',
+    '2 个地名（行政区），位于 30.2700, -97.7400。',
   );
   assert.deepEqual(
     result.data.rows.map((row) => [row.name, row.admin_level]),
@@ -421,8 +421,8 @@ test('the situation brief combines available sections and marks failures', async
   });
   assert.equal(
     result.summary,
-    'Situation in Austin, Texas: Weather at Austin, Texas: overcast, 26°C, wind 5 km/h. ' +
-      '1 earthquake of M2.5+ in the last 24 hours in Austin, Texas; strongest M3.1 near Austin.',
+    '态势，Austin, Texas：Austin, Texas：阴，26°C，风 5 km/h。 ' +
+      '1 次 M2.5+ 地震，近 24 小时，位于 Austin, Texas；最强 M3.1 near Austin。',
   );
   assert.deepEqual(Object.keys(result.data.sections), [
     'weather',
@@ -432,11 +432,11 @@ test('the situation brief combines available sections and marks failures', async
   ]);
   assert.deepEqual(result.data.sections.fires, {
     unavailable: true,
-    reason: 'Fire detections need a NASA FIRMS key configured for this server',
+    reason: '火点探测需要在本服务器配置 NASA FIRMS 密钥',
   });
   assert.deepEqual(result.data.sections.cyclones, {
     unavailable: true,
-    reason: 'unavailable right now',
+    reason: '当前不可用',
   });
   assert.equal(result.data.sections.aircraft, undefined);
 });
@@ -462,7 +462,7 @@ test('the HUD caption summarizes the brief through the summary service', async (
   assert.deepEqual(sent[0].placeLabels, ['Austin, Texas']);
   assert.deepEqual(sent[0].enabledLayerLabels, ['Weather']);
   assert.equal(sent[0].feedProvenance.overall, 'nominal');
-  assert.match(sent[0].observations[0], /^Weather at /);
+  assert.match(sent[0].observations[0], /^Austin, Texas：/);
   const failing = {
     summarize: async () => ({
       ok: false,
@@ -524,9 +524,9 @@ test('military awareness gathers contacts around a point and marks failures', as
   });
   assert.equal(
     result.summary,
-    'Military awareness within 100 km of 32.7000, -117.2000: ' +
-      '1 military aircraft in 100 km around 32.700, -117.200. ' +
-      '1 mapped military installation in 100 km around 32.700, -117.200.',
+    '军事感知，32.7000, -117.2000 周边 100 km：' +
+      '1 个军用航空器，位于 32.700, -117.200 周边 100 km。 ' +
+      '1 个已标注军事设施，位于 32.700, -117.200 周边 100 km。',
   );
   assert.deepEqual(Object.keys(result.data.sections), [
     'military_aircraft',
@@ -539,7 +539,7 @@ test('military awareness gathers contacts around a point and marks failures', as
   );
   assert.deepEqual(result.data.sections.aircraft, {
     unavailable: true,
-    reason: 'unavailable right now',
+    reason: '当前不可用',
   });
   assert.equal(result.data.radius_km, 100);
   const voice = catalogForSurface(catalog, 'voice');
@@ -663,7 +663,7 @@ test('brief sections use a named place at its own point', async () => {
     { area: { place: 'Tokyo' } },
   );
   assert.deepEqual(queries[0], { latitude: 35.6769, longitude: 139.7639 });
-  assert.match(result.data.sections.aircraft.summary, /in Tokyo, Japan\.$/);
+  assert.match(result.data.sections.aircraft.summary, /位于 Tokyo, Japan。$/);
 });
 
 test('a fire perimeter enclosing the whole area is found', async () => {
@@ -727,12 +727,12 @@ test('stale weather and partial fire data reach answers and the HUD caption', as
     location: { place: 'Austin' },
   });
   assert.equal(weatherResult.data.stale, true);
-  assert.match(weatherResult.summary, /\(data may be stale\)\.$/);
+  assert.match(weatherResult.summary, /（数据可能已过期）。$/);
   const fireResult = await catalog.call('get_active_fires', {
     area: { place: 'Austin' },
   });
   assert.deepEqual(fireResult.data.missing_sources, ['VIIRS_SNPP_NRT']);
-  assert.match(fireResult.summary, /\(no data from VIIRS_SNPP_NRT\)\.$/);
+  assert.match(fireResult.summary, /（无来自 VIIRS_SNPP_NRT 的数据）。$/);
   await catalog.call('get_hud_caption', { area: { place: 'Austin' } });
   assert.deepEqual(
     sent[0].enabledLayers.map((layer) => [layer.id, layer.feedState]),
@@ -778,5 +778,5 @@ test('installation names wait for the name pack, briefly', async (t) => {
   const slow = await pending;
   assert.equal(slow.data.rows[0].name, 'Military area');
   assert.equal(slow.data.names_pending, true);
-  assert.match(slow.summary, /site names are still loading\)\.$/);
+  assert.match(slow.summary, /站点名称仍在加载）。$/);
 });

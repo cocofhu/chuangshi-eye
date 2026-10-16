@@ -417,12 +417,12 @@ async function assertKeylessGate(page) {
     }),
   );
   await page.waitForFunction(
-    () => document.getElementById('sl-status').textContent === 'KEY REQUIRED',
+    () => document.getElementById('sl-status').textContent === '需要密钥',
     { timeout: 30_000 },
   );
   const info = await readPanel(page);
   assert.equal(info.controlsDisabled, true);
-  assert.equal(info.status, 'KEY REQUIRED');
+  assert.equal(info.status, '需要密钥');
   const chip = await page.$eval(
     '#sl-provider-chips [data-chip-id="mapillary"]',
     (node) => ({
@@ -1001,9 +1001,9 @@ async function main() {
             );
             fixture.tiles = 'rejected';
             await clickPanelControl(page, '#sl-status');
-            await statusText('OFF');
+            await statusText('关');
             await clickPanelControl(page, '#sl-status');
-            await statusText('KEY REJECTED');
+            await statusText('密钥已拒');
             const shown = await page.evaluate(() => ({
               error: document.getElementById('sl-error').textContent,
               errorHidden: document.getElementById('sl-error').hidden,
@@ -1012,7 +1012,7 @@ async function main() {
                 .querySelector('#sl-provider-chips [data-chip-id="mapillary"]')
                 .classList.contains('chip-error'),
             }));
-            assert.match(shown.error, /rejected MAPILLARY_CLIENT_TOKEN/);
+            assert.match(shown.error, /MAPILLARY_CLIENT_TOKEN/);
             assert.equal(shown.errorHidden, false);
             assert.equal(shown.controls, true);
             assert.equal(shown.chip, true);
@@ -1023,7 +1023,7 @@ async function main() {
             assert.equal(after, rejectedAt, 'no tile requests while rejected');
             // Off clears the message; with a good key it comes back as ON.
             await clickPanelControl(page, '#sl-status');
-            await statusText('OFF');
+            await statusText('关');
             assert.equal(
               await page.$eval(
                 '#sl-error',
@@ -1035,7 +1035,7 @@ async function main() {
             fixture.tiles = 'ok';
             await clickPanelControl(page, '#sl-status');
             await waitForCoverage(page);
-            await statusText('ON');
+            await statusText('开');
           },
         );
       else

@@ -90,7 +90,7 @@ export function runExplicitNavigation({
 } = {}) {
   if (disposed) return false;
   if (cockpitActive) {
-    showToast?.(`Exit cockpit to fly to a ${noun}`);
+    showToast?.(`请先退出驾驶舱再飞往${noun}`);
     return false;
   }
   const generation = stamp?.();
@@ -112,7 +112,7 @@ export function beginDeferredNavigation({
 } = {}) {
   if (disposed) return false;
   if (cockpitActive) {
-    showToast?.(`Exit cockpit to fly to a ${noun}`);
+    showToast?.(`请先退出驾驶舱再飞往${noun}`);
     return false;
   }
   return stamp?.();
@@ -133,7 +133,7 @@ export function reassertNavigationHandoff({
 } = {}) {
   if (disposed || generation !== currentGeneration) return false;
   if (cockpitActive) {
-    showToast?.('Exit cockpit to fly to a location');
+    showToast?.('请先退出驾驶舱再飞往地点');
     return false;
   }
   release?.();

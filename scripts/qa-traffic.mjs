@@ -305,7 +305,7 @@ async function main() {
       // Keyless is a designed fallback, not a fault: it must read SIMULATED
       // without ever raising a layer error.
       const keylessHonest = !simStats.error
-        && String(simStats.loadingLabel || '').startsWith('SIMULATED');
+        && String(simStats.loadingLabel || '').startsWith('模拟');
       record('KEYLESS: no error, and the label reads SIMULATED', keylessHonest,
         `err=${simStats.error || 'none'} label="${simStats.loadingLabel}"`);
       if (simStats.mode !== 'sim' || !allWhite || keylessFlowReqs.length !== 0 || !keylessHonest) {

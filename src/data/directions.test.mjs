@@ -164,14 +164,14 @@ test('row chips: modes, arming, and command availability follow the state', () =
     'clear',
   ]);
   assert.equal(chips.find((c) => c.id === 'mode-car').active, true);
-  assert.equal(chips.find((c) => c.id === 'set-a').label, 'SET A');
+  assert.equal(chips.find((c) => c.id === 'set-a').label, '设 A');
   assert.deepEqual(chips.find((c) => c.id === 'set-a').params, { arm: 'a' });
   assert.equal(chips.find((c) => c.id === 'fly').disabled, true);
   assert.equal(chips.find((c) => c.id === 'swap').disabled, true);
   assert.equal(chips.find((c) => c.id === 'clear').disabled, true);
 
   const armed = directionsRowControls({ ...idle, armed: 'a' }).chips;
-  assert.equal(armed.find((c) => c.id === 'set-a').label, 'CLICK MAP');
+  assert.equal(armed.find((c) => c.id === 'set-a').label, '点地图');
   assert.deepEqual(
     armed.find((c) => c.id === 'set-a').params,
     { arm: null },
@@ -202,14 +202,14 @@ test('row chips: modes, arming, and command availability follow the state', () =
 });
 
 test('stats guide the user, show progress, and summarize a route honestly', () => {
-  assert.equal(directionsStats(idle).coverage, 'SET A, then click the globe');
+  assert.equal(directionsStats(idle).coverage, '设 A，然后点击地球');
   assert.equal(
     directionsStats({ ...idle, armed: 'b' }).coverage,
-    'Click the globe to place B',
+    '点击地球放置 B',
   );
   assert.equal(
     directionsStats({ ...idle, a: A }).coverage,
-    'SET B, then click the globe',
+    '设 B，然后点击地球',
   );
   const routing = directionsStats({ ...idle, a: A, b: B, status: 'routing' });
   assert.equal(routing.loading, true);
@@ -222,16 +222,16 @@ test('stats guide the user, show progress, and summarize a route honestly', () =
     lastUpdate: 5,
   });
   assert.equal(ready.count, 3);
-  assert.equal(ready.coverage, '21 km · 25 min · Drive');
+  assert.equal(ready.coverage, '21 km · 25 min · 驾车');
   assert.equal(
     ready.loadingLabel,
-    '21 km · 25 min · Drive',
+    '21 km · 25 min · 驾车',
     'the summary is the row detail line',
   );
   assert.equal(ready.loading, undefined);
   assert.equal(
     directionsStats(idle).loadingLabel,
-    'SET A, then click the globe',
+    '设 A，然后点击地球',
   );
   const failed = directionsStats({
     ...idle,
@@ -249,11 +249,11 @@ test('step cards name the maneuver, its leg, and what comes next', () => {
   const copy = directionsStepCopy(route.steps, 1);
   assert.equal(copy.title, 'Turn right onto Kansakoulukatu');
   assert.deepEqual(copy.details, [
-    'Step 2 of 3 · then 240 m · 39 s',
-    'Then: Arrive at your destination',
+    '第 2 / 3 步 · 随后 240 m · 39 s',
+    '然后：Arrive at your destination',
   ]);
   const last = directionsStepCopy(route.steps, 2);
-  assert.deepEqual(last.details, ['Step 3 of 3']);
+  assert.deepEqual(last.details, ['第 3 / 3 步']);
   const position = Cesium.Cartesian3.fromDegrees(24.9349, 60.1683, 2);
   const card = createDirectionsStepOverlayEntry(1, position, copy);
   assert.equal(card.accent, DIRECTIONS_ROUTE_COLOR);
@@ -398,7 +398,7 @@ test('the turn-by-turn list is ordered, labelled, and highlights the flown step'
     route,
   }).list;
   assert.equal(rowList.items.length, 3);
-  assert.equal(rowList.ariaLabel, 'Turn-by-turn directions');
+  assert.equal(rowList.ariaLabel, '逐步路线');
   assert.equal(directionsRowControls(idle).list, null, 'no route, no list');
 });
 
@@ -425,14 +425,14 @@ test('the FLY chip reports a flight in progress', () => {
     route,
     flightStep: 1,
   }).chips.find((chip) => chip.id === 'fly');
-  assert.equal(flying.label, 'FLYING');
+  assert.equal(flying.label, '飞行中');
   assert.equal(flying.busy, true);
   assert.equal(flying.active, true);
 });
 
 test('a blocked pointer is reported instead of silently doing nothing', () => {
   const blocked = directionsStats({ ...idle, pointerBlocked: true });
-  assert.match(blocked.error, /Another map tool is using clicks/);
+  assert.match(blocked.error, /其他地图工具占用点击/);
   assert.equal(blocked.count, 0);
 });
 
@@ -529,7 +529,7 @@ test('arming is refused, and said so, while another tool holds the pointer', (t)
   );
   assert.match(
     directionsLayer.getStats().error,
-    /Another map tool is using clicks/,
+    /其他地图工具占用点击/,
     'the row says why the click did nothing',
   );
 
@@ -649,13 +649,13 @@ test('a route cut off at the step cap says so instead of ending at a random turn
   const list = directionsStepList({ route: cut });
   assert.equal(list.items.length, route.steps.length + 1);
   const last = list.items.at(-1);
-  assert.match(last.text, /Only the first 3 turns of this route are shown/);
+  assert.match(last.text, /本路线仅显示前 3 个转弯/);
   assert.equal(last.disabled, true, 'the note is not an action');
   assert.equal(last.params, undefined, 'and carries no command');
   assert.match(
     directionsStats({ ...idle, a: A, b: B, status: 'ready', route: cut })
       .coverage,
-    /first 3 turns$/,
+    /仅前 3 个转弯$/,
   );
   // A complete route says nothing extra.
   assert.equal(directionsStepList({ route }).items.length, route.steps.length);
@@ -722,16 +722,16 @@ test('a refused arming names the tool holding the pointer and how to leave it', 
   // and he concluded Directions was broken. Silence was the bug.
   assert.equal(
     pointerBlockedMessage('draw', 'a'),
-    'Draw is active — press Escape twice to leave Draw, then set A',
+    '绘制占用中 — 按两次 Esc 退出绘制，然后再设 A',
   );
   assert.equal(
     pointerBlockedMessage('draw', 'b'),
-    'Draw is active — press Escape twice to leave Draw, then set B',
+    '绘制占用中 — 按两次 Esc 退出绘制，然后再设 B',
   );
   // A tool nobody has written an exit for still gets a usable sentence.
   assert.equal(
     pointerBlockedMessage('measure', 'a'),
-    'measure is active — turn measure off, then set A',
+    'measure占用中 — 请关闭measure，然后再设 A',
   );
   // Nothing to say when nothing is in the way, or when we are the holder.
   assert.equal(pointerBlockedMessage(null, 'a'), null);
@@ -742,9 +742,9 @@ test('a refused arming names the tool holding the pointer and how to leave it', 
   for (const [id, exit] of Object.entries(POINTER_TOOL_EXITS)) {
     assert.match(
       pointerBlockedMessage(id, 'a'),
-      new RegExp(`^${exit.name} is active — `),
+      new RegExp(`^${exit.name}占用中 — `),
     );
-    assert.match(pointerBlockedMessage(id, 'a'), /, then set A$/);
+    assert.match(pointerBlockedMessage(id, 'a'), /，然后再设 A$/);
   }
 });
 
@@ -759,12 +759,12 @@ test('the refusal reaches the app toast, and a successful arming says nothing', 
   const releaseDraw = claimAs('draw');
   directionsLayer.setParams({ arm: 'a' });
   assert.deepEqual(toasts, [
-    'Draw is active — press Escape twice to leave Draw, then set A',
+    '绘制占用中 — 按两次 Esc 退出绘制，然后再设 A',
   ]);
   // The row status the operator can also read is still set.
   assert.match(
     directionsLayer.getStats().error,
-    /Another map tool is using clicks/,
+    /其他地图工具占用点击/,
   );
 
   // Once Draw lets go, arming works and says nothing at all.

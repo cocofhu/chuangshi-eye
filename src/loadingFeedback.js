@@ -1,4 +1,5 @@
 import { installationFeedback } from './data/installationFeedback.js';
+import { layerDisplayLabel } from './data/layerDisplayLabels.js';
 
 export const LOADING_REVEAL_DELAY_MS = 160;
 export const LOADING_TERMINAL_DWELL_MS = 2200;
@@ -49,7 +50,7 @@ export function normalizeLayerLoading(layer = {}) {
   const accepted = Boolean(stats.lastUpdate) || count > 0;
   return {
     id: String(layer.id || ''),
-    label: String(layer.name || layer.id || 'Layer'),
+    label: layerDisplayLabel(layer),
     loading,
     disabling,
     refresh:
@@ -244,7 +245,7 @@ export function reduceTrafficSyncFeedback(
       // Neutral default: the layer always supplies its own LIVE/SIMULATED
       // label, and a fallback string must never claim a live feed on a
       // keyless build.
-      label: label || 'syncing road network',
+      label: label || '正在同步路网',
       progressText: hasProgress ? `${progressPct}%` : '...',
     };
   }
@@ -393,9 +394,9 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     return {
       state: 'retry',
       label: (
-        camera.cameraRetry.error || 'Overpass temporarily unavailable'
+        camera.cameraRetry.error || 'Overpass 暂时不可用'
       ).toUpperCase(),
-      detail: `ALPR cameras · ${seconds ? `retrying in ${seconds}s` : 'retry pending'}`,
+      detail: `车牌识别摄像头 · ${seconds ? `${seconds} 秒后重试` : '等待重试'}`,
     };
   }
 
@@ -420,18 +421,18 @@ export function presentLoadingFeedback(state, summary, nowMs) {
   if (!state?.visible) return null;
   if (state.phase === 'terminal') {
     const labels = {
-      complete: 'LOAD COMPLETE',
-      cancelled: 'LOAD CANCELLED',
-      error: 'LOAD FAILED',
+      complete: '加载完成',
+      cancelled: '加载已取消',
+      error: '加载失败',
     };
     const label =
       state.operation === 'disabling' && state.terminal === 'complete'
-        ? 'LIVE DATA OFF'
+        ? '实时数据已关闭'
         : state.terminal === 'complete' &&
             state.activeIds?.length === 1 &&
             state.activeIds[0] === 'military-installations'
-          ? 'MAPPED SITES LOADED'
-          : labels[state.terminal] || 'LOAD COMPLETE';
+          ? '已加载标注站点'
+          : labels[state.terminal] || '加载完成';
     return { state: state.terminal, label, detail: '' };
   }
   const active = summary.active;
@@ -439,8 +440,8 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     return {
       state: 'loading',
       label: active[0].cameraRetry.retrying
-        ? 'RETRYING ALPR CAMERAS'
-        : 'FETCHING ALPR CAMERAS',
+        ? '正在重试监控摄像头'
+        : '正在获取监控摄像头',
       detail: 'OpenStreetMap · Overpass',
     };
   }
@@ -453,17 +454,17 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     return {
       state: 'loading',
       label: active[0].installationRetry.retrying
-        ? 'RETRYING MAPPED SITES'
-        : 'FETCHING MAPPED SITES',
+        ? '正在重试标注站点'
+        : '正在获取标注站点',
       detail: 'OpenStreetMap · Overpass',
     };
   }
   const elapsed = Math.max(0, nowMs - state.startedAt);
   const label = summary.disabling
-    ? 'TURNING OFF LIVE DATA'
+    ? '正在关闭实时数据'
     : summary.refresh
-      ? 'REFRESHING LIVE DATA'
-      : 'LOADING LIVE DATA';
+      ? '正在刷新实时数据'
+      : '正在加载实时数据';
   const names = active
     .slice(0, 2)
     .map((record) => record.label)

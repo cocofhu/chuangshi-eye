@@ -6,7 +6,7 @@
  */
 
 /** Guidance shown when the active map stack cannot host draped imagery. */
-export const NO_IMAGERY_HOST = 'Hidden by this map source · choose a globe map';
+export const NO_IMAGERY_HOST = '当前地图源已隐藏 · 请改用地球地图';
 
 /**
  * Resolve the imagery layer collection for the active map stack.

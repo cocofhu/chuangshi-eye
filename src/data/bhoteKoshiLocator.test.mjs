@@ -144,12 +144,12 @@ test('Bhote Koshi regional locator sequences Nepal, border, then the incident', 
   const nepal = publication.entries.find(({ id }) => id === 'nepal-context-callout');
   const incident = publication.entries.find(({ id }) => id === 'bhote-koshi-incident-callout');
   assert.equal(nepal.variant, 'label');
-  assert.equal(nepal.title, 'NEPAL');
+  assert.equal(nepal.title, '尼泊尔');
   assert.equal(nepal.anchorDot, true);
   assert.equal(incident.variant, 'card');
   assert.equal(incident.paintLane, 'thumbnail');
-  assert.equal(incident.title, 'BHOTE KOSHI FLOOD INCIDENT');
-  assert.deepEqual(incident.details, ['NEPAL · 26 AUG 2026']);
+  assert.equal(incident.title, '波泰科西洪水');
+  assert.deepEqual(incident.details, ['尼泊尔 · 2026-08-26']);
   assert.equal(incident.anchorDot, true);
   assert.equal(incident.leaderStyle, 'elbow');
   assert.equal('image' in incident, false);
@@ -308,7 +308,7 @@ test('Bhote Koshi flood path draws a solid cyan sourced route after the place sh
 
   assert.equal(source.entities.values.length, 1);
   assert.equal(labels.length, 15);
-  assert.equal(bidur.title, '14 · BIDUR BRIDGE');
+  assert.equal(bidur.title, '14 · 比杜尔桥');
   for (const place of INCIDENT_OVERVIEW_PLACES) {
     const pin = labels.find(({ id }) => id === `bhote-koshi-place-${place.id}`);
     assert.equal(pin.sourceAlpha(), 1, place.id);
@@ -410,12 +410,12 @@ test('Bhote Koshi trigger-record presentation reveals sourced incident details',
     'bhote-koshi-flood-path',
     'bhote-koshi-trigger-record-halo',
   ]);
-  assert.equal(record.title, 'USGS INITIAL REPORT');
+  assert.equal(record.title, 'USGS 初报');
   assert.deepEqual(record.details, [
-    '26 AUG 2026 · 08:37 NPT',
+    '2026-08-26 · 08:37 NPT',
     '28.2710° N · 85.5150° E',
-    'INITIAL M4.4 · RECLASSIFIED M5.2 LANDSLIDE',
-    'USGS EVENT us7000tbwb · OPEN SOURCE',
+    '初报 M4.4 · 改判 M5.2 滑坡',
+    'USGS 事件 us7000tbwb · 公开来源',
   ]);
   assert.equal(record.interactive, true);
   assert.equal(typeof record.activate, 'function');
@@ -571,9 +571,9 @@ test('Bhote Koshi locator keeps the regional context settled while nearby cities
 
   assert.equal(borderFill.show.getValue(), true);
   assert.equal(incident.contentAlpha(), 1);
-  assert.equal(kathmandu.title, 'KATHMANDU');
-  assert.equal(bhaktapur.title, 'BHAKTAPUR');
-  assert.equal(dhulikhel.title, 'DHULIKHEL');
+  assert.equal(kathmandu.title, '加德满都');
+  assert.equal(bhaktapur.title, '巴克塔普尔');
+  assert.equal(dhulikhel.title, '杜利凯尔');
   assert.ok([kathmandu, bhaktapur, dhulikhel].every(({ variant, anchorDot }) => (
     variant === 'label' && anchorDot === true
   )));

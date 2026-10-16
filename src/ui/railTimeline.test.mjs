@@ -31,7 +31,7 @@ test('preview is immediate, commits are coalesced and the drag DOM and tick mapp
   view.update(props);
   const slider = f.find((n) => n.tagName === 'INPUT');
   const row = slider.parent;
-  assert.equal(slider.getAttribute('aria-label'), 'Observed history');
+  assert.equal(slider.getAttribute('aria-label'), '观测历史');
   slider.value = '0';
   slider.dispatchEvent(new Event('input'));
   assert.deepEqual(commits, []);
@@ -82,11 +82,11 @@ test('identical updates write nothing; controls call actions and destruction can
   writes = 0;
   view.update({ ...props, index: 1 });
   assert.equal(writes, 0);
-  for (const label of ['‹', '›', 'Latest', 'Play'])
+  for (const label of ['‹', '›', '最新', '播放'])
     f.find((n) => n.textContent === label).click();
   assert.deepEqual(calls, [-1, 1, 'latest', 'play']);
   view.update({ ...props, playing: true });
-  assert.ok(f.find((n) => n.textContent === 'Pause'));
+  assert.ok(f.find((n) => n.textContent === '暂停'));
   const slider = f.find((n) => n.tagName === 'INPUT');
   slider.value = '0';
   slider.dispatchEvent(new Event('change'));
@@ -104,7 +104,7 @@ test('observed history label and endpoint times track the advertised tick range'
   view.update(props);
   assert.equal(
     f.find((n) => n.className === 'panel-title').textContent,
-    'Observed history',
+    '观测历史',
   );
   const endpoints = f.find((n) => n.className === 'rail-timeline-endpoints');
   assert.equal(endpoints.parent.className, 'rail-timeline-track');

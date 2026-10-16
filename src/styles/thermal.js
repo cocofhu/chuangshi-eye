@@ -14,11 +14,11 @@
 export const thermalShader = {
   name: 'thermal',
   uniforms: {
-    sensitivity: { default: 0.75, min: 0, max: 1, label: 'Sensitivity' },
-    bloom: { default: 0.65, min: 0, max: 1, label: 'Bloom' },
-    mode: { default: 0.0, min: 0, max: 1, label: 'WHOT/BHOT' },
-    pixelation: { default: 1.5, min: 1, max: 6, label: 'Pixelation' },
-    palette: { default: 0.0, min: 0, max: 1, label: 'Ironbow' },
+    sensitivity: { default: 0.75, min: 0, max: 1, label: '灵敏度' },
+    bloom: { default: 0.65, min: 0, max: 1, label: '光晕' },
+    mode: { default: 0.0, min: 0, max: 1, label: '白热/黑热' },
+    pixelation: { default: 1.5, min: 1, max: 6, label: '像素化' },
+    palette: { default: 0.0, min: 0, max: 1, label: '铁红' },
   },
   fragmentShader: /* glsl */ `
     uniform sampler2D colorTexture;

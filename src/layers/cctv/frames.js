@@ -11,6 +11,7 @@ import {
   PROJECTION_IDLE_REFRESH_MS,
   PLACEHOLDER_REPAINT_MS,
 } from './policy.js';
+import { paintedCctvStatus } from './feedLabel.js';
 
 export function createFrames({ state: layerState, services, parts, source }) {
   /**
@@ -186,11 +187,11 @@ export function createFrames({ state: layerState, services, parts, source }) {
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
 
-    const label = String(camera?.name || 'CCTV');
-    const city = String(camera?.city || 'GLOBAL');
-    const status = String(
-      health?.message || health?.status || camera?.feedType || 'NO FEED',
-    ).toUpperCase();
+    const label = String(camera?.name || '监控');
+    const city = String(camera?.city || '全球');
+    const status = paintedCctvStatus(
+      health?.message || health?.status || camera?.feedType || '无画面',
+    );
 
     ctx.strokeStyle = 'rgba(0, 220, 255, 0.24)';
     ctx.lineWidth = 2;

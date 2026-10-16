@@ -40,7 +40,7 @@ test('an unnamed feature reads as its class, never as a raw OSM id', () => {
 
   assert.deepEqual(
     result.records.map((record) => record.name),
-    ['Firing range', 'Military airfield', 'Naval base', 'Military land', 'Firing range'],
+    ['靶场', '军用机场', '海军基地', '军事用地', '靶场'],
   );
   for (const record of result.records) {
     assert.doesNotMatch(record.name, /\d/, `label must carry no OSM id: ${record.name}`);
@@ -61,12 +61,14 @@ test('a real OSM name always wins over the class label', () => {
   assert.deepEqual(result.records.map((record) => record.name), ['Camp Swift', 'Bergstrom']);
 });
 
-test('an unmapped class title-cases instead of leaking an underscored tag', () => {
-  assert.equal(humanizeInstallationClass('danger_area'), 'Danger area');
-  assert.equal(humanizeInstallationClass('checkpoint'), 'Checkpoint');
-  assert.equal(humanizeInstallationClass('training_area_north'), 'Training area north');
-  assert.equal(humanizeInstallationClass(''), 'Mapped installation');
-  assert.equal(humanizeInstallationClass(null), 'Mapped installation');
+test('an unmapped class stays a Chinese label instead of title-casing the tag', () => {
+  assert.equal(humanizeInstallationClass('danger_area'), '已标注设施');
+  assert.equal(humanizeInstallationClass('checkpoint'), '已标注设施');
+  assert.equal(humanizeInstallationClass('training_area_north'), '已标注设施');
+  assert.equal(humanizeInstallationClass('airfield'), '军用机场');
+  assert.equal(humanizeInstallationClass('places_candidate'), '地点候选');
+  assert.equal(humanizeInstallationClass(''), '已标注设施');
+  assert.equal(humanizeInstallationClass(null), '已标注设施');
 });
 
 test('accepts only small non-dateline request bboxes', () => {

@@ -36,5 +36,5 @@ test('no globe and no tileset means nowhere to drape', () => {
     }),
     { collection: null, kind: 'none' },
   );
-  assert.match(NO_IMAGERY_HOST, /globe map/);
+  assert.match(NO_IMAGERY_HOST, /地球地图/);
 });

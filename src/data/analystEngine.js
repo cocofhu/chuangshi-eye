@@ -891,7 +891,7 @@ export function createAnalystEngine(providers) {
     // Human phrasing for the same scope, so every spoken count can name what it
     // measured ("8 in view", "about 30 within 250 km of Austin") instead of
     // arriving as a bare number that contradicts the panel.
-    let scopeLabel = rememberedScope?.label || 'anywhere in the loaded data';
+    let scopeLabel = rememberedScope?.label || '已加载数据范围内';
     let scopeDetail = rememberedScope?.detail || scopeLabel;
     // A follow-up re-filters a set that was already scoped, so it only narrows
     // further when a new scope is given.
@@ -917,7 +917,7 @@ export function createAnalystEngine(providers) {
       }
       resolvedScope = region;
       scopeNote = `region:${region.name}`;
-      scopeLabel = `over ${region.name}`;
+      scopeLabel = `${region.name}上空`;
       scopeDetail = scopeLabel;
     } else if (scope.kind === 'radius') {
       // An explicit center always wins. Otherwise, when Contacts is active its
@@ -948,8 +948,8 @@ export function createAnalystEngine(providers) {
         ? `radius:${resolvedScope.km}km@${resolvedScope.centeredOn}`
         : `radius:${resolvedScope.km}km`;
       scopeLabel = resolvedScope.centeredOn
-        ? `within ${resolvedScope.km} km of ${resolvedScope.centeredOn}`
-        : `within ${resolvedScope.km} km`;
+        ? `距 ${resolvedScope.centeredOn} ${resolvedScope.km} 公里内`
+        : `${resolvedScope.km} 公里内`;
       scopeDetail = scopeLabel;
     } else if (scope.kind === 'view') {
       const view = providers.getViewContext();
@@ -960,8 +960,8 @@ export function createAnalystEngine(providers) {
       scopeNote = `view:${Math.round(view.viewRadiusKm)}km`;
       // TODO: "in view" is a radius around the camera centre, not the visible
       // footprint; the display detail says so until a footprint scope lands.
-      scopeLabel = 'in view';
-      scopeDetail = `within ${Math.round(view.viewRadiusKm)} km of the view centre`;
+      scopeLabel = '视野内';
+      scopeDetail = `视野中心 ${Math.round(view.viewRadiusKm)} 公里内`;
     }
     const inScope =
       scope.kind === 'region' && resolvedScope?.ring
@@ -1019,8 +1019,8 @@ export function createAnalystEngine(providers) {
     if (totals.truncated)
       caveats.push(
         totals.total === null
-          ? `counted the first ${totals.returned.toLocaleString('en-US')} loaded records`
-          : `counted ${totals.returned.toLocaleString('en-US')} of ${totals.total.toLocaleString('en-US')} loaded records`,
+          ? `已计入前 ${totals.returned.toLocaleString('zh-CN')} 条已加载记录`
+          : `已计入 ${totals.returned.toLocaleString('zh-CN')} / ${totals.total.toLocaleString('zh-CN')} 条已加载记录`,
       );
     for (const layer of layersQueried) {
       if (layer.note) caveats.push(`${layer.layerKey}: ${layer.note}`);

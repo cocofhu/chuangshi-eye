@@ -5,6 +5,7 @@ import {
 } from '../data/layerSnapshot.js';
 import { readLayerLifecycleSummary } from './layerSummary.js';
 import { SPEECH_BUILDERS, attachVoiceResult } from './speech.js';
+import { layerDisplayLabel } from '../data/layerDisplayLabels.js';
 import { resolveDeicticArgs } from './deixis.js';
 export { readLayerLifecycleSummary } from './layerSummary.js';
 import { defaultGeospatial } from '../search/defaults.js';
@@ -410,7 +411,7 @@ export function createGevActionRunner({
       const enabled = Boolean(args.enabled);
       if (enabled) {
         const pending = dataManager.getAll?.().find((l) => l.id === layerId);
-        reportProgress('layer', pending?.name || layerId);
+        reportProgress('layer', layerDisplayLabel(pending || { id: layerId }));
       }
       const changeOptions = { origin: 'voice' };
       if (runOptions.signal) changeOptions.signal = runOptions.signal;
@@ -512,7 +513,7 @@ export function createGevActionRunner({
         ok: true,
         action: 'set_layer_visibility',
         layerId,
-        label: layer?.name || layerId,
+        label: layerDisplayLabel(layer || { id: layerId }),
         ...lifecycleSummary,
         ...(snapshot?.feedState ? { feedState: snapshot.feedState } : {}),
         ...(snapshot?.source ? { source: snapshot.source } : {}),
@@ -1460,7 +1461,7 @@ function controlScene(sceneDirector, args = {}) {
     };
   }
   if (sceneAction === 'stop') {
-    sceneDirector.stopScene('Stopped by voice');
+    sceneDirector.stopScene('语音已停止');
     return { ok: true, action: 'control_scene', running: false };
   }
   if (sceneAction === 'next') {
@@ -3428,7 +3429,7 @@ function describeTargetEntity(dataManager, target) {
             type: found.typeName || found.typeCode || '',
             route,
             altitude: Number.isFinite(found.altitudeM)
-              ? `${Math.round(found.altitudeM * 3.28084)} ft`
+              ? `${(Math.round(found.altitudeM / 100) * 100).toLocaleString('zh-CN')} 米`
               : '',
           }
         : { name, mmsi: found.mmsi || '', noradId: found.noradId || '' },
@@ -3673,7 +3674,7 @@ async function aircraftProximityWindowForQuery(
     action: 'analyst_query',
     count: selection.count,
     complete,
-    scopeLabel: `within ${radiusKm} km of ${label}`,
+    scopeLabel: `距 ${label} ${radiusKm} 公里内`,
     listed: items.length,
     items,
     summary: selection.summary,
@@ -3681,7 +3682,7 @@ async function aircraftProximityWindowForQuery(
       ? { partial: true, unanswered: [...(result.unanswered || [])] }
       : {}),
     display: {
-      scope: `within ${radiusKm} km of ${label} (Contacts window)`,
+      scope: `距 ${label} ${radiusKm} 公里内（目标情境窗口）`,
     },
     coverage,
     // (D) The answer always says whose window it is and which engine produced it.
@@ -4632,11 +4633,11 @@ function cleanText(value) {
 }
 
 function layerTitle(layerId) {
-  if (layerId === 'local-datacenters') return 'Datacenter';
-  if (layerId === 'local-dams') return 'Dam';
-  if (layerId === 'telegeography-submarine-cables') return 'Submarine Cable';
-  if (layerId === 'local-firms') return 'Active Fire';
-  return layerId || 'Entity';
+  if (layerId === 'local-datacenters') return '数据中心';
+  if (layerId === 'local-dams') return '水坝';
+  if (layerId === 'telegeography-submarine-cables') return '海底光缆';
+  if (layerId === 'local-firms') return '活跃火点';
+  return layerId || '对象';
 }
 
 function clampNumber(value, min, max, fallback) {

@@ -68,22 +68,22 @@ test('cockpit altitude reads zero on the ground without changing airborne MSL', 
 test('cockpit Context scope distinguishes radius-complete feeds from viewport installations', () => {
   assert.equal(
     formatCockpitContextScope('TEST123', 250000, 'CURRENT VIEWPORT ONLY'),
-    'TEST123 · 250 KM AIR/SEA WINDOW · INSTALLATIONS CURRENT VIEWPORT ONLY',
+    'TEST123 · 250 公里空海窗口 · 设施 CURRENT VIEWPORT ONLY',
   );
   assert.equal(
     formatCockpitContextScope('TEST123', 250000),
-    'TEST123 · 250 KM AIR/SEA WINDOW',
+    'TEST123 · 250 公里空海窗口',
   );
 });
 
 test('cockpit Context scope preserves zero and replaces missing values intentionally', () => {
   assert.equal(
     formatCockpitContextScope('', 0),
-    '— · 0 KM AIR/SEA WINDOW',
+    '— · 0 公里空海窗口',
   );
   assert.equal(
     formatCockpitContextScope(undefined, Number.NaN, {}),
-    '— · — KM AIR/SEA WINDOW',
+    '— · — 公里空海窗口',
   );
 });
 

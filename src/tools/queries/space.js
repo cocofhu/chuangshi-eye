@@ -9,7 +9,7 @@ import {
 import { parseTleText, tleCatalogNumber } from '../../sources/tle.js';
 import { POINT_SCHEMA, resolvePoint } from '../area.js';
 import { defineTool, ToolError } from '../catalog.js';
-import { LIMIT_SCHEMA, capRows, countNoun, isoTime } from '../results.js';
+import { LIMIT_SCHEMA, capRows, isoTime } from '../results.js';
 
 const text = (value) => (typeof value === 'string' && value ? value : null);
 
@@ -34,7 +34,7 @@ export const getRecentLaunches = defineTool({
         };
     const launches = Array.isArray(payload) ? payload : payload.results;
     if (!Array.isArray(launches))
-      throw new ToolError('malformed', 'The launch feed returned no launches');
+      throw new ToolError('malformed', '发射数据源没有返回发射任务');
     const rows = launches
       .map((launch) => ({
         id: text(launch?.id),
@@ -56,8 +56,8 @@ export const getRecentLaunches = defineTool({
     const result = capRows(rows, args.limit);
     return {
       summary:
-        `${countNoun(rows.length, 'launch', 'launches')} in the last 30 days${rows[0] ? `; latest ${rows[0].name}` : ''}` +
-        (stale ? ' (data may be stale).' : '.'),
+        `${rows.length} 次发射，近 30 天${rows[0] ? `；最近 ${rows[0].name}` : ''}` +
+        (stale ? '（数据可能已过期）。' : '。'),
       data: {
         view: suggestView(services, {
           point: { lat: 20, lon: 0 },
@@ -129,7 +129,7 @@ async function readCatalog(services, group, signal) {
   if (!result.ok)
     throw new ToolError(
       'unavailable',
-      `The ${group} satellite catalog is unavailable (HTTP ${result.status})`,
+      `${group} 卫星星表不可用（HTTP ${result.status}）`,
     );
   const entries = parseTleText(result.text).flatMap((entry) => {
     try {
@@ -196,12 +196,12 @@ export const nextSatellitePass = defineTool({
     const point = await resolvePoint(args.location, { services, signal });
     const group = args.group ?? 'stations';
     const { entries, stale } = await readCatalog(services, group, signal);
-    const staleNote = stale ? ' (orbit data may be stale)' : '';
+    const staleNote = stale ? '（轨道数据可能已过期）' : '';
     const satellite = matchSatellite(entries, args.satellite);
     if (!satellite)
       throw new ToolError(
         'invalid_arguments',
-        `No satellite matching "${args.satellite ?? 'ISS'}" is in the ${group} group`,
+        `「${args.satellite ?? 'ISS'}」不在 ${group} 组中`,
       );
     const hours = args.hours ?? 24;
     const pass = findNextSatellitePass({
@@ -216,7 +216,7 @@ export const nextSatellitePass = defineTool({
     const name = satellite.name;
     if (!pass)
       return {
-        summary: `${name} has no ${args.visible_only ? 'visible ' : ''}pass over ${point.label} in the next ${hours} hours${staleNote}.`,
+        summary: `${name} 在未来 ${hours} 小时内于 ${point.label} 无${args.visible_only ? '可见' : ''}过境${staleNote}。`,
         data: {
           view: followSatellite(services, point, satellite),
           stale,
@@ -228,9 +228,8 @@ export const nextSatellitePass = defineTool({
       };
     return {
       summary:
-        `${name} next rises over ${point.label} at ${isoTime(pass.riseMs)} in the ${compass(pass.riseAzDeg)}, ` +
-        `peaking at ${Math.round(pass.maxElevDeg)}°` +
-        `${pass.visible ? '; visible to the naked eye' : ''}${staleNote}.`,
+        `${name} 下次于 ${isoTime(pass.riseMs)} 在 ${point.label} 升起，方向 ${compass(pass.riseAzDeg)}，最高 ${Math.round(pass.maxElevDeg)}°` +
+        `${pass.visible ? '；肉眼可见' : ''}${staleNote}。`,
       data: {
         view: followSatellite(services, point, satellite),
         stale,
@@ -293,8 +292,8 @@ export const satellitesOverhead = defineTool({
       .sort((a, b) => b.elevation_deg - a.elevation_deg);
     return {
       summary:
-        `${countNoun(rows.length, 'satellite')} from the ${group} group ${rows.length === 1 ? 'is' : 'are'} at least ${minimum}° above ${point.label} at ${isoTime(at)}` +
-        (stale ? ' (orbit data may be stale).' : '.'),
+        `${rows.length} 颗 ${group} 组卫星在 ${isoTime(at)} 时位于 ${point.label} 上空至少 ${minimum}°` +
+        (stale ? '（轨道数据可能已过期）。' : '。'),
       data: {
         view: suggestView(services, {
           point,

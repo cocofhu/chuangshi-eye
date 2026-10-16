@@ -40,7 +40,7 @@ export function createControls({ state: layerState, services, parts, source }) {
         if (!Number.isFinite(info?.lat) || !Number.isFinite(info?.lon))
           continue;
         result.push({
-          id: record.stationName || `Dock ${record.stationId}`,
+          id: record.stationName || `桩位 ${record.stationId}`,
           name: record.stationName || null,
           city: record.cityId || null,
           lat: info.lat,
@@ -67,8 +67,8 @@ export function createControls({ state: layerState, services, parts, source }) {
       if (layerState._loading) {
         stats.loadingLabel =
           layerState._activeCityIds.size > 0
-            ? `syncing ${layerState._activeCityIds.size} city feeds...`
-            : 'scanning nearby systems...';
+            ? `正在同步 ${layerState._activeCityIds.size} 个城市数据源…`
+            : '正在扫描附近系统…';
       }
       if (layerState._error) stats.error = layerState._error;
       return stats;

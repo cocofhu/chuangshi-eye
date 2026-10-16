@@ -10,7 +10,7 @@ const signedNormalizeDeg = (deg) => ((((deg + 180) % 360) + 360) % 360) - 180;
  */
 const CCTV_CAL_FIELDS = {
   heading: {
-    label: 'HDG',
+    label: '航向',
     unit: '°',
     decimals: 1,
     get: (cam) => cam.headingDeg,
@@ -19,22 +19,22 @@ const CCTV_CAL_FIELDS = {
     }),
   },
   pitch: {
-    label: 'PITCH',
+    label: '俯仰',
     unit: '°',
     decimals: 1,
     get: (cam) => cam.pitchDeg,
     toPatch: (value, base) => ({ pitchDeg: value - base.pitchDeg }),
   },
   fov: {
-    label: 'FOV',
+    label: '视场',
     unit: '°',
     decimals: 0,
     get: (cam) => cam.fovDeg,
     toPatch: (value, base) => ({ fovDeg: value - base.fovDeg }),
   },
   range: {
-    label: 'RANGE',
-    unit: 'm',
+    label: '距离',
+    unit: '米',
     decimals: 0,
     get: (cam) => cam.rangeM,
     toPatch: (value, base) => ({
@@ -42,22 +42,22 @@ const CCTV_CAL_FIELDS = {
     }),
   },
   height: {
-    label: 'HGT',
-    unit: 'm',
+    label: '高度',
+    unit: '米',
     decimals: 0,
     get: (cam) => cam.mountHeightM,
     toPatch: (value, base) => ({ heightM: value - base.mountHeightM }),
   },
   north: {
     label: 'ΔN',
-    unit: 'm',
+    unit: '米',
     decimals: 1,
     get: (cam) => cam.calibration?.offsetNorthM || 0,
     toPatch: (value) => ({ offsetNorthM: value }),
   },
   east: {
     label: 'ΔE',
-    unit: 'm',
+    unit: '米',
     decimals: 1,
     get: (cam) => cam.calibration?.offsetEastM || 0,
     toPatch: (value) => ({ offsetEastM: value }),
@@ -81,7 +81,7 @@ export function _resetCctvCalibration() {
     },
     { origin: 'user' },
   );
-  this.actions.showToast('CCTV calibration reset');
+  this.actions.showToast('监控标定已重置');
 }
 
 export function _beginCctvCalValueEdit(chip) {
@@ -162,7 +162,7 @@ export function _syncCctvCalReadout(enabled, activeCamera) {
   if (this._cctvAdjustBtn) {
     const adjustOn = !!this._cctvState?.calibrationMode;
     this._cctvAdjustBtn.classList.toggle('active', adjustOn && canCalibrate);
-    this._cctvAdjustBtn.textContent = adjustOn ? 'ADJUST ON' : 'ADJUST';
+    this._cctvAdjustBtn.textContent = adjustOn ? '调整中' : '调整';
     this._cctvAdjustBtn.disabled = !canCalibrate;
   }
   if (this._cctvCalReadout) {

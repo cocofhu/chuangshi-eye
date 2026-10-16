@@ -205,13 +205,13 @@ test('getStats tells a rejected key from a missing one', async (t) => {
   const provider = fakeProvider();
   const { layer } = await enabledLayer(t, [provider]);
   provider.stats.loading = true;
-  assert.equal(layer.getStats().loadingLabel, 'loading coverage...');
+  assert.equal(layer.getStats().loadingLabel, '正在加载覆盖…');
   assert.equal(layer.getStats().keyRequired, false);
 
   provider.stats.keyRequired = true;
   assert.deepEqual(
     [layer.getStats().loadingLabel, layer.getStats().error],
-    ['KEY REQUIRED', 'KEY REQUIRED'],
+    ['需要密钥', '需要密钥'],
   );
 
   // A rejected key gates the provider exactly like a missing one.
@@ -220,7 +220,7 @@ test('getStats tells a rejected key from a missing one', async (t) => {
   provider.stats.error = 'Mapillary rejected MAPILLARY_CLIENT_TOKEN';
   const stats = layer.getStats();
   assert.equal(stats.keyRequired, true);
-  assert.equal(stats.loadingLabel, 'KEY REJECTED');
+  assert.equal(stats.loadingLabel, '密钥已拒');
   assert.equal(stats.error, 'Mapillary rejected MAPILLARY_CLIENT_TOKEN');
   const ui = layer.getUIState();
   assert.equal(ui.keyRequired, true);
@@ -248,7 +248,7 @@ test('openNearest without the panel reports it instead of loading forever', asyn
   assert.equal(await layer.openNearest({ lat: 38.58, lon: -121.49 }), false);
   const { street } = layer.getUIState();
   assert.equal(street.loading, false);
-  assert.match(street.error, /Open the Street Level panel/);
+  assert.match(street.error, /请打开街景面板/);
   assert.equal(provider.calls.mount, 0);
 });
 
@@ -295,7 +295,7 @@ test('a provider withdraws only the error it reported', async (t) => {
   actions.reportError('Sequence images unavailable');
   await layer.openImage('mapillary', 'img1');
   actions.reportError(null);
-  assert.match(layer.getUIState().street.error, /Open the Street Level panel/);
+  assert.match(layer.getUIState().street.error, /请打开街景面板/);
 });
 
 test('closing the photo stops the globe flying to it', async (t) => {
@@ -490,7 +490,7 @@ test('an empty provider composition enables and tears down without acquiring ima
   assert.equal(layer.getUIState().keyRequired, false);
   assert.match(
     layer.getUIState().coverage.hint,
-    /No street-level imagery providers/,
+    /未配置街景影像来源/,
   );
   layer.disable();
   layer.enable(viewer);

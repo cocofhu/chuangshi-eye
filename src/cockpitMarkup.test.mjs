@@ -41,7 +41,7 @@ test('Cockpit has one reset action beside its bottom exit path', () => {
   assert.doesNotMatch(html, /id="cockpit-exit"/);
   assert.match(
     html,
-    /id="map-view-switch"[^>]*aria-label="Exit cockpit view"[^>]*aria-keyshortcuts="Escape C"[\s\S]*?close_fullscreen[\s\S]*?EXIT COCKPIT/,
+    /id="map-view-switch"[^>]*aria-label="退出驾驶舱"[^>]*aria-keyshortcuts="Escape C"[\s\S]*?close_fullscreen[\s\S]*?退出驾驶舱/,
   );
   const topCenterActions = html.match(/<nav id="top-center-actions"[\s\S]*?<\/nav>/);
   assert.ok(topCenterActions, 'Top-center globe actions are missing');
@@ -54,7 +54,7 @@ test('Cockpit has one reset action beside its bottom exit path', () => {
   assert.doesNotMatch(viewSwitcher[0], /id="reset-globe-view"/, 'map-only reset must stay outside Cockpit');
   assert.match(
     viewSwitcher[0],
-    /id="cockpit-reset-globe"[^>]*type="button"[^>]*aria-label="Reset cockpit to full globe view"[^>]*hidden[\s\S]*?public[\s\S]*?RESET[\s\S]*?id="map-view-switch"/,
+    /id="cockpit-reset-globe"[^>]*type="button"[^>]*aria-label="退出驾驶舱并回到全球视角"[^>]*hidden[\s\S]*?public[\s\S]*?重置[\s\S]*?id="map-view-switch"/,
   );
 
   const actions = html.match(/<div class="global-context-actions"[\s\S]*?<\/div>/);
@@ -93,11 +93,11 @@ test('Cockpit vision cycle exposes every map preset exactly once', () => {
   );
   assert.match(
     setVisionMode.toString(),
-    /const labels = \{\s*optical: 'NORMAL',\s*crt: 'CRT',\s*nvg: 'NVG',\s*thermal: 'FLIR',\s*anime: 'ANIME',\s*noir: 'NOIR',\s*snow: 'SNOW',?\s*\};/,
+    /const labels = \{\s*optical: '标准',\s*crt: 'CRT',\s*nvg: 'NVG',\s*thermal: 'FLIR',\s*anime: '动漫',\s*noir: '黑白',\s*snow: '雪花',?\s*\};/,
   );
   assert.doesNotMatch(setVisionMode.toString(), /none: 'NONE'/);
   assert.doesNotMatch(ui, /getInheritedVisionLabel/);
-  assert.match(html, /id="cockpit-vision-current-label"[^>]*>NORMAL<\/strong>/);
+  assert.match(html, /id="cockpit-vision-current-label"[^>]*>标准<\/strong>/);
   assert.match(
     cockpitEnter.toString(),
     /this\.setVisionMode\(this\.getInitialVisionMode\(\)\)/,
@@ -193,14 +193,14 @@ test('the Contact panel never hides itself out from under its own NEXT button', 
   assert.match(body, /'BRG —'/);
   // A culled subject holds last-known content behind the CONTACT LOST cue.
   assert.match(body, /readout\.contactLost/);
-  assert.match(body, /CONTACT LOST/);
+  assert.match(body, /目标丢失/);
   assert.match(body, /this\.context\.dataset\.state = 'lost'/);
-  assert.match(body, /if \(readout\.contactLost\) \{/, 'the CONTACT LOST branch is missing');
+  assert.match(body, /if \(readout\.contactLost\) \{/, '目标丢失分支缺失');
   // PREVIOUS/NEXT must be written before any early return, so the operator can
   // always step off the current contact — including a lost one.
   const navIndex = body.indexOf('this.contextNext.disabled');
   const lostIndex = body.indexOf('if (readout.contactLost)');
-  assert.ok(navIndex >= 0 && lostIndex > navIndex, 'nav state must be written before the CONTACT LOST return');
+  assert.ok(navIndex >= 0 && lostIndex > navIndex, '导航状态须在目标丢失返回前写入');
   assert.equal(
     (body.match(/this\.contextNext\.disabled/g) || []).length,
     1,
@@ -209,7 +209,7 @@ test('the Contact panel never hides itself out from under its own NEXT button', 
   assert.match(
     css,
     /\.cockpit-context-window\[data-state='lost'\]/,
-    'CONTACT LOST reuses the panel-level data-state cue that "uncertain" already uses',
+    '目标丢失复用 uncertain 已用的面板级 data-state 提示',
   );
 });
 
@@ -261,8 +261,8 @@ test('Cockpit owns a focused shared Display portal and compact Radio controls', 
   assert.match(html, /data-cockpit-display-slot="hud"/);
   assert.match(html, /data-cockpit-display-slot="detection"[\s\S]*?data-cockpit-display-slot="parameters"[\s\S]*?data-cockpit-display-slot="models3d"/);
   assert.doesNotMatch(html, /data-cockpit-display-slot="presets"/);
-  assert.match(html, /id="clear-selected-layers"[^>]*aria-label="Clear selected data layers"/);
-  assert.match(html, /id="reset-globe-view"[^>]*aria-label="Reset to full globe view"/);
+  assert.match(html, /id="clear-selected-layers"[^>]*aria-label="关闭已选图层"/);
+  assert.match(html, /id="reset-globe-view"[^>]*aria-label="重置为全球视角"/);
   assert.match(css, /#top-center-actions\s*\{[\s\S]*?left:\s*50%;[\s\S]*?display:\s*flex;[\s\S]*?transform:\s*translateX\(-50%\)/);
   assert.match(
     css,
@@ -761,9 +761,9 @@ test('cockpit weather control is off before JavaScript restores an explicit opt-
     /<button\s+id="cockpit-weather-toggle"[\s\S]*?<\/button>/,
   );
   assert.ok(match, 'cockpit weather toggle markup is missing');
-  assert.match(match[0], /aria-label="Enable cockpit weather effects"/);
+  assert.match(match[0], /aria-label="开启驾驶舱天气效果"/);
   assert.match(match[0], /aria-pressed="false"/);
-  assert.match(match[0], /id="cockpit-weather-state">OFF</);
+  assert.match(match[0], /id="cockpit-weather-state">关</);
 });
 
 test('cockpit summary presents the focused item as Contact', () => {
@@ -771,14 +771,14 @@ test('cockpit summary presents the focused item as Contact', () => {
     /<aside id="cockpit-context"[\s\S]*?<\/aside>/,
   );
   assert.ok(match, 'cockpit Contact summary is missing');
-  assert.match(match[0], /aria-label="Contact cockpit summary"/);
-  assert.match(match[0], /class="cockpit-context-kicker">CONTACT</);
-  assert.match(match[0], /aria-label="Contact navigation"/);
-  assert.match(match[0], /aria-label="Previous — prior visited contact in the 250 km window"/);
-  assert.match(match[0], /aria-label="Next — nearest unvisited contact in the 250 km window"/);
-  assert.match(match[0], /aria-label="Collapse Contact panel"/);
+  assert.match(match[0], /aria-label="目标驾驶舱摘要"/);
+  assert.match(match[0], /class="cockpit-context-kicker">目标</);
+  assert.match(match[0], /aria-label="目标导航"/);
+  assert.match(match[0], /aria-label="上一个 — 250 公里窗口内已访问目标"/);
+  assert.match(match[0], /aria-label="下一个 — 250 公里窗口内最近未访问目标"/);
+  assert.match(match[0], /aria-label="收起目标面板"/);
   assert.doesNotMatch(match[0], />GLOBAL CONTEXT</);
-  assert.match(setContextCollapsed.toString(), /`\$\{expanded \? 'Collapse' : 'Expand'\} Contact panel`/);
+  assert.match(setContextCollapsed.toString(), /`\$\{expanded \? '收起' : '展开'\}目标面板`/);
 });
 
 test('Cockpit Contact navigation omits the redundant Focus camera action', () => {
@@ -793,9 +793,9 @@ test('Global Context names its mixed contact cycle without changing the stable m
     /<button id="global-context-flights-btn"[\s\S]*?<\/button>/,
   );
   assert.ok(match, 'Global Context contacts button is missing');
-  assert.match(match[0], />CONTACTS</);
-  assert.match(match[0], /aria-label="CONTACTS"/);
-  assert.match(match[0], /title="Cycles the nearest contacts of whatever type you select — planes, vessels, installations\. Satellites track independently\."/);
+  assert.match(match[0], />目标</);
+  assert.match(match[0], /aria-label="目标"/);
+  assert.match(match[0], /title="循环切换所选类型的最近目标 — 飞机、船舶、站点。卫星独立跟踪。"/);
   assert.doesNotMatch(match[0], />FLIGHTS</);
 });
 
@@ -814,8 +814,8 @@ test('Global Context standby describes both chooser modes', () => {
     /<div id="context-mode-standby"[\s\S]*?<\/div>/,
   );
   assert.ok(match, 'Global Context standby is missing');
-  assert.match(match[0], /CONTACTS — nearest planes · vessels · sites/);
-  assert.match(match[0], /SPACE MISSIONS — launches &amp; orbital assets/);
+  assert.match(match[0], /目标 — 最近的飞机 · 船舶 · 站点/);
+  assert.match(match[0], /航天任务 — 发射与在轨资产/);
 });
 
 test('cockpit briefing cycle control keeps its state as the accessible name', () => {
@@ -823,14 +823,14 @@ test('cockpit briefing cycle control keeps its state as the accessible name', ()
     /<button\s+id="cockpit-brief-auto"[\s\S]*?<\/button>/,
   );
   assert.ok(match, 'cockpit briefing cycle toggle is missing');
-  assert.match(match[0], /aria-label="CYCLE OFF"/);
+  assert.match(match[0], /aria-label="循环 关"/);
   assert.match(match[0], /aria-pressed="false"/);
-  assert.match(match[0], />CYCLE OFF<\/button>/);
-  assert.match(match[0], /title="Cycle briefing pages automatically every 9 seconds \(Signals → News → Local\)\./);
+  assert.match(match[0], />循环 关<\/button>/);
+  assert.match(match[0], /title="每 9 秒自动循环简报页（信号 → 新闻 → 本地）。/);
 
   const update = setBriefAutoRotate.toString();
   assert.ok(update, 'cockpit briefing cycle state updater is missing');
-  assert.match(update, /const label = this\.briefAutoRotateEnabled \? 'CYCLE ON' : 'CYCLE OFF';/);
+  assert.match(update, /const label = this\.briefAutoRotateEnabled \? '循环 开' : '循环 关';/);
   assert.match(update, /setAttribute\('aria-label', label\)/);
   assert.match(update, /\.title = help;/);
   assert.doesNotMatch(update, /setAttribute\('aria-label', help\)/);
@@ -886,8 +886,8 @@ test('voice Cockpit entry refuses when the entry gate is shut', () => {
     ui.indexOf("if (normalized === 'exit') {"),
   );
   assert.match(branch, /if \(!this\.cockpitView\.isEntryAllowed\?\.\(\)\) \{/);
-  assert.match(branch, /Contacts must be active to enter Cockpit/);
-  assert.match(branch, /Contacts is still starting up/);
+  assert.match(branch, /进入驾驶舱前需先开启目标/);
+  assert.match(branch, /目标仍在启动/);
 });
 
 test('cockpit state cannot report entryAllowed while already active', () => {

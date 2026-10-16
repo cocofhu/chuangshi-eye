@@ -6,7 +6,7 @@ import { localReceiverFeedName } from '../layers/localAdsb/feedNames.js';
  */
 
 function formatGain(gain) {
-  return gain === 'auto' || !Number.isFinite(gain) ? 'auto' : gain.toFixed(1);
+  return gain === 'auto' || !Number.isFinite(gain) ? '自动' : gain.toFixed(1);
 }
 
 function formatIq(state) {
@@ -15,15 +15,28 @@ function formatIq(state) {
     : '--';
 }
 
+const STATUS_LABELS = {
+  idle: '空闲',
+  connecting: '连接中',
+  tuning: '调谐中',
+  streaming: '接收中',
+  error: '出错',
+  unsupported: '不支持',
+};
+
+function statusLabel(status) {
+  return STATUS_LABELS[status] || String(status || '空闲');
+}
+
 function statusText(state) {
   const fmActive = state.mode === 'fm';
   const iqStatus =
     state.samplesPerSecond > 0
       ? `${(state.samplesPerSecond / 1_000_000).toFixed(2)} MS/s IQ`
-      : 'waiting for IQ';
+      : '等待 IQ';
   const device = state.deviceLabel ? ` · ${state.deviceLabel}` : '';
   if (state.connected && !fmActive) {
-    return `${state.message}${device} · ${iqStatus} · ${state.decodedMessages} messages`;
+    return `${state.message}${device} · ${iqStatus} · ${state.decodedMessages} 条报文`;
   }
   const detail = state.seeking
     ? state.seekMessage
@@ -31,13 +44,13 @@ function statusText(state) {
   if (state.connected && fmActive) {
     const workerStatus =
       state.workerBlocks > 0
-        ? `DSP ${state.workerBlocks} blocks`
-        : 'DSP waiting';
-    const rfStatus = `RF ${formatIq(state)}`;
+        ? `DSP ${state.workerBlocks} 块`
+        : 'DSP 等待中';
+    const rfStatus = `射频 ${formatIq(state)}`;
     const audioSignal = Number.isFinite(state.audioLevelDbfs)
-      ? `${state.audioLevelDbfs.toFixed(1)} dBFS audio`
-      : 'audio signal --';
-    return `${detail}${device} · ${iqStatus} · ${workerStatus} · ${rfStatus} · ${audioSignal} · audio ${state.audioState}`;
+      ? `音频 ${state.audioLevelDbfs.toFixed(1)} dBFS`
+      : '音频信号 --';
+    return `${detail}${device} · ${iqStatus} · ${workerStatus} · ${rfStatus} · ${audioSignal} · 音频 ${statusLabel(state.audioState)}`;
   }
   return detail;
 }
@@ -57,15 +70,15 @@ export function localSdrCardView(state) {
   return {
     connectionLabel: state.connected
       ? adsbActive
-        ? `${state.aircraftHeard || 0} HEARD`
-        : 'STREAMING'
-      : String(state.status || 'idle').toUpperCase(),
+        ? `已听 ${state.aircraftHeard || 0}`
+        : '接收中'
+      : statusLabel(state.status || 'idle'),
     connectionActive: Boolean(state.connected),
     connectLabel: transitional
-      ? String(state.status).toUpperCase()
+      ? statusLabel(state.status)
       : state.connected
-        ? 'DISCONNECT'
-        : 'CONNECT',
+        ? '断开'
+        : '连接',
     connectDisabled: transitional || !state.webUsbSupported,
     connectPressed: Boolean(state.connected),
     fmActive,
@@ -73,10 +86,10 @@ export function localSdrCardView(state) {
     modeDisabled: transitional,
     locateLabel:
       state.locationStatus === 'requesting'
-        ? 'LOCATING…'
+        ? '定位中…'
         : state.locationStatus === 'ready'
-          ? 'LOCATED'
-          : 'LOCATE',
+          ? '已定位'
+          : '定位',
     locateDisabled: state.locationStatus === 'requesting',
     locateActive: state.locationStatus === 'ready',
     changeDeviceDisabled: transitional || !state.webUsbSupported,
@@ -135,12 +148,19 @@ export function internetRadioAudioActive(state) {
 export function localSdrFeedLine(feedState) {
   const feeds = feedState?.configured === true ? feedState.feeds : null;
   if (!Array.isArray(feeds) || !feeds.length) return null;
+  const feedStatusLabel = {
+    live: '在线',
+    unreachable: '不可达',
+    invalid: '无效',
+    stale: '陈旧',
+  };
   const names = feeds.map((feed) => {
     const name = localReceiverFeedName(feed, feeds);
+    const status = feedStatusLabel[feed?.status] || feed?.status || '不可达';
     return feedState.polling || feed?.status === 'invalid'
-      ? `${name} ${feed?.status || 'unreachable'}`
+      ? `${name} ${status}`
       : name;
   });
-  const suffix = feedState.polling ? '' : ' · read while Local ADS-B is on';
-  return `Decoder feeds: ${names.join(' · ')}${suffix}`;
+  const suffix = feedState.polling ? '' : ' · 开启本地 ADS-B 时读取';
+  return `解码馈源：${names.join(' · ')}${suffix}`;
 }

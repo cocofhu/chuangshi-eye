@@ -32,7 +32,7 @@ const VIEWPORT_MARGIN_PX = 6;
  */
 const PANEL_OBSTACLE_IDS = ['command-dock', 'gev-voice-control'];
 const PANEL_FLOAT_HINT_STORAGE_KEY = `godsEyeView.${PANEL_POSITION_STORAGE_VERSION}.panelFloatHintShown`;
-const PANEL_FLOAT_HINT = 'Double-click the header to snap the panel back';
+const PANEL_FLOAT_HINT = '双击标题栏可将面板吸回原位';
 /** Header children whose own interaction wins over a drag or a snap-back. */
 const INTERACTIVE_SELECTOR =
   'input, select, option, textarea, button, a, [role="button"]';
@@ -221,7 +221,7 @@ export class PanelPositionControls {
       );
       if (hadOldPositions) {
         this._showToast(
-          'Panel layout updated — positions reset to new defaults',
+          '面板布局已更新 — 位置已重置为新默认值',
         );
       }
     } catch {
@@ -761,7 +761,7 @@ export class PanelPositionControls {
       handle.dataset.dir = dir;
       handle.setAttribute('aria-hidden', 'true');
       if (dir === 'se') {
-        handle.title = 'Drag to resize · double-click the header to snap back';
+        handle.title = '拖动调整大小 · 双击标题栏吸回原位';
       }
       panelEl.appendChild(handle);
       this._resizeHandles.push(handle);

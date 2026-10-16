@@ -122,15 +122,15 @@ export function createQueries({ state: layerState, services, parts, source }) {
       return {
         ...summary,
         reason: summary.count
-          ? `mapped matches within ${km} km of the subject`
-          : `none mapped within ${km} km; not a complete 250 km survey`,
+          ? `目标周边 ${km} 公里内的已标注匹配`
+          : `目标周边 ${km} 公里内无标注；并非完整的 250 公里普查`,
       };
     }
     return {
       ...summary,
       reason: summary.count
-        ? 'mapped matches from the loaded viewport'
-        : 'viewport feed is not a complete 250 km survey',
+        ? '已加载视野内的已标注匹配'
+        : '视野数据并非完整的 250 公里普查',
     };
   }
 

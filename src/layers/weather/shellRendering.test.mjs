@@ -559,7 +559,7 @@ for (const outcome of ['fetch', 'decode', 'dimensions', 'timeout']) {
     assert.equal(h.shell.getDiagnostics().time, times[0]);
     assert.equal(
       h.shell.getDiagnostics().error,
-      'Weather tiles unavailable · previous frame retained',
+      '天气瓦片不可用 · 保留上一帧',
     );
     fail = false;
     assert.equal(await show(h, times[2]), true);

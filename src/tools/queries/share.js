@@ -100,7 +100,7 @@ function appBase(services) {
   try {
     return new URL(services.app.baseUrl).href;
   } catch {
-    throw new ToolError('unavailable', "The app's address is not configured");
+    throw new ToolError('unavailable', '应用地址未配置');
   }
 }
 
@@ -130,7 +130,7 @@ export const showInGodsEyeView = defineTool({
     });
     const url = viewUrl(base, view);
     return {
-      summary: `Open ${label} in God's Eye View: ${url}`,
+      summary: `在创世之眼中打开 ${label}：${url}`,
       data: { url, view },
     };
   },

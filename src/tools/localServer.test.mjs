@@ -74,7 +74,7 @@ test('the stdio server answers newline-delimited requests using only its data so
   );
   assert.equal(
     byId.get(3).result.content[0].text,
-    '1 earthquake of M2.5+ in the last 24 hours worldwide; strongest M5.1 near Hualien.',
+    '1 次 M2.5+ 地震，近 24 小时，全球；最强 M5.1 near Hualien。',
   );
   // The earthquake feed is fetched directly; nothing else was contacted.
   assert.deepEqual(contacted, ['https://earthquake.usgs.gov']);

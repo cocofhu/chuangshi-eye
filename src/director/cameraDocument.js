@@ -24,7 +24,7 @@ function reference(value, path) {
   if (value !== 'ellipsoid')
     fail(
       path,
-      'expected ellipsoid height in meters; terrain-relative heights are not supported',
+      '需要椭球高（米）；不支持相对地形高度',
     );
 }
 function pose(value, path, version, anchorIds, explicit = false) {
@@ -42,7 +42,7 @@ function pose(value, path, version, anchorIds, explicit = false) {
   if (anchored) {
     string(value.anchorId, `${path}.anchorId`);
     if (!anchorIds.has(value.anchorId))
-      fail(`${path}.anchorId`, 'unknown scene anchor');
+      fail(`${path}.anchorId`, '未知场景锚点');
   } else {
     coordinates(value, path, POSITION, explicit, version < 3);
     if (explicit || Object.hasOwn(value, 'altitudeReference'))
@@ -75,7 +75,7 @@ export function validateSceneCameras(scene, path, version) {
     optional(shot, 'move', at, (move, field) => {
       fields(move, field, ['from', 'easing']);
       if (!['linear', 'cubic-in-out'].includes(move.easing))
-        fail(`${field}.easing`, 'expected linear or cubic-in-out');
+        fail(`${field}.easing`, '缓动应为 linear 或 cubic-in-out');
       pose(move.from, `${field}.from`, version, anchorIds, true);
       pose(shot.camera, `${at}.camera`, version, anchorIds, true);
       number(shot.durationSec, `${at}.durationSec`, 0.2, 86400, false);

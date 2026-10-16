@@ -28,9 +28,9 @@ export function parseGeojsonLines(text) {
 
 /** The singular label for a local infrastructure layer. */
 export function layerTitle(layerId) {
-  if (layerId === 'local-datacenters') return 'Datacenter';
-  if (layerId === 'local-dams') return 'Dam';
-  return 'Feature';
+  if (layerId === 'local-datacenters') return '数据中心';
+  if (layerId === 'local-dams') return '水坝';
+  return '地物';
 }
 
 /**

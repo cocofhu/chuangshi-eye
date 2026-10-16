@@ -314,7 +314,7 @@ test('keyless ion stacks stay focusable, aria-disabled, and say why', () => {
   assert.equal(bingAerial.getAttribute('aria-disabled'), 'true');
   assert.equal(
     bingAerial.getAttribute('aria-label'),
-    'Bing Aerial unavailable: Needs CESIUM_ION_TOKEN — add it in Provider Settings',
+    'Bing Aerial不可用：Needs CESIUM_ION_TOKEN — add it in Provider Settings',
   );
   assert.ok(bingAerial.classList.contains('unavailable'));
   assert.equal(
@@ -357,7 +357,7 @@ test('a non-ion stack that fails never claims an ion token is required', () => {
   assert.equal(google.getAttribute('aria-disabled'), 'true');
   assert.equal(
     google.getAttribute('aria-label'),
-    'Google 3D unavailable: Needs GOOGLE_MAPS_API_KEY — add it in Provider Settings',
+    'Google 3D不可用：Needs GOOGLE_MAPS_API_KEY — add it in Provider Settings',
   );
   assert.equal(
     chipText(google),
@@ -413,13 +413,13 @@ test("models carry the stack's own reason and never invent an active chip", () =
     [
       {
         requirement: 'ION',
-        unavailableHint: 'Needs CESIUM_ION_TOKEN — add it in Provider Settings',
-        title: 'Needs CESIUM_ION_TOKEN — add it in Provider Settings',
+        unavailableHint: '需要 CESIUM_ION_TOKEN — 请在提供者设置中添加',
+        title: '需要 CESIUM_ION_TOKEN — 请在提供者设置中添加',
       },
       {
         requirement: '',
-        unavailableHint: 'Hybrid is unavailable',
-        title: 'Hybrid is unavailable',
+        unavailableHint: 'Hybrid不可用',
+        title: 'Hybrid不可用',
       },
     ],
   );

@@ -1,3 +1,5 @@
+import { layerDisplayLabel } from '../data/layerDisplayLabels.js';
+
 const contract = (layers, methods) =>
   Object.freeze({
     layers: Object.freeze(layers),
@@ -53,7 +55,7 @@ export const CATALOG_SOURCE_CONTRACTS = Object.freeze({
 /** An omitted provider is unavailable, never an authoritative empty dataset. */
 export class SourceUnavailableError extends Error {
   constructor(name) {
-    super(`Data source not configured: ${name}`);
+    super(`未配置数据源：${name}`);
     this.name = 'SourceUnavailableError';
     this.code = 'unavailable';
     this.unavailable = true;
@@ -100,7 +102,7 @@ export function resolveCatalogSources(supplied = {}) {
               available: !missing.has(name),
               source: name,
               reason: missing.has(name)
-                ? `${layer.name || id}: data source not configured`
+                ? `${layerDisplayLabel(layer)}：未配置数据源`
                 : null,
             }),
           );

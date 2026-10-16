@@ -1,0 +1,478 @@
+/* ═══════════════════════════════════════════════
+   创世之眼 · 指挥中心主题层
+   叠加在原有组件样式之上：统一配色、玻璃质感、发光描边与入场动效。
+   只覆写视觉属性，不改动布局与交互。
+   ═══════════════════════════════════════════════ */
+
+:root {
+  --bg-dark: #05070d;
+  --glass-bg: linear-gradient(160deg, rgba(14, 22, 38, 0.78), rgba(6, 10, 20, 0.72));
+  --glass-solid: rgba(8, 13, 24, 0.88);
+  --glass-border: rgba(120, 200, 255, 0.12);
+  --glass-border-hover: rgba(120, 220, 255, 0.32);
+  --accent: #3ee0ff;
+  --accent-2: #7c5cff;
+  --accent-warm: #ffb547;
+  --accent-dim: rgba(62, 224, 255, 0.14);
+  --accent-glow: rgba(62, 224, 255, 0.45);
+  --text-primary: #eaf4ff;
+  --text-secondary: rgba(214, 230, 248, 0.62);
+  --text-dim: rgba(214, 230, 248, 0.36);
+  --menu-bg: #0b1220;
+  --panel-radius: 14px;
+  --hud-shadow:
+    0 0 0 1px rgba(62, 224, 255, 0.06) inset,
+    0 18px 50px -12px rgba(0, 0, 0, 0.7),
+    0 0 28px -10px rgba(62, 224, 255, 0.35);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: radial-gradient(120% 90% at 50% 0%, #0b1730 0%, #05070d 60%) fixed;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'tnum' 1;
+}
+
+::selection {
+  background: rgba(62, 224, 255, 0.3);
+  color: #fff;
+}
+
+/* 细滚动条 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(62, 224, 255, 0.35) transparent;
+}
+
+
+/* ── 首启任务面板 ───────────────────────────── */
+#first-run-launcher {
+  background:
+    linear-gradient(var(--glass-solid), var(--glass-solid)) padding-box,
+    linear-gradient(135deg, rgba(62, 224, 255, 0.55), rgba(124, 92, 255, 0.25) 40%, rgba(62, 224, 255, 0.08) 70%, rgba(255, 181, 71, 0.35)) border-box;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  box-shadow: var(--hud-shadow);
+  backdrop-filter: blur(var(--glass-blur, 12px)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px)) saturate(140%);
+}
+
+#first-run-launcher:not([hidden]) {
+  animation: cse-rise 520ms var(--ease-out-expo) both;
+}
+
+#first-run-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: linear-gradient(90deg, #ffffff 0%, #bdf3ff 55%, #9d8cff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.first-run-kicker {
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  text-shadow: 0 0 12px var(--accent-glow);
+}
+
+.first-run-choices button {
+  position: relative;
+  border: 1px solid rgba(120, 200, 255, 0.1);
+  background: linear-gradient(90deg, rgba(62, 224, 255, 0.05), rgba(255, 255, 255, 0.015));
+  transition:
+    transform 240ms var(--ease-out-expo),
+    border-color 200ms ease,
+    background 200ms ease,
+    box-shadow 240ms ease;
+}
+
+.first-run-choices button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18%;
+  bottom: 18%;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  opacity: 0;
+  transform: scaleY(0.3);
+  transition: opacity 200ms ease, transform 260ms var(--ease-out-expo);
+}
+
+.first-run-choices button:hover,
+.first-run-choices button:focus-visible {
+  transform: translateX(3px);
+  border-color: var(--glass-border-hover);
+  background: linear-gradient(90deg, rgba(62, 224, 255, 0.14), rgba(124, 92, 255, 0.05));
+  box-shadow: 0 0 24px -8px var(--accent-glow);
+}
+
+.first-run-choices button:hover::before,
+.first-run-choices button:focus-visible::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.first-run-choices button .material-symbols-outlined:first-child {
+  color: var(--accent);
+  filter: drop-shadow(0 0 6px rgba(62, 224, 255, 0.55));
+}
+
+.first-run-choices button:not(:hover) .first-run-arrow {
+  opacity: 0.5;
+}
+
+/* 入场依次浮现 */
+#first-run-launcher:not([hidden]) .first-run-choices button {
+  animation: cse-fade-in 480ms var(--ease-out-expo) both;
+}
+#first-run-launcher .first-run-choices button:nth-child(2) { animation-delay: 40ms; }
+#first-run-launcher .first-run-choices button:nth-child(3) { animation-delay: 80ms; }
+#first-run-launcher .first-run-choices button:nth-child(4) { animation-delay: 120ms; }
+#first-run-launcher .first-run-choices button:nth-child(5) { animation-delay: 160ms; }
+#first-run-launcher .first-run-choices button:nth-child(6) { animation-delay: 200ms; }
+#first-run-launcher .first-run-choices button:nth-child(7) { animation-delay: 240ms; }
+#first-run-launcher .first-run-choices button:nth-child(8) { animation-delay: 280ms; }
+
+/* ── 通用按钮与输入 ─────────────────────────── */
+button,
+input,
+select {
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 200ms ease,
+    color 180ms ease;
+}
+
+input[type='checkbox'] {
+  accent-color: var(--accent);
+}
+
+input[type='range'] {
+  accent-color: var(--accent);
+}
+
+/* ── 动效 ──────────────────────────────────── */
+@keyframes cse-rise {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    translate: 0 0;
+  }
+}
+
+@keyframes cse-fade-in {
+  from {
+    opacity: 0;
+    translate: -8px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #first-run-launcher:not([hidden]),
+  #first-run-launcher:not([hidden]) .first-run-choices button {
+    animation: none !important;
+  }
+  .first-run-choices button,
+  .first-run-choices button::before {
+    transition: none;
+  }
+  .first-run-choices button:hover,
+  .first-run-choices button:focus-visible {
+    transform: none;
+  }
+}
+
+/* 低端/小屏设备：关闭开销较大的模糊 */
+@media (max-width: 620px) {
+  #first-run-launcher {
+    backdrop-filter: blur(var(--glass-blur, 12px));
+    -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
+  }
+}
+
+/* ── 方案补全：语义色、字体、面板、顶栏、角标 ── */
+
+:root {
+  /* 与设计方案对齐：主青 + 鎏金辅色 + 告警语义 */
+  --accent: #3ee6ff;
+  --accent-gold: #f5c46b;
+  --accent-warm: #f5c46b;
+  --accent-2: #7c5cff;
+  --accent-dim: rgba(62, 230, 255, 0.14);
+  --accent-glow: rgba(62, 230, 255, 0.4);
+  --status-ok: #2fe0a0;
+  --status-warn: #ffb020;
+  --status-alert: #ff4d5e;
+  --panel-radius: 10px;
+  --btn-radius: 8px;
+  --glass-blur: 12px;
+  --font-sans: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', -apple-system,
+    BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', monospace;
+}
+
+/* 中文可读性：正文字体与行高 */
+body,
+.panel,
+.panel-collapsible,
+.cyber-panel,
+.cockpit-panel,
+#first-run-launcher {
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* 毛玻璃：仅静态面板，模糊降到 12px（工程师建议） */
+.panel,
+.panel-collapsible,
+.cyber-panel,
+.cockpit-side-panel,
+.command-dock,
+#status-bar,
+.cs-topbar {
+  background: var(--glass-solid);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--hud-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+}
+
+/* 浮层/弹窗：不透明，避免叠在 Cesium 上吃 GPU */
+.modal,
+.overlay-card,
+.menu-popup,
+[role='dialog'] {
+  background: rgba(8, 14, 22, 0.94);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* 面板 L 形角标 */
+.panel,
+.panel-collapsible,
+.cyber-panel,
+.cockpit-side-panel,
+#first-run-launcher {
+  position: relative;
+}
+
+.panel::before,
+.panel-collapsible::before,
+.cyber-panel::before,
+.cockpit-side-panel::before,
+#first-run-launcher::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  pointer-events: none;
+  border-radius: calc(var(--panel-radius) - 4px);
+  background:
+    linear-gradient(var(--accent), var(--accent)) top left / 8px 1px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) top left / 1px 8px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) top right / 8px 1px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) top right / 1px 8px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) bottom left / 8px 1px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) bottom left / 1px 8px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) bottom right / 8px 1px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) bottom right / 1px 8px no-repeat;
+  opacity: 0.28;
+}
+
+/* 标题与关键数字用鎏金 */
+.panel-title,
+.cyber-panel-title,
+#first-run-title,
+.cs-topbar__brand,
+.hud-metric-value,
+.status-value {
+  color: var(--accent-gold);
+  letter-spacing: 0.04em;
+}
+
+.cs-topbar__brand {
+  color: #f5c46b !important;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-shadow: none;
+}
+
+.panel-title,
+.cyber-panel-title {
+  font-weight: 600;
+}
+
+/* 顶部状态栏（工程师挂 .cs-topbar DOM） */
+.cs-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 16px;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.cs-topbar__brand {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.cs-topbar__clock {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+.cs-topbar__sources {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cs-topbar__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--status-ok);
+  box-shadow: 0 0 8px rgba(47, 224, 160, 0.55);
+}
+
+.cs-topbar__dot[data-state='warn'] {
+  background: var(--status-warn);
+  box-shadow: 0 0 8px rgba(255, 176, 32, 0.55);
+}
+
+.cs-topbar__dot[data-state='alert'],
+.cs-topbar__dot[data-state='offline'] {
+  background: var(--status-alert);
+  box-shadow: 0 0 8px rgba(255, 77, 94, 0.55);
+}
+
+
+/* 面板入场 */
+.panel,
+.panel-collapsible,
+.cyber-panel,
+.cockpit-side-panel {
+  animation: cse-panel-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes cse-panel-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+
+/* 减弱动态：关动画与毛玻璃 */
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .panel-collapsible,
+  .cyber-panel,
+  .cockpit-side-panel {
+    animation: none !important;
+  }
+
+  button,
+  input,
+  select {
+    transition: none;
+  }
+
+  .panel,
+  .panel-collapsible,
+  .cyber-panel,
+  .cockpit-side-panel,
+  .command-dock,
+  #status-bar,
+  .cs-topbar,
+  #first-run-launcher {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(8, 14, 22, 0.94);
+  }
+}
+
+/* 小屏：关掉模糊 */
+@media (max-width: 620px) {
+  .panel,
+  .panel-collapsible,
+  .cyber-panel,
+  .cockpit-side-panel,
+  .command-dock,
+  #status-bar,
+  .cs-topbar,
+  #first-run-launcher {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(8, 14, 22, 0.94);
+  }
+
+}
+
+/* ── 首屏深底：地球未画出前避免透出默认灰绿画布 ── */
+#cesiumContainer,
+#cesiumContainer canvas,
+#loading-screen {
+  background: #05070d !important;
+  background-color: #05070d !important;
+}
+
+#loading-screen {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #0b1730 0%, #05070d 60%) !important;
+}
+
+/* 顶栏附近旧品牌字标：与鎏金体系统一（克制，不加光效花活） */
+.title-glow,
+.brand-logo,
+.title-accent {
+  color: var(--accent-gold);
+}
+
+#title-bar h1,
+#title-bar .title-accent,
+.loader-content .title-accent {
+  color: var(--accent-gold);
+  text-shadow: none;
+}
+
+#title-bar .title-logo {
+  filter: drop-shadow(0 0 10px rgba(245, 196, 107, 0.35));
+}
+

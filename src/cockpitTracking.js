@@ -61,7 +61,7 @@ export function enterCockpitWithTracking({
         })
       ) {
         entryError = new Error(
-          'Selected aircraft could not be tracked for Cockpit entry',
+          '所选航空器无法跟踪以进入驾驶舱',
         );
       }
     }
@@ -85,7 +85,7 @@ export function enterCockpitWithTracking({
         })
       ) {
         entryError ||= new Error(
-          'Prior aircraft tracking could not be restored',
+          '无法恢复先前的航空器跟踪',
         );
       }
     } catch (error) {
@@ -104,6 +104,6 @@ export function enterCockpitWithTracking({
     entered,
     error: entered
       ? null
-      : entryError?.message || 'Cockpit entry was unavailable',
+      : entryError?.message || '驾驶舱入口不可用',
   };
 }

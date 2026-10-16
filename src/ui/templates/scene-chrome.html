@@ -1,8 +1,19 @@
+  <!-- 指挥中心顶栏：品牌 / 北京时间 / 数据源状态 -->
+  <header class="cs-topbar" role="banner" aria-label="全局状态栏">
+    <div class="cs-topbar__brand">创世之眼</div>
+    <time class="cs-topbar__clock" data-cs-clock datetime="">——</time>
+    <div class="cs-topbar__sources" aria-label="数据源状态">
+      <span class="cs-topbar__dot" data-source="tianditu" data-state="ok" title="天地图"></span>
+      <span class="cs-topbar__dot" data-source="earthquake" data-state="ok" title="地震速报"></span>
+      <span class="cs-topbar__dot" data-source="typhoon" data-state="ok" title="台风路径"></span>
+      <span class="cs-topbar__dot" data-source="flights" data-state="ok" title="实时航班"></span>
+    </div>
+  </header>
   <div id="cesiumContainer"></div>
   <div id="world-overlay-root" aria-hidden="true">
     <canvas id="world-overlay-canvas"></canvas>
   </div>
-  <div id="world-overlay-actions" class="world-overlay-accessibility" role="region" aria-label="Visible map targets">
+  <div id="world-overlay-actions" class="world-overlay-accessibility" role="region" aria-label="可见地图目标">
     <div id="world-overlay-action-list"></div>
     <div id="world-overlay-status" role="status" aria-live="polite" aria-atomic="true"></div>
   </div>
@@ -21,34 +32,34 @@
   </div>
 
   <!-- Top-center camera and share actions -->
-  <nav id="top-center-actions" aria-label="Globe actions">
-    <button id="clear-selected-layers" type="button" aria-label="Clear selected data layers" title="Turn off all selected data layers">
+  <nav id="top-center-actions" aria-label="地球操作">
+    <button id="clear-selected-layers" type="button" aria-label="关闭已选图层" title="关闭所有已选数据图层">
       <span class="material-symbols-outlined" aria-hidden="true">layers_clear</span>
     </button>
-    <button id="share-btn" type="button" aria-label="Copy share link" title="Copy share link">
+    <button id="share-btn" type="button" aria-label="复制分享链接" title="复制分享链接">
       <span class="share-icon" aria-hidden="true">&#x1F517;</span>
     </button>
-    <button id="tilt-map-view" type="button" aria-label="Tilt map to oblique view" aria-pressed="false" title="Toggle straight-down and tilted map views">
+    <button id="tilt-map-view" type="button" aria-label="倾斜地图视角" aria-pressed="false" title="在俯视与倾斜视角间切换">
       <span class="material-symbols-outlined" aria-hidden="true">view_in_ar</span>
     </button>
-    <button id="north-up-view" type="button" aria-label="Reset map to north up" title="Reset map bearing to north">
+    <button id="north-up-view" type="button" aria-label="恢复正北朝上" title="将地图方位恢复为正北">
       <span class="camera-compass-n" aria-hidden="true">N</span>
       <span class="camera-compass-needle material-symbols-outlined" aria-hidden="true">navigation</span>
     </button>
-    <button id="reset-globe-view" type="button" aria-label="Reset to full globe view" title="Reset camera and return to full globe view">
+    <button id="reset-globe-view" type="button" aria-label="重置为全球视角" title="重置相机并回到全球视角">
       <span class="material-symbols-outlined" aria-hidden="true">public</span>
     </button>
   </nav>
   <div id="global-loading-status" role="status" aria-live="polite" aria-atomic="true" hidden>
-    <span id="global-loading-label">LOADING LIVE DATA</span>
+    <span id="global-loading-label">正在加载实时数据</span>
     <span id="global-loading-detail"></span>
   </div>
   <div id="traffic-sync-chip" aria-live="polite">
-    <span id="traffic-sync-label">syncing road network</span>
+    <span id="traffic-sync-label">正在同步路网</span>
     <span id="traffic-sync-progress">0%</span>
   </div>
   <div id="cctv-sync-chip" aria-live="polite">
-    <span id="cctv-sync-label">loading frames</span>
+    <span id="cctv-sync-label">正在加载画面</span>
     <span id="cctv-sync-progress">0/0</span>
   </div>
 

@@ -79,7 +79,7 @@ test('weather maps return the latest frame as an image over the area', async () 
   });
   assert.equal(
     result.summary,
-    'MRMS radar at 2026-10-01T19:00:00.000Z over 50 km around 30.270, -97.740.',
+    'MRMS radar，2026-10-01T19:00:00.000Z，覆盖 30.270, -97.740 周边 50 km。',
   );
   assert.deepEqual(result.images, [
     { mimeType: 'image/png', data: 'iVBORw==' },
@@ -100,7 +100,7 @@ test('weather maps return the latest frame as an image over the area', async () 
       map: 'radar',
       area: { lat: 51.5, lon: -0.1, radius_km: 50 },
     }),
-    /outside the radar map's coverage: Contiguous United States/,
+    /超出 radar 地图覆盖：Contiguous United States/,
   );
   const down = composeCatalog({
     tools: coreTools,
@@ -139,14 +139,15 @@ test('wind is sampled from the model grid at the location', async () => {
   });
   assert.equal(
     result.summary,
-    'Wind at 30.2700, -97.7400: 36 km/h from the W.',
+    '30.2700, -97.7400：风速 36 km/h，来自 W。',
   );
   assert.equal(result.data.speed_mps, 10);
   assert.equal(result.data.from, 'W');
   assert.deepEqual(wind.requested, ['ifs']);
   u.fill(0);
   const calm = await catalog.call('get_wind', { location: { lat: 0, lon: 0 } });
-  assert.equal(calm.summary, 'Wind at 0.0000, 0.0000: 0 km/h, calm.');
+  assert.equal(calm.summary, '0.0000, 0.0000：风速 0 km/h，静风。');
+  assert.equal(calm.data.from, null);
   assert.equal(calm.data.calm, true);
   const down = composeCatalog({
     tools: coreTools,

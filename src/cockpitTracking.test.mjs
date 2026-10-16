@@ -124,7 +124,7 @@ test('Cockpit entry rollback restores the tracker captured before Contacts activ
     selectionOrigin: 'voice',
   });
 
-  assert.deepEqual(result, { entered: false, error: 'Cockpit entry was unavailable' });
+  assert.deepEqual(result, { entered: false, error: '驾驶舱入口不可用' });
   assert.deepEqual(calls, [
     ['current:stop', { origin: 'voice' }],
     'prior:stop',
@@ -170,7 +170,7 @@ test('failed Cockpit entry clears an attempted durable target when no prior targ
     selectionOrigin: 'voice',
   });
 
-  assert.deepEqual(result, { entered: false, error: 'Cockpit entry was unavailable' });
+  assert.deepEqual(result, { entered: false, error: '驾驶舱入口不可用' });
   assert.deepEqual(calls, [
     ['track', 'attempted', { origin: 'voice' }],
     ['stop', { origin: 'voice' }],

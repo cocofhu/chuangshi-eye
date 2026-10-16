@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   collectKeyUpdates,
   keySetupChipLabel,
+  paintedSetupNotice,
   stripKeylessBasemapFromHash,
   bindKeySetupPlacement,
   waitForChatGptOAuth,
@@ -93,7 +94,7 @@ test('OAuth login polling stops on login or HTTP failure instead of waiting for 
     await assert.rejects(waitForChatGptOAuth({
       fetchImpl: async () => { checks += 1; return { ok: result.ok, json: async () => result.payload }; },
       sleep: () => assert.fail('failed login must stop polling'),
-    }), { message: result.payload.error });
+    }), { message: '无法检查 ChatGPT 登录。请重试。' });
     assert.equal(checks, 1);
   }
 });
@@ -155,4 +156,22 @@ test('aborting pending setup removes its surface and ignores a late response', a
   assert.deepEqual(removed, ['chip', 'root']);
   resolveResponse({ ok: true, json: async () => ({ keys: [] }) });
   assert.equal(await pending, null);
+});
+
+test('key setup status maps known server English and drops the rest', () => {
+  assert.equal(
+    paintedSetupNotice(
+      'ChatGPT OAuth is available only from this machine',
+      '无法检查 ChatGPT 登录。',
+    ),
+    'ChatGPT 登录只能从本机使用',
+  );
+  assert.equal(
+    paintedSetupNotice('未设置密钥', '保存失败。'),
+    '未设置密钥',
+  );
+  assert.equal(
+    paintedSetupNotice('something the server invented', '保存失败。'),
+    '保存失败。',
+  );
 });

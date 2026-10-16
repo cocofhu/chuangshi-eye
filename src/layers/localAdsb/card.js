@@ -74,9 +74,9 @@ export function localAdsbReceiverLine(record) {
 export function localAdsbSourceText(record) {
   const sources = recordSources(record);
   if (sources.includes('webusb') && sources.includes('feed'))
-    return 'Your RTL-SDR receiver and decoder feed';
-  if (sources.includes('feed')) return 'Your decoder feed';
-  return 'Your RTL-SDR receiver';
+    return '本机 RTL-SDR 与解码馈源';
+  if (sources.includes('feed')) return '本机解码馈源';
+  return '本机 RTL-SDR';
 }
 
 /**
@@ -129,13 +129,13 @@ export function localAdsbCardModel(
   return {
     title: localAdsbTitle(record),
     details: [
-      `ICAO ${icao} · ${record?.callsign || 'NO CALLSIGN'}`,
+      `ICAO ${icao} · ${record?.callsign || '无呼号'}`,
       localAdsbClassLine(record, aircraftClass || {}),
       identity,
       routeLine,
-      `ALT ${grouped(altitude)} FT · GS ${speed === null ? DASH : speed} KT · TRK ${track === null ? DASH : `${track}°`}`,
-      `V/S ${vertical === null ? DASH : `${vertical > 0 ? '+' : ''}${grouped(vertical)} FPM`}`,
-      `POSITION ${ageS === null ? DASH : `${ageS} S AGO`} · ${messages} ${messages === 1 ? 'MSG' : 'MSGS'}`,
+      `ALT ${grouped(altitude)} FT · 地速 ${speed === null ? DASH : speed} KT · 航迹 ${track === null ? DASH : `${track}°`}`,
+      `升降 ${vertical === null ? DASH : `${vertical > 0 ? '+' : ''}${grouped(vertical)} FPM`}`,
+      `位置 ${ageS === null ? DASH : `${ageS} 秒前`} · ${messages} 条报文`,
       localAdsbReceiverLine(record),
     ].filter(Boolean),
     accent: LOCAL_ADSB_COLOR,

@@ -6,11 +6,17 @@ import { LAYER_SOURCE } from './policy.js';
  * WebUSB receiver and the server's decoder feeds. Pure; no DOM or Cesium.
  */
 
-export const FEED_SOURCE = 'Decoder feeds';
-export const COMBINED_SOURCE = 'WebUSB + decoder feeds';
+export const FEED_SOURCE = '解码数据源';
+export const COMBINED_SOURCE = 'WebUSB + 解码数据源';
 
-function plural(count, one, many) {
-  return count === 1 ? one : many;
+const FEED_STATUS_LABEL = {
+  stale: '过期',
+  unreachable: '不可达',
+  invalid: '无效',
+};
+
+function feedStatusLabel(status) {
+  return FEED_STATUS_LABEL[status] || status;
 }
 
 /**
@@ -30,7 +36,7 @@ export function describeFeedProblems(feeds) {
   return [...byStatus]
     .map(([status, names]) => {
       const list = [...names];
-      return `${plural(list.length, 'feed', 'feeds')} ${list.join(', ')} ${status}`;
+      return `数据源 ${list.join('、')} ${feedStatusLabel(status)}`;
     })
     .join(' · ');
 }
@@ -48,26 +54,26 @@ function webUsbStatus(receiver, heard, feedState) {
   if (receiver.status === 'error')
     return { status: 'error', error: receiver.message };
   if (receiver.status === 'connecting' || receiver.status === 'tuning')
-    return { loading: true, loadingLabel: 'opening receiver' };
+    return { loading: true, loadingLabel: '正在打开接收机' };
   if (
     feedState?.polling &&
     feedState.configured === null &&
     !receiver.connected
   )
-    return { loading: true, loadingLabel: 'checking decoder feeds' };
+    return { loading: true, loadingLabel: '正在检查解码数据源' };
   if (!receiver.webUsbSupported)
     return {
       status: 'idle',
-      statusMessage: 'WebUSB needs desktop Chrome or Edge',
+      statusMessage: 'WebUSB 需要桌面版 Chrome 或 Edge',
     };
   if (!receiver.connected)
-    return { status: 'idle', statusMessage: 'connect a receiver in Radio' };
+    return { status: 'idle', statusMessage: '请在电台中连接接收机' };
   if (receiver.mode !== 'adsb')
-    return { status: 'idle', statusMessage: 'receiver is in FM mode' };
+    return { status: 'idle', statusMessage: '接收机处于调频模式' };
   const rate = Number.isFinite(receiver.messagesPerSecond)
     ? `${receiver.messagesPerSecond} msg/s`
-    : 'listening';
-  return { status: 'streaming', loadingLabel: `${heard} heard · ${rate}` };
+    : '收听中';
+  return { status: 'streaming', loadingLabel: `${heard} 架已闻 · ${rate}` };
 }
 
 /**
@@ -97,19 +103,19 @@ export function localAdsbStatus({ receiver, feedState, heard }) {
   const source = usbActive ? COMBINED_SOURCE : FEED_SOURCE;
   const live = feedState.feeds.filter((feed) => feed.status === 'live');
   const problems = [describeFeedProblems(feedState.feeds)].filter(Boolean);
-  if (usbActive && receiver.status === 'error') problems.push('USB error');
+  if (usbActive && receiver.status === 'error') problems.push('USB 错误');
   const rate =
     usbActive &&
     receiver.status !== 'error' &&
     Number.isFinite(receiver.messagesPerSecond)
       ? ` · USB ${receiver.messagesPerSecond} msg/s`
       : '';
-  const heardText = `${heard} heard`;
+  const heardText = `${heard} 架已闻`;
   if (!problems.length) {
     return {
       source,
       status: 'streaming',
-      loadingLabel: `${live.length} ${plural(live.length, 'feed', 'feeds')} live · ${heardText}${rate}`,
+      loadingLabel: `${live.length} 路实时 · ${heardText}${rate}`,
     };
   }
   const problemText = problems.join(' · ');

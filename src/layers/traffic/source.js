@@ -64,12 +64,12 @@ export function roadRequestError(status, cause) {
   const code = Number.isFinite(status) ? status : null;
   const message =
     code === 429
-      ? 'OpenFreeMap tiles rate-limited'
+      ? 'OpenFreeMap 瓦片已限流'
       : code === 504 || cause?.name === 'TimeoutError'
-        ? 'OpenFreeMap tiles timed out'
+        ? 'OpenFreeMap 瓦片超时'
         : code === null
-          ? 'OpenFreeMap tiles unavailable'
-          : `OpenFreeMap tiles unavailable (HTTP ${code})`;
+          ? 'OpenFreeMap 瓦片不可用'
+          : `OpenFreeMap 瓦片不可用（HTTP ${code}）`;
   return Object.assign(new RoadRequestError(message, { status: code, cause }), {
     retryable: cause?.retryable !== false,
     code: cause?.code,
@@ -339,7 +339,7 @@ export function createTrafficSource({
             resolve({
               segments: [],
               hasKey: Boolean(liveModeHint()),
-              error: 'TomTom flow timed out',
+              error: 'TomTom 路况超时',
             }),
           (options.timeoutSec ?? 20) * 1000,
         );

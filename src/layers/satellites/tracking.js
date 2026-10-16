@@ -228,7 +228,7 @@ export function createTracking({ state: layerState, services, parts, source }) {
     return {
       id: String(noradId),
       layerId: 'satellites',
-      layerName: 'Satellites',
+      layerName: '卫星轨道',
       source: 'CelesTrak',
       label: name,
       latitude: pos.latitude,
@@ -369,7 +369,7 @@ export function createTracking({ state: layerState, services, parts, source }) {
     if (companions.length > 0) {
       const extra = companions.length - 1;
       details.push(
-        `DOCKED · ${companions[0]}${extra > 0 ? ` · +${extra}` : ''}`,
+        `对接 · ${companions[0]}${extra > 0 ? ` · +${extra}` : ''}`,
       );
     }
     const current = layerState._trackedEntity.gevLabelModel;

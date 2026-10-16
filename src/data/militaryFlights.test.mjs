@@ -50,7 +50,7 @@ const FULL_INFO = {
 
 test('military stats name the feed until the server names its provider, not a fallback', () => {
   const stats = militaryFlightsLayer.getStats();
-  assert.equal(stats.source, 'Military aircraft');
+  assert.equal(stats.source, '军用航空器');
   assert.equal(stats.fallback, false);
 });
 
@@ -163,7 +163,7 @@ test('nonempty adsb.lol payload with zero usable rows cannot prove share target 
     assert.equal(resolution.status, 'source-unavailable');
     assert.match(
       militaryFlightsLayer.getStats().error,
-      /Malformed adsb\.lol aircraft rows/,
+      /adsb\.lol 航空器记录无效/,
     );
     assert.equal(
       militaryFlightsLayer.getAnalystRecords().length,
@@ -245,7 +245,7 @@ test('military poll refreshes tracked callsign/altitude/kts and marks a missed p
     assert.match(entity.gevLabelModel.details.join(' · '), /400 kt/);
 
     await militaryFlightsLayer.update(viewer);
-    assert.match(entity.gevLabelModel.title, /STALE/);
+    assert.match(entity.gevLabelModel.title, /过期/);
   } finally {
     globalThis.fetch = realFetch;
   }

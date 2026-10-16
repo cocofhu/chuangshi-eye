@@ -15,18 +15,18 @@ const OBSERVED = new Set(ORDER.slice(2));
 const utc = (time) =>
   Number.isFinite(Date.parse(time))
     ? `${new Date(time).toISOString().slice(5, 16).replace('T', ' ')} UTC`
-    : 'Unavailable';
+    : '不可用';
 const age = (time) => {
   const minutes = Math.max(
     0,
     Math.floor((Date.now() - Date.parse(time)) / 60_000),
   );
   return minutes >= 60
-    ? `${Math.floor(minutes / 60)}h ${minutes % 60}m ago`
-    : `${minutes}m ago`;
+    ? `${Math.floor(minutes / 60)} 小时 ${minutes % 60} 分钟前`
+    : `${minutes} 分钟前`;
 };
 const historyTime = (time) =>
-  `${utc(time).slice(6)} · ${Math.max(0, Math.floor((Date.now() - Date.parse(time)) / 60_000))} min ago`;
+  `${utc(time).slice(6)} · ${Math.max(0, Math.floor((Date.now() - Date.parse(time)) / 60_000))} 分钟前`;
 const dated = (time) => `${utc(time)} · ${age(time)}`;
 const set = (node, key, value) => {
   if (node[key] !== value) node[key] = value;
@@ -63,7 +63,7 @@ export function createWeatherPanel({
   const root = document.createElement('section');
   root.className = 'weather-readout';
   root.hidden = true;
-  root.setAttribute('aria-label', 'Active weather');
+  root.setAttribute('aria-label', '活动天气');
   const timelineHost = document.createElement('div');
   timelineHost.className = 'weather-timeline-block';
   timelineHost.hidden = true;
@@ -71,10 +71,10 @@ export function createWeatherPanel({
   cardsHost.className = 'weather-cards';
   const observedGroup = document.createElement('section');
   observedGroup.className = 'weather-observed-group';
-  observedGroup.setAttribute('aria-label', 'Observed history');
+  observedGroup.setAttribute('aria-label', '观测历史');
   const heading = document.createElement('h3');
   heading.className = 'panel-title';
-  heading.textContent = 'Observed history';
+  heading.textContent = '观测历史';
   const scope = document.createElement('div');
   scope.className = 'weather-observed-scope';
   const observedCardsHost = document.createElement('div');
@@ -132,9 +132,9 @@ export function createWeatherPanel({
     const showTimeline = observed.length > 0;
     set(observedGroup, 'hidden', !showTimeline);
     const names = {
-      'weather-radar': 'Rain radar',
-      'weather-satellite': 'Satellite clouds',
-      'weather-lightning': 'Lightning density',
+      'weather-radar': '降雨雷达',
+      'weather-satellite': '卫星云图',
+      'weather-lightning': '闪电密度',
     };
     set(scope, 'textContent', observed.map(({ id }) => names[id]).join(' · '));
     set(timelineHost, 'hidden', !showTimeline);
@@ -155,7 +155,7 @@ export function createWeatherPanel({
       disabled: !showTimeline || state.timeline.length < 2,
       readout:
         state.mode === 'latest'
-          ? 'LATEST · newest per product'
+          ? '最新 · 各产品最新帧'
           : historyTime(state.target),
     });
     const models = active.map(({ id, icon, summary, legend = [], list }) => {
@@ -165,18 +165,18 @@ export function createWeatherPanel({
         const shown = product?.shown ?? summary.shownTime;
         if (state.mode === 'history' && product?.selected === null) {
           const gap = summary.maxGapMinutes || 30;
-          detail = `No frame within ${gap < 60 ? `${gap} min` : `${gap / 60} h`} of ${utc(state.target).slice(6)}`;
+          detail = `${utc(state.target).slice(6)} 前后 ${gap < 60 ? `${gap} 分钟` : `${gap / 60} 小时`}内无帧`;
         } else if (shown) {
           detail = dated(shown);
           if (state.mode === 'history')
             detail +=
               Date.parse(shown) === Date.parse(state.target)
-                ? ' · synced'
-                : ' · nearest';
+                ? ' · 已同步'
+                : ' · 最近';
         }
       } else if (id === 'wind') {
-        detail = `Forecast · valid ${utc(summary.validTime)} · issued ${utc(summary.issuedTime)}`;
-        if (state.mode === 'history') detail += ' · Does not follow history';
+        detail = `预报 · 有效 ${utc(summary.validTime)} · 发布 ${utc(summary.issuedTime)}`;
+        if (state.mode === 'history') detail += ' · 不跟随历史';
       }
       const lines = [
         { id: 'time', text: detail, muted: true },
@@ -222,7 +222,7 @@ export function createWeatherPanel({
           summary.status ||
           summary.compact ||
           (id === 'wind'
-            ? `Forecast · valid ${utc(summary.validTime)}`
+            ? `预报 · 有效 ${utc(summary.validTime)}`
             : detail),
         compactStatus: Boolean(summary.status),
         blocks,

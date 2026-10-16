@@ -6,15 +6,15 @@ const DAY_MS = 86_400_000;
 
 /** SINCE slider stops, in relative days so a share link keeps its meaning. */
 export const SINCE_STOPS = Object.freeze([
-  Object.freeze({ days: 0, label: 'ANY DATE' }),
-  Object.freeze({ days: 3652, label: 'LAST 10 YEARS' }),
-  Object.freeze({ days: 1826, label: 'LAST 5 YEARS' }),
-  Object.freeze({ days: 1095, label: 'LAST 3 YEARS' }),
-  Object.freeze({ days: 730, label: 'LAST 2 YEARS' }),
-  Object.freeze({ days: 365, label: 'LAST YEAR' }),
-  Object.freeze({ days: 182, label: 'LAST 6 MONTHS' }),
-  Object.freeze({ days: 91, label: 'LAST 3 MONTHS' }),
-  Object.freeze({ days: 30, label: 'LAST MONTH' }),
+  Object.freeze({ days: 0, label: '任意日期' }),
+  Object.freeze({ days: 3652, label: '近 10 年' }),
+  Object.freeze({ days: 1826, label: '近 5 年' }),
+  Object.freeze({ days: 1095, label: '近 3 年' }),
+  Object.freeze({ days: 730, label: '近 2 年' }),
+  Object.freeze({ days: 365, label: '近 1 年' }),
+  Object.freeze({ days: 182, label: '近 6 个月' }),
+  Object.freeze({ days: 91, label: '近 3 个月' }),
+  Object.freeze({ days: 30, label: '近 1 个月' }),
 ]);
 
 /** The exact stop for a day count, else the nearest one. */
@@ -34,13 +34,13 @@ export function sinceStopIndex(days) {
 function presentSince(days, now) {
   const value = Number(days) || 0;
   const index = sinceStopIndex(value);
-  if (value <= 0) return { index, days: 0, label: 'ANY DATE' };
+  if (value <= 0) return { index, days: 0, label: '任意日期' };
   const stop = SINCE_STOPS[index];
-  const window = stop.days === value ? stop.label : `LAST ${value} DAYS`;
+  const window = stop.days === value ? stop.label : `近 ${value} 天`;
   return {
     index,
     days: value,
-    label: `${window} · SINCE ${formatDate(now - value * DAY_MS)}`,
+    label: `${window} · 自 ${formatDate(now - value * DAY_MS)}`,
   };
 }
 
@@ -55,16 +55,16 @@ function formatDate(ms) {
 
 function presentStatus(state) {
   const pressed = state.enabled === true;
-  const title = pressed ? 'Turn Street Level off' : 'Turn Street Level on';
+  const title = pressed ? '关闭街景' : '打开街景';
   if (state.keyRejected)
-    return { text: 'KEY REJECTED', tone: 'warn', pressed, title };
+    return { text: '密钥已拒', tone: 'warn', pressed, title };
   if (state.keyRequired)
-    return { text: 'KEY REQUIRED', tone: 'warn', pressed, title };
+    return { text: '需要密钥', tone: 'warn', pressed, title };
   if (state.coverage.loading)
-    return { text: 'LOADING', tone: 'busy', pressed, title };
+    return { text: '加载中', tone: 'busy', pressed, title };
   return pressed
-    ? { text: 'ON', tone: 'on', pressed, title }
-    : { text: 'OFF', tone: '', pressed, title };
+    ? { text: '开', tone: 'on', pressed, title }
+    : { text: '关', tone: '', pressed, title };
 }
 
 /** A chip is lit only while the layer and its provider are both on. */
@@ -73,7 +73,7 @@ function presentProviders(state) {
   return (state.providers || []).map((provider) => {
     const keyRequired = provider.keyRequired === true;
     const on = enabled && provider.on === true;
-    let title = `${provider.name} imagery ${on ? 'on' : 'off'}`;
+    let title = `${provider.name} 影像${on ? '开' : '关'}`;
     if (provider.keyRejected && provider.error)
       title = `${provider.name}: ${provider.error}`;
     else if (keyRequired && provider.requiresKeyId)
@@ -109,7 +109,7 @@ function presentViewer(state) {
     open: street.open === true,
     loading: street.loading === true && !street.imageId,
     renderMode: street.renderMode === 'fill' ? 'fill' : 'letterbox',
-    captionLeft: street.creator ? `Image by ${street.creator}` : '',
+    captionLeft: street.creator ? `影像作者 ${street.creator}` : '',
     captionRight: right.join(' · '),
     link: street.externalUrl || null,
     linkLabel: street.providerLabel ? `${street.providerLabel} ↗` : '',
@@ -118,7 +118,7 @@ function presentViewer(state) {
       disabled: street.open !== true || street.followAvailable !== true,
       title:
         street.followAvailable === true
-          ? 'Camera follows view: move the globe camera wherever the street-level view looks'
+          ? '相机跟随：街景朝向哪里，地球相机跟到哪里'
           : '跟随相机需要 Google 3D 地图：请在「地图来源」里选择 Google 3D',
     },
   };
@@ -126,13 +126,13 @@ function presentViewer(state) {
 
 function presentMeta(state) {
   if (state.providers.length === 0) return state.coverage.hint || '';
-  if (!state.enabled) return 'Switch a provider on to draw its coverage.';
+  if (!state.enabled) return '打开来源以绘制覆盖。';
   if (state.sequence.selectedId)
     return state.sequence.loading
-      ? 'Loading this sequence…'
-      : `${state.sequence.images.toLocaleString()} images in this sequence · Esc clears`;
+      ? '正在加载该序列…'
+      : `${state.sequence.images.toLocaleString()} 张序列影像 · Esc 清除`;
   if (state.coverage.count > 0)
-    return `${state.coverage.count.toLocaleString()} sequences in view · click a line for its photos`;
+    return `视野内 ${state.coverage.count.toLocaleString()} 条序列 · 点击线段查看照片`;
   return state.coverage.hint || '';
 }
 

@@ -18,10 +18,10 @@ const MAX_NOTES = 6;
 const MAX_CAPTION = 220;
 
 const STATUS_TEXT = Object.freeze({
-  running: 'in progress',
-  done: 'done',
-  failed: 'failed',
-  cancelled: 'cancelled',
+  running: '进行中',
+  done: '完成',
+  failed: '失败',
+  cancelled: '已取消',
 });
 
 /** An empty, hidden card. */
@@ -119,7 +119,7 @@ export function reduceVoiceCard(state, event) {
       if (!pointer && !state.pointer) return state;
       if (!pointer) return { ...state, pointer };
       // The live region says what "this" meant, as the chip does.
-      const kind = pointer.kind === 'here' ? 'Here' : 'This';
+      const kind = pointer.kind === 'here' ? '此处' : '此';
       return reveal({
         ...state,
         pointer,
@@ -190,7 +190,7 @@ export function reduceVoiceCard(state, event) {
             : result.ok
               ? 'done'
               : 'failed',
-          detail: result.outlinePending ? 'Tracing outline' : '',
+          detail: result.outlinePending ? '正在描边' : '',
           annotationIds: result.outlinePending ? annotationIds(result) : [],
         }),
       );
@@ -224,10 +224,10 @@ export function reduceVoiceCard(state, event) {
           ...step,
           annotationIds: remaining,
           detail: remaining.length
-            ? 'Tracing outline'
+            ? '正在描边'
             : event.status === 'resolved'
-              ? 'Outline traced'
-              : 'Outline unavailable',
+              ? '轮廓已描'
+              : '轮廓不可用',
         };
         return reveal({ ...state, steps });
       }
@@ -244,7 +244,7 @@ export function voiceCardView(state) {
   const display = state.result?.display || null;
   const allNotes = [
     ...(display?.notes || []),
-    ...(display?.sources || []).map((source) => `Source: ${source.label}`),
+    ...(display?.sources || []).map((source) => `来源：${source.label}`),
   ];
   // Analyst notes carry count/scope/provenance qualifications. Preserve their
   // full sanitized text in at most six existing rows, joining overflow into
@@ -267,14 +267,14 @@ export function voiceCardView(state) {
   return {
     visible: Boolean(state.visible),
     busy: running,
-    phase: running ? 'WORKING' : state.steps.length ? 'DONE' : '',
+    phase: running ? '进行中' : state.steps.length ? '完成' : '',
     user: {
       visible: state.user !== null,
       text: state.user || '…',
     },
     pointer: {
       visible: Boolean(state.pointer),
-      kind: state.pointer?.kind === 'here' ? 'HERE' : 'THIS',
+      kind: state.pointer?.kind === 'here' ? '此处' : '此',
       text: spokenLabel(state.pointer?.label || '', 32),
     },
     assistant: {

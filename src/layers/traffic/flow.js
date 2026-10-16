@@ -36,11 +36,11 @@ export function createFlow({ state: layerState, services, parts, source }) {
     const status = Number.isFinite(error.status)
       ? error.status
       : Number(message.match(/HTTP (\d{3})/)?.[1]);
-    if (status === 503) return 'TomTom key unavailable';
-    if (status === 429) return 'TomTom daily budget reached';
-    if (status === 502 || status === 504) return 'TomTom upstream unreachable';
-    if (Number.isFinite(status)) return `TomTom flow error (HTTP ${status})`;
-    return 'TomTom flow unavailable';
+    if (status === 503) return 'TomTom 密钥不可用';
+    if (status === 429) return 'TomTom 日额度已用尽';
+    if (status === 502 || status === 504) return 'TomTom 上游不可达';
+    if (Number.isFinite(status)) return `TomTom 路况错误（HTTP ${status}）`;
+    return 'TomTom 路况不可用';
   }
 
   /**

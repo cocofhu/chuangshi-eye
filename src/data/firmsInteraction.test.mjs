@@ -171,7 +171,7 @@ test('painted detection cards are keyed by the stable detection key', () => {
     assert.ok(card, 'a detection card was painted');
     assert.equal(card.id, `fire:${fireDetectionKey(h.fires[0])}`);
     assert.equal(card.interactive, true, 'a detection card must publish a hit rect');
-    assert.match(card.accessibilityLabel, /^Focus fire detection /);
+    assert.match(card.accessibilityLabel, /^聚焦火点 /);
     assert.equal(card.activate(), true);
     assert.equal(h.requests.length, 1);
     assert.equal(h.requests[0].id, fireDetectionKey(h.fires[0]));

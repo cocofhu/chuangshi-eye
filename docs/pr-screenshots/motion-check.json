@@ -1,0 +1,18 @@
+{
+  "normal": {
+    "animationName": "cse-panel-in",
+    "animationDuration": "0.24s",
+    "backdropFilter": "blur(12px) saturate(1.4)",
+    "background": "rgba(8, 13, 24, 0.88)",
+    "brandColor": "rgb(245, 196, 107)",
+    "mq": false
+  },
+  "reduced": {
+    "animationName": "none",
+    "animationDuration": "0s",
+    "backdropFilter": "none",
+    "background": "rgba(8, 14, 22, 0.94)",
+    "brandColor": "rgb(245, 196, 107)",
+    "mq": true
+  }
+}

@@ -140,21 +140,21 @@ test('selection copy reads like a transit card and never leaks nulls', () => {
     'bus',
     now,
   );
-  assert.equal(full.title, '🚌 Route 17');
+  assert.equal(full.title, '🚌 线路 17');
   assert.deepEqual(full.details, [
     // The mode is said in words: a glyph and a route number do not tell a
     // reader whether the dot on the street is a bus or a subway train.
-    'Bus · Metro Transit · Minneapolis–St Paul, MN',
-    'Reported 15 s ago',
+    '公交 · Metro Transit · Minneapolis–St Paul, MN',
+    '15 秒前报告',
     // The operator's speed is labelled as a report: it describes the newest
     // fix, not the older segment the screen is drawing.
-    'reported 40 km/h · reported hdg 248°',
+    '报告 40 km/h · 报告航向 248°',
     // The operator's claim is kept as a REPORT, not as the live state. It
     // describes the moment of the report, which the display may not have
     // reached yet — presenting it as "now" is what put STOPPED on a metro
     // gliding across the owner's screen.
-    'Last report: stopped at stop 57458 · few seats available',
-    'Vehicle 1557',
+    '最近报告：停靠站点 57458 · 少量空座',
+    '车辆 1557',
   ]);
   // A time the feed gave for the SNAPSHOT rather than for this vehicle is
   // labelled, so the card never presents a borrowed time as the bus's own.
@@ -170,7 +170,7 @@ test('selection copy reads like a transit card and never leaks nulls', () => {
     'bus',
     now,
   );
-  assert.equal(borrowed.details[1], 'Reported 60 s ago (feed time)');
+  assert.equal(borrowed.details[1], '60 秒前报告（数据时间）');
 
   // A subway says where it is drawn, because a train on a road is otherwise
   // read as a bug rather than as a deliberate surface projection.
@@ -187,10 +187,10 @@ test('selection copy reads like a transit card and never leaks nulls', () => {
     now,
   );
   assert.deepEqual(underground.details, [
-    'Subway · Metro Transit · Minneapolis–St Paul, MN',
-    'Reported 15 s ago',
-    'Shown at street level · depth not in the feed',
-    'Vehicle T1',
+    '地铁 · Metro Transit · Minneapolis–St Paul, MN',
+    '15 秒前报告',
+    '按街道平面显示 · 数据不含深度',
+    '车辆 T1',
   ]);
   // No timestamp at all is aged from the fetch, never from "now".
   const sparse = buildTransitSelectionCopy(
@@ -200,11 +200,11 @@ test('selection copy reads like a transit card and never leaks nulls', () => {
     now,
     now - 120_000,
   );
-  assert.equal(sparse.title, '🚆 Vehicle abc');
+  assert.equal(sparse.title, '🚆 车辆 abc');
   assert.deepEqual(sparse.details, [
-    'Train · Metro Transit · Minneapolis–St Paul, MN',
-    'Reported 2 min ago (feed time)',
-    'Vehicle abc',
+    '列车 · Metro Transit · Minneapolis–St Paul, MN',
+    '2 分钟前报告（数据时间）',
+    '车辆 abc',
   ]);
   for (const line of [...full.details, ...sparse.details])
     assert.doesNotMatch(line, /null|undefined|NaN/);

@@ -277,7 +277,7 @@ export class RealtimeTurns {
           eventId: payload.event_id,
           activeResponseMessage: payload.error?.message || null,
         });
-        this.setStatus('listening', 'Ask or command');
+        this.setStatus('listening', '提问或下达指令');
         return;
       }
       // A conversation.item.delete for a stale viewport screenshot can land
@@ -301,7 +301,7 @@ export class RealtimeTurns {
       this.pendingResponseInstructions = null;
       this.pendingUserTextResponse = false;
       this.cancelRadioHandoff({ abortTools: true });
-      this.reportError('Realtime API', payload.error, {
+      this.reportError('实时接口', payload.error, {
         eventId: payload.event_id,
         type: payload.error?.type,
         code: payload.error?.code,
@@ -414,7 +414,7 @@ export class RealtimeTurns {
       return;
     }
 
-    this.setStatus('executing', 'Running command');
+    this.setStatus('executing', '正在执行指令');
     this.pruneProcessedCalls();
     let sentOutput = false;
     let lastResult = null;
@@ -678,7 +678,7 @@ export class RealtimeTurns {
         ),
       );
     }
-    this.setStatus('listening', 'Ask or command');
+    this.setStatus('listening', '提问或下达指令');
   }
 
   /**
@@ -986,7 +986,7 @@ export class RealtimeTurns {
       if (responseStatus === 'failed') {
         const details = payload.response?.status_details || null;
         const failErr = details?.error || null;
-        this.reportError('Realtime response failed', failErr, {
+        this.reportError('实时回复失败', failErr, {
           responseId: payload.response?.id || payload.response_id || null,
           statusReason: details?.reason || null,
           type: failErr?.type || null,
@@ -997,7 +997,7 @@ export class RealtimeTurns {
         // connection is still live. Recover to listening so the user can retry
         // (mirrors the transient-blip philosophy, H8).
         if (this.dc?.readyState === 'open') {
-          this.setStatus('listening', 'Ask or command');
+          this.setStatus('listening', '提问或下达指令');
         }
       }
       if (!this.radio.pendingRadioPlaybackResult) {

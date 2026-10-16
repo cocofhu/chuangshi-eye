@@ -15,14 +15,14 @@ test('an empty composition explains unavailable imagery even while disabled', ()
       snapshot({
         enabled,
         providers: [],
-        coverage: { hint: 'No street-level imagery providers configured' },
+        coverage: { hint: '未配置街景影像来源' },
         legend: [],
       }),
     );
     assert.equal(view.controlsDisabled, true);
     assert.equal(view.keyRequired, false);
     assert.deepEqual(view.providers, []);
-    assert.equal(view.meta, 'No street-level imagery providers configured');
+    assert.equal(view.meta, '未配置街景影像来源');
   }
 });
 
@@ -78,7 +78,7 @@ function deepMerge(target, source) {
 test('a key-gated layer disables every control and flags KEY REQUIRED', () => {
   const view = presentStreetLevelPanel(snapshot({ keyRequired: true }));
   assert.equal(view.controlsDisabled, true);
-  assert.equal(view.status.text, 'KEY REQUIRED');
+  assert.equal(view.status.text, '需要密钥');
   assert.equal(view.status.tone, 'warn');
 });
 
@@ -91,15 +91,15 @@ test('KEY REQUIRED shows no raw error code under the pill', () => {
       providers: [provider({ keyRequired: true, error: 'no_key' })],
     }),
   );
-  assert.equal(view.status.text, 'KEY REQUIRED');
+  assert.equal(view.status.text, '需要密钥');
   assert.equal(view.error, null);
   // The chip still says how to add the key.
-  assert.match(view.providers[0].title, /^Mapillary: Needs /);
+  assert.match(view.providers[0].title, /^Mapillary: 需要 /);
 });
 
 test('a key Mapillary rejected reads KEY REJECTED and names the fix', () => {
   const error =
-    'Mapillary rejected MAPILLARY_CLIENT_TOKEN — replace it in Provider Settings';
+    'Mapillary 拒绝了 MAPILLARY_CLIENT_TOKEN — 请在提供者设置中更换';
   const view = presentStreetLevelPanel(
     snapshot({
       enabled: true,
@@ -109,7 +109,7 @@ test('a key Mapillary rejected reads KEY REJECTED and names the fix', () => {
       providers: [provider({ keyRequired: true, keyRejected: true, error })],
     }),
   );
-  assert.equal(view.status.text, 'KEY REJECTED');
+  assert.equal(view.status.text, '密钥已拒');
   assert.equal(view.status.tone, 'warn');
   assert.equal(view.controlsDisabled, true);
   assert.equal(view.error, error);
@@ -124,37 +124,37 @@ test('a key problem outranks loading on the pill: KEY REJECTED, then KEY REQUIRE
   assert.equal(
     presentStreetLevelPanel(snapshot({ ...loading, keyRequired: true })).status
       .text,
-    'KEY REQUIRED',
+    '需要密钥',
   );
   assert.equal(
     presentStreetLevelPanel(
       snapshot({ ...loading, keyRequired: true, keyRejected: true }),
     ).status.text,
-    'KEY REJECTED',
+    '密钥已拒',
   );
 });
 
 test('the header pill is the on/off switch and reads OFF, LOADING or ON', () => {
   assert.deepEqual(presentStreetLevelPanel(snapshot()).status, {
-    text: 'OFF',
+    text: '关',
     tone: '',
     pressed: false,
-    title: 'Turn Street Level on',
+    title: '打开街景',
   });
   assert.deepEqual(
     presentStreetLevelPanel(
       snapshot({ enabled: true, coverage: { loading: true } }),
     ).status,
     {
-      text: 'LOADING',
+      text: '加载中',
       tone: 'busy',
       pressed: true,
-      title: 'Turn Street Level off',
+      title: '关闭街景',
     },
   );
   assert.deepEqual(
     presentStreetLevelPanel(snapshot({ enabled: true })).status,
-    { text: 'ON', tone: 'on', pressed: true, title: 'Turn Street Level off' },
+    { text: '开', tone: 'on', pressed: true, title: '关闭街景' },
   );
   assert.equal(
     presentStreetLevelPanel(snapshot({ enabled: true, keyRequired: true }))
@@ -204,10 +204,10 @@ test('one chip per provider: on, off, loading, and keyless as an error chip', ()
     ],
   );
   assert.equal(view.providers[0].label, 'MAPILLARY');
-  assert.equal(view.providers[1].title, 'Panoramax imagery off');
+  assert.equal(view.providers[1].title, 'Panoramax 影像关');
   assert.match(
     view.providers[3].title,
-    /^Google Street View: Needs GOOGLE_MAPS_API_KEY/,
+    /^Google Street View: 需要 GOOGLE_MAPS_API_KEY/,
   );
   assert.ok(view.providers.every((chip) => chip.disabled === false));
 });
@@ -240,7 +240,7 @@ test('chips are dark while the layer is off, so the chip is the layer switch', (
     view.providers.map((chip) => [chip.id, chip.active, chip.state]),
     [['mapillary', false, 'idle']],
   );
-  assert.equal(view.providers[0].title, 'Mapillary imagery off');
+  assert.equal(view.providers[0].title, 'Mapillary 影像关');
   assert.equal(view.enableButton, undefined, 'no separate ON/OFF button');
   const keyless = presentStreetLevelPanel(
     snapshot({ providers: [provider({ keyRequired: true })] }),
@@ -252,7 +252,7 @@ test('chips are dark while the layer is off, so the chip is the layer switch', (
   );
 });
 
-test('the SINCE slider runs from any date on the left to the last month on the right', () => {
+test('the 自 slider runs from any date on the left to the last month on the right', () => {
   assert.deepEqual(
     SINCE_STOPS.map((stop) => stop.days),
     [0, 3652, 1826, 1095, 730, 365, 182, 91, 30],
@@ -267,10 +267,10 @@ test('the SINCE slider runs from any date on the left to the last month on the r
   assert.equal(sinceStopIndex(-4), 0);
 });
 
-test('the SINCE readout names the window and the cut-off date it means today', () => {
+test('the since readout names the window and the cut-off date it means today', () => {
   const now = Date.UTC(2026, 8, 25);
   const any = presentStreetLevelPanel(snapshot(), { now });
-  assert.deepEqual(any.since, { index: 0, days: 0, label: 'ANY DATE' });
+  assert.deepEqual(any.since, { index: 0, days: 0, label: '任意日期' });
   const year = presentStreetLevelPanel(
     snapshot({ filter: { pano: 'pano', sinceDays: 365 } }),
     { now },
@@ -279,14 +279,14 @@ test('the SINCE readout names the window and the cut-off date it means today', (
   assert.deepEqual(year.since, {
     index: 5,
     days: 365,
-    label: 'LAST YEAR · SINCE 2025-09-25',
+    label: '近 1 年 · 自 2025-09-25',
   });
   const custom = presentStreetLevelPanel(
     snapshot({ filter: { pano: 'all', sinceDays: 400 } }),
     { now },
   );
   assert.equal(custom.since.index, 5);
-  assert.equal(custom.since.label, 'LAST 400 DAYS · SINCE 2025-08-21');
+  assert.equal(custom.since.label, '近 400 天 · 自 2025-08-21');
 });
 
 test('legend passes through in the layer’s order', () => {
@@ -318,12 +318,12 @@ test('each provider chip carries its source colour', () => {
 test('the meta line never mixes the visible-sequence count with the selected sequence', () => {
   assert.equal(
     presentStreetLevelPanel(snapshot()).meta,
-    'Switch a provider on to draw its coverage.',
+    '打开来源以绘制覆盖。',
   );
   const browsing = presentStreetLevelPanel(
     snapshot({ enabled: true, coverage: { count: 812 } }),
   );
-  assert.match(browsing.meta, /^812 sequences in view · click a line/);
+  assert.match(browsing.meta, /^视野内 812 条序列 · 点击线段/);
   const selected = presentStreetLevelPanel(
     snapshot({
       enabled: true,
@@ -331,8 +331,8 @@ test('the meta line never mixes the visible-sequence count with the selected seq
       sequence: { selectedId: 'abc', images: 33 },
     }),
   );
-  assert.equal(selected.meta, '33 images in this sequence · Esc clears');
-  assert.doesNotMatch(selected.meta, /sequences in view/);
+  assert.equal(selected.meta, '33 张序列影像 · Esc 清除');
+  assert.doesNotMatch(selected.meta, /条序列/);
   const hinted = presentStreetLevelPanel(
     snapshot({
       enabled: true,
@@ -362,7 +362,7 @@ test('viewer caption reads "Image by" left, date right, and links to the provide
       },
     }),
   );
-  assert.equal(view.viewer.captionLeft, 'Image by mapfool');
+  assert.equal(view.viewer.captionLeft, '影像作者 mapfool');
   assert.equal(view.viewer.captionRight, '360° · 93° · 2023-10-08');
   assert.equal(
     view.viewer.link,
@@ -399,7 +399,7 @@ test('FOLLOW is disabled off Google 3D and says where to switch', () => {
     snapshot({ street: { ...open, followAvailable: true } }),
   );
   assert.equal(on3d.viewer.follow.disabled, false);
-  assert.match(on3d.viewer.follow.title, /^Camera follows view/);
+  assert.match(on3d.viewer.follow.title, /^相机跟随/);
   const closed = presentStreetLevelPanel(
     snapshot({ street: { open: false, followAvailable: true } }),
   );

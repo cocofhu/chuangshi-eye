@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "bhote-koshi-2026",
-  "title": "Bhote Koshi Outburst Flood",
+  "title": "波泰科西溃决洪水",
   "observedDate": "2026-08-26",
   "geolocationMap": {
     "credit": "GeoGeorgeShadrach public geolocation map",
@@ -17,20 +17,20 @@
     "before": {
       "path": "pre.webp",
       "observedAt": "2021-10-16",
-      "label": "2021 HISTORICAL REFERENCE · 16 OCT 2021",
+      "label": "2021 历史参照 · 2021年10月16日",
       "source": "Vantor WorldView-2 Open Data"
     },
     "after": {
       "path": "post.webp",
       "observedAt": "2026-08-27",
-      "label": "2026 POST-EVENT · 27 AUG 2026",
+      "label": "2026 灾后 · 2026年8月27日",
       "source": "Vantor WorldView-3 Open Data"
     }
   },
   "reconstruction": {
     "elapsedSeconds": 4170,
-    "label": "SCHEMATIC DOWNSTREAM PROGRESSION, NOT MODELED ARRIVAL TIME",
-    "caveat": "2021 historical reference versus 2026 post-event imagery; changes are cumulative and include the July 2025 Rasuwagadhi flood. Schematic downstream progression, not modeled arrival time; not an official hazard model.",
+    "label": "示意下游推进，并非模拟到达时间",
+    "caveat": "2021 年历史参照对照 2026 年灾后影像；变化是累积的，包含 2025 年 7 月拉苏瓦加迪洪水。示意下游推进，并非模拟到达时间，也不是官方灾害模型。",
     "corridor": [
       {
         "chainageM": 23705,
@@ -911,10 +911,10 @@
   "witnessAnchors": [
     {
       "id": "rasuwagadhi-geoconfirmed",
-      "title": "RASUWAGADHI · SOURCE GEOCONFIRMED",
+      "title": "拉苏瓦加迪 · 来源已地理确认",
       "details": [
         "28.279942 N · 85.377725 E",
-        "WITNESS VIDEO · OPEN ORIGINAL"
+        "目击视频 · 打开原片"
       ],
       "lat": 28.279942,
       "lon": 85.377725,
@@ -925,23 +925,23 @@
   ],
   "fieldReports": [
     {
-      "label": "Rasuwagadhi witness video",
-      "status": "SOURCE GEOCONFIRMED · WORLD-PINNED",
+      "label": "拉苏瓦加迪目击视频",
+      "status": "来源已地理确认 · 已钉在地球上",
       "url": "https://x.com/Indowatchosint/status/2092640554568007958"
     },
     {
-      "label": "Bhote Koshi valley footage · Nirmal Prasai",
-      "status": "SOURCE CREDITED · LOCATION UNRESOLVED",
+      "label": "波泰科西河谷影像 · Nirmal Prasai",
+      "status": "来源已署名 · 位置未确定",
       "url": "https://x.com/GlobalUpdates24/status/2092602195812470980"
     },
     {
-      "label": "Flood footage · Surajit",
-      "status": "SOURCE CREDITED · LOCATION UNRESOLVED",
+      "label": "洪水影像 · Surajit",
+      "status": "来源已署名 · 位置未确定",
       "url": "https://x.com/BNODesk/status/2092568283098575057"
     },
     {
-      "label": "Compilation and casualty claims",
-      "status": "REFERENCE ONLY · CLAIMS UNVERIFIED",
+      "label": "汇编与伤亡说法",
+      "status": "仅供参照 · 说法未核验",
       "url": "https://x.com/Emeka2026/status/2093196357242662947"
     }
   ],
@@ -968,8 +968,8 @@
     {
       "id": "immediate-collapse-viewpoint",
       "sequence": 1,
-      "title": "Immediate collapse viewpoint",
-      "shortTitle": "Collapse viewpoint",
+      "title": "即时崩塌视点",
+      "shortTitle": "崩塌视点",
       "summary": "Geolocated viewpoint toward the upper-valley collapse zone.",
       "phase": "initiation",
       "lat": 28.3632333,
@@ -1010,8 +1010,8 @@
     {
       "id": "debris-dammed-lake",
       "sequence": 2,
-      "title": "Debris-dammed lake",
-      "shortTitle": "Dammed lake",
+      "title": "堰塞湖",
+      "shortTitle": "堰塞湖",
       "summary": "Geolocated observation of impoundment above the border corridor.",
       "phase": "damming",
       "lat": 28.3346111,
@@ -1050,8 +1050,8 @@
     {
       "id": "second-landslide",
       "sequence": 3,
-      "title": "Second landslide",
-      "shortTitle": "Second landslide",
+      "title": "第二处滑坡",
+      "shortTitle": "第二处滑坡",
       "summary": "A short source-linked excerpt of the second upper-valley landslide.",
       "phase": "secondary failure",
       "lat": 28.3379706,
@@ -1091,8 +1091,8 @@
     {
       "id": "gyirong-border-gate",
       "sequence": 4,
-      "title": "Gyirong border gate",
-      "shortTitle": "Border gate",
+      "title": "吉隆口岸",
+      "shortTitle": "口岸",
       "summary": "Public footage geolocated at the Nepal-China border crossing.",
       "phase": "border arrival",
       "lat": 28.2808338,
@@ -1132,8 +1132,8 @@
     {
       "id": "timure-cluster",
       "sequence": 5,
-      "title": "Timure evidence cluster",
-      "shortTitle": "Timure",
+      "title": "蒂穆雷证据群",
+      "shortTitle": "蒂穆雷",
       "summary": "Five geolocated public viewpoints document the flood passage.",
       "phase": "propagation",
       "lat": 28.2519361,
@@ -1180,8 +1180,8 @@
     {
       "id": "syabru-besi",
       "sequence": 6,
-      "title": "Syabru Besi",
-      "shortTitle": "Syabru Besi",
+      "title": "夏布鲁贝西",
+      "shortTitle": "夏布鲁贝西",
       "summary": "A Facebook-sourced downstream viewpoint along the reconstructed corridor.",
       "phase": "downstream passage",
       "lat": 28.1602583333333,
@@ -1221,8 +1221,8 @@
     {
       "id": "dhunche",
       "sequence": 7,
-      "title": "Dhunche",
-      "shortTitle": "Dhunche",
+      "title": "东切",
+      "shortTitle": "东切",
       "summary": "Flood surge visible from a Dhunche hillside viewpoint.",
       "phase": "downstream passage",
       "lat": 28.1131861111111,
@@ -1262,8 +1262,8 @@
     {
       "id": "mailung-upper-trishuli",
       "sequence": 8,
-      "title": "Mailung / Upper Trishuli bridge",
-      "shortTitle": "Upper Trishuli",
+      "title": "迈隆 · 特里苏里上游桥",
+      "shortTitle": "特里苏里上游",
       "summary": "A bridge-side view of the surge between Dhunche and Mailung Bazzar.",
       "phase": "downstream passage",
       "lat": 28.090925,
@@ -1303,8 +1303,8 @@
     {
       "id": "mailung-bazzar",
       "sequence": 9,
-      "title": "Mailung Bazzar, Dandaguan",
-      "shortTitle": "Mailung",
+      "title": "迈隆巴扎",
+      "shortTitle": "迈隆",
       "summary": "A wave races along the Mailung Bazzar road corridor.",
       "phase": "downstream passage",
       "lat": 28.0761666666667,
@@ -1345,8 +1345,8 @@
     {
       "id": "dandagaun",
       "sequence": 10,
-      "title": "Dandagaun, Rasuwa",
-      "shortTitle": "Dandagaun",
+      "title": "丹达冈",
+      "shortTitle": "丹达冈",
       "summary": "A compact excerpt of the Dandagaun slope-collapse sequence.",
       "phase": "downstream passage",
       "lat": 28.0751944444444,
@@ -1386,8 +1386,8 @@
     {
       "id": "dandagaun-viewpoint",
       "sequence": 11,
-      "title": "Dandagaun viewpoint restaurant",
-      "shortTitle": "Dandagaun viewpoint",
+      "title": "丹达冈观景台",
+      "shortTitle": "丹达冈观景",
       "summary": "A wide valley view of the flash-flood surge from a restaurant.",
       "phase": "downstream passage",
       "lat": 28.0354,
@@ -1427,8 +1427,8 @@
     {
       "id": "betrawati-bazaar",
       "sequence": 12,
-      "title": "Betrawati Bazaar",
-      "shortTitle": "Betrawati",
+      "title": "贝特拉瓦蒂",
+      "shortTitle": "贝特拉瓦蒂",
       "summary": "A landscape view of the Betrawati flood surge.",
       "phase": "downstream consequence",
       "lat": 27.9758992572246,
@@ -1468,8 +1468,8 @@
     {
       "id": "bhainse",
       "sequence": 13,
-      "title": "Bhainse",
-      "shortTitle": "Bhainse",
+      "title": "拜恩塞",
+      "shortTitle": "拜恩塞",
       "summary": "A source-linked clip placed at Bhainse in the public geolocation map.",
       "phase": "downstream consequence",
       "lat": 27.9623111111111,
@@ -1510,8 +1510,8 @@
     {
       "id": "bidur-trishuli-bridge",
       "sequence": 14,
-      "title": "Bidur - Trishuli bridge",
-      "shortTitle": "Bidur bridge",
+      "title": "比杜尔特里苏里桥",
+      "shortTitle": "比杜尔桥",
       "summary": "Geolocated downstream consequence well beyond the image comparison.",
       "phase": "consequence",
       "lat": 27.920858,
@@ -1550,8 +1550,8 @@
     {
       "id": "devighat-taadi-khola-bridge",
       "sequence": 15,
-      "title": "Devighat / Taadi Khola Bridge",
-      "shortTitle": "Devighat bridge",
+      "title": "德维加特桥",
+      "shortTitle": "德维加特桥",
       "summary": "A downstream river view at the Devighat bridge area.",
       "phase": "downstream consequence",
       "lat": 27.8585278,
@@ -1591,8 +1591,8 @@
     {
       "id": "charaudi",
       "sequence": 16,
-      "title": "Charaudi",
-      "shortTitle": "Charaudi",
+      "title": "查劳迪",
+      "shortTitle": "查劳迪",
       "summary": "Floodwater surges through the Charaudi built area.",
       "phase": "downstream consequence",
       "lat": 27.8032944444444,

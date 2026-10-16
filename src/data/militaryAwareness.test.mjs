@@ -59,7 +59,7 @@ const AWARENESS_DEPENDENCIES = [
 test('Contacts labels a capped cohort as a lower bound', () => {
   assert.equal(
     formatAwarenessCount({ count: 20_000, complete: false, truncated: true }),
-    'At least 20,000',
+    '至少 20,000',
   );
   assert.equal(
     formatAwarenessCount({ count: 19_999, complete: true, truncated: false }),
@@ -314,7 +314,7 @@ test('Contacts continuation target is the visible explanatory note', () => {
   const source = readLayerSource(new URL('./militaryAwareness.js', import.meta.url));
   assert.match(
     source,
-    /<p class="military-awareness-note" tabindex="-1" data-awareness-focus-continuation>Open-source mapped\/observed context\./,
+    /<p class="military-awareness-note" tabindex="-1" data-awareness-focus-continuation>公开来源的已标绘与观测情境。/,
   );
   assert.doesNotMatch(source, /<span[^>]*data-awareness-focus-continuation/);
 });
@@ -471,10 +471,10 @@ test('pending mapped installations render as unknown instead of a false zero', a
     const snapshot = militaryAwarenessLayer.getContextSnapshot();
     const installations = snapshot?.cohorts.find(({ id }) => id === 'military-installations');
     assert.equal(installations?.count, null, 'loading is not an observed empty cohort');
-    assert.match(installations?.reason || '', /unavailable/i);
+    assert.match(installations?.reason || '', /数据源不可用/);
     assert.match(
       runtime.panel()?.innerHTML || '',
-      /Mapped installations<\/strong><b aria-live="polite">\?<\/b>/,
+      /军事设施<\/strong><b aria-live="polite">\?<\/b>/,
       'the operator sees ? rather than an all-clear 0 while installations load',
     );
   } finally {
@@ -578,15 +578,15 @@ test('a vessel feed still connecting after the lifecycle settles reads as unknow
       null,
       'a source that has never answered has told us nothing — 0 would be a fabricated all-clear',
     );
-    assert.match(vessels?.reason || '', /unavailable/i);
+    assert.match(vessels?.reason || '', /数据源不可用/);
     assert.match(
       runtime.panel()?.innerHTML || '',
-      /AIS vessels<\/strong><b aria-live="polite">\?<\/b>/,
+      /实时船舶<\/strong><b aria-live="polite">\?<\/b>/,
       'the panel prints ? for the whole settled-but-connecting window',
     );
     assert.doesNotMatch(
       runtime.panel()?.innerHTML || '',
-      /AIS vessels<\/strong><b aria-live="polite">0<\/b>/,
+      /实时船舶<\/strong><b aria-live="polite">0<\/b>/,
       'the panel must never print an all-clear 0 before the feed has answered once',
     );
   } finally {
@@ -616,7 +616,7 @@ test('a settled vessel feed reporting a real empty viewport recovers to 0', asyn
     assert.equal(vessels?.count, 0, 'an answered empty viewport is a real observation');
     assert.match(
       runtime.panel()?.innerHTML || '',
-      /AIS vessels<\/strong><b aria-live="polite">0<\/b>/,
+      /实时船舶<\/strong><b aria-live="polite">0<\/b>/,
       'the operator sees the real count once the feed answers',
     );
   } finally {
@@ -1632,11 +1632,11 @@ test('awareness rescans only for invalidation, source change, or meaningful move
 
 test('installation summaries disclose viewport-scoped coverage', () => {
   const empty = summarizeInstallationViewport([], { available: true, stale: false });
-  assert.match(empty.reason, /viewport feed/i);
-  assert.match(empty.reason, /not a complete 250 km survey/i);
+  assert.match(empty.reason, /视野数据/);
+  assert.match(empty.reason, /并非完整的 250 公里普查/);
 
   const unavailable = summarizeInstallationViewport([], { available: false, stale: false });
-  assert.equal(unavailable.reason, 'feed unavailable');
+  assert.equal(unavailable.reason, '数据源不可用');
   const retrying = summarizeInstallationViewport([], { available: false, stats: {
     statusMessage: 'Overpass temporarily unavailable — retrying in 30s',
   } });
@@ -1648,14 +1648,14 @@ test('installation summaries name a subject window instead of the viewport', () 
   const stats = { coverage: { kind: 'subject', radiusM: 100_000 } };
   const empty = summarizeInstallationViewport([], { available: true, stale: false, stats });
   assert.equal(empty.count, 0);
-  assert.match(empty.reason, /none mapped within 100 km/);
-  assert.match(empty.reason, /not a complete 250 km survey/);
+  assert.match(empty.reason, /目标周边 100 公里内无标注/);
+  assert.match(empty.reason, /并非完整的 250 公里普查/);
   const found = summarizeInstallationViewport(
     [{ id: 'ofm:installation:1', label: 'Military area', distanceM: 1200 }],
     { available: true, stale: false, stats },
   );
   assert.equal(found.count, 1);
-  assert.equal(found.reason, 'mapped matches within 100 km of the subject');
+  assert.equal(found.reason, '目标周边 100 公里内的已标注匹配');
 });
 
 test('compact Context snapshots retain installation coverage', () => {
@@ -1682,7 +1682,7 @@ test('expanded Context results omit the redundant status heading', () => {
   assert.doesNotMatch(militaryAwarenessSource, /military-awareness-heading/);
   assert.doesNotMatch(militaryAwarenessSource, /GLOBAL CONTEXT <span>CONTEXT ONLY<\/span>/);
   assert.match(militaryAwarenessSource, /military-awareness-subject/);
-  assert.match(militaryAwarenessSource, /FLIGHT \/ VESSEL WINDOW/);
+  assert.match(militaryAwarenessSource, /航空 \/ 船舶窗口/);
   assert.match(militaryAwarenessSource, /military-awareness-controls/);
 });
 
@@ -3155,7 +3155,7 @@ test('a selected installation card keeps every member name and escapes source te
     });
     militaryAwarenessLayer.update();
     const html = runtime.panel().innerHTML;
-    assert.match(html, /Named areas \(4\)/);
+    assert.match(html, /命名区域（4）/);
     for (const name of ['Area one', 'Area two', 'Area three', '&lt;Area four&gt;']) assert.ok(html.includes(name));
     assert.ok(!html.includes('<Area four>'));
   } finally {

@@ -44,12 +44,12 @@ test('a full incident row renders name, size, containment, and ages', () => {
     now,
   );
   assert.equal(card.id, 'fire-perimeter-card:2026-NMGNF-000123');
-  assert.equal(card.title, 'FIRE · Frijoles');
+  assert.equal(card.title, '火场 · Frijoles');
   assert.deepEqual(card.details, [
-    '15,956 ac · 74% contained · US-NM',
-    'Natural cause · Active · Type 3 Incident',
-    '380 personnel · Sandoval County · $4.2M to date',
-    'discovered 1d ago · updated 2h ago',
+    '15,956 ac · 74% 已控 · US-NM',
+    'Natural 起因 · Active · Type 3 Incident',
+    '380 人 · Sandoval 县 · $4.2M 累计',
+    '发现于 1d 前 · 更新于 2h 前',
   ]);
   assert.equal(card.selected, true);
   assert.equal(typeof card.accent, 'string');
@@ -75,8 +75,8 @@ test('missing attributes degrade to available facts instead of placeholders', ()
     },
     1758000000000,
   );
-  assert.equal(card.title, 'FIRE · Unnamed incident');
-  assert.deepEqual(card.details, ['containment unknown · RX']);
+  assert.equal(card.title, '火场 · 未命名火场');
+  assert.deepEqual(card.details, ['控制程度未知 · RX']);
 });
 
 test('a known InciWeb page adds a link line to the card', () => {
@@ -102,7 +102,7 @@ test('a known InciWeb page adds a link line to the card', () => {
       link: 'https://inciweb.wildfire.gov/incident-information/calpf-timber-fire',
     },
   );
-  assert.equal(card.details.at(-1), 'InciWeb ↗ · click card to open');
+  assert.equal(card.details.at(-1), 'InciWeb ↗ · 点击卡片打开');
   assert.equal(card.interactive, true);
   assert.match(card.accessibilityLabel, /InciWeb/);
 });
@@ -154,12 +154,12 @@ test('costs near a unit boundary promote to the larger unit', () => {
   };
   const costLine = (costToDate) =>
     buildIncidentCard({ ...base, costToDate }, 0).details.find((line) =>
-      line.includes('to date'),
+      line.includes('累计'),
     );
-  assert.equal(costLine(999500), '$1M to date');
-  assert.equal(costLine(999499), '$999K to date');
-  assert.equal(costLine(999600000), '$1B to date');
-  assert.equal(costLine(4200000), '$4.2M to date');
+  assert.equal(costLine(999500), '$1M 累计');
+  assert.equal(costLine(999499), '$999K 累计');
+  assert.equal(costLine(999600000), '$1B 累计');
+  assert.equal(costLine(4200000), '$4.2M 累计');
 });
 
 test('a complex member names its complex on the card', () => {
@@ -183,7 +183,7 @@ test('a complex member names its complex on the card', () => {
     },
     1758000000000,
   );
-  assert.ok(card.details.includes('part of Rowe Creek Complex'));
+  assert.ok(card.details.includes('属于 Rowe Creek Complex'));
 });
 
 test('a card without a link is not interactive', () => {
@@ -230,8 +230,8 @@ test('partial incident details render only the facts that exist', () => {
     1758000000000,
   );
   assert.deepEqual(card.details, [
-    '542 ac · 48% contained · US-NM',
-    'Human cause',
-    'Catron County · $85K to date',
+    '542 ac · 48% 已控 · US-NM',
+    'Human 起因',
+    'Catron 县 · $85K 累计',
   ]);
 });

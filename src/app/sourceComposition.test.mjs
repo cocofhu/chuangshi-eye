@@ -50,7 +50,7 @@ test('all acquisition sources may be absent, and enable fails before initializin
       const row = manager.getAll().find((entry) => entry.id === id);
       assert.equal(row.enabled, false);
       assert.equal(row.stats.status, 'unavailable');
-      assert.match(row.stats.error, /data source not configured/);
+      assert.match(row.stats.error, /未配置数据源/);
     }
   }
 });
@@ -97,7 +97,7 @@ test('empty Street Level uses the shared unavailable lifecycle without initializ
   assert.equal(manager.layers.get('street-level').initialized, false);
   const row = manager.getAll()[0];
   assert.equal(row.stats.status, 'unavailable');
-  assert.equal(row.stats.error, 'No street-level imagery providers configured');
+  assert.equal(row.stats.error, '未配置街景影像来源');
   assert.equal(await manager.setEnabled('street-level', false), true);
   const configured = catalog(createStandaloneLayerSources(), t);
   assert.equal(
@@ -119,14 +119,14 @@ test('availability lookup accepts frozen layers and uses their display names', (
   const lookup = composition.createAvailabilityLookup(layers);
   assert.equal(
     lookup('fire-perimeters').reason,
-    'Fire perimeters: data source not configured',
+    '山火范围：未配置数据源',
   );
   assert.equal(Object.hasOwn(layers[0], 'getSourceAvailability'), false);
   const manager = new LayerLifecycle({}, { getSourceAvailability: lookup });
   manager.register(layers.find(({ id }) => id === 'fire-perimeters'));
   assert.equal(
     manager.getAll()[0].stats.error,
-    'Fire perimeters: data source not configured',
+    '山火范围：未配置数据源',
   );
 });
 

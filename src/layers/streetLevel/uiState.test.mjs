@@ -51,7 +51,7 @@ test('the legend is one swatch per active source, in its colour, then Selected',
   const single = composeUIState({ ...base, providers: [provider()] });
   assert.deepEqual(single.legend, [
     { key: 'mapillary', label: 'Mapillary', color: '#05cb63' },
-    { key: 'selected', label: 'Selected', color: COLORS.selected },
+    { key: 'selected', label: '已选', color: COLORS.selected },
   ]);
   const two = composeUIState({
     ...base,
@@ -65,7 +65,7 @@ test('the legend is one swatch per active source, in its colour, then Selected',
     [
       ['Mapillary', '#05cb63'],
       ['Panoramax', '#a66bff'],
-      ['Selected', COLORS.selected],
+      ['已选', COLORS.selected],
     ],
   );
   const oneOff = composeUIState({

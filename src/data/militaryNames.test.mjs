@@ -51,7 +51,7 @@ test('wide-view counts report visible points rather than retained off-screen can
   const stats = methods.getStats();
   assert.equal(stats.count, 3);
   assert.equal(stats.namedMarkers, 8);
-  assert.equal(stats.statusMessage, '3 mapped sites in view');
+  assert.equal(stats.statusMessage, '3 个标注站点（视野内）');
 });
 
 test('the separately licensed pack has unique typed identities, areas, names and a pinned lean output', async () => {
@@ -96,12 +96,12 @@ test('checked-in OpenFreeMap fixtures retain typed OSM feature ids and geographi
     assert.equal(militaryOsmKey(value), null);
   assert.equal(
     nameMilitaryFragment({ ...mabry, featureKey: '3177123' }, names).name,
-    'Military area',
+    '军事用地',
     'a valid but distant id fails soft',
   );
   assert.equal(
     nameMilitaryFragment({ ...mabry, featureKey: '278942510' }, names).name,
-    'Military area',
+    '军事用地',
   );
 });
 

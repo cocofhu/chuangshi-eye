@@ -79,10 +79,10 @@ export function createCatalog({ state: layerState, services, parts, source }) {
         console.warn(
           `[Data:Satellites] Dense group '${DENSE_GROUP_PATH}' fetch failed (${res.status})`,
         );
-        _denseLoadFailed(token, `feed unavailable (${res.status})`);
+        _denseLoadFailed(token, `星表不可用（${res.status}）`);
         return {
           status: 'source-unavailable',
-          reason: `feed unavailable (${res.status})`,
+          reason: `星表不可用（${res.status}）`,
         };
       }
       const text = res.text;
@@ -153,10 +153,10 @@ export function createCatalog({ state: layerState, services, parts, source }) {
         console.warn(
           `[Data:Satellites] Dense group '${DENSE_GROUP_PATH}' returned no usable satellites`,
         );
-        _denseLoadFailed(token, 'feed returned no satellites');
+        _denseLoadFailed(token, '星表没有可用卫星');
         return {
           status: 'source-unavailable',
-          reason: 'feed returned no satellites',
+          reason: '星表没有可用卫星',
         };
       }
 
@@ -179,8 +179,8 @@ export function createCatalog({ state: layerState, services, parts, source }) {
         };
       }
       console.warn('[Data:Satellites] Dense catalog load failed:', e);
-      _denseLoadFailed(token, 'feed unreachable');
-      return { status: 'source-unavailable', reason: 'feed unreachable' };
+      _denseLoadFailed(token, '星表不可达');
+      return { status: 'source-unavailable', reason: '星表不可达' };
     } finally {
       if (layerState._denseLoadController === resourceController)
         layerState._denseLoadController = null;

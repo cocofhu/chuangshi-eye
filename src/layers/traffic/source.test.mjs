@@ -393,7 +393,7 @@ test('a failed detail pass keeps major roads and exposes separate degraded statu
     assert.equal(state._roadError, null);
     assert.equal(
       state._detailError,
-      'Detailed roads unavailable — OpenFreeMap tiles unavailable',
+      '详细道路不可用 — OpenFreeMap 瓦片不可用',
     );
     assert.equal(state._roadPartial, true);
     assert.equal(state._fetching, false);
@@ -525,7 +525,7 @@ test('refresh failure removes cached matches and reports simulated flow', async 
   assert.equal(controls.getStats().flowCoveragePct, 0);
   assert.match(
     controls.getStats().loadingLabel,
-    /SIMULATED — TomTom daily budget reached/,
+    /模拟 — TomTom 日额度已用尽/,
   );
   assert.equal(state._flowPending, 0);
 });
@@ -608,30 +608,30 @@ test('OSM keyed loads run z12 then z14 and reuse road snapshots while refreshing
 });
 
 test('an OpenFreeMap refusal is named by status, and keeps the status beside the words', () => {
-  assert.equal(roadRequestError(429).message, 'OpenFreeMap tiles rate-limited');
-  assert.equal(roadRequestError(504).message, 'OpenFreeMap tiles timed out');
+  assert.equal(roadRequestError(429).message, 'OpenFreeMap 瓦片已限流');
+  assert.equal(roadRequestError(504).message, 'OpenFreeMap 瓦片超时');
   assert.equal(
     roadRequestError(406).message,
-    'OpenFreeMap tiles unavailable (HTTP 406)',
+    'OpenFreeMap 瓦片不可用（HTTP 406）',
   );
   assert.equal(
     roadRequestError(500).message,
-    'OpenFreeMap tiles unavailable (HTTP 500)',
+    'OpenFreeMap 瓦片不可用（HTTP 500）',
   );
 
   assert.equal(
     roadRequestError(502).message,
-    'OpenFreeMap tiles unavailable (HTTP 502)',
+    'OpenFreeMap 瓦片不可用（HTTP 502）',
   );
   assert.equal(
     roadRequestError(503).message,
-    'OpenFreeMap tiles unavailable (HTTP 503)',
+    'OpenFreeMap 瓦片不可用（HTTP 503）',
   );
   assert.equal(roadRequestError(503).status, 503);
 
   for (const missing of [undefined, null, NaN, 'four-oh-six']) {
     const vague = roadRequestError(missing);
-    assert.equal(vague.message, 'OpenFreeMap tiles unavailable');
+    assert.equal(vague.message, 'OpenFreeMap 瓦片不可用');
     assert.equal(vague.status, null, 'an unreadable code is absent, not zero');
   }
 

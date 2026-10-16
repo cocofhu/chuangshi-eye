@@ -433,7 +433,7 @@ test('a stalled USB read times out and tears the session down on its own', async
   const state = controller.getState();
   assert.equal(state.connected, false);
   assert.equal(state.status, 'error');
-  assert.equal(state.message, 'RTL-SDR sample stream stopped');
+  assert.equal(state.message, 'RTL-SDR 采样流已停止');
   assert.ok(events.includes('stalled:usb-close'));
   // Mode changes work again instead of queuing behind the dead read.
   assert.equal(await within(controller.setMode('fm')), true);

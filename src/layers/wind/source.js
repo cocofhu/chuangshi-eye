@@ -8,15 +8,15 @@ export function createWindSource({
   return {
     async getSnapshot({ signal, model = 'gfs', overlay = 'none' } = {}) {
       if (!['gfs', 'ifs'].includes(model))
-        throw new Error('Unknown wind model');
+        throw new Error('未知风场模式');
       if (!['none', 'temperature', 'pressure'].includes(overlay))
-        throw new Error('Unknown weather overlay');
+        throw new Error('未知天气叠层');
       const query = `model=${model}${overlay === 'none' ? '' : `&overlay=${overlay}`}`;
       const controller = new AbortController();
       const abort = () => controller.abort(signal.reason);
       signal?.addEventListener('abort', abort, { once: true });
       const timer = setTimeout(
-        () => controller.abort(new Error('Wind request timed out')),
+        () => controller.abort(new Error('风场请求超时')),
         timeoutMs,
       );
       const active = controller.signal;
@@ -27,7 +27,7 @@ export function createWindSource({
           cache: 'no-store',
           redirect: 'error',
         });
-        if (!response.ok) throw new Error(`Wind HTTP ${response.status}`);
+        if (!response.ok) throw new Error(`风场请求失败 HTTP ${response.status}`);
         const manifest = JSON.parse(
           new TextDecoder().decode(
             await readWindBody(response, 16_384, active),
@@ -73,7 +73,7 @@ export function createWindSource({
             `^/api/wind/grid/${model}-[\\w.-]+\\.bin\\?${query}$`,
           ).test(manifest.gridUrl)
         )
-          throw new Error('Malformed wind manifest');
+          throw new Error('风场清单格式无效');
         const count = grid.nx * grid.ny;
         const expectedBytes = count * (scalar ? 12 : 8);
         const gridResponse = await fetchImpl(manifest.gridUrl, {
@@ -81,13 +81,13 @@ export function createWindSource({
           redirect: 'error',
         });
         if (!gridResponse.ok)
-          throw new Error(`Wind HTTP ${gridResponse.status}`);
+          throw new Error(`风场请求失败 HTTP ${gridResponse.status}`);
         const bytes = await readWindBody(gridResponse, expectedBytes, active);
         if (bytes.byteLength !== expectedBytes)
-          throw new Error('Malformed wind grid');
+          throw new Error('风场网格格式无效');
         const values = new Float32Array(bytes.buffer);
         if (!values.every(Number.isFinite))
-          throw new Error('Malformed wind grid');
+          throw new Error('风场网格格式无效');
         return {
           ...manifest,
           u: values.slice(0, count),

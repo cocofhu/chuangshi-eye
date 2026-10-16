@@ -604,3 +604,9 @@ button.sl-status:focus-visible {
     min-height: 0;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-viewer-placeholder::after {
+    animation: none;
+  }
+}

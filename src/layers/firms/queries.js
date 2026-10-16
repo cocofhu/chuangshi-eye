@@ -17,7 +17,7 @@ export function createQueries({
       if (!fire) return null;
       return {
         id: fireDetectionKey(fire),
-        label: `Fire · FRP ${components.model.formatFrp(fire.frp)} MW`,
+        label: `火点 · FRP ${components.model.formatFrp(fire.frp)} MW`,
         latitude: fire.lat,
         longitude: fire.lon,
         frp: fire.frp,
@@ -53,27 +53,27 @@ export function createQueries({
      * Layer stats for the data panel. Degraded feed states surface through
      * `error` (established qa-failstate pattern: a dead feed must never look
      * like a healthy empty layer) with a matching human `loadingLabel`:
-     * 'LIVE · updated Xm ago' fresh, 'STALE · cached Xh' when the proxy
-     * served past-TTL cache, 'KEY REQUIRED' keyless.
+     * '实时 · 刚刚更新' when fresh, '过期 · 缓存 Xh' when the proxy
+     * served past-TTL cache, '需要密钥' when keyless.
      */
     getStats() {
       const now = Date.now();
       const staleText = layerState._lastUpdate
-        ? `STALE · cached ${components.model.formatAge(now - layerState._lastUpdate) || '<1h'}`
-        : 'STALE';
+        ? `过期 · 缓存 ${components.model.formatAge(now - layerState._lastUpdate) || '<1h'}`
+        : '过期';
       let loadingLabel = '';
       if (layerState._loading) {
         loadingLabel = layerState._fires.length
-          ? 'refreshing...'
-          : 'loading...';
+          ? '正在刷新…'
+          : '正在加载…';
       } else if (layerState._keyRequired) {
-        loadingLabel = 'KEY REQUIRED';
+        loadingLabel = '需要密钥';
       } else if (layerState._stale) {
         loadingLabel = staleText;
       } else if (layerState._error) {
         loadingLabel = layerState._error;
       } else if (layerState._lastUpdate) {
-        loadingLabel = `LIVE · updated ${components.model.formatAgoMinutes(now - layerState._lastUpdate)}`;
+        loadingLabel = `实时 · ${components.model.formatAgoMinutes(now - layerState._lastUpdate)}更新`;
       }
       return {
         count: layerState._count,
@@ -87,7 +87,7 @@ export function createQueries({
         // the operator can take.
         keyRequired: layerState._keyRequired,
         error: layerState._keyRequired
-          ? 'KEY REQUIRED'
+          ? '需要密钥'
           : layerState._stale
             ? staleText
             : layerState._error,
@@ -109,7 +109,7 @@ export function createQueries({
         latitude: strongest.lat,
         longitude: strongest.lon,
         frp: strongest.frp,
-        label: `Fire · FRP ${components.model.formatFrp(strongest.frp)} MW`,
+        label: `火点 · FRP ${components.model.formatFrp(strongest.frp)} MW`,
       };
     },
 

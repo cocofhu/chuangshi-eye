@@ -155,7 +155,7 @@ async function runSections(all, area, { tools, signal }) {
       const known = result.reason instanceof ToolError;
       answers[key] = {
         unavailable: true,
-        reason: known ? result.reason.message : 'unavailable right now',
+        reason: known ? result.reason.message : '当前不可用',
       };
     }
   });
@@ -192,7 +192,7 @@ export const situationBrief = defineTool({
   async run(args, context) {
     const { area, brief, lines } = await buildBrief(args, context);
     return {
-      summary: `Situation in ${area.label}: ${lines.join(' ')}`,
+      summary: `态势，${area.label}：${lines.join(' ')}`,
       data: {
         view: suggestView(context.services, {
           area,
@@ -250,7 +250,7 @@ export const getHudCaption = defineTool({
     );
     const caption = response?.data?.summary;
     if (!response?.ok || typeof caption !== 'string' || !caption)
-      throw new ToolError('unavailable', 'The caption service did not answer');
+      throw new ToolError('unavailable', '说明服务没有响应');
     return {
       summary: caption,
       data: { area: area.label, caption },
@@ -290,7 +290,7 @@ export const militaryAwareness = defineTool({
       signal,
     });
     return {
-      summary: `Military awareness within ${radiusKm} km of ${point.label}: ${lines.join(' ')}`,
+      summary: `军事感知，${point.label} 周边 ${radiusKm} km：${lines.join(' ')}`,
       data: {
         view: suggestView(services, {
           area,

@@ -78,7 +78,7 @@ export function createModel({ state: layerState, services, parts, source }) {
           .filter(Boolean),
       ),
     ];
-    return names.join(' + ') || 'Unknown mapped source';
+    return names.join(' + ') || '来源未知';
   }
 
   /**

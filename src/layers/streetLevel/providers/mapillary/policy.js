@@ -37,10 +37,10 @@ export const COVERAGE_MAX_TILES = 9;
 export const COVERAGE_OVERVIEW_MAX_TILES = 16;
 /** Shown when Mapillary refuses the server's token (401/403). */
 export const KEY_REJECTED_MESSAGE =
-  'Mapillary rejected MAPILLARY_CLIENT_TOKEN — replace it in Provider Settings';
+  'Mapillary 拒绝了 MAPILLARY_CLIENT_TOKEN — 请在提供者设置中更换';
 /** Shown while Mapillary rate-limits tile requests (429). */
 export const RATE_LIMITED_MESSAGE =
-  'Coverage requests are being rate-limited — they resume on their own';
+  '覆盖请求正在限流 — 会自行恢复';
 /**
  * Street-zoom coverage reaches this far from the camera: camera height times
  * the factor, never below the floor, even when a tilted view sees further.

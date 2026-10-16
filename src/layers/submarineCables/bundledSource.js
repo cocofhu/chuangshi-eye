@@ -28,7 +28,7 @@ export function createBundledCableSource({
       } catch {
         /* best effort */
       }
-      throw new Error(`HTTP ${response.status} for ${url}`);
+      throw new Error(`海底光缆数据不可用（HTTP ${response.status}）`);
     }
     const json = await response.json();
     signal?.throwIfAborted();

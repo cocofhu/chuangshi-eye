@@ -18,20 +18,21 @@
  * returned unchanged.
  */
 
-import { analystHeadline } from './resultDisplay.js';
+import { analystHeadline, feedChipLabel } from './resultDisplay.js';
+import { layerDisplayLabel } from '../data/layerDisplayLabels.js';
 
 const LAYER_NOUNS = Object.freeze({
-  flights: 'aircraft',
-  military: 'military aircraft',
-  'ais-live-vessels': 'ships',
-  satellites: 'satellites',
+  flights: '航空器',
+  military: '军用航空器',
+  'ais-live-vessels': '船舶',
+  satellites: '卫星',
 });
 
 /** Feed states that change what a spoken answer means. */
 const MATERIAL_FEED_TAGS = Object.freeze({
-  stale: 'stale',
-  degraded: 'degraded',
-  unavailable: 'feed unavailable',
+  stale: '陈旧',
+  degraded: '降级',
+  unavailable: '数据源不可用',
 });
 
 const MAX_LABEL = 48;
@@ -49,15 +50,15 @@ export function spokenLabel(value, max = MAX_LABEL) {
 function listPhrase(items) {
   const list = items.filter(Boolean);
   if (list.length <= 1) return list[0] || '';
-  if (list.length === 2) return `${list[0]} and ${list[1]}`;
-  return `${list.slice(0, -1).join(', ')} and ${list.at(-1)}`;
+  if (list.length === 2) return `${list[0]}和${list[1]}`;
+  return `${list.slice(0, -1).join('、')}和${list.at(-1)}`;
 }
 
-function feet(meters) {
+function metersPhrase(meters) {
   const value = Number(meters);
   if (!Number.isFinite(value)) return null;
-  const rounded = Math.round((value * 3.28084) / 100) * 100;
-  return `${rounded.toLocaleString('en-US')} feet`;
+  const rounded = Math.round(value / 100) * 100;
+  return `${rounded.toLocaleString('zh-CN')} 米`;
 }
 
 function kilometers(km) {
@@ -78,7 +79,8 @@ function feedTag(state) {
 
 /** A feed chip only when the state is worth seeing; nominal is the default. */
 function feedChips(state) {
-  return state && state !== 'nominal' ? [{ label: state }] : [];
+  const label = feedChipLabel(state);
+  return label ? [{ label }] : [];
 }
 
 /** Ids such as `austin` or `local-firms` read as names on screen. */
@@ -93,7 +95,7 @@ function displayName(value, max) {
 }
 
 function layerLabel(result) {
-  return spokenLabel(result?.label || result?.layerId || 'Layer');
+  return spokenLabel(result?.label || result?.layerId || '图层');
 }
 
 /* ---------------- per-tool builders ---------------- */
@@ -102,22 +104,22 @@ function setLayerVisibility(result, args = {}) {
   const label = layerLabel(result);
   if (result?.cancelled) return null;
   if (!result?.ok) {
-    const wanted = args.enabled === false ? 'off' : 'on';
+    const wanted = args.enabled === false ? '关闭' : '开启';
     return {
-      say: `Couldn't turn ${wanted} ${label}.`,
-      display: { title: label, lines: [result?.error].filter(Boolean) },
+      say: `无法${wanted} ${label}。`,
+      display: { title: label, lines: [`无法${wanted} ${label}。`] },
     };
   }
   const on = result.enabled !== false;
   const tag = on ? feedTag(result.feedState) : null;
   const say =
-    tag === 'feed unavailable'
-      ? `${label} on, but its feed is unavailable.`
-      : sentence(`${label} ${on ? 'on' : 'off'}${tag ? `, ${tag}` : ''}`);
+    tag === '数据源不可用'
+      ? `${label}已开启，但其数据源不可用。`
+      : sentence(`${label}${on ? '已开启' : '已关闭'}${tag ? `，${tag}` : ''}`);
   return {
     say,
     display: {
-      title: `${label} ${on ? 'on' : 'off'}`,
+      title: `${label}${on ? '已开启' : '已关闭'}`,
       chips: on ? feedChips(result.feedState) : [],
       sources: result.source ? [{ label: result.source }] : [],
     },
@@ -125,27 +127,27 @@ function setLayerVisibility(result, args = {}) {
 }
 
 function flyToLocation(result) {
-  const label = spokenLabel(result?.label || result?.query || 'there');
+  const label = spokenLabel(result?.label || result?.query || '该处');
   if (result?.cancelled) return null;
   if (!result?.ok) {
     return {
-      say: sentence(`Couldn't find ${label}`),
-      display: { title: label, lines: [result?.error].filter(Boolean) },
+      say: sentence(`找不到 ${label}`),
+      display: { title: label, lines: [sentence(`找不到 ${label}`)] },
     };
   }
   return {
-    say: sentence(result.arrived ? `Over ${label}` : `Flying to ${label}`),
+    say: sentence(result.arrived ? `已在 ${label} 上空` : `正在飞往 ${label}`),
     display: {
       title: label,
       lines: result.rangeM
-        ? [`Camera range ${kilometers(result.rangeM / 1000)}`]
+        ? [`相机距离 ${kilometers(result.rangeM / 1000)}`]
         : [],
     },
   };
 }
 
 function frameOverhead(result) {
-  const noun = LAYER_NOUNS[result?.layerId] || 'contacts';
+  const noun = LAYER_NOUNS[result?.layerId] || '目标';
   const radius = kilometers(result?.radiusKm);
   if (result?.cancelled) return null;
   if (!result?.ok) {
@@ -154,22 +156,22 @@ function frameOverhead(result) {
     const error = result?.error || '';
     let say;
     if (/not enabled/i.test(error))
-      say = `The ${noun} layer is off. Turn it on?`;
+      say = `${noun}图层已关闭。要打开吗？`;
     else if (result?.count === 0 && radius)
-      say = `No ${noun} within ${radius}.`;
-    else if (/unknown target/i.test(error)) say = "I can't frame that layer.";
-    else say = `Couldn't frame the ${noun} right now.`;
+      say = `${radius}内没有${noun}。`;
+    else if (/unknown target/i.test(error)) say = '无法框选该图层。';
+    else say = `现在无法框选该${noun}。`;
     return {
       say,
       display: {
-        title: `Frame ${noun}`,
-        lines: [result?.error].filter(Boolean),
+        title: `框选${noun}`,
+        lines: [say],
       },
     };
   }
   // The layer query returns at most 80, so a full page is a lower bound.
   const count = Number(result.count) || 0;
-  const countText = count >= 80 ? `at least ${count}` : String(count);
+  const countText = count >= 80 ? `至少 ${count}` : String(count);
   const referents = (result.nearest || [])
     .filter((entry) => entry?.label || entry?.id)
     .map((entry, index) => ({
@@ -179,14 +181,14 @@ function frameOverhead(result) {
       layerId: result.layerId,
     }));
   return {
-    say: sentence(`Framed ${countText} ${noun} within ${radius}`),
+    say: sentence(`已框选 ${countText} 个${noun}，范围 ${radius}`),
     display: {
-      title: `${count} ${noun} in frame`,
+      title: `框内 ${count} 个${noun}`,
       lines: [
-        `Within ${radius} of the view`,
-        result.detectionEnabled ? 'Labels on' : null,
+        `视野 ${radius} 内`,
+        result.detectionEnabled ? '标签开启' : null,
       ].filter(Boolean),
-      notes: count >= 80 ? ['Framing uses the nearest 80 loaded contacts'] : [],
+      notes: count >= 80 ? ['取景使用最近的 80 个已加载目标'] : [],
     },
     referents,
   };
@@ -194,26 +196,26 @@ function frameOverhead(result) {
 
 function selectNearestAircraft(result) {
   const location = spokenLabel(
-    result?.location?.label || result?.location || 'there',
+    result?.location?.label || result?.location || '该处',
   );
-  const noun = LAYER_NOUNS[result?.layerId] || 'aircraft';
+  const noun = LAYER_NOUNS[result?.layerId] || '航空器';
   const feed = result?.feed || {};
   const sources = feed.source ? [{ label: feed.source }] : [];
   if (result?.cancelled) return null;
   if (!result?.ok) {
     let say;
-    if (result?.stage === 'location') say = `Couldn't get to ${location}.`;
+    if (result?.stage === 'location') say = `无法到达 ${location}。`;
     else if (feed.state === 'unavailable')
-      say = 'The aircraft feed is unavailable.';
+      say = '航空器数据源不可用。';
     else if (result?.stage === 'nearest')
-      say = `No airborne ${noun} loaded near ${location} yet.`;
-    else if (result?.stage === 'layer') say = `Couldn't turn on ${noun}.`;
-    else say = `Couldn't select the nearest ${noun}.`;
+      say = `${location}附近尚未加载空中${noun}。`;
+    else if (result?.stage === 'layer') say = `无法开启 ${noun}。`;
+    else say = `无法选取最近的${noun}。`;
     return {
       say,
       display: {
-        title: `Nearest ${noun}`,
-        lines: [result?.error].filter(Boolean),
+        title: `最近${noun}`,
+        lines: [say],
         chips: feedChips(feed.state),
         sources,
       },
@@ -222,12 +224,12 @@ function selectNearestAircraft(result) {
   const aircraft = result.aircraft || {};
   const name = spokenLabel(aircraft.callsign || result.label || aircraft.id);
   const distance = kilometers(aircraft.distanceKm);
-  const altitude = feet(aircraft.altitudeM);
+  const altitude = metersPhrase(aircraft.altitudeM);
   const tag = feedTag(feed.state);
   const say = sentence(
     [
-      `Selected ${name}`,
-      distance ? `${distance} from ${location}` : null,
+      `已选中 ${name}`,
+      distance ? `距 ${location} ${distance}` : null,
       altitude,
       tag,
     ]
@@ -239,8 +241,8 @@ function selectNearestAircraft(result) {
     display: {
       title: name,
       lines: [
-        distance ? `${distance} from ${location}` : null,
-        altitude ? `Altitude ${altitude}` : null,
+        distance ? `距 ${location} ${distance}` : null,
+        altitude ? `高度 ${altitude}` : null,
       ].filter(Boolean),
       chips: feedChips(feed.state),
       sources,
@@ -253,12 +255,12 @@ function selectNearestAircraft(result) {
 
 function routeText(properties) {
   const route = spokenLabel(properties.route || '', 40);
-  if (route) return route.replace(/\s*(?:-|→|>)\s*/g, ' to ');
+  if (route) return route.replace(/\s*(?:-|→|>)\s*/g, ' 至 ');
   const origin = spokenLabel(properties.routeOrigin || '', 12);
   const destination = spokenLabel(properties.routeDestination || '', 12);
-  if (origin && destination) return `${origin} to ${destination}`;
-  if (origin) return `from ${origin}`;
-  if (destination) return `to ${destination}`;
+  if (origin && destination) return `${origin} 至 ${destination}`;
+  if (origin) return `从 ${origin}`;
+  if (destination) return `至 ${destination}`;
   return null;
 }
 
@@ -269,7 +271,7 @@ function getEntityContext(result) {
   const isAircraft =
     selected.layerId === 'flights' || selected.layerId === 'military';
   const title = spokenLabel(
-    properties.callsign || selected.name || selected.id || 'Selection',
+    properties.callsign || selected.name || selected.id || '选中项',
   );
   if (!isAircraft) {
     return {
@@ -289,9 +291,9 @@ function getEntityContext(result) {
   const identityLine = sentence(
     [
       title,
-      spokenLabel(properties.operator || '', 32) || 'operator unknown',
-      spokenLabel(properties.type || '', 32) || 'type unknown',
-      route || 'no route on file',
+      spokenLabel(properties.operator || '', 32) || '运营方未知',
+      spokenLabel(properties.type || '', 32) || '机型未知',
+      route || '无航路记录',
     ].join(', '),
   );
   return {
@@ -301,9 +303,9 @@ function getEntityContext(result) {
       title,
       lines: [
         properties.registration
-          ? `Registration ${spokenLabel(properties.registration, 16)}`
+          ? `注册号 ${spokenLabel(properties.registration, 16)}`
           : null,
-        route ? `Route ${route}` : null,
+        route ? `航路 ${route}` : null,
       ].filter(Boolean),
       sources: selected.source ? [{ label: selected.source }] : [],
     },
@@ -323,8 +325,8 @@ function getCurrentViewState(result) {
   const heightM = Number(result.camera?.heightM);
   const height = Number.isFinite(heightM)
     ? heightM >= 1000
-      ? `${Math.round(heightM / 1000).toLocaleString('en-US')} km up`
-      : `${Math.round(heightM)} m up`
+      ? `${Math.round(heightM / 1000).toLocaleString('zh-CN')} 公里高度`
+      : `${Math.round(heightM)} 米高度`
     : null;
   const layers = Array.isArray(result.layers) ? result.layers : [];
   const enabled = layers.filter((layer) => layer.enabled !== false);
@@ -337,11 +339,11 @@ function getCurrentViewState(result) {
     );
   const style = spokenLabel(result.style || 'normal', 20);
   const parts = [
-    height ? `Camera ${height}` : null,
-    `${style} style`,
+    height ? `相机 ${height}` : null,
+    `${style} 风格`,
     names.length
-      ? `${listPhrase(names.slice(0, 4))}${names.length > 4 ? ` and ${names.length - 4} more` : ''} on`
-      : 'no layers on',
+      ? `${listPhrase(names.slice(0, 4))}${names.length > 4 ? `及其他 ${names.length - 4} 项` : ''}已开启`
+      : '无图层开启',
     tagged.length ? listPhrase(tagged.slice(0, 2)) : null,
   ];
   return {
@@ -350,10 +352,10 @@ function getCurrentViewState(result) {
       .map((part) => sentence(part[0].toUpperCase() + part.slice(1)))
       .join(' '),
     display: {
-      title: 'View state',
+      title: '视图状态',
       lines: enabled.map(
         (layer) =>
-          `${spokenLabel(layer.name || layer.id, 32)} · ${layer.count ?? 0} · ${layer.feedState || 'nominal'}`,
+          `${spokenLabel(layer.name || layer.id, 32)} · ${layer.count ?? 0} · ${feedChipLabel(layer.feedState) || '正常'}`,
       ),
     },
     schedule: 'silent',
@@ -372,28 +374,28 @@ function annotateMap(result) {
   const referents = drawn.map((item, index) => ({
     n: index + 1,
     id: item.id || null,
-    label: spokenLabel(item.label || item.target || `Mark ${index + 1}`),
+    label: spokenLabel(item.label || item.target || `标记 ${index + 1}`),
     latitude: item.latitude,
     longitude: item.longitude,
   }));
   const parts = [];
   if (failed.length)
-    parts.push(`Couldn't place ${listPhrase(failed.slice(0, 3))}.`);
+    parts.push(`无法放置 ${listPhrase(failed.slice(0, 3))}。`);
   if (result?.ok && result.routeFallback)
-    parts.push('That line is straight-line distance, not a street route.');
-  if (result?.capped) parts.push('The map is full. Clear it first?');
+    parts.push('该线为直线距离，不是街道路线。');
+  if (result?.capped) parts.push('地图已满。要先清除吗？');
   return {
     // Successful marks are not announced; the model keeps explaining.
     say: parts.length ? parts.join(' ') : null,
     display: {
       title: result?.ok
-        ? `Marked ${drawn.length} ${drawn.length === 1 ? 'place' : 'places'}`
-        : 'Nothing marked',
+        ? `已标记 ${drawn.length} 处`
+        : '未标记',
       // The numbered referents list the marks; lines stay for extra facts.
       lines: [],
       notes: [
-        ...(failed.length ? [`Not found: ${failed.join(', ')}`] : []),
-        ...(result?.outlinePending ? ['Tracing outlines'] : []),
+        ...(failed.length ? [`未找到：${failed.join('、')}`] : []),
+        ...(result?.outlinePending ? ['正在描边轮廓'] : []),
       ],
     },
     referents,
@@ -410,17 +412,17 @@ function analystQuery(result) {
   const tag = feedTag(state);
   const scope = spokenLabel(result.scopeLabel || '', 96);
   const answer =
-    tag === 'feed unavailable'
+    tag === '数据源不可用'
       ? sentence(
-          `Feed unavailable${scope ? ` ${scope}` : ''}; no authoritative count${result.complete === false ? ', retained coverage is a lower bound' : ''}`,
+          `数据源不可用${scope ? ` ${scope}` : ''}；无权威计数${result.complete === false ? '，已保留覆盖为下限' : ''}`,
         )
       : sentence(`${headline}${tag ? `, ${tag}` : ''}`);
   const unanswered = (Array.isArray(result.unanswered) ? result.unanswered : [])
     .map((layer) => spokenLabel(layer, 24))
     .filter(Boolean);
   const missing = unanswered.length
-    ? `Partial; ${listPhrase(unanswered.slice(0, 2))}${unanswered.length > 2 ? ` and ${unanswered.length - 2} more` : ''} not answered.`
-    : 'Partial answer.';
+    ? `部分；${listPhrase(unanswered.slice(0, 2))}${unanswered.length > 2 ? `及其他 ${unanswered.length - 2} 项` : ''}未回答。`
+    : '部分回答。';
   return {
     say: `${answer}${result.partial ? ` ${missing}` : ''}`,
   };
@@ -493,25 +495,55 @@ export function planStepLabel(name, args = {}) {
     case 'annotate_map': {
       const targets = annotationTargets(args);
       return targets.length
-        ? `Mark ${listPhrase(targets.slice(0, 2))}${targets.length > 2 ? ` +${targets.length - 2}` : ''}`
-        : 'Mark the map';
+        ? `标记 ${listPhrase(targets.slice(0, 2))}${targets.length > 2 ? ` +${targets.length - 2}` : ''}`
+        : '在地图上标记';
     }
     case 'fly_to_location':
-      return `Fly to ${displayName(args.query || args.locationId || 'location', 40)}`;
+      return `飞往 ${displayName(args.query || args.locationId || '地点', 40)}`;
     case 'select_nearest_aircraft':
-      return `Nearest aircraft to ${displayName(args.locationQuery || args.locationId || 'here', 32)}`;
+      return `距 ${displayName(args.locationQuery || args.locationId || '此处', 32)} 最近的航空器`;
     case 'set_layer_visibility':
-      return `${displayName(args.layerId || 'Layer', 32)} ${args.enabled === false ? 'off' : 'on'}`;
+      return `${layerDisplayLabel({ id: args.layerId })}${args.enabled === false ? '关闭' : '开启'}`;
     case 'get_entity_context':
-      return 'Read the view';
+      return '读取当前视图';
     case 'get_current_view_state':
-      return 'Check view state';
+      return '查看视野状态';
     case 'frame_overhead':
-      return `Frame ${spokenLabel(args.target || 'flights', 24)}`;
+      return `框选 ${spokenLabel(args.target || '航空器', 24)}`;
     default:
-      return spokenLabel(String(name || 'Action').replace(/_/g, ' '), 40);
+      return (
+        TOOL_STEP_LABELS[name] ||
+        spokenLabel(String(name || '操作').replace(/_/g, ' '), 40)
+      );
   }
 }
+
+/** On-screen plan labels for tools that have no argument-specific phrasing. */
+const TOOL_STEP_LABELS = Object.freeze({
+  adjust_camera_zoom: '调整缩放',
+  zoom_to_globe: '回到全球',
+  show_data_layers_menu: '打开图层菜单',
+  set_panel_open: '切换面板',
+  set_context_mode: '切换情境',
+  control_cockpit: '座舱',
+  set_visual_style: '切换风格',
+  set_hud: '切换 HUD',
+  set_cyber_sonar: '声呐',
+  set_detection: '检测',
+  set_map_stack: '底图',
+  set_post_processing: '画面处理',
+  control_scene: '场景',
+  control_cctv: '监控',
+  control_radio: '电台',
+  track_entity: '跟踪目标',
+  stop_tracking: '停止跟踪',
+  clear_annotations: '清除标记',
+  move_camera: '移动相机',
+  fly_route: '沿路径飞行',
+  analyst_query: '查询态势',
+  next_iss_pass: '国际空间站过境',
+  next_satellite_pass: '卫星过境',
+});
 
 /**
  * The spoken subject of a tool call for "Still working on …", or '' when the
@@ -532,18 +564,18 @@ export function narrationLabel(name, args = {}) {
 
 /** On-screen labels for progress steps. */
 const STEP_LABELS = Object.freeze({
-  resolve: 'Finding places',
-  outline: 'Tracing outline',
-  search: 'Looking up place',
-  fly: 'Flying',
-  layer: 'Turning on layer',
-  refresh: 'Loading aircraft',
-  nearest: 'Picking nearest',
+  resolve: '正在查找地点',
+  outline: '正在描边轮廓',
+  search: '正在查询地点',
+  fly: '正在飞行',
+  layer: '正在开启图层',
+  refresh: '正在加载航空器',
+  nearest: '正在选取最近目标',
 });
 
 /** On-screen label for a progress step. */
 export function progressStepLabel(step, label) {
-  const base = STEP_LABELS[step] || spokenLabel(step || 'Working', 24);
+  const base = STEP_LABELS[step] || spokenLabel(step || '处理中', 24);
   return label ? `${base}: ${spokenLabel(label, 32)}` : base;
 }
 
@@ -555,19 +587,19 @@ export function progressLine(step, label) {
   const place = spokenLabel(label, 32);
   switch (step) {
     case 'resolve':
-      return place ? `Finding ${place} on the map.` : 'Finding those places.';
+      return place ? `正在地图上查找 ${place}。` : '正在查找这些地点。';
     case 'search':
-      return place ? `Looking up ${place}.` : null;
+      return place ? `正在查询 ${place}。` : null;
     case 'fly':
-      return place ? `Heading to ${place}.` : null;
+      return place ? `正在飞往 ${place}。` : null;
     case 'layer':
-      return place ? `Turning on ${place}.` : null;
+      return place ? `正在开启 ${place}。` : null;
     case 'refresh':
-      return 'Loading aircraft there.';
+      return '正在加载该处航空器。';
     case 'nearest':
-      return 'Picking the nearest aircraft.';
+      return '正在选取最近航空器。';
     case 'still':
-      return place ? `Still working on ${place}.` : 'Still working on it.';
+      return place ? `仍在处理 ${place}。` : '仍在处理。';
     default:
       return null;
   }

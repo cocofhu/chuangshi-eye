@@ -200,10 +200,10 @@ export function createReplay({ state: layerState, services, parts, source }) {
     if (speedControl) speedControl.hidden = !replayAvailable;
     button.hidden = active || !replayAvailable;
     button.disabled = !replayAvailable;
-    button.textContent = 'REPLAY ASCENT';
+    button.textContent = '回放上升';
     button.classList.remove('active');
     button.setAttribute('aria-pressed', String(active));
-    button.title = 'Replay the estimated ascent with a following camera';
+    button.title = '以跟随相机回放估计上升段';
     if (transport) {
       transport.hidden = !active;
       transport.classList.toggle(
@@ -218,11 +218,11 @@ export function createReplay({ state: layerState, services, parts, source }) {
         toggleButton.textContent = layerState._replayPaused ? '▶' : 'Ⅱ';
         toggleButton.setAttribute(
           'aria-label',
-          layerState._replayPaused ? 'Resume replay' : 'Pause replay',
+          layerState._replayPaused ? '继续回放' : '暂停回放',
         );
         toggleButton.title = layerState._replayPaused
-          ? 'Resume replay'
-          : 'Pause replay';
+          ? '继续回放'
+          : '暂停回放';
       }
     }
   }
@@ -233,17 +233,17 @@ export function createReplay({ state: layerState, services, parts, source }) {
     );
     if (!transport || !layerState._replayCameraLaunchId) return;
     const phase = state.countdownActive
-      ? `T minus ${state.countdownSeconds}`
+      ? `T−${state.countdownSeconds}`
       : state.preCountdownActive
-        ? 'Preparing launch site'
+        ? '正在准备发射场'
         : state.elapsedSinceStart < 1
-          ? 'Liftoff'
+          ? '起飞'
           : state.ascending
-            ? 'Ascent replay'
-            : 'Orbit replay';
+            ? '上升回放'
+            : '轨道回放';
     transport.setAttribute(
       'aria-label',
-      `${phase}${layerState._replayPaused ? ', paused' : ''}`,
+      `${phase}${layerState._replayPaused ? '，已暂停' : ''}`,
     );
   }
 

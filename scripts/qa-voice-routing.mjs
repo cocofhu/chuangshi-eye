@@ -858,7 +858,7 @@ async function runDeixisLiveLayer() {
     );
     report(
       result?.result?.resolvedFrom?.source === 'pointer' &&
-        /within/i.test(result?.result?.scopeLabel || ''),
+        /公里内/.test(result?.result?.scopeLabel || ''),
       'deixis live: [ground] "How many flights are around here?" → radius at the pointer',
       summarize(events),
     );
@@ -1092,7 +1092,7 @@ async function runDeixisBehavior(page, run, settle) {
     report(
       turn.snapshot?.entity?.id === aircraft.id &&
         turn.chipVisible &&
-        turn.chipKind === 'THIS' &&
+        turn.chipKind === '此' &&
         turn.reticleVisible,
       'deixis: pointer on an aircraft resolves "this" with chip and reticle',
       `entity=${turn.snapshot?.entity?.id}/${turn.snapshot?.entity?.label} expected=${aircraft.id} chip=${turn.chipKind}:${turn.chipText} reticle=${turn.reticleVisible}`,
@@ -1170,7 +1170,7 @@ async function runDeixisBehavior(page, run, settle) {
   }
   report(
     groundTurn?.snapshot?.target === 'ground' &&
-      groundTurn.chipKind === 'HERE' &&
+      groundTurn.chipKind === '此处' &&
       /-?\d+\.\d\d, -?\d+\.\d\d/.test(groundTurn.chipText) &&
       groundTurn.reticleVisible,
     'deixis: pointer on bare ground resolves "here" to coordinates',
@@ -1221,7 +1221,7 @@ async function runDeixisBehavior(page, run, settle) {
   report(
     around?.ok !== false &&
       around?.resolvedFrom?.source === 'pointer' &&
-      /within/i.test(around?.scopeLabel || ''),
+      /公里内/.test(around?.scopeLabel || ''),
     'deixis: "how many flights around here" counts a radius at the pointer',
     `count=${around?.count} scope=${around?.scopeLabel} km=${around?.resolvedFrom?.km}`,
   );
@@ -2192,7 +2192,7 @@ async function runBehaviorLayer() {
         typeof windowBlock.centeredOn === 'string' &&
         /loads by viewport/.test(r?.coverage?.note || '') &&
         // Contract rule 3: the count names its own scope.
-        /^within 250 km of /.test(r?.scopeLabel || ''),
+        /^距 .+ 250 公里内$/.test(r?.scopeLabel || ''),
       'behavior: analyst_query carries the Contacts panel counts and says what it measured',
       `contactsWindow=${JSON.stringify(windowBlock)} awarenessFlights=${awarenessFlights} analystCount=${r?.count} scopeLabel="${r?.scopeLabel}"`,
     );

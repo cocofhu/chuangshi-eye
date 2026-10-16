@@ -21,7 +21,7 @@ export function createIngestion({
   async function loadLivePositions(viewer) {
     if (!viewer || feed.loading) return;
     feed.loading = true;
-    feed.loadingLabel = feed.loaded ? 'refreshing...' : 'loading...';
+    feed.loadingLabel = feed.loaded ? '正在刷新…' : '正在加载…';
     const requestController = new AbortController();
     const requestSessionId = feed.sessionId;
     feed.abort = requestController;
@@ -69,7 +69,7 @@ export function createIngestion({
         ownsAisRequest(requestController, requestSessionId) &&
         error?.name !== 'AbortError'
       ) {
-        markUnavailable(error?.message || 'AIS live load failed');
+        markUnavailable(error?.message || 'AIS 实时加载失败');
         console.warn('[Data:ais-live-vessels]', feed.error, error);
       }
     } finally {

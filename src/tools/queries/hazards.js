@@ -3,7 +3,7 @@
 import { suggestView } from '../views.js';
 import { defineTool, ToolError } from '../catalog.js';
 import { AREA_SCHEMA, areaContains, resolveArea } from '../area.js';
-import { LIMIT_SCHEMA, capRows, countNoun, isoTime } from '../results.js';
+import { LIMIT_SCHEMA, capRows, isoTime } from '../results.js';
 
 export const getEarthquakes = defineTool({
   name: 'get_earthquakes',
@@ -32,12 +32,12 @@ export const getEarthquakes = defineTool({
       )
       .sort((a, b) => b.mag - a.mag || (b.time ?? 0) - (a.time ?? 0));
     const result = capRows(events, args.limit);
-    const where = area ? ` in ${area.label}` : ' worldwide';
+    const where = area ? `，位于 ${area.label}` : '，全球';
     const strongest = events[0]
-      ? `; strongest M${events[0].mag.toFixed(1)}${events[0].place ? ` ${events[0].place}` : ''}`
+      ? `；最强 M${events[0].mag.toFixed(1)}${events[0].place ? ` ${events[0].place}` : ''}`
       : '';
     return {
-      summary: `${countNoun(events.length, 'earthquake')} of M${minimum}+ in the last 24 hours${where}${strongest}.`,
+      summary: `${events.length} 次 M${minimum}+ 地震，近 24 小时${where}${strongest}。`,
       data: {
         view: suggestView(
           services,
@@ -83,7 +83,7 @@ export const getActiveFires = defineTool({
     if (snapshot.keyRequired)
       throw new ToolError(
         'unavailable',
-        'Fire detections need a NASA FIRMS key configured for this server',
+        '火点探测需要在本服务器配置 NASA FIRMS 密钥',
       );
     const fires = snapshot.fires
       .filter((fire) => areaContains(area, fire))
@@ -96,13 +96,13 @@ export const getActiveFires = defineTool({
       .filter((source) => source?.ok === false)
       .map((source) => source.source);
     const notes = [
-      ...(stale ? ['data may be stale'] : []),
-      ...(missing.length ? [`no data from ${missing.join(', ')}`] : []),
+      ...(stale ? ['数据可能已过期'] : []),
+      ...(missing.length ? [`无来自 ${missing.join('、')} 的数据`] : []),
     ];
     return {
       summary:
-        `${countNoun(fires.length, 'fire detection')} in ${area.label} in the last 24 hours` +
-        (notes.length ? ` (${notes.join('; ')}).` : '.'),
+        `${fires.length} 个火点，位于 ${area.label}，近 24 小时` +
+        (notes.length ? `（${notes.join('；')}）。` : '。'),
       data: {
         view: suggestView(services, { area, layers: ['local-firms'] }),
         stale,

@@ -1366,7 +1366,7 @@ export async function searchAndFlyTo(viewer, query, options = {}) {
         : navigationMode,
     rangeM: Math.round(flight.range),
     ...(isUnavailableCapability(buildingBounds)
-      ? { outlineUnavailable: true, message: 'Detailed outline unavailable' }
+      ? { outlineUnavailable: true, message: '详细轮廓不可用' }
       : {}),
   };
 }

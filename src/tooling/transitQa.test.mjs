@@ -155,7 +155,7 @@ test('thermal controls wait for activation and use the real generated parameter 
   const how = await selectStyle(
     page,
     'thermal',
-    { 'WHOT/BHOT': 1, Ironbow: 1 },
+    { '白热/黑热': 1, '铁红': 1 },
     pause,
   );
   assert.match(how, /button did not activate/);

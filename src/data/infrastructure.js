@@ -16,7 +16,7 @@ export function createInfrastructureLayers(services) {
       name: 'Datacenters',
       color: '#00ffff', // Cyan
       icon: '▣',
-      source: 'Local',
+      source: '本地',
       osmDerived: true,
       labels: true,
       labelMax: 700,

@@ -257,7 +257,7 @@ export function createSequences({ state, source, parts }) {
         parts.coverage.recolorSequence(sequenceId, false);
         state.sequence.selectedId = null;
         state.context.actions.reportError(
-          error?.message || 'Sequence images unavailable',
+          error?.message || '序列影像不可用',
         );
       }
     } finally {

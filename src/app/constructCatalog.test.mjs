@@ -51,7 +51,7 @@ test('catalogs construct distinct layers and classification from their supplied 
   await first.weatherClock.setTarget('2026-09-21T12:00:00.000Z');
   assert.match(
     first.get('wind').getRowControls().info,
-    /Forecast · does not follow history/,
+    /预报 · 不跟随历史/,
   );
   assert.equal(second.get('wind').getRowControls().summary.status, null);
   for (const id of ['weather-radar', 'weather-satellite', 'weather-lightning'])
@@ -161,7 +161,7 @@ test('Mapillary can be omitted or replaced without changing catalog membership',
   );
   assert.match(
     catalog.get('street-level').getUIState().coverage.hint,
-    /No street-level imagery providers/,
+    /未配置街景影像来源/,
   );
   const provider = fakeStreetLevelProvider({
     id: 'example',

@@ -497,10 +497,10 @@ test('a failed Context mission reports the layers the facade named', async () =>
 });
 
 test('the fires/quakes tile name is switchable from one constant', () => {
-  assert.equal(environmentalLabel('ENVIRONMENTAL').title, 'ENVIRONMENTAL');
-  assert.equal(environmentalLabel('EARTH_WATCH').title, 'EARTH WATCH');
-  assert.equal(environmentalLabel('ACTIVE_EVENTS').title, 'ACTIVE EVENTS');
-  assert.equal(environmentalLabel('nonsense').title, 'ENVIRONMENTAL');
+  assert.equal(environmentalLabel('ENVIRONMENTAL').title, '环境');
+  assert.equal(environmentalLabel('EARTH_WATCH').title, '地球观测');
+  assert.equal(environmentalLabel('ACTIVE_EVENTS').title, '活跃事件');
+  assert.equal(environmentalLabel('nonsense').title, '环境');
   assert.equal(environmentalLabel().title, environmentalLabel(ENVIRONMENTAL_LABEL_CHOICE).title);
 });
 

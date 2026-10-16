@@ -1095,11 +1095,11 @@ try {
         );
         assert.match(
           measured.stats.loadingLabel,
-          /LIVE · Roads: TomTom \+ OpenStreetMap · Flow/,
+          /实时 · 道路：TomTom \+ OpenStreetMap · 路况/,
         );
       } else {
         assert.equal(measured.stats.flowCoveragePct, 0);
-        assert.match(measured.stats.loadingLabel, /SIMULATED/);
+        assert.match(measured.stats.loadingLabel, /模拟/);
       }
       const { free, slow, jam, sim } = measured.stats.flowBuckets;
       assert.equal(
@@ -1221,7 +1221,7 @@ try {
       );
       assert.match(
         result['traffic-street-ofm'].stats.loadingLabel,
-        /TomTom roads need a TomTom key/,
+        /TomTom 道路需要 TomTom 密钥/,
       );
       await waitForSources();
       await page.close();
@@ -1436,7 +1436,7 @@ try {
     assert.equal(result.alprLondon.countLabel, '');
     assert.equal(
       result.alprLondon.loadingLabel,
-      'No ALPR data for this area — US and Canada only',
+      '此区域无车牌识别数据 — 仅美国和加拿大',
     );
     await page.evaluate(() => {
       if (document.querySelector('#data-panel.collapsed'))

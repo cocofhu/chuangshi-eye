@@ -84,7 +84,7 @@ test('bike share joins station information with live status inside the area', as
   const result = await catalog.call('get_bike_share', { area: downtown });
   assert.equal(
     result.summary,
-    '2 bike-share stations in 2 km around 30.267, -97.743 with 4 bikes available.',
+    '2 个共享单车站点，位于 30.267, -97.743 周边 2 km，可用 4 辆车。',
   );
   assert.deepEqual(result.data.systems, ['Austin, TX']);
   assert.deepEqual(result.data.rows[0], {
@@ -114,7 +114,7 @@ test('bike share reports uncovered areas and failed systems honestly', async () 
   const empty = await none.call('get_bike_share', { area: downtown });
   assert.equal(
     empty.summary,
-    'No supported bike-share system covers 2 km around 30.267, -97.743.',
+    '没有支持的共享单车系统覆盖 30.267, -97.743 周边 2 km。',
   );
   assert.equal(empty.data.total, 0);
   const both = [
@@ -131,7 +131,7 @@ test('bike share reports uncovered areas and failed systems honestly', async () 
         area: { lat: 30.4, lon: -97.7, radius_km: 20 },
       })
     ).summary,
-    /\(1 system unavailable\)\.$/,
+    /（1 个系统不可用）。$/,
   );
   const down = composeCatalog({
     tools: coreTools,
@@ -205,7 +205,7 @@ test('transit vehicles come from nearby feeds and can be limited to a route', as
   const all = await catalog.call('get_transit_vehicles', { area: downtown });
   assert.equal(
     all.summary,
-    '2 transit vehicles in 2 km around 30.267, -97.743.',
+    '2 辆公交车辆，位于 30.267, -97.743 周边 2 km。',
   );
   assert.deepEqual(source.requested, ['capmetro']);
   assert.deepEqual(all.data.rows[0], {
@@ -238,7 +238,7 @@ test('transit vehicles come from nearby feeds and can be limited to a route', as
   });
   assert.equal(
     rapid.summary,
-    '1 transit vehicle on route rapid in 2 km around 30.267, -97.743.',
+    '1 辆公交车辆，线路 rapid，位于 30.267, -97.743 周边 2 km。',
   );
   assert.equal(rapid.data.rows[0].id, 'v2');
 });
@@ -253,7 +253,7 @@ test('transit reports uncovered areas and unavailable feeds', async () => {
   });
   assert.equal(
     oslo.summary,
-    'No supported transit feed covers 5 km around 59.900, 10.700.',
+    '没有支持的公交数据源覆盖 59.900, 10.700 周边 5 km。',
   );
   const down = composeCatalog({
     tools: coreTools,
@@ -316,7 +316,7 @@ test('traffic flow aggregates speed, congestion and closures by road length', as
   assert.deepEqual(zooms, [12, 11, 10]);
   assert.equal(
     result.summary,
-    'Traffic in the requested box: 50% of free-flow speed on average; 1.7 km congested of 2.8 km measured; 0.6 km closed.',
+    '路况 指定范围：平均自由流速度的 50%；已测 2.8 km 中拥堵 1.7 km；封闭 0.6 km。',
   );
   assert.equal(result.data.speed_pct_of_free_flow, 50);
   assert.deepEqual(result.data.by_category, [
@@ -345,7 +345,7 @@ test('traffic reports a missing key, empty areas and areas that are too wide', a
       'get_traffic_flow',
       { area: downtown },
     ),
-    (error) => error.code === 'unavailable' && /TomTom key/.test(error.message),
+    (error) => error.code === 'unavailable' && /TomTom 密钥/.test(error.message),
   );
   const quiet = {
     getStatus: async () => ({ hasKey: true }),
@@ -358,7 +358,7 @@ test('traffic reports a missing key, empty areas and areas that are too wide', a
         services: { traffic: quiet },
       }).call('get_traffic_flow', { area: downtown })
     ).summary,
-    'No live traffic is reported in 2 km around 30.267, -97.743.',
+    '30.267, -97.743 周边 2 km 无实时路况报告。',
   );
   const wide = {
     getStatus: async () => ({ hasKey: true }),
@@ -402,7 +402,7 @@ test('transit marks stale feeds and drops expired positions', async () => {
   assert.equal(result.data.feeds[0].status, 'stale');
   assert.equal(
     result.summary,
-    '1 transit vehicle in 2 km around 30.267, -97.743 (1 feed stale; positions may be out of date).',
+    '1 辆公交车辆，位于 30.267, -97.743 周边 2 km（1 个数据源陈旧，位置可能过时）。',
   );
 });
 
@@ -425,7 +425,7 @@ test('bike share names the systems it did not search', async () => {
   assert.ok(result.data.systems_not_searched.length >= 1);
   assert.match(
     result.summary,
-    /more not searched: .*; use a smaller area\)\.$/,
+    /个未搜索：.*；请缩小范围）。$/,
   );
 });
 
@@ -479,7 +479,7 @@ test('traffic counts only roads inside a radius area and reports missing tiles',
   assert.ok((await call(flow(chord), circle)).data.measured_km > 10);
   const partial = await call(flow(across, true), circle);
   assert.equal(partial.data.partial, true);
-  assert.match(partial.summary, /Some map tiles did not load/);
+  assert.match(partial.summary, /部分地图瓦片未加载/);
 });
 
 test('a whole-world bike-share search names every system it skipped', async () => {

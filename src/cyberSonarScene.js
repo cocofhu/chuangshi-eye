@@ -176,7 +176,7 @@ export function createCyberSonarScene(viewer, manager) {
     const status = globalThis.document?.getElementById?.('cyber-sonar-status');
     const message = gpu.stats.supported
       ? ''
-      : 'Contact GPU unavailable. Native contacts remain visible.';
+      : '目标 GPU 不可用。原生目标仍可见。';
     if (status && status.textContent !== message) status.textContent = message;
     removeRender?.();
     removeRender = scene.preRender.addEventListener(update);

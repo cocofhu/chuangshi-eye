@@ -32,7 +32,7 @@ test('a wide-view pack failure names the unavailable data without an API fallbac
           status: 'unavailable',
           failureReason: error.failureReason,
         }),
-        'Mapped names temporarily unavailable',
+        '标注名称暂不可用',
       );
       return true;
     },
@@ -54,7 +54,7 @@ test('mapped-site sources validate viewport bounds and preserve the exact retry 
   ])
     await assert.rejects(
       source.getMappedSites(invalid),
-      /bounded installation viewport/,
+      /有界的设施视野/,
     );
   assert.equal(calls.length, 0);
   const payload = await source.getMappedSites(box, { exact: true });
@@ -69,7 +69,7 @@ test('malformed installation and place snapshots are never accepted as empty suc
   });
   await assert.rejects(
     source.getMappedSites(box),
-    /Malformed installation snapshot/,
+    /设施快照无效/,
   );
   await assert.rejects(
     source.searchNearby({ latitude: 30.2, longitude: -97.7, radiusM: 1000 }),

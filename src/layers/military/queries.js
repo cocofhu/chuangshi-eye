@@ -50,11 +50,11 @@ export function createQueries({
   /**
    * Format an altitude value in feet for display, with fallback text.
    * @param {number|null|undefined} altitudeFt - Barometric altitude in feet
-   * @returns {string} Formatted altitude string (e.g. "35000 ft" or "Alt unknown")
+   * @returns {string} Formatted altitude string (e.g. "35000 ft" or "高度未知")
    */
 
   function _formatAltitude(altitudeFt) {
-    if (!Number.isFinite(altitudeFt)) return 'Alt unknown';
+    if (!Number.isFinite(altitudeFt)) return '高度未知';
     return `${Math.round(altitudeFt)} ft`;
   }
 

@@ -242,7 +242,7 @@ export class CockpitCoordinator {
       return {
         ok: false,
         action: 'control_cockpit',
-        error: 'Cockpit controller unavailable',
+        error: '驾驶舱控制器不可用',
         state: this.getCockpitState(),
       };
     }
@@ -264,8 +264,8 @@ export class CockpitCoordinator {
           ok: false,
           action: 'control_cockpit',
           error: this._contextModeChanging
-            ? 'Contacts is still starting up — try Cockpit again in a moment'
-            : 'Contacts must be active to enter Cockpit — say "open contacts" first',
+            ? '目标仍在启动 — 请稍后再试驾驶舱'
+            : '进入驾驶舱前需先开启目标 — 请先说「打开目标」',
           state: this.getCockpitState(),
         };
       }

@@ -5,12 +5,12 @@ export function createLaunchSource({
   /** The launch payload, and whether the proxy served it from a stale cache. */
   async function getLaunchSnapshot({ signal } = {}) {
     signal?.throwIfAborted();
-    const response = await fetchImpl('/api/launches', { signal });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const response = await fetchImpl('/api/launches', { signal });
+    if (!response.ok) throw new Error(`发射数据不可用（HTTP ${response.status}）`);
     const payload = await response.json();
     signal?.throwIfAborted();
     if (!Array.isArray(payload) && !Array.isArray(payload?.results))
-      throw new Error('Malformed launch snapshot');
+      throw new Error('发射快照无效');
     return {
       payload,
       stale: response.headers?.get?.('x-gev-cache') === 'STALE-ERROR',
@@ -24,7 +24,7 @@ export function createLaunchSource({
     async getActiveTle({ signal } = {}) {
       signal?.throwIfAborted();
       const response = await fetchImpl('/api/celestrak/active', { signal });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      if (!response.ok) throw new Error(`轨道数据不可用（HTTP ${response.status}）`);
       const text = await response.text();
       signal?.throwIfAborted();
       return text;

@@ -1,6 +1,7 @@
 import { CCTV_AMBIENT_CARD_MAX } from '../../data/cctvLod.js';
 import { ACTIVE_FRAME_REFRESH_MS, IDLE_FRAME_REFRESH_MS } from './policy.js';
 import { headingHudToken, isHeadingEstimated } from './headingConfidence.js';
+import { paintedCctvToken } from './feedLabel.js';
 
 export function createPresentation({
   state: layerState,
@@ -19,8 +20,8 @@ export function createPresentation({
     const active = parts.selection.getActiveRecord();
     if (!active) {
       return layerState._records.length
-        ? `${layerState._records.length} CAMERAS STANDING BY · NO CAMERA SELECTED · CLICK A CAMERA TO ACTIVATE`
-        : 'No cameras available in catalog.';
+        ? `${layerState._records.length} 路摄像头待命 · 未选中 · 点击一路以激活`
+        : '目录中没有摄像头。';
     }
 
     const area = parts.model.sectorAreaKm2(
@@ -33,22 +34,36 @@ export function createPresentation({
     const health = layerState._healthById.get(active.camera.id) || null;
     const calBadge = parts.calibration.deriveCalBadge(active.camera);
 
+    const calLabel =
+      {
+        calibrated: '已校准',
+        curated: '精选',
+        'raw-prior': '原始',
+      }[calBadge] || calBadge;
+    const bandLabel =
+      {
+        street: '街道',
+        city: '城市',
+        regional: '区域',
+        global: '全球',
+        none: '无',
+      }[viewBand] || viewBand;
     return [
-      `${active.camera.city.toUpperCase()} CCTV`,
+      `${active.camera.city.toUpperCase()} 监控`,
       `${active.camera.name.toUpperCase()}`,
       // A synthetic bearing (headingConfidence 'low', no human calibration)
       // is tagged so a hashed guess never reads as a surveyed facing (#639).
       headingHudToken(active.camera),
-      `FOV ${Math.round(active.camera.fovDeg)}°`,
-      `COVERAGE ${area.toFixed(2)}km²`,
-      overlapCount > 0 ? `OVERLAP ${overlapCount} cams` : 'ISOLATED VIEW',
-      `PROJ ${layerState._showProjection ? 'MONITOR' : 'OFF'}`,
-      layerState._coverageMode === 'viewshed' ? 'VIEWSHED' : null,
-      `CAL ${calBadge.replace('-', ' ').toUpperCase()}`,
+      `视场 ${Math.round(active.camera.fovDeg)}°`,
+      `覆盖 ${area.toFixed(2)} km²`,
+      overlapCount > 0 ? `重叠 ${overlapCount} 路` : '独立视野',
+      `投影 ${layerState._showProjection ? '监视' : '关'}`,
+      layerState._coverageMode === 'viewshed' ? '视域' : null,
+      `校准 ${calLabel}`,
       health?.sourceKind
-        ? `SRC ${String(health.sourceKind).toUpperCase()}`
-        : `SRC ${String(active.camera.feedType || 'image').toUpperCase()}`,
-      `${viewBand.toUpperCase()} CONTEXT`,
+        ? `来源 ${paintedCctvToken(health.sourceKind)}`
+        : `来源 ${paintedCctvToken(active.camera.feedType || 'image')}`,
+      `${bandLabel} 情境`,
     ]
       .filter(Boolean)
       .join(' · ');

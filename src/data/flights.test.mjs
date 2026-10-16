@@ -203,7 +203,7 @@ test('nonempty OpenSky payload with zero usable rows cannot prove share target a
     assert.equal(resolution.status, 'source-unavailable');
     assert.match(
       flightsLayer.getStats().error,
-      /Malformed OpenSky aircraft rows/,
+      /OpenSky 航空器记录无效/,
     );
     assert.equal(
       flightsLayer.getAnalystRecords().length,
@@ -389,7 +389,7 @@ test('flights poll refreshes tracked callsign/FL/kts and marks a missed poll STA
     await flightsLayer.update(viewer);
     assert.match(
       [entity.gevLabelModel.title, ...entity.gevLabelModel.details].join(' · '),
-      /STALE/,
+      /过期/,
     );
   } finally {
     globalThis.fetch = realFetch;

@@ -53,7 +53,7 @@ export async function resolveArea(area, { services, signal } = {}) {
         'invalid_arguments',
         'area.bbox must be [west, south, east, north] with south below north',
       );
-    return { label: 'the requested box', west, south, east, north };
+    return { label: '指定范围', west, south, east, north };
   }
   if (area.lat != null) {
     if (area.lon == null || area.radius_km == null)
@@ -67,7 +67,7 @@ export async function resolveArea(area, { services, signal } = {}) {
   if (!places)
     throw new ToolError(
       'unsupported',
-      'Place names cannot be resolved here; give a bbox or lat/lon instead',
+      '此处无法解析地名；请改用范围框或经纬度',
     );
   const place = await places.resolve(area.place, { signal });
   if (!place)
@@ -96,7 +96,7 @@ function circleArea(lat, lon, radiusKm) {
     reachesPole || ratio >= 1 ? 180 : Math.asin(ratio) * (180 / Math.PI);
   const wrap = (value) => ((((value + 180) % 360) + 360) % 360) - 180;
   return {
-    label: `${radiusKm} km around ${lat.toFixed(3)}, ${lon.toFixed(3)}`,
+    label: `${lat.toFixed(3)}, ${lon.toFixed(3)} 周边 ${radiusKm} km`,
     west: lonSpan >= 180 ? -180 : wrap(lon - lonSpan),
     east: lonSpan >= 180 ? 180 : wrap(lon + lonSpan),
     south: Math.max(-90, lat - latSpan),

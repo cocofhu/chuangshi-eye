@@ -1,10 +1,12 @@
 import { syncChipGroup } from './chipGroup.js';
 import { syncRowList } from './rowList.js';
 import { layerFeedState } from '../data/feedState.js';
+import { paintedFeedCoverage } from '../sources/live/coverageLabel.js';
 export { layerFeedState } from '../data/feedState.js';
 import { GUIDANCE_STATUSES } from '../loadingFeedback.js';
 import { keySetupRequirement } from '../keySetupCore.mjs';
 import { createWeatherPanel } from './weatherPanel.js';
+import { layerDisplayLabel } from '../data/layerDisplayLabels.js';
 const FEED_STATE_LABELS = Object.freeze({
   nominal: '开',
   loading: '加载中',
@@ -13,6 +15,10 @@ const FEED_STATE_LABELS = Object.freeze({
   partial: '部分',
   fallback: '回退',
   unavailable: '不可用',
+});
+const LIFECYCLE_DISPLAY = Object.freeze({
+  enabling: '启用中',
+  disabling: '关闭中',
 });
 
 // Presentation order is independent of catalog registration and startup order.
@@ -73,38 +79,8 @@ const PANEL_ORDER = PANEL_GROUPS.flatMap(({ label, ids }) =>
 const PANEL_POSITIONS = new Map(
   PANEL_ORDER.map(({ id }, index) => [id, index]),
 );
-const PANEL_LABELS = {
-  satellites: '卫星轨道',
-  flights: '民航航班',
-  military: '军用航空器',
-  'local-adsb': '本地 ADS-B',
-  'ais-live-vessels': '实时船舶',
-  traffic: '道路车流',
-  transit: '公共交通',
-  bikeshare: '共享单车',
-  cctv: '公开摄像头',
-  'recent-imagery': '近期卫星影像',
-  'street-level': '街景',
-  'alpr-cameras': '已标注车牌识别摄像头',
-  'military-installations': '军事设施',
-  'local-datacenters': '数据中心',
-  'telegeography-submarine-cables': '海底光缆',
-  'local-dams': '水坝',
-  'rocket-launches': '火箭发射',
-  earthquakes: '地震',
-  'local-firms': '活跃火点',
-  'fire-perimeters': '山火范围',
-  wind: '风场',
-  'weather-radar': '天气雷达',
-  'weather-satellite': '红外云图',
-  'weather-lightning': '闪电',
-  'weather-cyclones': '台风与飓风',
-  directions: '路径规划',
-  radio: '网络电台',
-};
-
-function panelLabel(layer) {
-  return PANEL_LABELS[layer.id] || layer.name;
+export function panelLabel(layer) {
+  return layerDisplayLabel(layer);
 }
 
 /**
@@ -228,7 +204,7 @@ export class LayerPanel {
     for (const layer of layers) {
       if (!layer.showInTogglePanel) continue;
       const group =
-        PANEL_ORDER[PANEL_POSITIONS.get(layer.id)]?.label ?? 'Other layers';
+        PANEL_ORDER[PANEL_POSITIONS.get(layer.id)]?.label ?? '其他图层';
       if (group && group !== previousGroup) {
         const heading = document.createElement('h3');
         heading.className = 'data-layer-group-heading';
@@ -550,16 +526,16 @@ export class LayerPanel {
     const lifecycleState =
       layer.lifecycleState || (layer.enabled ? 'enabled' : 'disabled');
     if (lifecycleState === 'enabling' || lifecycleState === 'disabling') {
-      return `${lifecycleState.toUpperCase()} · ${source}`;
+      return `${LIFECYCLE_DISPLAY[lifecycleState]} · ${source}`;
     }
     if (layer.lifecycleUncertain) {
-      return `UNCERTAIN · ${source} · lifecycle state requires reconciliation`;
+      return `待核对 · ${source} · 生命周期状态需要核对`;
     }
     const presentedError =
       stats.error || stats.lastError || stats.managerRefreshError;
     if (presentedError) {
       if (typeof stats.retryInSec === 'number' && stats.retryInSec > 0) {
-        return `${stateLabel} · ${source} · ${presentedError} · retry ${stats.retryInSec}s`;
+        return `${stateLabel} · ${source} · ${presentedError} · ${stats.retryInSec} 秒后重试`;
       }
       return `${stateLabel} · ${source} · ${presentedError}`;
     }
@@ -584,7 +560,7 @@ export class LayerPanel {
       const detail =
         typeof stats.loadingLabel === 'string' && stats.loadingLabel.trim()
           ? stats.loadingLabel.trim()
-          : stats.coverage || ago;
+          : paintedFeedCoverage(stats.coverage) || ago;
       return `${stateLabel} · ${source} · ${detail}`;
     }
     if (feedState === 'partial') {
@@ -601,7 +577,7 @@ export class LayerPanel {
     if (feedState === 'stale') {
       const retry =
         typeof stats.retryInSec === 'number' && stats.retryInSec > 0
-          ? ` · retrying in ${stats.retryInSec}s`
+          ? ` · ${stats.retryInSec} 秒后重试`
           : '';
       return `${stateLabel} · ${source} · ${ago}${retry}`;
     }
@@ -648,14 +624,14 @@ export class LayerPanel {
     );
     button.setAttribute('aria-busy', String(transitioning));
     button.textContent = transitioning
-      ? layer.lifecycleState.toUpperCase()
+      ? LIFECYCLE_DISPLAY[layer.lifecycleState]
       : uncertain
-        ? 'UNCERTAIN'
+        ? '待核对'
         : layer.enabled || unavailable
           ? FEED_STATE_LABELS[feedState]
           : '关';
     const keyGuidance = unavailable
-      ? String(layer.stats.error || 'Data source unavailable')
+      ? String(layer.stats.error || '数据源不可用')
       : layerKeyRequirementTooltip(layer);
     // Name the missing key on the control itself: a row reading KEY REQUIRED
     // without saying WHICH key leaves a dead control and no next step. Empty

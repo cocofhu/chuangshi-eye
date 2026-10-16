@@ -24,7 +24,7 @@ export function createSceneInteractions(
         card.append(text);
         if (item.action.url) {
           const link = document.createElement('a');
-          link.textContent = 'Source';
+          link.textContent = '来源';
           link.style.color = '#6eeaff';
           link.href = item.action.url;
           link.target = '_blank';
@@ -60,8 +60,8 @@ export function createSceneInteractions(
     const ok = await session.dispatch(id);
     if (current && current === panel && status)
       status.textContent = ok
-        ? 'Action complete'
-        : 'Action unavailable or cancelled';
+        ? '操作完成'
+        : '操作不可用或已取消';
     return ok;
   }
   return {
@@ -83,11 +83,11 @@ export function createSceneInteractions(
       ) {
         items = [];
         targets.clear();
-        throw new Error('Interaction feature is missing from the loaded pack');
+        throw new Error('已加载数据包中缺少交互要素');
       }
       panel = document.createElement('section');
       panel.dataset.directorInteractions = '';
-      panel.setAttribute('aria-label', 'Scene actions');
+      panel.setAttribute('aria-label', '场景操作');
       Object.assign(panel.style, {
         position: 'absolute',
         left: '12px',
@@ -104,12 +104,12 @@ export function createSceneInteractions(
       });
       const owner = panel;
       const title = document.createElement('strong');
-      title.textContent = 'Scene actions';
+      title.textContent = '场景操作';
       panel.append(title);
       status = document.createElement('p');
       status.setAttribute('role', 'status');
       status.textContent =
-        'Select a feature or use Tab and Enter to choose an action.';
+        '选择要素，或用 Tab 与 Enter 选择操作。';
       panel.append(status);
       for (const item of items) {
         const button = document.createElement('button');
@@ -157,7 +157,7 @@ export function createSceneInteractions(
             ? '2px solid #6eeaff'
             : '';
         }
-        status.textContent = `Selected feature: ${matches[0].target.featureId}. Choose an action.`;
+        status.textContent = `已选要素：${matches[0].target.featureId}。请选择操作。`;
         buttons.get(matches[0].id)?.focus({ preventScroll: true });
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     },

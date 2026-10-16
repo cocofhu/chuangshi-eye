@@ -480,7 +480,7 @@ export function createVoiceCostTracker(options = {}) {
     display: formatCostUsd(totalUsd) + (incomplete ? '*' : ''),
     /** Prose for the tooltip; null when the accounting is complete. */
     note: incomplete
-      ? 'Estimate is incomplete — a response was still in flight when the session ended, so its usage was never reported.'
+      ? '估算不完整 — 会话结束时仍有响应在途，其用量从未上报。'
       : null,
   });
 

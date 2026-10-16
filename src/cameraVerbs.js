@@ -1274,7 +1274,7 @@ export function moveCamera(args = {}, runNavigation = null) {
     return {
       ok: false,
       action: 'move_camera',
-      error: `Unknown motion "${args.motion}" — use orbit, pan, tilt, rotate, or stop.`,
+      error: `未知动作「${args.motion}」— 请用 orbit、pan、tilt、rotate 或 stop。`,
     };
   }
   if (
@@ -1284,14 +1284,14 @@ export function moveCamera(args = {}, runNavigation = null) {
     return {
       ok: false,
       action: 'move_camera',
-      error: `${motion} needs a direction (left/right${motion !== 'rotate' ? '/up/down' : ''}).`,
+      error: `${motion} 需要方向（left/right${motion !== 'rotate' ? '/up/down' : ''}）。`,
     };
   }
   if (motion === 'rotate' && !['left', 'right'].includes(direction)) {
     return {
       ok: false,
       action: 'move_camera',
-      error: 'rotate needs left or right.',
+      error: 'rotate 需要 left 或 right。',
     };
   }
   if (motion === 'tilt') {
@@ -1303,7 +1303,7 @@ export function moveCamera(args = {}, runNavigation = null) {
         ok: false,
         action: 'move_camera',
         error:
-          'Already at the upper tilt limit (near the horizon) — tilt down, or zoom/pan instead.',
+          '已到俯仰上限（接近地平线）— 请向下倾斜，或改用缩放 / 平移。',
       };
     }
     if (
@@ -1313,7 +1313,7 @@ export function moveCamera(args = {}, runNavigation = null) {
       return {
         ok: false,
         action: 'move_camera',
-        error: 'Already looking straight down — tilt up to raise the horizon.',
+        error: '已经垂直俯视 — 向上倾斜才能抬起地平线。',
       };
     }
   }
@@ -1328,11 +1328,11 @@ export function moveCamera(args = {}, runNavigation = null) {
     const label =
       _viewer.trackedEntity?.name ||
       _viewer.trackedEntity?.id ||
-      'the tracked target';
+      '跟踪目标';
     return {
       ok: false,
       action: 'move_camera',
-      error: `Already following ${label} — the follow camera owns the view while tracking. Say "stop tracking" first if you want a free orbit.`,
+      error: `正在跟随 ${label} — 跟踪时跟随相机会占用视角。若要自由环绕，请先说「停止跟踪」。`,
     };
   }
   const start = () => {
@@ -1466,7 +1466,7 @@ export function flyRoute(
       ok: false,
       action: 'fly_route',
       error:
-        'No route is drawn — draw a route first (e.g. "route from A to B"), then fly it.',
+        '还没有路径 — 请先绘制路径（例如「从 A 到 B 的路线」），再沿它飞行。',
     };
   }
   let route = routes[routes.length - 1];
@@ -1481,7 +1481,7 @@ export function flyRoute(
       return {
         ok: false,
         action: 'fly_route',
-        error: `No route matches "${args.label}" — say fly the route without a name for the newest one.`,
+        error: `没有匹配「${args.label}」的路径 — 不指名时会飞最近的一条。`,
       };
     }
     route = byLabel[byLabel.length - 1];
@@ -1501,7 +1501,7 @@ export function flyRoute(
     return {
       ok: false,
       action: 'fly_route',
-      error: 'The selected route has an invalid waypoint.',
+      error: '所选路径有无效航点。',
     };
   }
   const pts = route.path.map((p) =>
@@ -1515,7 +1515,7 @@ export function flyRoute(
     return {
       ok: false,
       action: 'fly_route',
-      error: 'The selected route has no flyable distance.',
+      error: '所选路径没有可飞距离。',
     };
   }
   const start = () => {

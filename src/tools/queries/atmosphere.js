@@ -36,6 +36,20 @@ const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 
 const snapDown = (value) => Math.floor(value / SNAP_DEGREES) * SNAP_DEGREES;
 const snapUp = (value) => Math.ceil(value / SNAP_DEGREES) * SNAP_DEGREES;
+/** Spoken coverage clause. Area labels stay English for other tools. */
+function coveragePhrase(area) {
+  if (!area) return '';
+  const center = area.center;
+  if (Number.isFinite(center?.lat) && Number.isFinite(center?.lon)) {
+    const coords = `${center.lat.toFixed(3)}, ${center.lon.toFixed(3)}`;
+    return Number.isFinite(center.radiusKm)
+      ? `，覆盖 ${coords} 周边 ${center.radiusKm} km`
+      : `，覆盖 ${coords}`;
+  }
+  if (area.label && area.label !== '指定范围')
+    return `，覆盖 ${area.label}`;
+  return '，覆盖指定范围';
+}
 const round = (value, digits) =>
   Number.isFinite(value) ? Number(value.toFixed(digits)) : null;
 
@@ -106,10 +120,7 @@ export const getWeatherMap = defineTool({
       signal,
     });
     if (snapshot.unavailable)
-      throw new ToolError(
-        'unavailable',
-        `The ${args.map} map is unavailable right now`,
-      );
+      throw new ToolError('unavailable', `${args.map} 地图暂不可用`);
     const area = args.area
       ? await resolveArea(args.area, { services, signal })
       : null;
@@ -125,7 +136,7 @@ export const getWeatherMap = defineTool({
       )
         throw new ToolError(
           'invalid_arguments',
-          `${area.label} is outside the ${args.map} map's coverage: ${snapshot.coverage || 'see its bounds'}`,
+          `${area.label} 超出 ${args.map} 地图覆盖：${snapshot.coverage || '见其范围'}`,
         );
       mapBox = weatherWindow(area, bounds);
     }
@@ -137,12 +148,11 @@ export const getWeatherMap = defineTool({
       signal,
     });
     if (!/^image\/(png|jpeg)$/.test(image.contentType))
-      throw new ToolError('unavailable', 'The weather map returned no image');
+      throw new ToolError('unavailable', '天气地图未返回图像');
     if (image.bytes.byteLength > MAX_IMAGE_BYTES)
-      throw new ToolError('unavailable', 'The weather map image is too large');
-    const where = area ? ` over ${area.label}` : '';
+      throw new ToolError('unavailable', '天气地图图像过大');
     return {
-      summary: `${snapshot.title || args.map} at ${snapshot.latest}${where}.`,
+      summary: `${snapshot.title || args.map}，${snapshot.latest}${coveragePhrase(area)}。`,
       data: {
         view: suggestView(
           services,
@@ -192,10 +202,7 @@ export const getWind = defineTool({
     const model = args.model ?? 'gfs';
     const snapshot = await services.wind.getSnapshot({ model, signal });
     if (snapshot.unavailable || !snapshot.u || !snapshot.v)
-      throw new ToolError(
-        'unavailable',
-        'Wind forecasts are unavailable right now',
-      );
+      throw new ToolError('unavailable', '风场预报暂不可用');
     const vector = sampleWind(
       { ...snapshot.grid, u: snapshot.u, v: snapshot.v },
       point.lon,
@@ -204,10 +211,11 @@ export const getWind = defineTool({
     const speed = windSpeed(vector.u, vector.v);
     const from = windFrom(vector.u, vector.v);
     const kph = speed * 3.6;
+    const calm = from === '静风' || from === 'Calm';
     return {
-      summary:
-        `Wind at ${point.label}: ${kph.toFixed(0)} km/h` +
-        (from === 'Calm' ? ', calm.' : ` from the ${from}.`),
+      summary: calm
+        ? `${point.label}：风速 ${kph.toFixed(0)} km/h，静风。`
+        : `${point.label}：风速 ${kph.toFixed(0)} km/h，来自 ${from}。`,
       data: {
         view: suggestView(services, {
           point,
@@ -217,8 +225,8 @@ export const getWind = defineTool({
         location: point,
         speed_mps: round(speed, 1),
         speed_kph: round(kph, 1),
-        from: from === 'Calm' ? null : from,
-        calm: from === 'Calm',
+        from: calm ? null : from,
+        calm,
         u_mps: round(vector.u, 2),
         v_mps: round(vector.v, 2),
         level: snapshot.level ?? '10 m above ground',

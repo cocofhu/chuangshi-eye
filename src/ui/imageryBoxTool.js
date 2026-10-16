@@ -9,7 +9,7 @@ import * as Cesium from 'cesium';
 import { pickWorldFromScreen } from '../annotations/annotationResolver.js';
 import {
   claimPointer,
-  pointerOwner,
+  pointerOwnerLabel,
   releasePointer,
 } from '../data/inputOwnership.js';
 import { validateBox } from '../layers/recentImagery/model.js';
@@ -150,7 +150,7 @@ export function initImageryBoxTool({
     if (!active || destroyed || anchor) return;
     const point = worldAt(event.position);
     if (!point) {
-      onCancel?.('sky', 'Press on the ground, not the sky');
+      onCancel?.('sky', '请点在地面上，不要点天空');
       return;
     }
     anchor = point;
@@ -169,7 +169,7 @@ export function initImageryBoxTool({
     corner = worldAt(event.position) || corner;
     const box = dragBox();
     const result = validateBox(box);
-    if (result.reason === 'degenerate') result.message = 'Drag to size the box';
+    if (result.reason === 'degenerate') result.message = '拖动以确定选框大小';
     endDrag();
     setActive(false);
     if (result.ok) onBox(result.box);
@@ -238,7 +238,7 @@ export function initImageryBoxTool({
       if (!lease) {
         onCancel?.(
           'pointer-busy',
-          `${pointerOwner()} is using the pointer — close it first`,
+          `${pointerOwnerLabel()} 正在占用指针 — 请先关闭`,
         );
         return active;
       }

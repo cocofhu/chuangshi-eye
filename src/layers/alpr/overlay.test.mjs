@@ -214,7 +214,7 @@ test('adapter labels never claim a custom source is public OSM data', () => {
       { manufacturer: 'Vendor', operator: 'Vendor' },
       { label: 'Custom directory' },
     ),
-    ['Source: Custom directory', 'VENDOR'],
+    ['来源：Custom directory', 'VENDOR'],
   );
 });
 

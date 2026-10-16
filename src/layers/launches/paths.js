@@ -486,7 +486,7 @@ export function createPaths({ state: layerState, services, parts, source }) {
 
   function landingEndpoint(stage, launch, insertionPosition) {
     if (Number.isFinite(stage.lat) && Number.isFinite(stage.lon)) {
-      return { lat: stage.lat, lon: stage.lon, accuracy: 'CONFIRMED' };
+      return { lat: stage.lat, lon: stage.lon, accuracy: '已确认' };
     }
     const recoveryIdentity =
       `${stage.recoveryType || ''} ${stage.destination || ''}`.toLowerCase();
@@ -495,7 +495,7 @@ export function createPaths({ state: layerState, services, parts, source }) {
         recoveryIdentity,
       )
     ) {
-      return { lat: launch.lat, lon: launch.lon, accuracy: 'PAD / RTLS' };
+      return { lat: launch.lat, lon: launch.lon, accuracy: '发射台回收' };
     }
     if (!(stage.downrangeKm > 0) || !insertionPosition) return null;
     const ellipsoid = Cesium.Ellipsoid.WGS84;
@@ -521,7 +521,7 @@ export function createPaths({ state: layerState, services, parts, source }) {
     return {
       lat: Cesium.Math.toDegrees(lat),
       lon: Cesium.Math.toDegrees(Cesium.Math.negativePiToPi(lon)),
-      accuracy: 'EST. DOWNRANGE',
+      accuracy: '估计航程',
     };
   }
 

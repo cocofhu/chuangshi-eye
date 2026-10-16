@@ -153,10 +153,13 @@ export function createVoiceSession({ createAdapter, runner, signal }) {
         await adapter.start(options);
       } catch (error) {
         if (!disposed && attempt === startAttempt) {
+          console.error('[GEV voice] session start failed', error);
+          const text = String(error?.message || '').trim();
+          const detail = /[\u4e00-\u9fff]/.test(text) ? text : '语音未能启动。';
           try {
             adapter.stop({ preserveStatus: true });
           } finally {
-            emit({ type: 'state', state: 'error', detail: error.message });
+            emit({ type: 'state', state: 'error', detail });
           }
         }
       }

@@ -671,7 +671,7 @@ export class VisualSettings {
     const settings = applyCyberSonarSettings(readCyberSonarSettings());
     this._cyberSonarBtn.classList.toggle('active', enabled);
     this._cyberSonarBtn.setAttribute('aria-pressed', String(enabled));
-    this._cyberSonarBtn.textContent = enabled ? 'ON' : 'OFF';
+    this._cyberSonarBtn.textContent = enabled ? '开' : '关';
     for (const [input, output, value, suffix] of [
       [this._cyberSonarRings, this._cyberSonarRingsValue, settings.rings, ''],
       [this._cyberSonarRange, this._cyberSonarRangeValue, settings.range, '%'],
@@ -1170,7 +1170,7 @@ export class VisualSettings {
         ok: false,
         celestialRing: current(),
         cameraFocused: false,
-        error: 'Celestial ring options must be boolean',
+        error: '天体环选项必须为布尔值',
       };
     }
     if (!styleSupported && enabled) {
@@ -1178,7 +1178,7 @@ export class VisualSettings {
         ok: false,
         celestialRing: current(),
         cameraFocused: false,
-        error: 'Celestial ring is available only in Normal style',
+        error: '天体环仅在标准风格下可用',
       };
     }
     if (syncShare) this.shareLinkManager?.claimRestoreLane?.('visual');
@@ -1190,8 +1190,8 @@ export class VisualSettings {
       this._celestialBtn.disabled = !styleSupported;
       this._celestialBtn.setAttribute('aria-disabled', String(!styleSupported));
       this._celestialBtn.title = styleSupported
-        ? 'Celestial ring — reveal the full globe'
-        : 'Celestial ring — available in Normal style';
+        ? '天体环 — 展开完整地球'
+        : '天体环 — 仅在标准风格下可用';
     }
     let cameraFocused = false;
     if (nextEnabled && focus) {
@@ -1653,24 +1653,25 @@ export class VisualSettings {
     const btn = this._detectionBtn;
     const enabled = modeLabel !== 'OFF';
     btn.setAttribute('aria-pressed', String(enabled));
-    btn.setAttribute(
-      'aria-label',
-      enabled
-        ? `Detection overlay: ${String(modeLabel).toLowerCase()}`
-        : 'Detection overlay: off',
-    );
+    const spoken = {
+      OFF: '关',
+      SPARSE: '稀疏',
+      BALANCED: '均衡',
+      DENSE: '密集',
+    }[modeLabel] || '关';
+    btn.setAttribute('aria-label', `探测叠加：${spoken}`);
     btn.classList.remove('active', 'god', 'panoptic');
     if (modeLabel === 'SPARSE') {
-      btn.querySelector('.pp-label').textContent = 'SPARSE';
+      btn.querySelector('.pp-label').textContent = '稀疏';
       btn.classList.add('active');
     } else if (modeLabel === 'BALANCED') {
-      btn.querySelector('.pp-label').textContent = 'BALANCED';
+      btn.querySelector('.pp-label').textContent = '均衡';
       btn.classList.add('active');
     } else if (modeLabel === 'DENSE') {
-      btn.querySelector('.pp-label').textContent = 'DENSE';
+      btn.querySelector('.pp-label').textContent = '密集';
       btn.classList.add('active', 'panoptic');
     } else {
-      btn.querySelector('.pp-label').textContent = 'DETECT';
+      btn.querySelector('.pp-label').textContent = '探测';
     }
 
     if (this._detectionSliderRow) {

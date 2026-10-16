@@ -233,7 +233,7 @@ export function createCycloneSource({
         });
         if (!response.ok) {
           await response.body?.cancel();
-          throw new Error(`Cyclone HTTP ${response.status}`);
+          throw new Error(`气旋公报请求失败（HTTP ${response.status}）`);
         }
         const result = await readResponseJsonCapped(
           response,

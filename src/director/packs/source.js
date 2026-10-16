@@ -29,21 +29,21 @@ export function createAssetDirectorySource({
     });
     if (!response.ok) {
       await response.body?.cancel().catch(() => {});
-      throw new Error('Asset unavailable');
+      throw new Error('素材不可用');
     }
     const reader = response.body?.getReader();
-    if (!reader) throw new Error('Asset stream unavailable');
+    if (!reader) throw new Error('素材流不可用');
     const chunks = [];
     let length = 0;
     try {
       if (Number(response.headers.get('content-length')) > maxBytes)
-        throw new Error('Asset exceeds byte limit');
+        throw new Error('素材超过字节上限');
       for (;;) {
         signal?.throwIfAborted();
         const { done, value } = await reader.read();
         if (done) break;
         length += value.byteLength;
-        if (length > maxBytes) throw new Error('Asset exceeds byte limit');
+        if (length > maxBytes) throw new Error('素材超过字节上限');
         chunks.push(value);
       }
     } finally {

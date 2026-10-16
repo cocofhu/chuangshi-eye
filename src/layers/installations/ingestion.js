@@ -199,7 +199,7 @@ export function createIngestion({
           )
             return;
           placesError =
-            'Google Places search unavailable; showing mapped sites';
+            'Google Places 搜索不可用，仍显示已标注站点';
         }
       }
       let floorTimer;
@@ -253,9 +253,9 @@ export function createIngestion({
               : 'ready'
             : 'empty',
           payload.status === 'stale'
-            ? `Serving cached mapped context · ${payload.records[0]?.retrievedAt || 'date unknown'}`
+            ? `显示缓存的标注范围 · ${payload.records[0]?.retrievedAt || '日期未知'}`
             : saturated
-              ? 'Too many mapped sites in view to list them all'
+              ? '视野内标注站点过多，无法全部列出'
               : placesError,
         );
         parts.rendering.renderRecords();
@@ -291,7 +291,7 @@ export function createIngestion({
       layerState.failureReason = error?.failureReason || 'unavailable';
       setInstallationStatus(
         'unavailable',
-        error?.message || 'Installation context unavailable',
+        error?.message || '设施情境不可用',
       );
       if (!isUnavailableCapability(error))
         parts.viewport.scheduleUnavailableRetry(error?.retryAfterMs);

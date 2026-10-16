@@ -57,7 +57,7 @@ export function renderCockpitSignals() {
     if (item.target) {
       heading.dataset.signalLayer = item.target.layerId;
       heading.dataset.signalId = item.target.id;
-      const label = `Select flight ${item.title}`;
+      const label = `选择航班 ${item.title}`;
       if (heading.getAttribute('aria-label') !== label)
         heading.setAttribute('aria-label', label);
       setText(heading.children[0], item.title);
@@ -126,7 +126,7 @@ export function updateCockpitSignals(snapshot, unknownCount) {
       key: `flight:${subject.layerId}:${subject.id}`,
       tone: 'track',
       title: subject.label || subject.id,
-      detail: `${subject.layerId === 'military' ? 'MILITARY FLIGHT' : 'COMMERCIAL FLIGHT'} · CURRENT`,
+      detail: `${subject.layerId === 'military' ? '军用航班' : '民航'} · 当前`,
       target: { layerId: subject.layerId, id: String(subject.id) },
       distanceM: -1,
     });
@@ -145,10 +145,10 @@ export function updateCockpitSignals(snapshot, unknownCount) {
         // contact reads as its registration here too. Same helper the
         // Context panel's nearest list uses.
         title: this.services.formatAwarenessLabel(item),
-        detail: `${cohort.id === 'military' ? 'MILITARY FLIGHT' : 'COMMERCIAL FLIGHT'} · ${
+        detail: `${cohort.id === 'military' ? '军用航班' : '民航'} · ${
           Number.isFinite(item.distanceM)
-            ? `${item.distanceM < 10000 ? (item.distanceM / 1000).toFixed(1) : Math.round(item.distanceM / 1000)} KM`
-            : 'DISTANCE UNKNOWN'
+            ? `${item.distanceM < 10000 ? (item.distanceM / 1000).toFixed(1) : Math.round(item.distanceM / 1000)} 公里`
+            : '距离未知'
         }`,
         target: { layerId: cohort.id, id: String(id) },
         distanceM: item.distanceM ?? Infinity,
@@ -169,8 +169,8 @@ export function updateCockpitSignals(snapshot, unknownCount) {
     nextItems.splice(4, Math.max(0, nextItems.length - 4), {
       key: 'input-status',
       tone: 'warning',
-      title: `${unknownCount} INPUT${unknownCount === 1 ? '' : 'S'} UNKNOWN`,
-      detail: sources || 'SOURCE STATUS UNAVAILABLE',
+      title: `${unknownCount} 路输入未知`,
+      detail: sources || '来源状态不可用',
       target: null,
       timestamp:
         previous.get('input-status')?.timestamp ||

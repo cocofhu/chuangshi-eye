@@ -121,9 +121,9 @@ test('the expanded viewer is a modal dialog that restores focus', () => {
 
 test('labels say what the buttons do', () => {
   for (const label of [
-    'aria-label="Camera follows view"',
-    'PROVIDERS',
-    'SINCE',
+    'aria-label="相机跟随视图"',
+    '来源',
+    '起始',
   ])
     assert.ok(html.includes(label), label);
   // The provider chips are the on/off switch; no separate buttons.

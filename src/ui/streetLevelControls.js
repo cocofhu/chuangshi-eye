@@ -214,7 +214,7 @@ export class StreetLevelControls {
       await this.actions.setEnabled?.(true);
     } catch (error) {
       this.actions.showToast?.(
-        error?.message || 'Street Level could not start',
+        error?.message || '街景无法启动',
       );
       return false;
     }
@@ -226,7 +226,7 @@ export class StreetLevelControls {
     try {
       await this.actions.setEnabled?.(!enabled);
     } catch (error) {
-      this.actions.showToast?.(error?.message || 'Street Level toggle failed');
+      this.actions.showToast?.(error?.message || '街景切换失败');
     }
   }
 
@@ -259,7 +259,7 @@ export class StreetLevelControls {
     try {
       await this.actions.setEnabled?.(false);
     } catch (error) {
-      this.actions.showToast?.(error?.message || 'Street Level toggle failed');
+      this.actions.showToast?.(error?.message || '街景切换失败');
     }
   }
 
@@ -311,7 +311,7 @@ export class StreetLevelControls {
       wrap.classList.add('sl-viewer-wrap-expanded');
       wrap.setAttribute('role', 'dialog');
       wrap.setAttribute('aria-modal', 'true');
-      wrap.setAttribute('aria-label', 'Street-level image');
+      wrap.setAttribute('aria-label', '街景影像');
       wrap.tabIndex = -1;
       wrap.focus({ preventScroll: true });
       this._watchModal(true);
@@ -343,9 +343,9 @@ export class StreetLevelControls {
       const icon = button.querySelector('.sl-btn-icon');
       const text = button.querySelector('.sl-btn-text');
       if (icon) icon.textContent = on ? '⤡' : '⤢';
-      if (text) text.textContent = on ? 'SHRINK' : 'EXPAND';
+      if (text) text.textContent = on ? '缩小' : '放大';
       button.setAttribute('aria-pressed', String(on));
-      button.setAttribute('aria-label', on ? 'Shrink' : 'Expand');
+      button.setAttribute('aria-label', on ? '缩小' : '放大');
     }
     if (!on && dock) this.actions.dockPanel?.();
     this._requestResize();

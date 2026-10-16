@@ -1054,7 +1054,7 @@ test('under KEY REQUIRED the provider chip stays live and explains the key inste
     assert.deepEqual(calls.setEnabled, []);
     assert.deepEqual(calls.setParams, []);
     assert.equal(calls.toasts.length, 1);
-    assert.match(calls.toasts[0], /^Mapillary: Needs /);
+    assert.match(calls.toasts[0], /^Mapillary: 需要 /);
     controls.destroy();
   }));
 

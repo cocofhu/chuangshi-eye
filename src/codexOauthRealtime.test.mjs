@@ -92,7 +92,7 @@ test('Codex OAuth reader accepts a current ChatGPT token and rejects unusable cr
   ]) {
     assert.throws(
       () => readCodexOAuthAccessToken({ authPath: '/unused', readFile, nowMs }),
-      /ChatGPT sign-in is unavailable/,
+      /登录不可用/,
     );
   }
 });
@@ -108,7 +108,7 @@ test('Codex OAuth reader enforces expiry margin and bounds tokens without exp by
         });
       },
       (error) => {
-        assert.match(error.message, /sign-in has expired/);
+        assert.match(error.message, /登录已过期/);
         assert.equal(error.code, 'CODEX_OAUTH_REAUTH_REQUIRED');
         return true;
       },
@@ -129,7 +129,7 @@ test('Codex OAuth reader enforces expiry margin and bounds tokens without exp by
         ...base,
         statFile: () => ({ mtimeMs: nowMs - 3600_000 }),
       }),
-    /sign-in has expired/,
+    /登录已过期/,
   );
   assert.throws(
     () =>
@@ -139,7 +139,7 @@ test('Codex OAuth reader enforces expiry margin and bounds tokens without exp by
           throw new Error('missing');
         },
       }),
-    /sign-in is unavailable/,
+    /登录不可用/,
   );
 });
 

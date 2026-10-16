@@ -339,8 +339,8 @@ test('keeps failed-launch mission details truthful without inventing paths', () 
     orbit: { name: 'Geostationary Transfer Orbit' },
     trajectory: [],
   }, false), {
-    orbit: 'PLANNED · Geostationary Transfer Orbit',
-    ascent: 'UNAVAILABLE',
+    orbit: '计划 · Geostationary Transfer Orbit',
+    ascent: '未知',
     replayAvailable: false,
   });
   assert.deepEqual(missionPathPresentation({
@@ -351,8 +351,8 @@ test('keeps failed-launch mission details truthful without inventing paths', () 
       { latitude: 29, longitude: -79.5 },
     ],
   }, false), {
-    orbit: 'PLANNED · Low Earth Orbit',
-    ascent: 'SUPPLIED TRAJECTORY POINTS',
+    orbit: '计划 · Low Earth Orbit',
+    ascent: '提供的轨迹点',
     replayAvailable: false,
   });
 });
@@ -364,7 +364,7 @@ test('describes only renderable successful mission paths', () => {
     trajectory: [],
   }, true), {
     orbit: 'Low Earth Orbit',
-    ascent: 'RECONSTRUCTED ESTIMATE',
+    ascent: '重建估计',
     replayAvailable: true,
   });
   assert.deepEqual(missionPathPresentation({
@@ -373,7 +373,7 @@ test('describes only renderable successful mission paths', () => {
     trajectory: [{ latitude: 28.5, longitude: -80.5 }],
   }, false), {
     orbit: null,
-    ascent: 'UNAVAILABLE',
+    ascent: '未知',
     replayAvailable: false,
   });
 });
@@ -722,7 +722,7 @@ test('normalizes detailed payload and stage recovery records', () => {
   assert.equal(launches[0].payloads[0].amount, 2);
   assert.equal(launches[0].payloads[0].massKg, 420);
   assert.equal(launches[0].recoveryStages[0].name, 'Core · B1099');
-  assert.equal(launches[0].recoveryStages[0].status, 'RECOVERED');
+  assert.equal(launches[0].recoveryStages[0].status, '已回收');
   assert.equal(launches[0].recoveryStages[0].downrangeKm, 610);
   assert.equal(launches[0].recoveryStages[0].lat, 30.1);
   assert.equal(launches[0].recoveryStages[0].lon, -76.2);
@@ -900,7 +900,7 @@ test('formats the launch epoch for ascent and orbit replay labels', () => {
     formatMissionEventTime('2026-06-29T02:25:00Z'),
     '2026-06-29\n02:25:00 UTC',
   );
-  assert.equal(formatMissionEventTime(null), 'UNAVAILABLE');
+  assert.equal(formatMissionEventTime(null), '未知');
 });
 
 test('reduces generic launch-site names to their identifying suffix', () => {
@@ -939,7 +939,7 @@ test('mission overlay factories preserve all four source-formatted label roles a
 
   const selected = createRocketMissionMarkerOverlayEntry(launch, position, true);
   assert.equal(selected.title, 'FALCON 9');
-  assert.deepEqual(selected.details, ['LAUNCH SITE · 39A']);
+  assert.deepEqual(selected.details, ['发射场 · 39A']);
   assert.equal(selected.paintLane, 'selected');
   assert.equal(selected.protected, true);
 
@@ -1207,11 +1207,11 @@ test('real mission build, select, refresh, deselect, disable, and destroy paths 
     assert.deepEqual(selectedPublication[3], ROCKET_MISSION_SELECTED_OVERLAY_SOURCE_OPTIONS);
     assert.deepEqual(selectedPublication[2].map(({ title }) => title), [
       'FALCON 9',
-      'STAGE RE-ENTRY',
-      'EST. ORBIT POSITION',
-      'PROJECTED ORBIT',
+      '级段再入',
+      '估计轨道位置',
+      '预计轨道',
     ]);
-    assert.deepEqual(selectedPublication[2][0].details, ['LAUNCH SITE · 39A']);
+    assert.deepEqual(selectedPublication[2][0].details, ['发射场 · 39A']);
     assert.match(selectedPublication[2][2].details[0], /^\d{4}-\d{2}-\d{2}$/);
     assert.match(selectedPublication[2][2].details[1], /^\d{2}:\d{2}:\d{2} UTC$/);
     assert.ok(selectedPublication[2].every((entry) => (
@@ -1288,7 +1288,7 @@ test('real mission build, select, refresh, deselect, disable, and destroy paths 
       type === 'entries' && sourceId === ROCKET_MISSION_SELECTED_OVERLAY_SOURCE_ID
     ));
     assert.equal(refreshPublication[2][0].title, 'MISSION REFRESH');
-    assert.deepEqual(refreshPublication[2][0].details, ['LAUNCH SITE · 39A']);
+    assert.deepEqual(refreshPublication[2][0].details, ['发射场 · 39A']);
 
     _setSelectedRocketMissionForTest(null);
     const deselectedPublication = hostCalls.findLast(([type, sourceId]) => (
@@ -1356,7 +1356,7 @@ test('enable is transactional: a failed satellites dependency rolls the module b
 
   // First enable: dependency activation fails -> enable() must reject and the
   // module must roll itself back (satellite snapshot restored AND cleared).
-  await assert.rejects(() => rocketLaunchesLayer.enable(), /satellites layer/);
+  await assert.rejects(() => rocketLaunchesLayer.enable(), /航天任务需要卫星图层/);
   const restoreCall = calls.filter(([, id, enabled]) => id === 'satellites' && enabled === false);
   assert.ok(restoreCall.length >= 1, 'rollback restored the pre-mission satellites state');
 
@@ -1414,7 +1414,7 @@ test('missing payload details stay unknown without inventing mass or classificat
     const [launch] = normalizeRocketLaunches([{ id: 'mass', pad: { latitude: 1, longitude: 2 }, net: '2026-07-20T10:00:00Z',
       payloads: [{ mass }] }], NOW);
     assert.equal(launch.payloads[0].massKg, expected);
-    assert.equal(launch.payloads[0].name, 'Unnamed payload');
+    assert.equal(launch.payloads[0].name, '未命名载荷');
   }
   const [launch] = normalizeRocketLaunches([{ id: 'missing', pad: { latitude: 1, longitude: 2 }, net: '2026-07-20T10:00:00Z' }], NOW);
   assert.deepEqual(launch.payloads, []);

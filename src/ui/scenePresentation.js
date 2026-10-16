@@ -1,3 +1,37 @@
+const SHOT_STYLE_LABELS = {
+  normal: '常规',
+  retro: 'CRT',
+  surveillance: '夜视',
+  thermal: '热成像',
+  anime: '动漫',
+  noir: '黑白',
+  snow: '风雪',
+};
+
+const SHOT_MODE_LABELS = {
+  OFF: '关',
+  SPARSE: '稀疏',
+  SURVEY: '稀疏',
+  BALANCED: '均衡',
+  NORMAL: '均衡',
+  PANOPTIC: '密集',
+};
+
+/** Shot row meta. The bare detection token DENSE stays unchanged. */
+export function sceneShotMetaText(shot) {
+  const mode = String(shot?.visual?.detection?.mode || 'OFF');
+  const style = String(shot?.visual?.style || 'normal');
+  const styleLabel = SHOT_STYLE_LABELS[style] || style.toUpperCase();
+  const modeKey = mode.toUpperCase();
+  const modeLabel =
+    modeKey === 'DENSE' ? 'DENSE' : SHOT_MODE_LABELS[modeKey] || mode;
+  const duration = Number(shot?.durationSec);
+  const hold = Number(shot?.holdSec);
+  const durationText = Number.isFinite(duration) ? duration.toFixed(1) : '0.0';
+  const holdText = Number.isFinite(hold) ? hold.toFixed(1) : '0.0';
+  return `${styleLabel} · ${modeLabel} · ${durationText}s + ${holdText}s`;
+}
+
 /** Scene panel elements and text-only project presentation. */
 export function sceneElements(root = document) {
   const ids = {
@@ -47,7 +81,7 @@ export function renderSceneShots(
   if (!scene || scene.shots.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'scene-shot-empty';
-    empty.textContent = 'No shots yet. Use CAPTURE SHOT to save current look.';
+    empty.textContent = '暂无镜头。用「捕捉镜头」保存当前视角。';
     element.appendChild(empty);
     return;
   }
@@ -61,14 +95,14 @@ export function renderSceneShots(
     const label = document.createElement('div');
     label.className = 'scene-shot-label';
     label.textContent = shot.title;
-    label.title = 'Double-click to rename';
+    label.title = '双击重命名';
     listen(label, 'click', () => select(shot.id));
     listen(label, 'dblclick', () => {
       if (label.children.length) return;
       const input = document.createElement('input');
       input.type = 'text';
       input.className = 'scene-shot-rename';
-      input.setAttribute('aria-label', 'Shot name');
+      input.setAttribute('aria-label', '镜头名称');
       input.value = shot.title;
       let finished = false;
       const finish = (save) => {
@@ -96,11 +130,11 @@ export function renderSceneShots(
     actions.className = 'scene-shot-actions';
     const loadButton = document.createElement('button');
     loadButton.className = 'scene-shot-btn';
-    loadButton.textContent = 'LOAD';
+    loadButton.textContent = '载入';
     listen(loadButton, 'click', () => load(scene.id, shot.id));
     const deleteButton = document.createElement('button');
     deleteButton.className = 'scene-shot-btn scene-shot-danger';
-    deleteButton.textContent = 'DEL';
+    deleteButton.textContent = '删除';
     listen(deleteButton, 'click', () => remove(scene.id, shot.id));
     actions.appendChild(loadButton);
     actions.appendChild(deleteButton);
@@ -108,9 +142,7 @@ export function renderSceneShots(
     top.appendChild(actions);
     const meta = document.createElement('div');
     meta.className = 'scene-shot-meta';
-    const mode = shot.visual?.detection?.mode || 'OFF';
-    const style = shot.visual?.style || 'normal';
-    meta.textContent = `${style.toUpperCase()} · ${mode} · ${shot.durationSec.toFixed(1)}s + ${shot.holdSec.toFixed(1)}s`;
+    meta.textContent = sceneShotMetaText(shot);
     row.appendChild(top);
     row.appendChild(meta);
     element.appendChild(row);

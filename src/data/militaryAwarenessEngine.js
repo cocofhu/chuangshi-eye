@@ -82,14 +82,14 @@ export function summarizeAwarenessCohort(
       relationship: AWARENESS_RELATIONSHIP.UNKNOWN,
       count: null,
       nearest: [],
-      reason: 'feed unavailable',
+      reason: '数据源不可用',
     };
   if (stale)
     return {
       relationship: AWARENESS_RELATIONSHIP.UNKNOWN,
       count: null,
       nearest: [],
-      reason: 'feed stale',
+      reason: '数据源陈旧',
     };
   const normalized = (Array.isArray(items) ? items : [])
     .filter(
@@ -106,8 +106,8 @@ export function summarizeAwarenessCohort(
     count: normalized.length,
     nearest: normalized.slice(0, limit),
     reason: normalized.length
-      ? 'observed or mapped nearby context'
-      : 'no observed or mapped objects in current feeds',
+      ? '附近已观测或已标注的情境'
+      : '当前数据源中无已观测或已标注对象',
   };
 }
 

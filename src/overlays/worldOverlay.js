@@ -2419,7 +2419,7 @@ function syncAccessibleActions() {
       if (!activate) return;
       const accepted = activate();
       if (accepted !== false && _accessibilityStatus) {
-        _accessibilityStatus.textContent = `Focusing ${item.label}`;
+        _accessibilityStatus.textContent = `正在聚焦 ${item.label}`;
       }
     });
     _accessibilityList.appendChild(button);

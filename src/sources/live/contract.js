@@ -56,7 +56,7 @@ export function coordinates(latitude, longitude) {
 /** Admit a snapshot atomically; an all-invalid nonempty feed is unavailable. */
 export function admitRecords(rows, normalize, label) {
   if (!Array.isArray(rows))
-    throw new LiveSourceError('malformed', `Malformed ${label} response`);
+    throw new LiveSourceError('malformed', `${label} 响应无效`);
   const records = [];
   const ids = new Set();
   for (const row of rows) {
@@ -67,7 +67,7 @@ export function admitRecords(rows, normalize, label) {
     }
   }
   if (rows.length && !records.length) {
-    throw new LiveSourceError('malformed', `Malformed ${label} aircraft rows`);
+    throw new LiveSourceError('malformed', `${label} 航空器记录无效`);
   }
   return {
     records,
@@ -81,7 +81,7 @@ export async function readResponse(
   fetchImpl,
   url,
   { signal, ...init } = {},
-  source = 'Live source',
+  source = '实时数据源',
 ) {
   signal?.throwIfAborted();
   let response;
@@ -91,7 +91,7 @@ export async function readResponse(
   } catch (error) {
     signal?.throwIfAborted();
     if (error?.name === 'AbortError') throw error;
-    throw new LiveSourceError('unavailable', `${source} network error`, {
+    throw new LiveSourceError('unavailable', `${source} 网络错误`, {
       source,
     });
   }
@@ -115,7 +115,7 @@ export function httpError(response, source) {
         : 'unavailable';
   return new LiveSourceError(
     code,
-    status === 429 ? `${source} rate limited` : `${source} HTTP ${status}`,
+    status === 429 ? `${source} 限流` : `${source} HTTP ${status}`,
     {
       status,
       source,

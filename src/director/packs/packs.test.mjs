@@ -133,12 +133,12 @@ test('directory source confines paths, strips credentials and rejects redirects,
   assert.equal(requests[0][1].referrerPolicy, 'no-referrer');
   await assert.rejects(source({ path: '../api/test' }));
   assert.equal(requests.length, 1);
-  await assert.rejects(source({ path: 'a', maxBytes: 2 }), /byte limit/);
+  await assert.rejects(source({ path: 'a', maxBytes: 2 }), /字节上限/);
   const missing = createAssetDirectorySource({
     baseUrl: 'https://example.org/packs/',
     fetchImpl: async () => new Response('', { status: 404 }),
   });
-  await assert.rejects(missing({ path: 'a' }), /unavailable/);
+  await assert.rejects(missing({ path: 'a' }), /不可用/);
 });
 
 test('GeoJSON preserves stable geometry IDs but never properties or remote style hints', () => {
@@ -159,10 +159,10 @@ test('GeoJSON preserves stable geometry IDs but never properties or remote style
     { id: 'p', type: 'Point', coordinates: [-97, 30, 300] },
   ]);
   data.features.push(data.features[0]);
-  assert.throws(decode, /IDs/);
+  assert.throws(decode, /字符串 ID/);
   data.features.pop();
   data.features[0].geometry.coordinates[1] = 91;
-  assert.throws(decode, /position/);
+  assert.throws(decode, /地理坐标/);
   data.features[0].geometry = {
     type: 'Polygon',
     coordinates: [
@@ -174,7 +174,7 @@ test('GeoJSON preserves stable geometry IDs but never properties or remote style
       ],
     ],
   };
-  assert.throws(decode, /ring/);
+  assert.throws(decode, /环未闭合/);
 });
 
 test('pack session removes presentations and cancels the transport on Stop', async () => {
@@ -287,7 +287,7 @@ test('timeout settles an uncooperative adapter and failed packs roll back earlie
     sources: { assets: () => new Promise(() => {}) },
     adapters: { geojson: () => assert.fail() },
   });
-  await assert.rejects(session.load([pack()]), /could not load/);
+  await assert.rejects(session.load([pack()]), /无法加载/);
   assert.equal(session.getState().status, 'idle');
   let disposed = 0,
     called = 0;
@@ -308,7 +308,7 @@ test('timeout settles an uncooperative adapter and failed packs roll back earlie
   });
   await assert.rejects(
     rollback.load([pack(), { ...pack(), id: 'second' }]),
-    (e) => !e.message.includes('secret') && /could not load/.test(e.message),
+    (e) => !e.message.includes('secret') && /无法加载/.test(e.message),
   );
   assert.equal(disposed, 1);
   assert.equal(rollback.getState().count, 0);
@@ -356,7 +356,7 @@ test('failed responses release their body and an already-cancelled source sends 
       );
     },
   });
-  await assert.rejects(source({ path: 'a.json' }), /unavailable/);
+  await assert.rejects(source({ path: 'a.json' }), /不可用/);
   assert.equal(cancelled, 1);
   const controller = new AbortController();
   controller.abort();

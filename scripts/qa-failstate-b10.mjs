@@ -409,11 +409,11 @@ async function main() {
       });
       const partialControl = await readLayerControl(page, 'satellites', 'DEGRADED');
       const partialChipHonest = partialStats.count > 0
-        && /1 CelesTrak group unavailable/i.test(partialStats.error || '')
+        && /1 个 CelesTrak 分组不可用/.test(partialStats.error || '')
         && partialControl.feedState === 'degraded'
         && partialControl.ariaLabel === 'Satellites: DEGRADED';
       const partialMetaHonest = /^DEGRADED · CelesTrak · /i.test(partialControl.meta)
-        && /1 CelesTrak group unavailable/i.test(partialControl.meta);
+        && /1 个 CelesTrak 分组不可用/.test(partialControl.meta);
       record(
         'Satellites: partial outage renders a DEGRADED chip',
         partialChipHonest,

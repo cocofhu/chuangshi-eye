@@ -28,11 +28,11 @@ test('presentation: a slow annotate turn shows captions, plan steps and the resu
   let view = voiceCardView(state);
   assert.equal(view.visible, true);
   assert.equal(view.busy, true);
-  assert.equal(view.phase, 'WORKING');
+  assert.equal(view.phase, '进行中');
   assert.equal(view.user.text, 'Annotate the Texas State Capitol');
   assert.equal(view.assistant.text, 'Finding the Capitol, then outlining it.');
   assert.deepEqual(view.steps.map(({ label, status, detail }) => ({ label, status, detail })), [
-    { label: 'Mark Texas State Capitol', status: 'running', detail: 'Finding places: Texas State Capitol' },
+    { label: '标记 Texas State Capitol', status: 'running', detail: '正在查找地点: Texas State Capitol' },
   ]);
   const done = [
     {
@@ -50,11 +50,11 @@ test('presentation: a slow annotate turn shows captions, plan steps and the resu
     { type: 'outline', id: 'anno-1', status: 'resolved' },
   ].reduce(reduceVoiceCard, state);
   view = voiceCardView(done);
-  assert.equal(view.phase, 'DONE');
-  assert.equal(view.steps[0].detail, 'Outline traced');
+  assert.equal(view.phase, '完成');
+  assert.equal(view.steps[0].detail, '轮廓已描');
   assert.equal(view.result.title, 'Marked 1 place');
   assert.deepEqual(view.result.referents, [{ n: 1, label: 'Texas State Capitol' }]);
-  assert.deepEqual(view.result.notes, ['Tracing outlines', 'Source: OpenStreetMap']);
+  assert.deepEqual(view.result.notes, ['Tracing outlines', '来源：OpenStreetMap']);
   assert.equal(view.announce, 'Marked 1 place', 'the live region carries the result title');
 });
 
@@ -93,7 +93,7 @@ test('markup: the card nests inside the voice control with every element and a p
     assert.match(controlSource, new RegExp(`id="${id}"`), `${id} is missing`);
   }
   assert.match(controlSource, /id="gev-voice-card-live"[^>]*aria-live="polite"/);
-  assert.match(controlSource, /aria-label="Dismiss voice card"/);
+  assert.match(controlSource, /aria-label="关闭语音卡片"/);
   assert.match(css, /#gev-voice-control \.gev-voice-card \{/);
   assert.match(css, /body\.recording-mode #gev-voice-control/, 'recording mode hides the control, card included');
   assert.match(css, /body\.ui-clean-view #command-dock/, 'Clean-UI hides the dock, card included');
@@ -197,10 +197,10 @@ test('presentation: concurrent calls of one tool update their own steps', () => 
   ]);
   const steps = voiceCardView(state).steps;
   assert.deepEqual(steps.map(({ label, status }) => [label, status]), [
-    ['Fly to Tokyo', 'running'],
-    ['Fly to Paris', 'failed'],
+    ['飞往 Tokyo', 'running'],
+    ['飞往 Paris', 'failed'],
   ]);
-  assert.equal(steps[0].detail, 'Looking up place: Tokyo');
+  assert.equal(steps[0].detail, '正在查询地点: Tokyo');
 });
 
 test('presentation: stale and unmatched events never reopen the card', () => {
@@ -226,8 +226,8 @@ test('presentation: stale and unmatched events never reopen the card', () => {
   ]);
   assert.equal(reduceVoiceCard(live, { type: 'outline', id: 'anno-7', status: 'resolved' }), live, 'another mark is ignored');
   const first = reduceVoiceCard(live, { type: 'outline', id: 'anno-1', status: 'resolved' });
-  assert.equal(voiceCardView(first).steps[0].detail, 'Tracing outline', 'one of two outlines still pending');
+  assert.equal(voiceCardView(first).steps[0].detail, '正在描边', 'one of two outlines still pending');
   assert.equal(voiceCardView(first).visible, false, 'a dismissed card stays hidden');
   const both = reduceVoiceCard(first, { type: 'outline', id: 'anno-2', status: 'failed' });
-  assert.equal(voiceCardView(both).steps[0].detail, 'Outline unavailable');
+  assert.equal(voiceCardView(both).steps[0].detail, '轮廓不可用');
 });

@@ -18,7 +18,7 @@ const camera = (id, latitude, longitude, extra = {}) => ({
   ...extra,
 });
 const alpr = (result) => ({
-  label: 'OpenStreetMap · community mapped',
+  label: 'OpenStreetMap · 社区标注',
   attribution: { text: 'OpenStreetMap contributors' },
   boxes: [],
   async fetch(box) {
@@ -45,7 +45,7 @@ test('mapped cameras are listed nearest first with their details', async () => {
   });
   assert.equal(
     result.summary,
-    '2 license plate reader cameras mapped in 10 km around 30.270, -97.740.',
+    '2 个已标注车牌识别摄像头，位于 30.270, -97.740 周边 10 km。',
   );
   assert.deepEqual(
     result.data.rows.map((row) => row.id),
@@ -63,7 +63,7 @@ test('mapped cameras are listed nearest first with their details', async () => {
     last_verified: '2026-05-01',
     distance_km: 5.09,
   });
-  assert.equal(result.data.source, 'OpenStreetMap · community mapped');
+  assert.equal(result.data.source, 'OpenStreetMap · 社区标注');
   assert.ok(source.boxes[0].north - source.boxes[0].south < 1);
 });
 
@@ -78,7 +78,7 @@ test('coverage, size and zoom limits are reported', async () => {
         area: { lat: 51.5, lon: -0.1, radius_km: 5 },
       })
     ).summary,
-    '5 km around 51.500, -0.100 is outside the US and Canadian camera coverage.',
+    '51.500, -0.100 周边 5 km 超出美国和加拿大摄像头覆盖。',
   );
   await assert.rejects(
     outside.call('find_alpr_cameras', { area: { bbox: [-100, 30, -95, 35] } }),
@@ -92,7 +92,7 @@ test('coverage, size and zoom limits are reported', async () => {
     zoom.call('find_alpr_cameras', {
       area: { lat: 30, lon: -97, radius_km: 100 },
     }),
-    /smaller, city-sized area/,
+    /请改用更小的城市范围/,
   );
 });
 
@@ -111,5 +111,5 @@ test('a saturated camera fetch is reported as partial', async () => {
     area: { lat: 30.3, lon: -97.7, radius_km: 5 },
   });
   assert.equal(result.data.complete, false);
-  assert.match(result.summary, /partial: some cameras were not loaded/);
+  assert.match(result.summary, /部分结果：有摄像头未加载/);
 });

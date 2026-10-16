@@ -188,7 +188,7 @@ export class LocalSdrControls {
     // Internet radio just started: it takes over from local FM.
     if (radioAudioActive && !this._radioAudioActive && this._fmAudioActive) {
       void this.receiver.stop({
-        message: 'Local FM stopped: internet radio started',
+        message: '本地调频已停止：网络电台已开始',
       });
     }
     this._radioAudioActive = radioAudioActive;

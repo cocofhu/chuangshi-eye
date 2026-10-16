@@ -92,8 +92,8 @@ export function createLifecycle({
       flightState.feed._lastError = null;
       flightState.feed._lastStatus = null;
       flightState.feed._lastSource =
-        flightState.feed._source.label || 'Aircraft';
-      flightState.feed._lastCoverage = 'worldwide upstream snapshot';
+        flightState.feed._source.label || '民航航班';
+      flightState.feed._lastCoverage = '全球上游快照';
       flightState._trackedIcao = null;
       parts.tracking._resetTrackedSelectionState();
       flightState._trackedEntity = null;

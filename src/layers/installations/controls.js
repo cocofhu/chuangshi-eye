@@ -14,7 +14,7 @@ export function createControls({ state: layerState, services, parts, source }) {
 
     icon: '⌖',
 
-    source: 'OpenStreetMap + optional Google Maps Places',
+    source: 'OpenStreetMap · 可选 Google 地图地点',
 
     updateInterval: 0,
 
@@ -231,13 +231,13 @@ export function createControls({ state: layerState, services, parts, source }) {
           retrying: layerState.loading && Boolean(layerState.failureReason),
         }),
         loadingLabel: layerState.loading
-          ? 'loading mapped installation context'
+          ? '正在加载军事设施'
           : '',
         coverage: layerState.coverage,
         coverageLabel:
           layerState.coverage?.kind === 'subject'
-            ? `WITHIN ${Math.round(layerState.coverage.radiusM / 1000)} KM`
-            : 'CURRENT VIEWPORT ONLY',
+            ? `目标周边 ${Math.round(layerState.coverage.radiusM / 1000)} 公里`
+            : '仅当前视野',
       };
     },
   };

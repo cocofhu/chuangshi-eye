@@ -12,7 +12,7 @@ const idle = Object.freeze({
   webUsbSupported: true,
   connected: false,
   status: 'idle',
-  message: 'Connect an RTL-SDR to begin.',
+  message: '连接 RTL-SDR 以开始。',
   mode: 'fm',
   frequencyHz: 98_500_000,
   volume: 0.8,
@@ -34,11 +34,11 @@ const idle = Object.freeze({
 
 test('an idle card invites a connection and hides receiver stats', () => {
   const view = localSdrCardView(idle);
-  assert.equal(view.statusText, 'Connect an RTL-SDR to begin.');
-  assert.equal(view.connectLabel, 'CONNECT');
+  assert.equal(view.statusText, '连接 RTL-SDR 以开始。');
+  assert.equal(view.connectLabel, '连接');
   assert.equal(view.connectDisabled, false);
-  assert.equal(view.connectionLabel, 'IDLE');
-  assert.equal(view.gainValue, 'auto');
+  assert.equal(view.connectionLabel, '空闲');
+  assert.equal(view.gainValue, '自动');
   assert.equal(view.statsHidden, true);
   assert.equal(view.tuneDisabled, true);
   assert.equal(view.seekDisabled, true);
@@ -47,7 +47,7 @@ test('an idle card invites a connection and hides receiver stats', () => {
     ...idle,
     webUsbSupported: false,
     status: 'unsupported',
-    message: 'WebUSB is unavailable in this browser',
+    message: '此浏览器不支持 WebUSB',
   });
   assert.equal(unsupported.connectDisabled, true);
   assert.equal(unsupported.changeDeviceDisabled, true);
@@ -60,7 +60,7 @@ test('streaming ADS-B shows message rate, heard, positioned and IQ level', () =>
     connected: true,
     status: 'streaming',
     mode: 'adsb',
-    message: 'Receiving 1090 MHz ADS-B',
+    message: '正在接收 1090 MHz ADS-B',
     gain: 20.7,
     messagesPerSecond: 13.8,
     aircraftHeard: 4,
@@ -78,13 +78,13 @@ test('streaming ADS-B shows message rate, heard, positioned and IQ level', () =>
     iq: '-21.4 dBFS',
   });
   assert.equal(view.gainValue, '20.7');
-  assert.equal(view.connectionLabel, '4 HEARD');
-  assert.equal(view.connectLabel, 'DISCONNECT');
+  assert.equal(view.connectionLabel, '已听 4');
+  assert.equal(view.connectLabel, '断开');
   assert.equal(view.frequencyDisabled, true);
   assert.equal(view.volumeDisabled, true);
   assert.equal(
     view.statusText,
-    'Receiving 1090 MHz ADS-B · FlyCatcher_ADS_B · 2.00 MS/s IQ · 276 messages',
+    '正在接收 1090 MHz ADS-B · FlyCatcher_ADS_B · 2.00 MS/s IQ · 276 条报文',
   );
 });
 
@@ -122,11 +122,11 @@ test('the decoder-feed line appears only when feeds are configured', () => {
   ];
   assert.equal(
     localSdrFeedLine({ configured: true, polling: true, feeds }),
-    'Decoder feeds: 1090 live · 978 unreachable',
+    '解码馈源：1090 在线 · 978 不可达',
   );
   assert.equal(
     localSdrFeedLine({ configured: true, polling: false, feeds }),
-    'Decoder feeds: 1090 · 978 · read while Local ADS-B is on',
+    '解码馈源：1090 · 978 · 开启本地 ADS-B 时读取',
   );
   assert.equal(
     localSdrFeedLine({
@@ -134,7 +134,7 @@ test('the decoder-feed line appears only when feeds are configured', () => {
       polling: false,
       feeds: [{ band: null, label: 'entry 2', status: 'invalid' }],
     }),
-    'Decoder feeds: entry 2 invalid · read while Local ADS-B is on',
+    '解码馈源：entry 2 无效 · 开启本地 ADS-B 时读取',
   );
 });
 
@@ -146,10 +146,10 @@ test('two feeds on one band are told apart by their ordinal labels', () => {
   ];
   assert.equal(
     localSdrFeedLine({ configured: true, polling: true, feeds }),
-    'Decoder feeds: 1090 live · 978 MHz UAT #1 live · 978 MHz UAT #2 stale',
+    '解码馈源：1090 在线 · 978 MHz UAT #1 在线 · 978 MHz UAT #2 陈旧',
   );
   assert.equal(
     localSdrFeedLine({ configured: true, polling: false, feeds }),
-    'Decoder feeds: 1090 · 978 MHz UAT #1 · 978 MHz UAT #2 · read while Local ADS-B is on',
+    '解码馈源：1090 · 978 MHz UAT #1 · 978 MHz UAT #2 · 开启本地 ADS-B 时读取',
   );
 });

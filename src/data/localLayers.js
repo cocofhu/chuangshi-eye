@@ -12,7 +12,7 @@ const fires = createFirmsHeatmapLayer({
   id: 'local-firms',
   name: 'FIRMS Active Fires',
   icon: '▲',
-  source: 'NASA FIRMS · LIVE',
+  source: 'NASA FIRMS · 实时',
 });
 
 export default [datacenters, dams, submarineCablesLayer, fires];

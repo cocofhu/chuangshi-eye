@@ -44,20 +44,20 @@ export function createQueries({
     if (status === 'auth-failed') {
       // Actionable, not a countdown: retrying cannot fix a rejected credential,
       // so the chip asks the operator to do the one thing that can.
-      return 'API key rejected — check AISSTREAM_API_KEY';
+      return 'API 密钥被拒绝 — 请检查 AISSTREAM_API_KEY';
     }
     if (status === 'stale') {
       const silentSec = Math.round(Number(payload?.silentForMs) / 1000);
       return Number.isFinite(silentSec) && silentSec > 0
-        ? `feed silent ${silentSec}s — no AIS data`
-        : 'feed silent — no AIS data';
+        ? `数据源静默 ${silentSec} 秒 — 无 AIS 数据`
+        : '数据源静默 — 无 AIS 数据';
     }
     const attempt = Number(payload?.reconnectAttempt);
     const suffix =
-      Number.isFinite(attempt) && attempt >= 1 ? ` (attempt ${attempt})` : '';
+      Number.isFinite(attempt) && attempt >= 1 ? `（第 ${attempt} 次）` : '';
     return status === 'down'
-      ? `feed down — retrying slowly${suffix}`
-      : `reconnecting to feed…${suffix}`;
+      ? `数据源中断 — 正在缓慢重试${suffix}`
+      : `正在重新连接数据源…${suffix}`;
   }
 
   /**
@@ -82,18 +82,19 @@ export function createQueries({
     if (acceptedRowCount > 0) return null; // accepted rows may be stale while reconnecting, but remain usable
     if (AIS_HEALTHY_STATUSES.has(status)) {
       return payload?.lastMessageAt
-        ? 'awaiting usable AIS positions…'
-        : 'awaiting first AIS message…';
+        ? '正在等待可用的 AIS 位置…'
+        : '正在等待首条 AIS 消息…';
     }
     if (!status) return null;
     const detail =
       typeof payload.error === 'string' && payload.error.trim()
         ? payload.error.trim()
         : '';
-    const reason = AIS_STATUS_REASON[status] || 'feed unavailable';
-    return detail && !AIS_STATUS_REASON[status]
-      ? `${reason} (${detail})`
-      : reason;
+    const reason = AIS_STATUS_REASON[status] || '数据源不可用';
+    if (!detail || AIS_STATUS_REASON[status]) return reason;
+    return /[\u4e00-\u9fff]/.test(detail)
+      ? `${reason}（${detail}）`
+      : `${reason}（服务端说明未识别）`;
   }
 
   /** True when a raw AIS row can enter the production vessel normalizer. */
@@ -142,7 +143,7 @@ export function createQueries({
       error: emptyCoverage
         ? null
         : deriveAisFeedError(payload, acceptedRowCount) ||
-          (acceptedRowCount === 0 ? 'awaiting usable AIS positions…' : null),
+          (acceptedRowCount === 0 ? '正在等待可用的 AIS 位置…' : null),
     };
   }
 

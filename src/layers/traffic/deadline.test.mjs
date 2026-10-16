@@ -199,7 +199,7 @@ for (const outcome of ['timeout', 'abort']) test(`a road pass ${outcome} invalid
   assert.equal(state._fetching, false);
   if (outcome === 'timeout') {
     assert.equal(state._activeFetchAbort.signal.aborted, false);
-    assert.match(state._roadError, /timed out/);
+    assert.match(state._roadError, /OpenFreeMap 瓦片超时/);
     assert.equal(state._retryAttempts, 1);
   }
   held.shift()(); await flush();

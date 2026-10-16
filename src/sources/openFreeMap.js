@@ -191,7 +191,7 @@ function decodeLayers(bytes, z, x, y, layerNames) {
             id: `ofm:${z}/${x}/${y}:${feature.id ?? i}:${p}`,
             kind: 'installation',
             class: 'military_land',
-            name: 'Military area',
+            name: '军事用地',
             latitude,
             longitude,
             footprint: ring,

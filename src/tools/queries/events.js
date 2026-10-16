@@ -83,7 +83,7 @@ export const getBhoteKoshiFlood = defineTool({
   async run(args, { services, signal }) {
     const event = await services.events.getEvent(EVENT_ID, { signal });
     if (!Array.isArray(event?.evidenceSpine))
-      throw new ToolError('malformed', 'The event pack has no evidence');
+      throw new ToolError('malformed', '事件包没有证据');
     const wanted = args.phase?.toLowerCase();
     const evidence = event.evidenceSpine
       .filter((record) => !wanted || record.phase?.toLowerCase() === wanted)
@@ -96,10 +96,9 @@ export const getBhoteKoshiFlood = defineTool({
     const { imagery = {} } = event;
     return {
       summary:
-        `${event.title}, observed ${event.observedDate}: ${evidence.length} ` +
-        `evidence record${evidence.length === 1 ? '' : 's'}` +
-        (args.phase ? ` in the ${args.phase} phase` : '') +
-        ` along a ${lengthKm} km mapped flood path.`,
+        `${event.title}，观测 ${event.observedDate}：${evidence.length} 条证据` +
+        (args.phase ? `，阶段 ${args.phase}` : '') +
+        `，沿 ${lengthKm} km 已标注洪水路径。`,
       data: {
         view: suggestView(services, {
           area: pathArea(BHOTE_KOSHI_FLOOD_PATH),

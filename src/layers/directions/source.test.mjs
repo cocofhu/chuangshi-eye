@@ -37,7 +37,7 @@ test('route failures are surfaced without fallback requests', async () => {
       calls++;
       return Response.json({}, { status });
     } });
-    await assert.rejects(source.getRoute(query), status === 429 ? /rate limited/ : /HTTP 503/);
+    await assert.rejects(source.getRoute(query), status === 429 ? /限流/ : /HTTP 503/);
     assert.equal(calls, 1);
   }
 });

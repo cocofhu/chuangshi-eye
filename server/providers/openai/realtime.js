@@ -120,7 +120,7 @@ function createRealtimeOAuthLoginHandler({
       res.end(
         JSON.stringify({
           available: false,
-          error: 'Could not start ChatGPT sign-in',
+          error: '无法启动 ChatGPT 登录',
         }),
       );
     }
@@ -151,7 +151,7 @@ function createRealtimeTokenHandler({
     if (!authMode) {
       res.statusCode = 400;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ error: 'Unsupported cloud voice auth mode' }));
+      res.end(JSON.stringify({ error: '不支持的云语音认证方式' }));
       return;
     }
 
@@ -170,7 +170,7 @@ function createRealtimeTokenHandler({
       res.end(
         JSON.stringify({
           error:
-            'ChatGPT OAuth is required by GEV_PREFER_CODEX_OAUTH. Select USE CHATGPT OAUTH in Provider Settings.',
+            'GEV_PREFER_CODEX_OAUTH 要求使用 ChatGPT OAuth。请在提供者设置中选择使用 ChatGPT 登录。',
           code: 'CODEX_OAUTH_REQUIRED',
         }),
       );
@@ -187,7 +187,7 @@ function createRealtimeTokenHandler({
         res.setHeader('Content-Type', 'application/json');
         res.end(
           JSON.stringify({
-            error: 'ChatGPT OAuth voice is available only from this machine',
+            error: 'ChatGPT OAuth 语音只能从本机使用',
           }),
         );
         return;
@@ -199,7 +199,7 @@ function createRealtimeTokenHandler({
         res.setHeader('Content-Type', 'application/json');
         res.end(
           JSON.stringify({
-            error: error?.message || 'ChatGPT sign-in is unavailable',
+            error: error?.message || 'ChatGPT 登录不可用',
             code: error?.code || 'CODEX_OAUTH_UNAVAILABLE',
           }),
         );
@@ -210,7 +210,7 @@ function createRealtimeTokenHandler({
         res.setHeader('Content-Type', 'application/json');
         res.end(
           JSON.stringify({
-            error: 'ChatGPT sign-in is unavailable',
+            error: 'ChatGPT 登录不可用',
             code: 'CODEX_OAUTH_UNAVAILABLE',
           }),
         );

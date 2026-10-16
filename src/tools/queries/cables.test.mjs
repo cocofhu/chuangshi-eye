@@ -57,7 +57,7 @@ test('cables are found by area and name, with landing points and attribution', a
   });
   assert.equal(
     virginia.summary,
-    '1 submarine cable in 50 km around 36.850, -75.980, with 1 landing point.',
+    '1 条海底光缆，位于 36.850, -75.980 周边 50 km，登陆点 1 个。',
   );
   assert.deepEqual(virginia.data.rows, [{ id: 'marea', name: 'MAREA' }]);
   assert.equal(
@@ -66,7 +66,7 @@ test('cables are found by area and name, with landing points and attribution', a
   );
   assert.match(virginia.data.attribution, /TeleGeography.*CC BY-NC-SA 3\.0/);
   const named = await catalog.call('find_submarine_cables', { name: 'uni' });
-  assert.equal(named.summary, '1 submarine cable matching "uni".');
+  assert.equal(named.summary, '1 条海底光缆，匹配「uni」。');
   assert.equal(named.data.landing_points, null);
   await assert.rejects(
     catalog.call('find_submarine_cables', {}),

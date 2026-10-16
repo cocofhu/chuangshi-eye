@@ -340,7 +340,7 @@ export function createStreetLevelLayer({
         source: STREET_LEVEL_LAYER_ID,
         reason: available
           ? null
-          : 'No street-level imagery providers configured',
+          : '未配置街景影像来源',
       };
     },
 
@@ -406,9 +406,9 @@ export function createStreetLevelLayer({
       // The lifecycle polls this every second: summarise, don't snapshot.
       const coverage = summarizeCoverage(providerSnapshots());
       let loadingLabel = '';
-      const keyLabel = coverage.keyRejected ? 'KEY REJECTED' : 'KEY REQUIRED';
+      const keyLabel = coverage.keyRejected ? '密钥已拒' : '需要密钥';
       if (coverage.keyRequired) loadingLabel = keyLabel;
-      else if (coverage.loading) loadingLabel = 'loading coverage...';
+      else if (coverage.loading) loadingLabel = '正在加载覆盖…';
       else if (coverage.hint && state.enabled) loadingLabel = coverage.hint;
       return {
         count: coverage.count,
@@ -521,7 +521,7 @@ export function createStreetLevelLayer({
       if (state.enabled && activeEntries().length)
         state.street.error =
           lastError?.message ||
-          `No street-level imagery within ${NEAREST_RADIUS_M} m of the view centre`;
+          `视野中心 ${NEAREST_RADIUS_M} 米内没有街景影像`;
       state.street.loading = false;
       notify();
       return false;

@@ -74,7 +74,7 @@ try {
   });
   check(
     'generated range has an accessible label and a numeric step',
-    initial.label === 'Pixelation' && initial.step > 0,
+    initial.label === '像素化' && initial.step > 0,
   );
   await page.keyboard.press('ArrowRight');
   const changed = await page.evaluate(() => {

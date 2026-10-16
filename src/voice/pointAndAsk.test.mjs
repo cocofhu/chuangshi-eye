@@ -267,12 +267,12 @@ test('card: the chip says what "this" or "here" resolved to and resets per turn'
   assert.equal(view.visible, true);
   assert.deepEqual(view.pointer, {
     visible: true,
-    kind: 'THIS',
+    kind: '此',
     text: 'UPS793',
   });
   assert.equal(
     view.announce,
-    'This: UPS793',
+    '此: UPS793',
     'the live region says what "this" meant',
   );
   state = reduceVoiceCard(state, {
@@ -281,12 +281,12 @@ test('card: the chip says what "this" or "here" resolved to and resets per turn'
   });
   assert.deepEqual(voiceCardView(state).pointer, {
     visible: true,
-    kind: 'HERE',
+    kind: '此处',
     text: '30.27, -97.74',
   });
   assert.equal(
     voiceCardView(state).announce,
-    'Here: 30.27, -97.74',
+    '此处: 30.27, -97.74',
     'a changed target is announced',
   );
   state = reduceVoiceCard(state, { type: 'interruption' });

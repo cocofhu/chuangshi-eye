@@ -247,7 +247,7 @@ function keySetupEndpoint({ sourceRoot = defaultSourceRoot } = {}) {
     configureServer(server) {
       server.middlewares.use('/api/setup/status', (req, res) => {
         if (req.method !== 'GET')
-          return respond(res, 405, { error: 'Method not allowed' });
+          return respond(res, 405, { error: '不允许该方法' });
         const admission = admit(req);
         if (!admission.ok)
           return respond(res, admission.status, { error: admission.error });
@@ -255,7 +255,7 @@ function keySetupEndpoint({ sourceRoot = defaultSourceRoot } = {}) {
       });
       server.middlewares.use('/api/setup/keys', (req, res) => {
         if (req.method !== 'POST')
-          return respond(res, 405, { error: 'Method not allowed' });
+          return respond(res, 405, { error: '不允许该方法' });
         const admission = admit(req);
         if (!admission.ok)
           return respond(res, admission.status, { error: admission.error });
@@ -270,12 +270,12 @@ function keySetupEndpoint({ sourceRoot = defaultSourceRoot } = {}) {
         });
         req.on('end', () => {
           if (overflowed)
-            return respond(res, 413, { error: 'Request too large' });
+            return respond(res, 413, { error: '请求过大' });
           let parsed;
           try {
             parsed = JSON.parse(body || '{}');
           } catch {
-            return respond(res, 400, { error: 'Invalid JSON' });
+            return respond(res, 400, { error: 'JSON 无效' });
           }
           const verdict = validateKeySetupUpdates(parsed);
           if (!verdict.ok) return respond(res, 400, { error: verdict.error });
@@ -288,7 +288,7 @@ function keySetupEndpoint({ sourceRoot = defaultSourceRoot } = {}) {
           for (const name of Object.keys(verdict.updates)) {
             if (isExternallyManaged(name, inStore)) {
               return respond(res, 409, {
-                error: `${name} is configured outside Provider Settings and can only be changed where it was set`,
+                error: `${name} 在提供者设置之外配置，只能在原处修改`,
               });
             }
           }
@@ -304,11 +304,11 @@ function keySetupEndpoint({ sourceRoot = defaultSourceRoot } = {}) {
               error?.code === 'GEV_STORE_UNREADABLE'
             ) {
               return respond(res, 500, {
-                error: `The key was not saved: ${error.message}`,
+                error: `密钥未保存：${error.message}`,
               });
             }
             return respond(res, 500, {
-              error: `Could not write the ${storeName()} store`,
+              error: `无法写入 ${storeName()} 存储`,
             });
           }
           // Live for the server-side proxies immediately; the restart below is

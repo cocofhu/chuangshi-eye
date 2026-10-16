@@ -91,7 +91,7 @@ test('analyst: a subject without usable coordinates cannot lend its name to a ca
   assert.equal(r.count, 1, 'the count is the camera-centred one it actually measured');
   assert.equal(r.centeredOn, undefined, 'and it must not claim a centre it did not use');
   assert.equal(r.coverage.scope, 'radius:250km');
-  assert.equal(r.scopeLabel, 'within 250 km');
+  assert.equal(r.scopeLabel, '250 公里内');
 });
 
 test('analyst: every scope names itself in words', async () => {
@@ -101,27 +101,27 @@ test('analyst: every scope names itself in words', async () => {
   const centred = await makeContactsEngine(subject).query({
     layers: ['flights'], scope: { kind: 'radius', km: 250 }, limit: 1,
   });
-  assert.equal(centred.scopeLabel, 'within 250 km of DYNO11');
+  assert.equal(centred.scopeLabel, '距 DYNO11 250 公里内');
 
   const plainRadius = await makeContactsEngine(null).query({
     layers: ['flights'], scope: { kind: 'radius', km: 250 }, limit: 1,
   });
-  assert.equal(plainRadius.scopeLabel, 'within 250 km');
+  assert.equal(plainRadius.scopeLabel, '250 公里内');
 
   const inView = await makeEngine().query({
     layers: ['flights'], scope: { kind: 'view' }, limit: 1,
   });
-  assert.equal(inView.scopeLabel, 'in view');
+  assert.equal(inView.scopeLabel, '视野内');
 
   const region = await makeEngine().query({
     layers: ['flights'], scope: { kind: 'region', name: 'Texland' }, limit: 1,
   });
-  assert.equal(region.scopeLabel, 'over Texland');
+  assert.equal(region.scopeLabel, 'Texland上空');
 
   const anywhere = await makeEngine().query({
     layers: ['flights'], scope: { kind: 'anywhere' }, limit: 1,
   });
-  assert.equal(anywhere.scopeLabel, 'anywhere in the loaded data');
+  assert.equal(anywhere.scopeLabel, '已加载数据范围内');
 });
 
 test('analyst: count flights over a region', async () => {
@@ -390,7 +390,7 @@ test('capped cohorts report returned/total/truncated and keep it on follow-up', 
   const layer = result.coverage.layersQueried[0];
   assert.deepEqual({ returned: layer.returned, total: layer.total, truncated: layer.truncated }, { returned: 1, total: 3000, truncated: true });
   assert.deepEqual(result.coverage.records, { returned: 1, total: 3000, truncated: true });
-  assert.match(result.display.caveat, /counted 1 of 3,000 loaded records/);
+  assert.match(result.display.caveat, /已计入 1 \/ 3,000 条已加载记录/);
   const followUp = await engine.query({ followUp: true });
   assert.equal(followUp.coverage.layersQueried[0].total, 3000);
 });
@@ -399,7 +399,7 @@ test('an uncapped cohort is complete and carries no caveat', async () => {
   const result = await makeEngine().query({ layers: ['flights'], scope: { kind: 'anywhere' } });
   assert.deepEqual(result.coverage.records, { returned: 4, total: 4, truncated: false });
   assert.equal(result.display.caveat, undefined);
-  assert.equal(result.display.scope, 'anywhere in the loaded data');
+  assert.equal(result.display.scope, '已加载数据范围内');
 });
 
 test('unknown fields, operators, scopes and wrong-typed values are refused with the allowed values', async () => {

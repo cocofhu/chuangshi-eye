@@ -55,19 +55,19 @@ const INCIDENT = Object.freeze({
   lat: 28.3632333,
   lon: 85.4423639,
   heightM: 5200,
-  title: 'BHOTE KOSHI FLOOD INCIDENT',
-  subtitle: 'NEPAL · 26 AUG 2026',
+  title: '波泰科西洪水',
+  subtitle: '尼泊尔 · 2026-08-26',
 });
 const TRIGGER_RECORD = Object.freeze({
   lat: 28.271,
   lon: 85.515,
   heightM: 4200,
-  title: 'USGS INITIAL REPORT',
+  title: 'USGS 初报',
   details: Object.freeze([
-    '26 AUG 2026 · 08:37 NPT',
+    '2026-08-26 · 08:37 NPT',
     '28.2710° N · 85.5150° E',
-    'INITIAL M4.4 · RECLASSIFIED M5.2 LANDSLIDE',
-    'USGS EVENT us7000tbwb · OPEN SOURCE',
+    '初报 M4.4 · 改判 M5.2 滑坡',
+    'USGS 事件 us7000tbwb · 公开来源',
   ]),
 });
 const TRIGGER_APPROACH_CAMERA = Object.freeze({
@@ -90,12 +90,12 @@ const NEPAL = Object.freeze({
   lat: 28.3949,
   lon: 84.124,
   heightM: 6800,
-  title: 'NEPAL',
+  title: '尼泊尔',
 });
 const NEARBY_CITIES = Object.freeze([
   Object.freeze({
     id: 'kathmandu',
-    title: 'KATHMANDU',
+    title: '加德满都',
     lat: 27.7017,
     lon: 85.3206,
     heightM: 3600,
@@ -103,7 +103,7 @@ const NEARBY_CITIES = Object.freeze([
   }),
   Object.freeze({
     id: 'bhaktapur',
-    title: 'BHAKTAPUR',
+    title: '巴克塔普尔',
     lat: 27.673,
     lon: 85.43,
     heightM: 3400,
@@ -111,7 +111,7 @@ const NEARBY_CITIES = Object.freeze([
   }),
   Object.freeze({
     id: 'dhulikhel',
-    title: 'DHULIKHEL',
+    title: '杜利凯尔',
     lat: 27.6221,
     lon: 85.5428,
     heightM: 3600,
@@ -549,8 +549,7 @@ export function createBhoteKoshiLocatorLayer({
       protected: true,
       active: true,
       interactive: true,
-      accessibilityLabel:
-        'Open the USGS initial report for the 26 August 2026 Nepal landslide',
+      accessibilityLabel: '打开 2026 年 8 月 26 日尼泊尔滑坡的 USGS 初报',
       activate: () => {
         const opened = window.open(
           TRIGGER_SOURCE_URL,

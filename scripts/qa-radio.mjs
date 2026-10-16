@@ -461,7 +461,7 @@ async function main() {
         && uncertainPresentation.prevDisabled
         && uncertainPresentation.playDisabled
         && uncertainPresentation.volumeDisabled
-        && /compact Radio controls/i.test(uncertainPresentation.disclosureLabel)
+        && /紧凑电台/.test(uncertainPresentation.disclosureLabel)
         && /uncertain/i.test(uncertainPresentation.compactPowerLabel)
         && uncertainPresentation.compactPowerText === 'RECONCILE'
         && /uncertain/i.test(uncertainPresentation.fullLabel)
@@ -526,11 +526,11 @@ async function main() {
         && disablingPresentation.manager.lifecycleState === 'disabling'
         && disablingPresentation.presentationActive === false
         && disablingPresentation.markerSourceVisible === false
-        && disablingPresentation.full === 'DISABLING'
-        && /compact Radio controls/i.test(disablingPresentation.disclosure)
-        && disablingPresentation.compactPower === 'DISABLING'
-        && disablingPresentation.layerState === 'DISABLING'
-        && /disabling/i.test(disablingPresentation.message)
+        && disablingPresentation.full === '关闭中'
+        && /紧凑电台/.test(disablingPresentation.disclosure)
+        && disablingPresentation.compactPower === '关闭中'
+        && disablingPresentation.layerState === '关闭中'
+        && /正在关闭/.test(disablingPresentation.message)
         && disablingPresentation.stopDisabled
         && disablingPresentation.volumeDisabled,
       JSON.stringify(disablingPresentation),
@@ -602,13 +602,13 @@ async function main() {
         && enablingPresentation.manager.lifecycleState === 'enabling'
         && enablingPresentation.presentationActive === false
         && enablingPresentation.markerSourceVisible === false
-        && enablingPresentation.full === 'ENABLING'
-        && enablingPresentation.disclosure === 'Go to expanded Radio section'
+        && enablingPresentation.full === '开启中'
+        && enablingPresentation.disclosure === '转到已展开的电台'
         && enablingPresentation.disclosureControls === 'radio-panel'
         && enablingPresentation.disclosureExpanded === 'true'
-        && enablingPresentation.compactPower === 'ENABLING'
-        && enablingPresentation.layerState === 'ENABLING'
-        && /enabling/i.test(enablingPresentation.message)
+        && enablingPresentation.compactPower === '开启中'
+        && enablingPresentation.layerState === '开启中'
+        && /正在开启/.test(enablingPresentation.message)
         && enablingPresentation.tunerHidden
         && enablingPresentation.stopDisabled
         && enablingPresentation.volumeDisabled,
@@ -1174,7 +1174,7 @@ async function main() {
     });
     check(
       'user-facing chip, real Context entry rollback, and installation Search failures settle safely',
-      userFacingFailures.semanticFalseMessage === 'Radio could not stop cleanly'
+      userFacingFailures.semanticFalseMessage === '电台未能干净关闭'
         && userFacingFailures.contextFailures.length === 8
         && userFacingFailures.contextFailures.every((failure) => (
           failure.result === false
@@ -1188,7 +1188,7 @@ async function main() {
         ))
         && userFacingFailures.directEntryFailures.length === 4
         && userFacingFailures.directEntryFailures.every((failure) => (
-          failure.reason.includes('could not start')
+          failure.reason.includes('未能启动')
           && failure.retryReason === null
           && failure.toastMessages.length === 1
           && failure.toastMessages[0] === failure.reason
@@ -1207,7 +1207,7 @@ async function main() {
         && userFacingFailures.directActivationRollbackFailures.length === 2
         && userFacingFailures.directActivationRollbackFailures.every((failure) => (
           failure.toastMessages.length === 1
-          && failure.toastMessages[0] === `${failure.layerId} could not start cleanly`
+          && failure.toastMessages[0] === `${failure.layerId === 'rocket-launches' ? '航天任务' : '目标情境'}未能干净开启`
           && failure.retryRetained
         ))
         && userFacingFailures.contextExitFailures.length === 2
@@ -1228,7 +1228,7 @@ async function main() {
         ))
         && userFacingFailures.unrelatedManagerFailure.result === false
         && userFacingFailures.unrelatedManagerFailure.toastMessages.length === 1
-        && userFacingFailures.unrelatedManagerFailure.toastMessages[0].includes('qa-unrelated-manager-failure could not start cleanly')
+        && userFacingFailures.unrelatedManagerFailure.toastMessages[0].includes('qa-unrelated-manager-failure未能干净开启')
         && userFacingFailures.installationFalseMessage.includes('could not be refreshed')
         && userFacingFailures.installationFalseReleased
         && userFacingFailures.installationEnableRejectionMessage.includes('could not be refreshed')
@@ -4548,7 +4548,7 @@ async function main() {
       'expanded Context Radio icon reveals and scrolls to embedded Radio without an overlay or playback/camera theft',
       expandedContextRadioAfter.ariaControls === 'radio-panel'
         && expandedContextRadioAfter.expanded === 'true'
-        && expandedContextRadioAfter.label === 'Go to expanded Radio section'
+        && expandedContextRadioAfter.label === '转到已展开的电台'
         && !expandedContextRadioAfter.radioCollapsed
         && expandedContextRadioAfter.compactHidden
         && expandedContextRadioAfter.scrollTop > expandedContextRadioBefore.scrollTop

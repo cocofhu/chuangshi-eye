@@ -150,8 +150,8 @@ export function resolveVoiceVisualizerSpeaker(
  */
 export function resolveVoiceControlHint(pushToTalkMode, pushToTalkKeyHeld) {
   return pushToTalkMode && pushToTalkKeyHeld
-    ? 'Release Space to send'
-    : 'Hold Space to speak · tap Space to activate focused controls';
+    ? '松开空格发送'
+    : '按住空格说话 · 点按空格以激活焦点控件';
 }
 
 /**

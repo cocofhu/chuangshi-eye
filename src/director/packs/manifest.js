@@ -25,7 +25,7 @@ export function validateAssetPath(value, path = 'source.path') {
   )
     fail(
       path,
-      'expected a relative asset path without URL syntax or traversal',
+      '需要不含网址或路径穿越的相对素材路径',
     );
 }
 
@@ -42,9 +42,9 @@ export function validateDataPack(pack, path, anchorIds) {
     'sha256',
   ]);
   string(pack.id, `${path}.id`);
-  if (pack.version !== 1) fail(`${path}.version`, 'unsupported pack version');
+  if (pack.version !== 1) fail(`${path}.version`, '不支持的素材包版本');
   if (!['geojson', 'image', 'media'].includes(pack.format))
-    fail(`${path}.format`, 'unsupported pack format');
+    fail(`${path}.format`, '不支持的素材包格式');
   fields(pack.source, `${path}.source`, ['adapter', 'path']);
   string(pack.source.adapter, `${path}.source.adapter`);
   validateAssetPath(pack.source.path, `${path}.source.path`);
@@ -57,7 +57,7 @@ export function validateDataPack(pack, path, anchorIds) {
     try {
       parsed = new URL(url);
     } catch {
-      fail(at, 'expected an HTTPS source link');
+      fail(at, '需要 HTTPS 来源链接');
     }
     if (
       parsed.protocol !== 'https:' ||
@@ -68,16 +68,16 @@ export function validateDataPack(pack, path, anchorIds) {
     )
       fail(
         at,
-        'expected an HTTPS source link without credentials, query or fragment',
+        '需要不含凭据、查询或片段的 HTTPS 来源链接',
       );
   });
   optional(pack, 'byteLength', path, (v, at) => {
     number(v, at, 1, PACK_LIMITS.bytes, false);
-    if (!Number.isInteger(v)) fail(at, 'expected an integer');
+    if (!Number.isInteger(v)) fail(at, '需要整数');
   });
   optional(pack, 'sha256', path, (v, at) => {
     if (typeof v !== 'string' || !/^[a-f0-9]{64}$/.test(v))
-      fail(at, 'expected a lowercase SHA-256 digest');
+      fail(at, '需要小写 SHA-256 摘要');
   });
   const p = pack.placement,
     at = `${path}.placement`;
@@ -92,14 +92,14 @@ export function validateDataPack(pack, path, anchorIds) {
   );
   if (pack.format === 'media') {
     if (!anchorIds.has(p.anchorId))
-      fail(`${at}.anchorId`, 'unknown scene anchor');
+      fail(`${at}.anchorId`, '未知场景锚点');
   } else {
     if (p.altitudeReference !== 'ellipsoid')
-      fail(`${at}.altitudeReference`, 'expected ellipsoid height in meters');
+      fail(`${at}.altitudeReference`, '需要椭球高（米）');
     if (pack.format === 'image') {
       array(p.bounds, `${at}.bounds`, 4);
       if (p.bounds.length !== 4)
-        fail(`${at}.bounds`, 'expected west, south, east, north');
+        fail(`${at}.bounds`, '需要西、南、东、北边界');
       p.bounds.forEach((v, i) =>
         number(
           v,
@@ -110,7 +110,7 @@ export function validateDataPack(pack, path, anchorIds) {
         ),
       );
       if (p.bounds[0] >= p.bounds[2] || p.bounds[1] >= p.bounds[3])
-        fail(`${at}.bounds`, 'expected increasing non-dateline bounds');
+        fail(`${at}.bounds`, '边界须递增且不跨日界线');
       number(p.height, `${at}.height`, -12000, 1e9, false);
     }
   }
@@ -125,14 +125,14 @@ export function validateSceneDataPacks(scene, path) {
   packs.forEach((pack, i) => {
     validateDataPack(pack, `${path}.dataPacks[${i}]`, anchors);
     if (seen.has(pack.id))
-      fail(`${path}.dataPacks[${i}].id`, 'duplicate pack ID');
+      fail(`${path}.dataPacks[${i}].id`, '重复的素材包 ID');
     seen.add(pack.id);
   });
   scene.shots.forEach((shot, i) => {
     optional(shot, 'dataPackIds', `${path}.shots[${i}]`, (ids, at) => {
       array(ids, at, PACK_LIMITS.packs);
       if (new Set(ids).size !== ids.length || ids.some((id) => !seen.has(id)))
-        fail(at, 'expected distinct scene pack IDs');
+        fail(at, '需要互不相同的场景素材包 ID');
     });
   });
 }

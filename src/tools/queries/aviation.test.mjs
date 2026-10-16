@@ -72,7 +72,7 @@ test('aircraft in an area are filtered, nearest first, with source details', asy
   const aircraft = feed(civil);
   const catalog = composeCatalog({ tools: coreTools, services: { aircraft } });
   const result = await catalog.call('aircraft_in_area', { area: bay });
-  assert.equal(result.summary, '2 aircraft in 60 km around 37.600, -122.300.');
+  assert.equal(result.summary, '2 个航空器，位于 37.600, -122.300 周边 60 km。');
   assert.deepEqual(
     result.data.rows.map((row) => row.id),
     ['bbb222', 'aaa111'],
@@ -130,7 +130,7 @@ test('the military feed is used on request and reported when missing', async () 
   });
   assert.equal(
     result.summary,
-    '1 military aircraft in 60 km around 37.600, -122.300 (data may be stale).',
+    '1 个军用航空器，位于 37.600, -122.300 周边 60 km（数据可能已过期）。',
   );
   assert.equal(result.data.rows[0].registration, '07-7175');
   const civilOnly = composeCatalog({
@@ -151,7 +151,7 @@ test('aircraft are found by exactly one identifier across feeds', async () => {
   const byCallsign = await catalog.call('find_aircraft', {
     callsign: 'ual123',
   });
-  assert.equal(byCallsign.summary, 'Found 1 aircraft with callsign UAL123.');
+  assert.equal(byCallsign.summary, '找到 1 架呼号为 UAL123 的航空器。');
   assert.deepEqual(
     byCallsign.data.rows.map((row) => row.id),
     ['aaa111'],
@@ -167,7 +167,7 @@ test('aircraft are found by exactly one identifier across feeds', async () => {
   const none = await catalog.call('find_aircraft', { icao24: 'ABCDEF' });
   assert.equal(
     none.summary,
-    'No aircraft with icao24 ABCDEF is currently reported.',
+    '当前没有报告识别码为 ABCDEF 的航空器。',
   );
   await assert.rejects(catalog.call('find_aircraft', {}), /exactly one/);
   await assert.rejects(
@@ -195,7 +195,7 @@ test('tracks are ordered and thinned to 200 points', async () => {
   assert.equal(aircraft.calls[0], 'aaa111');
   assert.equal(
     result.summary,
-    '450 positions for aaa111 from 2026-01-01T00:00:00.000Z to 2026-01-01T00:07:29.000Z.',
+    '450 个位置，aaa111，从 2026-01-01T00:00:00.000Z 到 2026-01-01T00:07:29.000Z。',
   );
   assert.deepEqual(
     {
@@ -213,7 +213,7 @@ test('tracks are ordered and thinned to 200 points', async () => {
   });
   assert.equal(
     (await empty.call('get_aircraft_track', { icao24: 'aaa111' })).summary,
-    'No recent track is available for aaa111.',
+    '没有 aaa111 的近期轨迹。',
   );
   const failing = (status) => ({
     getSnapshot: async () => snapshot([]),
@@ -229,7 +229,7 @@ test('tracks are ordered and thinned to 200 points', async () => {
   });
   assert.equal(
     (await unknown.call('get_aircraft_track', { icao24: 'abcdef' })).summary,
-    'No recent track is available for abcdef.',
+    '没有 abcdef 的近期轨迹。',
   );
   const down = composeCatalog({
     tools: coreTools,
@@ -265,11 +265,11 @@ test('aircraft info combines type and route lookups', async () => {
   });
   assert.equal(
     both.summary,
-    'Aircraft aaa111 is Boeing 737-800 (N12345); flight UAL123 flies SFO to EWR (United Airlines).',
+    '航空器 aaa111 为 Boeing 737-800（N12345）；航班 UAL123 从 SFO 飞往 EWR（United Airlines）。',
   );
   assert.equal(both.data.route.destination.name, 'Newark');
   const unknown = await catalog.call('get_aircraft_info', { callsign: 'XYZ9' });
-  assert.equal(unknown.summary, 'No route is known for XYZ9.');
+  assert.equal(unknown.summary, '未知 XYZ9 的航线。');
   assert.deepEqual(unknown.data, { aircraft: null, route: null });
   await assert.rejects(
     catalog.call('get_aircraft_info', {}),
@@ -317,7 +317,7 @@ test('aircraft searches keep the feeds that answered and name the others', async
   });
   assert.equal(
     byCallsign.summary,
-    'Found 1 aircraft with callsign RCH123. The civil feed did not answer.',
+    '找到 1 架呼号为 RCH123 的航空器。民航数据源无响应。',
   );
   assert.deepEqual(byCallsign.data.unavailable_feeds, ['civil']);
   const civil = feed([]);
@@ -349,7 +349,7 @@ test('a regional fallback feed is named in the answer', async () => {
   }).call('aircraft_in_area', {
     area: { lat: 37.6, lon: -122.3, radius_km: 20 },
   });
-  assert.match(result.summary, /\(regional feed: 250nm regional fallback\)\.$/);
+  assert.match(result.summary, /（区域数据源：250 nm 区域回退）。$/);
 });
 
 test('aircraft searches say when a feed that answered is stale', async () => {
@@ -360,7 +360,7 @@ test('aircraft searches say when a feed that answered is stale', async () => {
   }).call('find_aircraft', { callsign: 'UAL1' });
   assert.equal(
     result.summary,
-    'No aircraft with callsign UAL1 is currently reported. The civil feed data may be stale.',
+    '当前没有报告呼号为 UAL1 的航空器。民航数据可能已过期。',
   );
   assert.deepEqual(result.data.stale_feeds, ['civil']);
   assert.deepEqual(
@@ -386,5 +386,5 @@ test('the real OpenSky source marks an hour-old snapshot stale for searches', as
     services: { aircraft: opensky },
   }).call('find_aircraft', { callsign: 'UAL1' });
   assert.deepEqual(result.data.stale_feeds, ['civil']);
-  assert.match(result.summary, /may be stale\.$/);
+  assert.match(result.summary, /数据可能已过期。$/);
 });

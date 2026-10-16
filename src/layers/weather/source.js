@@ -10,7 +10,7 @@ export const WEATHER_PRODUCTS = Object.freeze([
 /** Only bounded, explicit observations may become imagery requests. */
 export function validateWeatherSnapshot(value, product) {
   if (!value || value.schemaVersion !== 1 || value.product !== product)
-    throw new Error('Malformed weather manifest');
+    throw new Error('天气清单格式无效');
   if (value.unavailable) return value;
   const { bounds, times } = value;
   if (
@@ -40,7 +40,7 @@ export function validateWeatherSnapshot(value, product) {
     value.maxLevel !== 6 ||
     value.tilingScheme !== 'geographic'
   )
-    throw new Error('Malformed weather manifest');
+    throw new Error('天气清单格式无效');
   return value;
 }
 
@@ -63,7 +63,7 @@ export function weatherImageUrl(
   bbox = null,
 ) {
   if (!WEATHER_PRODUCTS.includes(product) || !Number.isFinite(Date.parse(time)))
-    throw new Error('Invalid weather frame');
+    throw new Error('天气帧无效');
   let box = '';
   if (bbox !== null) {
     const edges = [bbox.west, bbox.south, bbox.east, bbox.north];
@@ -72,7 +72,7 @@ export function weatherImageUrl(
       edges[0] >= edges[2] ||
       edges[1] >= edges[3]
     )
-      throw new Error('Invalid weather window');
+      throw new Error('天气窗口无效');
     box = `&bbox=${edges.join(',')}`;
   }
   const largest =
@@ -84,7 +84,7 @@ export function weatherImageUrl(
       height !== width / 2 ||
       width > largest.width
     )
-      throw new Error('Invalid weather image size');
+      throw new Error('天气图像尺寸无效');
     // The largest size is the proxy default: one frame has one URL.
     if (width !== largest.width) size = `&size=${width}x${height}`;
   }
@@ -93,9 +93,9 @@ export function weatherImageUrl(
 
 export function weatherTileUrl(product, time, { size } = {}) {
   if (!WEATHER_PRODUCTS.includes(product) || !Number.isFinite(Date.parse(time)))
-    throw new Error('Invalid weather frame');
+    throw new Error('天气帧无效');
   if (size !== undefined && ![256, 512, 1024].includes(size))
-    throw new Error('Invalid weather tile size');
+    throw new Error('天气瓦片尺寸无效');
   // Construct locally; never accept a manifest-provided host or template.
   return `/api/weather/tile?product=${product}&time=${encodeURIComponent(time)}&z={z}&x={x}&y={y}${size === undefined ? '' : `&size=${size}`}`;
 }
@@ -108,12 +108,12 @@ export function createWeatherSource({
   return {
     async getSnapshot({ product = 'radar', signal } = {}) {
       if (!WEATHER_PRODUCTS.includes(product))
-        throw new Error('Unknown weather product');
+        throw new Error('未知天气产品');
       const controller = new AbortController();
       const abort = () => controller.abort(signal.reason);
       signal?.addEventListener('abort', abort, { once: true });
       const timer = setTimeout(
-        () => controller.abort(new Error('Weather request timed out')),
+        () => controller.abort(new Error('天气请求超时')),
         timeoutMs,
       );
       try {
@@ -122,7 +122,7 @@ export function createWeatherSource({
           `/api/weather/manifest?product=${product}`,
           { signal: controller.signal, cache: 'no-store', redirect: 'error' },
         );
-        if (!response.ok) throw new Error(`Weather HTTP ${response.status}`);
+        if (!response.ok) throw new Error(`天气请求失败 HTTP ${response.status}`);
         return validateWeatherSnapshot(
           await readResponseJsonCapped(response, 16_384, controller.signal),
           product,
@@ -140,7 +140,7 @@ export function createWeatherSource({
         { signal, redirect: 'error' },
       );
       if (!response.ok)
-        throw new Error(`Weather image HTTP ${response.status}`);
+        throw new Error(`天气图像请求失败 HTTP ${response.status}`);
       const bytes = new Uint8Array(await response.arrayBuffer());
       signal?.throwIfAborted();
       const type = response.headers.get('content-type') || '';
