@@ -203,9 +203,9 @@ test('a tracked docked cluster consolidates its companions onto one card', () =>
   const details = entity.gevLabelModel.details;
   // Class leads the detail block; the altitude line follows it, and the
   // consolidated companions stay last.
-  assert.equal(details[0], 'STATION · ISS', 'the class line names what this is');
+  assert.equal(details[0], '空间站 · ISS', 'the class line names what this is');
   assert.match(details[1], /NORAD 25544$/, 'the altitude line is unchanged');
-  assert.equal(details[2], 'DOCKED · PROGRESS-MS 34 · +1',
+  assert.equal(details[2], '对接 · PROGRESS-MS 34 · +1',
     'companions are consolidated, named, and counted on the tracked card');
 
   // Scoping is encoded in that string: THREE neighbours were seeded but only two
@@ -239,14 +239,14 @@ test('satellite pre-render refreshes the tracked altitude on each propagated fra
 
   _runSatellitePreRenderForTest();
   assert.equal(entity.gevLabelModel.title, 'ISS (ZARYA)');
-  assert.equal(entity.gevLabelModel.details[0], 'STATION · ISS');
+  assert.equal(entity.gevLabelModel.details[0], '空间站 · ISS');
   assert.equal(entity.gevLabelModel.details[1], '353 km · NORAD 25544');
 
   epochIndex = 1;
   viewer.scene.frameState.frameNumber = 2;
   _runSatellitePreRenderForTest();
   assert.equal(entity.gevLabelModel.details[1], '366 km · NORAD 25544');
-  assert.equal(entity.gevLabelModel.details[0], 'STATION · ISS',
+  assert.equal(entity.gevLabelModel.details[0], '空间站 · ISS',
     'the class line survives an altitude-only republish');
 });
 

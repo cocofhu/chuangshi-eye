@@ -128,14 +128,14 @@ export const RADIO_CATEGORY_COLORS = Object.freeze({
 });
 
 export const RADIO_CLUSTER_LABELS = Object.freeze({
-  news: 'NEWS',
-  talk: 'TALK',
-  weather: 'WEATHER',
-  'public-safety': 'SAFETY',
-  'aviation-marine': 'AIR / SEA',
-  'traffic-transit': 'TRANSIT',
-  music: 'MUSIC',
-  other: 'OTHER',
+  news: '新闻',
+  talk: '谈话',
+  weather: '天气',
+  'public-safety': '安全',
+  'aviation-marine': '空海',
+  'traffic-transit': '交通',
+  music: '音乐',
+  other: '其他',
 });
 
 export const RADIO_MARKER_CATEGORY_ORDER = Object.freeze([

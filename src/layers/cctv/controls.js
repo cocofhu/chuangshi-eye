@@ -17,7 +17,7 @@ export function createControls({ state: layerState, services, parts, source }) {
 
     icon: '📹',
 
-    source: 'CCTV + Street View fallback',
+    source: '公开摄像头 · Google Street View 回退',
 
     updateInterval: DEFAULT_UPDATE_INTERVAL_MS,
 

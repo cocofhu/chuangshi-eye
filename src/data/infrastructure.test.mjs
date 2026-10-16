@@ -64,7 +64,7 @@ test('infrastructure factory preserves identity and creates independent state wi
   assert.deepEqual(
     first.map(({ id, name, source }) => ({ id, name, source })),
     [
-      { id: 'local-datacenters', name: 'Datacenters', source: 'Local' },
+      { id: 'local-datacenters', name: 'Datacenters', source: '本地' },
       { id: 'local-dams', name: 'Dams', source: 'USACE' },
     ],
   );

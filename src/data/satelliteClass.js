@@ -24,7 +24,7 @@
  */
 export const SATELLITE_CLASSES = Object.freeze({
   station: Object.freeze({
-    label: 'STATION',
+    label: '空间站',
     // Warm white — "crewed", and the brightest class in the sky. Deliberately
     // NOT amber: 40-48deg amber is the app's known-military convention
     // (flights.js MIL_TINT / militaryFlights.js MIL_ICON_COLOR) and must not
@@ -34,7 +34,7 @@ export const SATELLITE_CLASSES = Object.freeze({
     blurb: '载人空间站及其来访飞行器',
   }),
   nav: Object.freeze({
-    label: 'NAV',
+    label: '导航',
     // Cyan — the strongest accent goes to the class users actually name
     // ("how many GPS satellites are up?"). Takes over the slot the catch-all
     // VISUAL group used to occupy, so this adds no new hue to the app.
@@ -42,12 +42,12 @@ export const SATELLITE_CLASSES = Object.freeze({
     blurb: '卫星导航 — 北斗、GPS、GLONASS、Galileo',
   }),
   earthobs: Object.freeze({
-    label: 'EO',
+    label: '观测',
     color: '#7ee0a0',
     blurb: '中国对地观测 — 风云气象、高分成像',
   }),
   geo: Object.freeze({
-    label: 'GEO',
+    label: '静止',
     // Violet, unchanged. Already the app's "space" semantic (the detection
     // overlay paints the SAT tier #bda4ff), and the geostationary belt draws
     // as one clean equatorial ring at globe scale.
@@ -55,7 +55,7 @@ export const SATELLITE_CLASSES = Object.freeze({
     blurb: '地球静止轨道 — 通信与气象，固定于赤道上空',
   }),
   visual: Object.freeze({
-    label: 'VISUAL',
+    label: '可见',
     // Muted blue-gray. This is the catch-all bucket, so it gives up the bright
     // cyan it used to hold and recedes behind the three classes that mean
     // something. Still well clear of the dense shell by luminance.
@@ -63,7 +63,7 @@ export const SATELLITE_CLASSES = Object.freeze({
     blurb: '最亮的肉眼可见目标 — CelesTrak 视觉组',
   }),
   comms: Object.freeze({
-    label: 'COMMS',
+    label: '通信',
     // Dim slate — thousands of these appear in DENSE mode. They must read as
     // texture behind the core catalog, never compete with it. Rec.601 luma
     // ~0.40 against VISUAL's ~0.69 keeps the two separable even when the
@@ -85,7 +85,7 @@ export const SATELLITE_CLASS_ORDER = Object.freeze([
 
 /**
  * CelesTrak group tag → { class, subtype }. Subtype names the specific
- * constellation so the card can read "NAV · GPS" rather than a bare "NAV".
+ * constellation so the card can read "导航 · GPS" rather than a bare "导航".
  * Keys must stay in sync with CATALOG_GROUPS + the 'dense' tag in satellites.js.
  */
 const GROUP_CLASS = Object.freeze({
@@ -136,7 +136,7 @@ export function satelliteClassColor(group) {
 
 /**
  * Operator-facing class label for a satellite — the text field shown on the
- * tracked card and the detection overlay ("NAV · GPS", "GEO", "STATION · ISS").
+ * tracked card and the detection overlay ("导航 · GPS", "静止", "空间站 · ISS").
  * The ISS is the one object named individually: it is the reason most people
  * open this layer, and its dot is already styled apart from its class.
  *
