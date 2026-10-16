@@ -254,7 +254,17 @@ export function renderRegionalBrief(payload, info) {
   if (this.signalStream)
     this.signalStream.dataset.regionalStatus = payload?.status || 'partial';
   if (this.briefPageIndex === 1 && this.briefSource) {
-    this.briefSource.textContent = `${String(payload?.newsSource || '区域新闻').toUpperCase()} · 位置查询`;
+    this.briefSource.textContent = `${paintedNewsSource(payload?.newsSource)} · 位置查询`;
   }
   this.scheduleContextLayout();
+}
+
+/** Keep news brands; do not paste an English source description. */
+function paintedNewsSource(source) {
+  const text = String(source || '').trim();
+  if (/google news/i.test(text)) return 'Google News';
+  if (/gdelt/i.test(text)) return 'GDELT';
+  if (!text || (/[A-Za-z]/.test(text) && !/[\u4e00-\u9fff]/.test(text)))
+    return '区域新闻';
+  return text;
 }

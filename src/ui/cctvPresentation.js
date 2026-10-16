@@ -103,7 +103,7 @@ export function _renderCctvState(state) {
     this._cctvCoverageBtn.classList.toggle('active', mode !== 'off');
     this._cctvCoverageBtn.textContent =
       mode === 'viewshed'
-        ? 'VIEWSHED ON'
+        ? '视域 开'
         : mode === 'on'
           ? '覆盖 开'
           : '覆盖 关';

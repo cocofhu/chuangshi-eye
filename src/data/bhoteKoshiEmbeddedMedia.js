@@ -737,7 +737,7 @@ export function createBhoteKoshiEmbeddedMedia({
           globalRef.setTimeout?.(() => {
             if (!session.active || session.ready) return;
             session.error = new Error(
-              'Facebook embed unavailable. The post may be private, removed, region-restricted, or blocked.',
+              'Facebook 嵌入不可用。帖子可能不公开、已删除、有地区限制或被拦截。',
             );
             session.onError?.(session.error);
           }, EMBED_TIMEOUT_MS) ?? null;
@@ -1068,7 +1068,11 @@ export function createBhoteKoshiEmbeddedMedia({
           onStatus: (phase) => {
             if (phase !== 'completed')
               status.textContent = `YouTube ${
-                { unavailable: '不可用', timeout: '超时' }[phase] || phase
+                {
+                  unavailable: '不可用',
+                  timeout: '超时',
+                  blocked: '自动播放被阻止',
+                }[phase] || '状态未识别'
               } · 打开原片`;
           },
         });
