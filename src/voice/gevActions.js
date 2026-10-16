@@ -5,6 +5,7 @@ import {
 } from '../data/layerSnapshot.js';
 import { readLayerLifecycleSummary } from './layerSummary.js';
 import { SPEECH_BUILDERS, attachVoiceResult } from './speech.js';
+import { layerDisplayLabel } from '../ui/layerDisplayLabels.js';
 import { resolveDeicticArgs } from './deixis.js';
 export { readLayerLifecycleSummary } from './layerSummary.js';
 import { defaultGeospatial } from '../search/defaults.js';
@@ -410,7 +411,7 @@ export function createGevActionRunner({
       const enabled = Boolean(args.enabled);
       if (enabled) {
         const pending = dataManager.getAll?.().find((l) => l.id === layerId);
-        reportProgress('layer', pending?.name || layerId);
+        reportProgress('layer', layerDisplayLabel(pending || { id: layerId }));
       }
       const changeOptions = { origin: 'voice' };
       if (runOptions.signal) changeOptions.signal = runOptions.signal;
@@ -512,7 +513,7 @@ export function createGevActionRunner({
         ok: true,
         action: 'set_layer_visibility',
         layerId,
-        label: layer?.name || layerId,
+        label: layerDisplayLabel(layer || { id: layerId }),
         ...lifecycleSummary,
         ...(snapshot?.feedState ? { feedState: snapshot.feedState } : {}),
         ...(snapshot?.source ? { source: snapshot.source } : {}),

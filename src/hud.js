@@ -653,7 +653,7 @@ export class IntelHUD {
         : `${Math.round(altDisplayM)} 米`;
     const winTag = window
       ? `${Math.max(1, Math.round(window.widthKm))}×${Math.max(1, Math.round(window.heightKm))} 千米`
-      : 'N/A';
+      : '--';
     // NEAR the nearest catalogued POI at metro range; otherwise the lat/lon sector.
     const localityTag = composeLocalityTag(nearest, m.latDeg, m.lonDeg);
 

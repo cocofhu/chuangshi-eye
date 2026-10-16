@@ -20,9 +20,9 @@ export function createCards({
     const stale = (record.missedRefreshes || 0) > 0;
     el.classList.add('active');
     el.textContent = [
-      `AIS: ${trimHudValue(record.name, 32)}`,
-      `${trimHudValue(record.type || 'VESSEL', 24)}  SPD: ${formatSpeed(record.speed)}  HDG: ${formatHeading(record.heading ?? record.course)}`,
-      `MMSI: ${record.mmsi || '--'}  ${formatPositionTime(record)}${stale ? '  · 过期' : ''}`,
+      trimHudValue(displayVesselName(record), 32),
+      `${trimHudValue(vesselTypeShort(record) || '船舶', 24)}  航速 ${formatSpeed(record.speed)}  航向 ${formatHeading(record.heading ?? record.course)}`,
+      `MMSI ${record.mmsi || '--'}  ${formatPositionTime(record)}${stale ? '  · 过期' : ''}`,
     ].join('\n');
   }
 
@@ -30,7 +30,7 @@ export function createCards({
     const el = document.getElementById('hud-ais-vessel');
     if (!el) return;
     el.classList.remove('active');
-    el.textContent = 'AIS: --';
+    el.textContent = '船舶 --';
   }
 
   function trimHudValue(value, maxLength) {
@@ -160,7 +160,7 @@ export function createCards({
   }
 
   function formatHeading(heading) {
-    return Number.isFinite(heading) ? `${Math.round(heading)}DEG` : '--DEG';
+    return Number.isFinite(heading) ? `${Math.round(heading)}°` : '--°';
   }
 
   function formatPositionTime(record) {
