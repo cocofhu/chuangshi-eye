@@ -153,7 +153,7 @@ test('HUD summary context and telemetry tag carry chip-identical feed-state', ()
   assert.deepEqual(context.enabledLayerLabels, ['Live Flights']);
   assert.equal(context.enabledLayers[0].feedState, 'stale');
   assert.equal(context.feedProvenance.overall, 'stale');
-  assert.equal(hudTelemetryProvenanceTag(layers, { now }), 'STALE LIVE FLIGHTS');
+  assert.equal(hudTelemetryProvenanceTag(layers, { now }), '过期 民航航班');
   assert.equal(hudTelemetryProvenanceTag([{
     id: 'flights', name: 'Live Flights', enabled: true, stats: { count: 4, lastUpdate: now },
   }], { now }), null);

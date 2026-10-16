@@ -1048,6 +1048,7 @@ test('generic layer visibility exposes lifecycle truth for every manager phase a
   const flightsRunner = createGevActionRunner({ viewer, styleManager: {}, dataManager: flightsManager });
   const flights = await flightsRunner('set_layer_visibility', { layerId: 'flights', enabled: true });
   assert.equal(flights.ok, true);
+  assert.equal(flights.label, '民航航班');
   assert.equal(flights.lifecycleState, 'enabled');
   assert.equal(flights.lifecycleUncertain, false);
 

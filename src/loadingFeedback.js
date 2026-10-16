@@ -1,4 +1,5 @@
 import { installationFeedback } from './data/installationFeedback.js';
+import { layerDisplayLabel } from './ui/layerDisplayLabels.js';
 
 export const LOADING_REVEAL_DELAY_MS = 160;
 export const LOADING_TERMINAL_DWELL_MS = 2200;
@@ -49,7 +50,7 @@ export function normalizeLayerLoading(layer = {}) {
   const accepted = Boolean(stats.lastUpdate) || count > 0;
   return {
     id: String(layer.id || ''),
-    label: String(layer.name || layer.id || 'Layer'),
+    label: layerDisplayLabel(layer),
     loading,
     disabling,
     refresh:

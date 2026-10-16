@@ -19,6 +19,7 @@
  */
 
 import { analystHeadline, feedChipLabel } from './resultDisplay.js';
+import { layerDisplayLabel } from '../ui/layerDisplayLabels.js';
 
 const LAYER_NOUNS = Object.freeze({
   flights: '航空器',
@@ -502,7 +503,7 @@ export function planStepLabel(name, args = {}) {
     case 'select_nearest_aircraft':
       return `距 ${displayName(args.locationQuery || args.locationId || '此处', 32)} 最近的航空器`;
     case 'set_layer_visibility':
-      return `${displayName(args.layerId || '图层', 32)}${args.enabled === false ? '关闭' : '开启'}`;
+      return `${layerDisplayLabel({ id: args.layerId })}${args.enabled === false ? '关闭' : '开启'}`;
     case 'get_entity_context':
       return '读取当前视图';
     case 'get_current_view_state':

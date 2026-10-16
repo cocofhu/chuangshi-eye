@@ -2,6 +2,7 @@ import {
   feedProvenanceEnvelope,
   layerSnapshots,
 } from './data/layerSnapshot.js';
+import { layerDisplayLabel } from './ui/layerDisplayLabels.js';
 
 export const HUD_SUMMARY_UNCONFIGURED_CODE = 'OPENAI_NOT_CONFIGURED';
 
@@ -92,13 +93,21 @@ export function hudTelemetryProvenanceTag(layers = [], options) {
   const snapshots = layerSnapshots(layers, options).filter((s) => s.enabled);
   const envelope = feedProvenanceEnvelope(snapshots, options);
   if (!envelope.overall || envelope.overall === 'nominal') return null;
+  const stateLabels = {
+    loading: '加载中',
+    degraded: '降级',
+    stale: '过期',
+    fallback: '回退',
+    unavailable: '不可用',
+  };
   const names = envelope.layers
     .filter(
       (s) => s.feedState && s.feedState !== 'nominal' && s.feedState !== 'off',
     )
-    .map((s) => String(s.name || s.id || 'LAYER').toUpperCase())
+    .map((s) => layerDisplayLabel(s))
     .slice(0, 2);
-  return `${envelope.overall.toUpperCase()}${names.length ? ` ${names.join('/')}` : ''}`;
+  const stateLabel = stateLabels[envelope.overall] || '状态未知';
+  return `${stateLabel}${names.length ? ` ${names.join('/')}` : ''}`;
 }
 
 /** Require the supplied non-nominal state before showing an AI summary. */

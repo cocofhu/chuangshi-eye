@@ -437,6 +437,10 @@ test('labels are bounded and cleaned before they are spoken', () => {
     '飞往 Tokyo',
   );
   assert.equal(
+    planStepLabel('set_layer_visibility', { layerId: 'flights', enabled: true }),
+    '民航航班开启',
+  );
+  assert.equal(
     progressStepLabel('resolve', 'Capitol'),
     '正在查找地点: Capitol',
   );

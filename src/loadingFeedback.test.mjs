@@ -614,7 +614,7 @@ test('aggregates Mapped Installations refresh beside CCTV without changing eithe
   const visible = reduceLoadingFeedback(pending, summary, 200);
   assert.deepEqual(
     presentLoadingFeedback(visible, summary, 200),
-    { state: 'refresh', label: '正在刷新实时数据', detail: 'CCTV · Mapped Installations' },
+    { state: 'refresh', label: '正在刷新实时数据', detail: '公开摄像头 · 军事设施' },
   );
 });
 

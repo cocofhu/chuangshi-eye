@@ -31,7 +31,7 @@ export function decodeAlprTile(bytes, z, x, y) {
   const layer = new VectorTile(new PbfReader(bytes)).layers.cameras;
   if (!layer) return [];
   if (layer.length > 40_000)
-    throw new Error('Camera tile feature limit exceeded');
+    throw new Error('摄像头瓦片要素过多');
   const records = [];
   for (let i = 0; i < layer.length; i++) {
     const record = normalizeAlprTileFeature(
