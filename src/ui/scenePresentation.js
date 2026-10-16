@@ -1,3 +1,37 @@
+const SHOT_STYLE_LABELS = {
+  normal: '常规',
+  retro: 'CRT',
+  surveillance: '夜视',
+  thermal: '热成像',
+  anime: '动漫',
+  noir: '黑白',
+  snow: '风雪',
+};
+
+const SHOT_MODE_LABELS = {
+  OFF: '关',
+  SPARSE: '稀疏',
+  SURVEY: '稀疏',
+  BALANCED: '均衡',
+  NORMAL: '均衡',
+  PANOPTIC: '密集',
+};
+
+/** Shot row meta. The bare detection token DENSE stays unchanged. */
+export function sceneShotMetaText(shot) {
+  const mode = String(shot?.visual?.detection?.mode || 'OFF');
+  const style = String(shot?.visual?.style || 'normal');
+  const styleLabel = SHOT_STYLE_LABELS[style] || style.toUpperCase();
+  const modeKey = mode.toUpperCase();
+  const modeLabel =
+    modeKey === 'DENSE' ? 'DENSE' : SHOT_MODE_LABELS[modeKey] || mode;
+  const duration = Number(shot?.durationSec);
+  const hold = Number(shot?.holdSec);
+  const durationText = Number.isFinite(duration) ? duration.toFixed(1) : '0.0';
+  const holdText = Number.isFinite(hold) ? hold.toFixed(1) : '0.0';
+  return `${styleLabel} · ${modeLabel} · ${durationText}s + ${holdText}s`;
+}
+
 /** Scene panel elements and text-only project presentation. */
 export function sceneElements(root = document) {
   const ids = {
@@ -108,9 +142,7 @@ export function renderSceneShots(
     top.appendChild(actions);
     const meta = document.createElement('div');
     meta.className = 'scene-shot-meta';
-    const mode = shot.visual?.detection?.mode || 'OFF';
-    const style = shot.visual?.style || 'normal';
-    meta.textContent = `${style.toUpperCase()} · ${mode} · ${shot.durationSec.toFixed(1)}s + ${shot.holdSec.toFixed(1)}s`;
+    meta.textContent = sceneShotMetaText(shot);
     row.appendChild(top);
     row.appendChild(meta);
     element.appendChild(row);

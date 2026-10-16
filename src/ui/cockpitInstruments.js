@@ -227,9 +227,9 @@ export function setVisionMode(mode, { revealParameters = false } = {}) {
     crt: 'CRT',
     nvg: 'NVG',
     thermal: 'FLIR',
-    anime: 'ANIME',
-    noir: 'NOIR',
-    snow: 'SNOW',
+    anime: '动漫',
+    noir: '黑白',
+    snow: '雪花',
   };
   const names = {
     optical: '标准',

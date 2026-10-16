@@ -1,6 +1,7 @@
 import { CCTV_AMBIENT_CARD_MAX } from '../../data/cctvLod.js';
 import { ACTIVE_FRAME_REFRESH_MS, IDLE_FRAME_REFRESH_MS } from './policy.js';
 import { headingHudToken, isHeadingEstimated } from './headingConfidence.js';
+import { paintedCctvToken } from './feedLabel.js';
 
 export function createPresentation({
   state: layerState,
@@ -60,8 +61,8 @@ export function createPresentation({
       layerState._coverageMode === 'viewshed' ? '视域' : null,
       `校准 ${calLabel}`,
       health?.sourceKind
-        ? `来源 ${String(health.sourceKind).toUpperCase()}`
-        : `来源 ${String(active.camera.feedType || 'image').toUpperCase()}`,
+        ? `来源 ${paintedCctvToken(health.sourceKind)}`
+        : `来源 ${paintedCctvToken(active.camera.feedType || 'image')}`,
       `${bandLabel} 情境`,
     ]
       .filter(Boolean)

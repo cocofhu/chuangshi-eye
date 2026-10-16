@@ -1,4 +1,8 @@
 import { createCctvVideoSurface } from './cctvVideo.js';
+import {
+  paintedCctvProvider,
+  paintedCctvStatus,
+} from '../layers/cctv/feedLabel.js';
 export function _calBadgeLabel(badge) {
   switch (badge) {
     case 'calibrated':
@@ -142,12 +146,11 @@ export function _renderCctvState(state) {
 
   if (this._cctvMeta) {
     if (activeCamera) {
-      const provider =
-        activeCamera.sourceLabel ||
-        activeCamera.provider ||
-        '已配置来源';
+      const provider = paintedCctvProvider(
+        activeCamera.sourceLabel || activeCamera.provider || '已配置来源',
+      );
       const statusMsg = activeCamera.sourceMessage
-        ? ` · ${activeCamera.sourceMessage}`
+        ? ` · ${paintedCctvStatus(activeCamera.sourceMessage)}`
         : '';
       // A partner-supplied feed inside a pack names its owner here.
       const credit = activeCamera.credit ? ` · ${activeCamera.credit}` : '';

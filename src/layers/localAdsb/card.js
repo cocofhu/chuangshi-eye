@@ -129,13 +129,13 @@ export function localAdsbCardModel(
   return {
     title: localAdsbTitle(record),
     details: [
-      `ICAO ${icao} · ${record?.callsign || 'NO CALLSIGN'}`,
+      `ICAO ${icao} · ${record?.callsign || '无呼号'}`,
       localAdsbClassLine(record, aircraftClass || {}),
       identity,
       routeLine,
-      `ALT ${grouped(altitude)} FT · GS ${speed === null ? DASH : speed} KT · TRK ${track === null ? DASH : `${track}°`}`,
-      `V/S ${vertical === null ? DASH : `${vertical > 0 ? '+' : ''}${grouped(vertical)} FPM`}`,
-      `POSITION ${ageS === null ? DASH : `${ageS} S AGO`} · ${messages} ${messages === 1 ? 'MSG' : 'MSGS'}`,
+      `ALT ${grouped(altitude)} FT · 地速 ${speed === null ? DASH : speed} KT · 航迹 ${track === null ? DASH : `${track}°`}`,
+      `升降 ${vertical === null ? DASH : `${vertical > 0 ? '+' : ''}${grouped(vertical)} FPM`}`,
+      `位置 ${ageS === null ? DASH : `${ageS} 秒前`} · ${messages} 条报文`,
       localAdsbReceiverLine(record),
     ].filter(Boolean),
     accent: LOCAL_ADSB_COLOR,

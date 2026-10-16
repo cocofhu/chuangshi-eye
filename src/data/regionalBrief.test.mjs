@@ -38,7 +38,7 @@ test('normalizes weather values and labels WMO conditions', () => {
   } });
   assert.equal(weather.temperatureC, 21.4);
   assert.equal(weather.visibilityM, 18000);
-  assert.equal(weatherCodeLabel(weather.weatherCode), 'PARTLY CLOUDY');
+  assert.equal(weatherCodeLabel(weather.weatherCode), '少云');
   assert.equal(normalizeRegionalWeather({ current: {} }), null);
 });
 
