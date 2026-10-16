@@ -61,17 +61,17 @@ test('the three GNSS constellations share one NAV color and split by subtype', (
   assert.equal(colors.size, 1, 'GPS, GLONASS and Galileo must read as one NAV family');
   assert.equal([...colors][0], SATELLITE_CLASSES.nav.color);
 
-  assert.equal(satelliteClassLabel('gps-ops'), 'NAV · GPS');
-  assert.equal(satelliteClassLabel('glonass'), 'NAV · GLONASS');
-  assert.equal(satelliteClassLabel('galileo'), 'NAV · GALILEO');
+  assert.equal(satelliteClassLabel('gps-ops'), '导航 · GPS');
+  assert.equal(satelliteClassLabel('glonass'), '导航 · GLONASS');
+  assert.equal(satelliteClassLabel('galileo'), '导航 · GALILEO');
 });
 
 test('class labels name the type, and the ISS names itself', () => {
-  assert.equal(satelliteClassLabel('geo'), 'GEO');
-  assert.equal(satelliteClassLabel('stations'), 'STATION');
-  assert.equal(satelliteClassLabel('visual'), 'VISUAL');
-  assert.equal(satelliteClassLabel('dense'), 'COMMS · STARLINK');
-  assert.equal(satelliteClassLabel('stations', { isIss: true }), 'STATION · ISS');
+  assert.equal(satelliteClassLabel('geo'), '静止');
+  assert.equal(satelliteClassLabel('stations'), '空间站');
+  assert.equal(satelliteClassLabel('visual'), '可见');
+  assert.equal(satelliteClassLabel('dense'), '通信 · STARLINK');
+  assert.equal(satelliteClassLabel('stations', { isIss: true }), '空间站 · ISS');
 });
 
 test('the ISS is a STATION whichever group a partial outage ingested it from', () => {
@@ -79,18 +79,18 @@ test('the ISS is a STATION whichever group a partial outage ingested it from', (
   // survives a partial group failure. If the stations feed drops, the ISS is
   // ingested as `visual` — its card must not then read "VISUAL · ISS" beside
   // the red station dot.
-  assert.equal(satelliteClassLabel('visual', { isIss: true }), 'STATION · ISS');
-  assert.equal(satelliteClassLabel('geo', { isIss: true }), 'STATION · ISS');
-  assert.equal(satelliteClassLabel(undefined, { isIss: true }), 'STATION · ISS');
+  assert.equal(satelliteClassLabel('visual', { isIss: true }), '空间站 · ISS');
+  assert.equal(satelliteClassLabel('geo', { isIss: true }), '空间站 · ISS');
+  assert.equal(satelliteClassLabel(undefined, { isIss: true }), '空间站 · ISS');
   // Non-ISS satellites in those groups are unaffected.
-  assert.equal(satelliteClassLabel('visual'), 'VISUAL');
+  assert.equal(satelliteClassLabel('visual'), '可见');
 });
 
 test('an unknown group falls back to the neutral bucket instead of vanishing', () => {
   assert.equal(satelliteClassOf('weather').klass, 'visual');
   assert.equal(satelliteClassOf(undefined).klass, 'visual');
   assert.equal(satelliteClassColor(null), SATELLITE_CLASSES.visual.color);
-  assert.equal(satelliteClassLabel('some-new-celestrak-group'), 'VISUAL');
+  assert.equal(satelliteClassLabel('some-new-celestrak-group'), '可见');
 });
 
 test('class colors are distinct, valid, and never borrow the military amber', () => {
@@ -197,7 +197,7 @@ test('the legend lists present classes in order and omits absent ones', () => {
   assert.equal(legend.some((row) => row.klass === 'comms'), false);
 
   const row = legend.find((entry) => entry.klass === 'nav');
-  assert.equal(row.label, 'NAV');
+  assert.equal(row.label, '导航');
   assert.equal(row.color, SATELLITE_CLASSES.nav.color);
   assert.equal(row.count, 1);
   assert.ok(row.blurb.length > 0, 'every legend row carries a plain-language gloss');
@@ -402,7 +402,7 @@ test('a real stations-feed outage keeps STATION in the legend, matching the card
       'STATION survives the outage because the ISS is counted there');
     assert.equal(legend.some((row) => row.klass === 'visual'), false,
       'and it is not also counted under VISUAL');
-    assert.equal(satelliteClassLabel('visual', { isIss: true }), 'STATION · ISS',
+    assert.equal(satelliteClassLabel('visual', { isIss: true }), '空间站 · ISS',
       'the card says the same thing the legend does');
   } finally {
     console.log = log;
@@ -434,12 +434,12 @@ test('a catalog rebuild refreshes the detection overlay class strings', async ()
     await satellitesLayer.update(viewer);
     const first = satellitesLayer.getDetectableObjects().find((o) => o.sourceId === 33333);
     assert.ok(first, 'the seeded satellite is collectable');
-    assert.equal(first.klass, 'GEO');
+    assert.equal(first.klass, '静止');
 
     homeGroup = 'visual';
     await satellitesLayer.update(viewer);
     const second = satellitesLayer.getDetectableObjects().find((o) => o.sourceId === 33333);
-    assert.equal(second.klass, 'VISUAL', 'the cached record does not outlive its catalog');
+    assert.equal(second.klass, '可见', 'the cached record does not outlive its catalog');
   } finally {
     console.log = log;
     console.warn = warn;

@@ -14,7 +14,7 @@ export function createControls({ state: layerState, services, parts, source }) {
 
     icon: '⌖',
 
-    source: 'OpenStreetMap + optional Google Maps Places',
+    source: 'OpenStreetMap · 可选 Google 地图地点',
 
     updateInterval: 0,
 
