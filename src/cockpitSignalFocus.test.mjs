@@ -136,7 +136,7 @@ test('signal content and accessible name update without replacing the active tar
   const target = f.buttons()[0]; target.focus();
   render(f, [item('a', { title: 'RENAMED', tone: 'track', detail: 'CURRENT', timestamp: 1_700_000_001_000 })]);
   assert.equal(f.buttons()[0], target);
-  assert.equal(target.getAttribute('aria-label'), 'Select flight RENAMED');
+  assert.equal(target.getAttribute('aria-label'), '选择航班 RENAMED');
   assert.match(target.textContent, /RENAMED/);
   assert.match(f.controller.signalList.textContent, /CURRENT/);
   assert.equal(f.controller.signalList.children[0].className, 'track actionable');

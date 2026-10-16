@@ -57,7 +57,7 @@ export function renderCockpitSignals() {
     if (item.target) {
       heading.dataset.signalLayer = item.target.layerId;
       heading.dataset.signalId = item.target.id;
-      const label = `Select flight ${item.title}`;
+      const label = `选择航班 ${item.title}`;
       if (heading.getAttribute('aria-label') !== label)
         heading.setAttribute('aria-label', label);
       setText(heading.children[0], item.title);

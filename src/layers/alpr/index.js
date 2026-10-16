@@ -293,7 +293,7 @@ export function createAlprCamerasLayer({ source, services } = {}) {
     id: LAYER_ID,
     name: 'ALPR Cameras',
     icon: '📷',
-    source: source.label || 'Mapped camera locations',
+    source: source.label || '已标注摄像头',
     updateInterval: 0,
     statsRefreshInterval: 1000,
     init(viewer) {

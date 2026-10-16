@@ -61,10 +61,12 @@ test('a real OSM name always wins over the class label', () => {
   assert.deepEqual(result.records.map((record) => record.name), ['Camp Swift', 'Bergstrom']);
 });
 
-test('an unmapped class title-cases instead of leaking an underscored tag', () => {
-  assert.equal(humanizeInstallationClass('danger_area'), 'Danger area');
-  assert.equal(humanizeInstallationClass('checkpoint'), 'Checkpoint');
-  assert.equal(humanizeInstallationClass('training_area_north'), 'Training area north');
+test('an unmapped class stays a Chinese label instead of title-casing the tag', () => {
+  assert.equal(humanizeInstallationClass('danger_area'), '已标注设施');
+  assert.equal(humanizeInstallationClass('checkpoint'), '已标注设施');
+  assert.equal(humanizeInstallationClass('training_area_north'), '已标注设施');
+  assert.equal(humanizeInstallationClass('airfield'), '军用机场');
+  assert.equal(humanizeInstallationClass('places_candidate'), '地点候选');
   assert.equal(humanizeInstallationClass(''), '已标注设施');
   assert.equal(humanizeInstallationClass(null), '已标注设施');
 });

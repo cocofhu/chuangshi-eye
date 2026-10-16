@@ -96,12 +96,12 @@ test('checked-in OpenFreeMap fixtures retain typed OSM feature ids and geographi
     assert.equal(militaryOsmKey(value), null);
   assert.equal(
     nameMilitaryFragment({ ...mabry, featureKey: '3177123' }, names).name,
-    'Military area',
+    '军事用地',
     'a valid but distant id fails soft',
   );
   assert.equal(
     nameMilitaryFragment({ ...mabry, featureKey: '278942510' }, names).name,
-    'Military area',
+    '军事用地',
   );
 });
 

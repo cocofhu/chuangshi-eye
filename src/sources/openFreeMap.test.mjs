@@ -103,7 +103,7 @@ test('Camp Mabry tile emits an unnamed polygon and its centroid marker', () => {
       Math.abs(record.longitude + 97.763) < 0.03,
   );
   assert.ok(camp);
-  assert.equal(camp.name, 'Military area');
+  assert.equal(camp.name, '军事用地');
   assert.equal(camp.kind, 'installation');
   assert.equal(camp.class, 'military_land');
   assert.ok(camp.footprint.length > 3);
