@@ -13,7 +13,7 @@ import {
   uninstallRenderGovernor,
   governorRequestRender,
 } from '../renderGovernor.js';
-import { describeError } from './errors.js';
+import { describeError, paintedFailure } from './errors.js';
 
 /** Construct the application globe using the caller's local configuration. */
 export async function createApplicationScene({
@@ -92,7 +92,7 @@ export async function createApplicationScene({
       console.info(
         `[Init] 没有 Google 三维密钥，使用免密钥地球（${tileErrorDetail}）`,
       );
-      loaderStatus.textContent = `Google 三维瓦片不可用（${tileErrorDetail}），改用二维地球…`;
+      loaderStatus.textContent = `Google 三维瓦片不可用（${paintedFailure(tileErrorDetail)}），改用二维地球…`;
     }
     viewer.scene.globe.show = true;
   }

@@ -1,3 +1,4 @@
+import { paintedFailure } from '../app/errors.js';
 import { resolveImageryHost } from '../layers/weather/imageryHost.js';
 import { ShellFacade } from './shellFacade.js';
 import { AircraftDisplay } from './aircraftDisplay.js';
@@ -720,7 +721,8 @@ export class StyleManager extends ShellFacade {
       },
       claimSelection: () => this.shareLinkManager?.claimRestoreLane?.('map'),
       onStateChanged: () => this._syncShareState(),
-      onError: (message) => this._showToast(message),
+      onError: (message) =>
+        this._showToast(paintedFailure(message, '地图源切换失败')),
     });
   }
 

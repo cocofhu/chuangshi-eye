@@ -1,1 +1,1 @@
-export { describeError } from '../app/errors.js';
+export { describeError, paintedFailure } from '../app/errors.js';

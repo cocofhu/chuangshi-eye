@@ -1,6 +1,6 @@
 import { mountCommandChrome } from './ui/commandChrome.js';
 import { createStandaloneApplication } from './standalone/application.js';
-import { describeError } from './standalone/errors.js';
+import { describeError, paintedFailure } from './standalone/errors.js';
 
 mountCommandChrome();
 
@@ -15,7 +15,7 @@ const application = createStandaloneApplication({
 application.start().catch((error) => {
   console.error('创世之眼初始化失败:', error);
   const loaderStatus = document.querySelector('#loading-screen .loader-status');
-  loaderStatus.textContent = `启动失败：${describeError(error)}`;
+  loaderStatus.textContent = `启动失败：${paintedFailure(describeError(error), '启动失败')}`;
   loaderStatus.style.color = '#ff4444';
 });
 

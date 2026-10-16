@@ -76,7 +76,7 @@ test('infra analyst record: unnamed feature falls back to source id', () => {
 
 test('infra analyst record: empty record yields nulls, never NaN/undefined', () => {
   const r = mapAnalystRecord(undefined, 'local-dams');
-  assert.equal(r.id, 'Dam');
+  assert.equal(r.id, '水坝');
   for (const [key, value] of Object.entries(r)) {
     assert.notEqual(value, undefined, `${key} must not be undefined`);
     if (typeof value === 'number')

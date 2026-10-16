@@ -91,9 +91,10 @@ export function createQueries({
         ? payload.error.trim()
         : '';
     const reason = AIS_STATUS_REASON[status] || '数据源不可用';
-    return detail && !AIS_STATUS_REASON[status]
-      ? `${reason} (${detail})`
-      : reason;
+    if (!detail || AIS_STATUS_REASON[status]) return reason;
+    return /[\u4e00-\u9fff]/.test(detail)
+      ? `${reason}（${detail}）`
+      : `${reason}（服务端说明未识别）`;
   }
 
   /** True when a raw AIS row can enter the production vessel normalizer. */

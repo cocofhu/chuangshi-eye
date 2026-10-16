@@ -4,6 +4,28 @@ import {
   writeStoredCloudVoiceAuthMode,
 } from './voice/cloudVoiceAuth.js';
 
+const SETUP_ERROR_TEXT = {
+  'Method not allowed': '不允许该方法',
+  'ChatGPT OAuth is available only from this machine':
+    'ChatGPT 登录只能从本机使用',
+  'ChatGPT OAuth sign-in is available only from this machine':
+    'ChatGPT 登录只能从本机使用',
+  'Cross-origin ChatGPT OAuth sign-in is not allowed':
+    '不允许跨站发起 ChatGPT 登录',
+  'OPENAI_API_KEY is not set': '未设置 OPENAI_API_KEY',
+  'Failed to create Realtime token': '无法创建实时语音令牌',
+  'Failed to fetch': '网络请求失败',
+};
+
+/** Status-line text. Known server sentences are mapped; other English is not pasted. */
+export function paintedSetupNotice(value, fallback) {
+  const text = String(value || '').trim();
+  if (!text) return fallback;
+  if (SETUP_ERROR_TEXT[text]) return SETUP_ERROR_TEXT[text];
+  if (/[\u4e00-\u9fff]/.test(text)) return text;
+  return fallback;
+}
+
 /**
  * The POWER UP surface — paste a key, get a power.
  *
@@ -77,7 +99,7 @@ export async function waitForChatGptOAuth({
     if (response.ok && payload.available) return true;
     if (!response.ok || payload.loginFailed) {
       throw new Error(
-        payload.error || '无法检查 ChatGPT 登录。请重试。',
+        paintedSetupNotice(payload.error, '无法检查 ChatGPT 登录。请重试。'),
       );
     }
     if (now() >= deadline) break;
@@ -395,7 +417,12 @@ export async function initKeySetup({
       const payload = await response.json().catch(() => ({}));
       if (disposed) return;
       if (!response.ok || !payload.ok) {
-        say(payload.error || `保存失败（${response.status}）。`);
+        say(
+          paintedSetupNotice(
+            payload.error,
+            `保存失败（${response.status}）。`,
+          ),
+        );
         return;
       }
       for (const input of root.querySelectorAll('input[data-env-var]'))
@@ -429,7 +456,7 @@ export async function initKeySetup({
         `${doneVerb}${storeLabel()}。正在重启，页面将自动刷新。`,
       );
     } catch (error) {
-      say(`保存失败：${error?.message || error}`);
+      say(paintedSetupNotice(error?.message || error, '保存失败。'));
     } finally {
       busy = false;
       applyButton?.setAttribute('aria-disabled', 'false');
@@ -482,7 +509,7 @@ export async function initKeySetup({
           if (lifetime.signal.aborted) return;
           if (!response.ok)
             throw new Error(
-              payload.error || '无法检查 ChatGPT 登录。',
+              paintedSetupNotice(payload.error, '无法检查 ChatGPT 登录。'),
             );
           if (payload.available) {
             writeStoredCloudVoiceAuthMode('oauth');
@@ -507,9 +534,10 @@ export async function initKeySetup({
           if (lifetime.signal.aborted) return;
           if (!loginResponse.ok) {
             say(
-              loginPayload.error ||
-                payload.error ||
+              paintedSetupNotice(
+                loginPayload.error || payload.error,
                 '无法在本机启动 ChatGPT 登录。',
+              ),
             );
             return;
           }
@@ -543,7 +571,7 @@ export async function initKeySetup({
           );
         } catch (error) {
           if (lifetime.signal.aborted) return;
-          say(`OAuth 检查失败：${error?.message || error}`);
+          say(paintedSetupNotice(error?.message || error, 'OAuth 检查失败。'));
         } finally {
           oauthBusy = false;
           if (!disposed) syncCloudVoiceAuth();

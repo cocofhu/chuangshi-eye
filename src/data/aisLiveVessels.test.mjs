@@ -114,10 +114,18 @@ test('non-open status but rows still flowing is treated as stale, not down (null
   assert.equal(deriveAisFeedError({ status: 'connecting', error: null }, 30), null);
 });
 
-test('unknown status falls back to a generic reason and appends server detail', () => {
+test('unknown status stays Chinese and does not append server English', () => {
   assert.equal(
     deriveAisFeedError({ status: 'weird-state', error: 'something specific' }, 0),
-    '数据源不可用 (something specific)',
+    '数据源不可用（服务端说明未识别）',
+  );
+  assert.equal(
+    deriveAisFeedError({ status: 'weird-state', error: '上游暂无数据' }, 0),
+    '数据源不可用（上游暂无数据）',
+  );
+  assert.equal(
+    deriveAisFeedError({ status: 'weird-state', error: '  ' }, 0),
+    '数据源不可用',
   );
 });
 
