@@ -648,19 +648,19 @@ try {
         {
           name: 'thermal-whot',
           style: 'thermal',
-          params: { 'WHOT/BHOT': 0, Ironbow: 0 },
+          params: { '白热/黑热': 0, '铁红': 0 },
           hot: 'white',
         },
         {
           name: 'thermal-bhot',
           style: 'thermal',
-          params: { 'WHOT/BHOT': 1, Ironbow: 0 },
+          params: { '白热/黑热': 1, '铁红': 0 },
           hot: 'black',
         },
         {
           name: 'thermal-ironbow',
           style: 'thermal',
-          params: { 'WHOT/BHOT': 0, Ironbow: 1 },
+          params: { '白热/黑热': 0, '铁红': 1 },
           hot: 'white',
         },
         {
@@ -779,7 +779,7 @@ try {
         );
       }
       // Selection under FLIR keeps the sprite white; leaving FLIR restores it.
-      await selectStyle(page, 'thermal', { 'WHOT/BHOT': 0, Ironbow: 0 });
+      await selectStyle(page, 'thermal', { '白热/黑热': 0, '铁红': 0 });
       const target = (await sampleRendered(page))[0];
       if (target) {
         await page.mouse.click(target.x, target.y);

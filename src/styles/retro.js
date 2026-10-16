@@ -12,9 +12,9 @@
 export const retroShader = {
   name: 'retro',
   uniforms: {
-    pixelation: { default: 5.0, min: 1, max: 10, label: 'Pixelation' },
-    distortion: { default: 0, min: 0, max: 1, label: 'Distortion' },
-    instability: { default: 0.4, min: 0, max: 1, label: 'Instability' },
+    pixelation: { default: 5.0, min: 1, max: 10, label: '像素化' },
+    distortion: { default: 0, min: 0, max: 1, label: '畸变' },
+    instability: { default: 0.4, min: 0, max: 1, label: '抖动' },
   },
   fragmentShader: /* glsl */ `
     uniform sampler2D colorTexture;
