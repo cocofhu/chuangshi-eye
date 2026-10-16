@@ -125,7 +125,7 @@ export class RealtimeCost {
     if (this.isActive() && this.ui?.detail) {
       this.setStatus(
         this.status,
-        `${this.voiceTier.toUpperCase()} 下次会话生效`,
+        `${this.voiceTier === 'mini' ? '轻量' : '标准'} 下次会话生效`,
       );
     }
     return this.voiceTier;

@@ -1653,12 +1653,13 @@ export class VisualSettings {
     const btn = this._detectionBtn;
     const enabled = modeLabel !== 'OFF';
     btn.setAttribute('aria-pressed', String(enabled));
-    btn.setAttribute(
-      'aria-label',
-      enabled
-        ? `探测叠加：${String(modeLabel).toLowerCase()}`
-        : '探测叠加：关',
-    );
+    const spoken = {
+      OFF: '关',
+      SPARSE: '稀疏',
+      BALANCED: '均衡',
+      DENSE: '密集',
+    }[modeLabel] || '关';
+    btn.setAttribute('aria-label', `探测叠加：${spoken}`);
     btn.classList.remove('active', 'god', 'panoptic');
     if (modeLabel === 'SPARSE') {
       btn.querySelector('.pp-label').textContent = '稀疏';

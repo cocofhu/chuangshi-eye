@@ -136,7 +136,7 @@ export function updateContext(info, heading) {
     if (relative === null) this.contextBearing.textContent = 'BRG —';
     else if (Math.abs(relative) < 8) this.contextBearing.textContent = '正前';
     else
-      this.contextBearing.textContent = `${relative < 0 ? 'L' : 'R'} ${String(Math.round(Math.abs(relative))).padStart(3, '0')}°`;
+      this.contextBearing.textContent = `${relative < 0 ? '左' : '右'} ${String(Math.round(Math.abs(relative))).padStart(3, '0')}°`;
   }
   if (this.contextUncertainty) {
     this.contextUncertainty.textContent = unknownCount

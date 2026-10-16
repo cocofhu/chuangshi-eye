@@ -120,18 +120,18 @@ export function normalizeRegionalWeather(payload) {
 /** Translate the WMO weather code used by Open-Meteo into concise cockpit copy. */
 export function weatherCodeLabel(code) {
   const value = Number(code);
-  if (!Number.isFinite(value)) return 'CONDITIONS UNKNOWN';
-  if (value === 0) return 'CLEAR';
-  if ([1, 2].includes(value)) return 'PARTLY CLOUDY';
-  if (value === 3) return 'OVERCAST';
-  if ([45, 48].includes(value)) return 'FOG';
-  if (value >= 51 && value <= 57) return 'DRIZZLE';
-  if (value >= 61 && value <= 67) return 'RAIN';
-  if (value >= 71 && value <= 77) return 'SNOW';
-  if (value >= 80 && value <= 82) return 'RAIN SHOWERS';
-  if (value >= 85 && value <= 86) return 'SNOW SHOWERS';
-  if (value >= 95) return 'THUNDERSTORM';
-  return 'MIXED CONDITIONS';
+  if (!Number.isFinite(value)) return '状况未知';
+  if (value === 0) return '晴';
+  if ([1, 2].includes(value)) return '少云';
+  if (value === 3) return '阴';
+  if ([45, 48].includes(value)) return '雾';
+  if (value >= 51 && value <= 57) return '毛毛雨';
+  if (value >= 61 && value <= 67) return '雨';
+  if (value >= 71 && value <= 77) return '雪';
+  if (value >= 80 && value <= 82) return '阵雨';
+  if (value >= 85 && value <= 86) return '阵雪';
+  if (value >= 95) return '雷暴';
+  return '混合状况';
 }
 
 /** Great-circle distance used to avoid refetching a regional brief every animation frame. */

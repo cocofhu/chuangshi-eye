@@ -1,3 +1,5 @@
+import { paintedCctvToken } from '../layers/cctv/feedLabel.js';
+
 export function _clearCctvFrame() {
   this._cctvFrameRequestToken += 1;
   if (this._cctvFramePreloader) {
@@ -102,10 +104,10 @@ export function _syncCctvSourceBadge(activeCamera, enabled) {
     this._cctvSourceBadge.dataset.frameState = 'error';
     return;
   }
-  const kind = String(
-    activeCamera.sourceKind || activeCamera.feedType || 'unknown',
-  ).toUpperCase();
-  const status = String(activeCamera.sourceStatus || 'unknown').toUpperCase();
+  const kind = paintedCctvToken(
+    activeCamera.sourceKind || activeCamera.feedType,
+  );
+  const status = paintedCctvToken(activeCamera.sourceStatus);
   this._cctvSourceBadge.textContent = `${kind} · ${status}`;
   this._cctvSourceBadge.dataset.frameState = 'ready';
 }
