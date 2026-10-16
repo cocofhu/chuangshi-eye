@@ -49,7 +49,7 @@ test('close polygons publish immediately while a wide consumer can cancel its in
   const rejection = assert.rejects(waiting, { name: 'AbortError' });
   const payload = await source.getMappedSites(box);
   assert.ok(payload.records.length);
-  assert.ok(payload.records.every((r) => r.name === 'Military area'));
+  assert.ok(payload.records.every((r) => r.name === '军事用地'));
   abort.abort();
   await rejection;
   job.resolve(await loadMilitaryNames());

@@ -1,4 +1,5 @@
 import * as Cesium from 'cesium';
+import { humanizeInstallationClass } from '../../data/militaryInstallationData.js';
 import { LAYER_ID, MAX_RENDERED, COLOR_BY_CLASS } from './policy.js';
 
 export function createRendering({
@@ -270,11 +271,9 @@ export function createRendering({
       entity.gevTrackedId = `installations:${record.id}`;
       entity.gevDisplayPosition = () => displayPosition;
       entity.gevLabelModel = {
-        title: record.name || 'MAPPED INSTALLATION',
+        title: record.name || '已标注设施',
         details: [
-          String(record.class || 'installation')
-            .replaceAll('_', ' ')
-            .toUpperCase(),
+          humanizeInstallationClass(record.class),
           ...(record.memberNames || []).slice(0, 3),
         ],
         accent: COLOR_BY_CLASS[record.class] || '#9ca6b0',
@@ -284,8 +283,8 @@ export function createRendering({
         layerId: LAYER_ID,
         layerName:
           record.kind === 'place_candidate'
-            ? 'Military Site Search Candidates'
-            : 'Mapped Military Installations',
+            ? '地点候选'
+            : '已标注军事设施',
         source: parts.model.installationSourceLabel(record),
         label: record.name,
         latitude: record.latitude,

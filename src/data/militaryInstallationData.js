@@ -17,16 +17,16 @@ const CLASS_BY_MILITARY_TAG = {
  * fallback surfaced "range (10981656305)" — an OSM primary key shown to a human
  * as if it were a place name).
  *
- * Only the classes CLASS_BY_MILITARY_TAG can actually produce need an entry;
- * anything else title-cases its class, which already reads correctly for plain
- * nouns. The OSM id is not lost — it stays on `id` and on `sources[].id`, where
- * attribution and the details panel read it.
+ * Known classes have a specific label. Anything else stays the generic Chinese
+ * fallback so an OSM tag is never title-cased onto the map. The OSM id stays
+ * on `id` and on `sources[].id`.
  */
 const LABEL_BY_CLASS = {
   airfield: '军用机场',
   naval_base: '海军基地',
   range: '靶场',
   military_land: '军事用地',
+  places_candidate: '地点候选',
 };
 
 const MAX_FOOTPRINT_POINTS = 400;
@@ -40,11 +40,7 @@ export function humanizeInstallationClass(klass) {
   const key = String(klass || '')
     .trim()
     .toLowerCase();
-  if (LABEL_BY_CLASS[key]) return LABEL_BY_CLASS[key];
-  const words = key.replaceAll('_', ' ').trim();
-  return words
-    ? `${words[0].toUpperCase()}${words.slice(1)}`
-    : '已标注设施';
+  return LABEL_BY_CLASS[key] || '已标注设施';
 }
 
 function finiteLatitude(value) {

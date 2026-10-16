@@ -90,19 +90,75 @@ export function createErrorRecord(source, error, extra = {}) {
   };
 }
 
+const CONNECTION_STATE_LABEL = {
+  new: '新建',
+  connecting: '连接中',
+  connected: '已连接',
+  disconnected: '已中断',
+  failed: '失败',
+  closed: '已关闭',
+  checking: '检查中',
+  completed: '已完成',
+};
+
+const CHANNEL_STATE_LABEL = {
+  connecting: '连接中',
+  open: '已打开',
+  closing: '关闭中',
+  closed: '已关闭',
+};
+
+const ERROR_DETAIL_LABEL = {
+  'data-channel-failure': '数据通道失败',
+  'dtls-failure': 'DTLS 失败',
+  'fingerprint-failure': '指纹校验失败',
+  'sctp-failure': 'SCTP 失败',
+  'sdp-syntax-error': 'SDP 语法错误',
+  'hardware-encoder-not-available': '硬件编码器不可用',
+  'hardware-encoder-error': '硬件编码器错误',
+};
+
+const ERROR_CODE_LABEL = {
+  rate_limit_exceeded: '请求过于频繁',
+  server_error: '服务端错误',
+  insufficient_quota: '额度不足',
+  invalid_request_error: '请求无效',
+  conversation_already_has_active_response: '已有进行中的回复',
+  item_not_found: '条目不存在',
+};
+
+function paintedChinese(value) {
+  const text = String(value || '').trim();
+  return /[\u4e00-\u9fff]/.test(text) ? text : '';
+}
+
+function diagnosticField(label, value, labels) {
+  if (value == null || value === '') return '';
+  const text = String(value).trim();
+  if (!text) return '';
+  if (labels[text]) return `${label}：${labels[text]}`;
+  if (/^\d+$/.test(text) || /[\u4e00-\u9fff]/.test(text))
+    return `${label}：${text}`;
+  return `${label}：未识别`;
+}
+
 export function formatErrorForDisplay(record) {
-  const primary = [record.source, record.message].filter(Boolean).join(': ');
+  const message = paintedChinese(record?.message);
+  const primary = [record?.source, message].filter(Boolean).join('：');
+  const sctp = record?.sctpCauseCode;
   const state = [
-    record.errorDetail && `detail=${record.errorDetail}`,
-    record.code && `code=${record.code}`,
-    record.sctpCauseCode != null && `sctp=${record.sctpCauseCode}`,
-    record.connectionState && `pc=${record.connectionState}`,
-    record.iceConnectionState && `ice=${record.iceConnectionState}`,
-    record.dataChannelState && `dc=${record.dataChannelState}`,
-  ]
-    .filter(Boolean)
-    .join(' | ');
-  return state ? `${primary}\n${state}` : primary;
+    diagnosticField('详情', record?.errorDetail, ERROR_DETAIL_LABEL),
+    diagnosticField('代码', record?.code, ERROR_CODE_LABEL),
+    sctp != null && sctp !== '' && Number.isFinite(Number(sctp))
+      ? `SCTP：${sctp}`
+      : '',
+    diagnosticField('连接', record?.connectionState, CONNECTION_STATE_LABEL),
+    diagnosticField('ICE', record?.iceConnectionState, CONNECTION_STATE_LABEL),
+    diagnosticField('数据通道', record?.dataChannelState, CHANNEL_STATE_LABEL),
+  ].filter(Boolean);
+  const line = state.join(' · ');
+  if (primary && line) return `${primary}\n${line}`;
+  return primary || line || '语音不可用';
 }
 
 export function removeEmptyValues(value) {
