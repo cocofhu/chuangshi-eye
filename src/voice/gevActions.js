@@ -4632,11 +4632,11 @@ function cleanText(value) {
 }
 
 function layerTitle(layerId) {
-  if (layerId === 'local-datacenters') return 'Datacenter';
-  if (layerId === 'local-dams') return 'Dam';
-  if (layerId === 'telegeography-submarine-cables') return 'Submarine Cable';
-  if (layerId === 'local-firms') return 'Active Fire';
-  return layerId || 'Entity';
+  if (layerId === 'local-datacenters') return '数据中心';
+  if (layerId === 'local-dams') return '水坝';
+  if (layerId === 'telegeography-submarine-cables') return '海底光缆';
+  if (layerId === 'local-firms') return '活跃火点';
+  return layerId || '对象';
 }
 
 function clampNumber(value, min, max, fallback) {
