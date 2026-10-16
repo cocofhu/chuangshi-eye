@@ -2558,7 +2558,7 @@ test('periodic refresh publishes work, failure, and later manager-owned recovery
   assert.equal(mgr.getAll()[0].lifecycleState, 'enabled');
   releaseUpdate();
   assert.equal(await failedRefresh, false);
-  assert.match(mgr.getAll()[0].stats.managerRefreshError, /refresh rejected/);
+  assert.equal(mgr.getAll()[0].stats.managerRefreshError, '民航航班刷新被拒绝');
   assert.deepEqual(events.map(({ type }) => type), ['refresh-transition', 'refresh-failed']);
 
   updateStarted = () => {};

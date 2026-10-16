@@ -1,3 +1,4 @@
+import { layerDisplayLabel } from './layerDisplayLabels.js';
 import { cancelCameraArrival } from './cameraArrival.js';
 
 function cloneLayerParams(value) {
@@ -64,7 +65,7 @@ function refreshFailureFromStats(stats, label) {
   if (specific)
     return specific instanceof Error ? specific : new Error(String(specific));
   if (stats?.unavailable === true || stats?.available === false) {
-    return new Error(`${label} refresh unavailable`);
+    return new Error(`${label}刷新不可用`);
   }
   return null;
 }
@@ -296,12 +297,17 @@ export class LayerLifecycle {
       // Even a rejected/partial update may have changed the data exposed by
       // the layer. Publish before classifying its result so observers see it.
       this._publishActivity({ type: 'data-updated', layerId });
-      if (result === false)
+      if (result === false) {
         failure = lifecycleRejectedError(layerId, 'refresh');
+        failure.message = `${layerDisplayLabel({
+          id: layerId,
+          name: entry.module?.name,
+        })}刷新被拒绝`;
+      }
       if (!failure)
         failure = refreshFailureFromStats(
           this._moduleStats(entry),
-          entry.module.name || layerId,
+          layerDisplayLabel({ id: layerId, name: entry.module?.name }),
         );
     } catch (error) {
       failure = error;

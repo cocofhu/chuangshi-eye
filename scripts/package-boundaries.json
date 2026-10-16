@@ -310,6 +310,7 @@
       "server/providers/openai/realtime.js",
       "server/providers/openai/tools.js",
       "src/hudSummaryResponse.js",
+      "src/data/layerDisplayLabels.js",
       "src/data/layerSnapshot.js",
       "src/data/feedState.js",
       "src/loadingFeedback.js",
@@ -441,6 +442,7 @@
       "src/ui/railTimeline.js",
       "src/ui/clearLayersControl.js",
       "src/loadingFeedback.js",
+      "src/data/layerDisplayLabels.js",
       "src/data/installationFeedback.js",
       "src/keySetupCore.mjs",
       "src/localRequestGate.mjs",
@@ -492,6 +494,7 @@
       "src/ui/contextBindings.js",
       "src/ui/contextControls.js",
       "src/ui/contextLayerChanges.js",
+      "src/data/layerDisplayLabels.js",
       "src/ui/contextPresentation.js",
       "src/ui/contextSession.js",
       "src/ui/contextSubscriptions.js",
@@ -567,6 +570,7 @@
       "src/keySetupCore.mjs",
       "src/localRequestGate.mjs",
       "src/loadingFeedback.js",
+      "src/data/layerDisplayLabels.js",
       "src/locationStatus.js",
       "src/mapStackChips.js",
       "src/navigationPolicy.js",
@@ -1402,6 +1406,7 @@
       "src/voice/referents.js",
       "src/voice/layerManifest.js",
       "src/voice/speech.js",
+      "src/data/layerDisplayLabels.js",
       "src/voice/narration.js",
       "src/voice/earcon.js",
       "src/voice/pointerContext.js",
@@ -1848,6 +1853,7 @@
       "src/layers/vessels/testing.js",
       "src/layers/vessels/tracking.js",
       "src/loadingFeedback.js",
+      "src/data/layerDisplayLabels.js",
       "src/locationStatus.js",
       "src/locations.js",
       "src/logoGaze.js",
@@ -2258,6 +2264,7 @@
       "src/app/catalog.js",
       "src/app/constructCatalog.js",
       "src/app/sourceComposition.js",
+      "src/data/layerDisplayLabels.js",
       "src/layers/wind/index.js",
       "src/layers/wind/model.js",
       "src/layers/wind/fields.js",
@@ -2822,7 +2829,11 @@
   },
   "layer-lifecycle": {
     "exports": ["./data/lifecycle"],
-    "modules": ["src/data/lifecycle.js", "src/data/cameraArrival.js"],
+    "modules": [
+      "src/data/lifecycle.js",
+      "src/data/cameraArrival.js",
+      "src/data/layerDisplayLabels.js"
+    ],
     "external": []
   },
   "ui-navigation": {
@@ -2844,6 +2855,7 @@
       "src/data/layerStateCoordinator.js",
       "src/data/layerStateTokenReservations.json",
       "src/loadingFeedback.js",
+      "src/data/layerDisplayLabels.js",
       "src/navigationPolicy.js",
       "src/ui/shareRestoration.js",
       "src/ui/uiLifetime.js"
@@ -3017,6 +3029,7 @@
       "src/voice/referents.js",
       "src/voice/layerManifest.js",
       "src/voice/speech.js",
+      "src/data/layerDisplayLabels.js",
       "src/voice/pointerReticle.js"
     ],
     "external": []
@@ -3386,6 +3399,7 @@
       "src/data/layerSnapshot.js",
       "src/data/feedState.js",
       "src/loadingFeedback.js",
+      "src/data/layerDisplayLabels.js",
       "src/data/installationFeedback.js",
       "src/view/index.js",
       "src/tools/views.js",

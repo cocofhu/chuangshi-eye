@@ -1,5 +1,5 @@
 import { installationFeedback } from './data/installationFeedback.js';
-import { layerDisplayLabel } from './ui/layerDisplayLabels.js';
+import { layerDisplayLabel } from './data/layerDisplayLabels.js';
 
 export const LOADING_REVEAL_DELAY_MS = 160;
 export const LOADING_TERMINAL_DWELL_MS = 2200;

@@ -19,7 +19,7 @@
  */
 
 import { analystHeadline, feedChipLabel } from './resultDisplay.js';
-import { layerDisplayLabel } from '../ui/layerDisplayLabels.js';
+import { layerDisplayLabel } from '../data/layerDisplayLabels.js';
 
 const LAYER_NOUNS = Object.freeze({
   flights: '航空器',

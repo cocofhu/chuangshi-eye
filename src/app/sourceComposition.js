@@ -1,3 +1,5 @@
+import { layerDisplayLabel } from '../data/layerDisplayLabels.js';
+
 const contract = (layers, methods) =>
   Object.freeze({
     layers: Object.freeze(layers),
@@ -100,7 +102,7 @@ export function resolveCatalogSources(supplied = {}) {
               available: !missing.has(name),
               source: name,
               reason: missing.has(name)
-                ? `${layer.name || id}：未配置数据源`
+                ? `${layerDisplayLabel(layer)}：未配置数据源`
                 : null,
             }),
           );

@@ -119,14 +119,14 @@ test('availability lookup accepts frozen layers and uses their display names', (
   const lookup = composition.createAvailabilityLookup(layers);
   assert.equal(
     lookup('fire-perimeters').reason,
-    'Fire perimeters：未配置数据源',
+    '山火范围：未配置数据源',
   );
   assert.equal(Object.hasOwn(layers[0], 'getSourceAvailability'), false);
   const manager = new LayerLifecycle({}, { getSourceAvailability: lookup });
   manager.register(layers.find(({ id }) => id === 'fire-perimeters'));
   assert.equal(
     manager.getAll()[0].stats.error,
-    'Fire perimeters：未配置数据源',
+    '山火范围：未配置数据源',
   );
 });
 
