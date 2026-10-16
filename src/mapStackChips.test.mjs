@@ -413,8 +413,8 @@ test("models carry the stack's own reason and never invent an active chip", () =
     [
       {
         requirement: 'ION',
-        unavailableHint: 'Needs CESIUM_ION_TOKEN — add it in Provider Settings',
-        title: 'Needs CESIUM_ION_TOKEN — add it in Provider Settings',
+        unavailableHint: '需要 CESIUM_ION_TOKEN — 请在提供者设置中添加',
+        title: '需要 CESIUM_ION_TOKEN — 请在提供者设置中添加',
       },
       {
         requirement: '',

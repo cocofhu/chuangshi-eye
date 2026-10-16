@@ -94,7 +94,7 @@ test('OAuth login polling stops on login or HTTP failure instead of waiting for 
     await assert.rejects(waitForChatGptOAuth({
       fetchImpl: async () => { checks += 1; return { ok: result.ok, json: async () => result.payload }; },
       sleep: () => assert.fail('failed login must stop polling'),
-    }), { message: result.payload.error });
+    }), { message: '无法检查 ChatGPT 登录。请重试。' });
     assert.equal(checks, 1);
   }
 });
