@@ -2,7 +2,7 @@ import {
   feedProvenanceEnvelope,
   layerSnapshots,
 } from './data/layerSnapshot.js';
-import { layerDisplayLabel } from './ui/layerDisplayLabels.js';
+import { layerDisplayLabel } from './data/layerDisplayLabels.js';
 
 export const HUD_SUMMARY_UNCONFIGURED_CODE = 'OPENAI_NOT_CONFIGURED';
 

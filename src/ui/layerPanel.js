@@ -6,7 +6,7 @@ export { layerFeedState } from '../data/feedState.js';
 import { GUIDANCE_STATUSES } from '../loadingFeedback.js';
 import { keySetupRequirement } from '../keySetupCore.mjs';
 import { createWeatherPanel } from './weatherPanel.js';
-import { layerDisplayLabel } from './layerDisplayLabels.js';
+import { layerDisplayLabel } from '../data/layerDisplayLabels.js';
 const FEED_STATE_LABELS = Object.freeze({
   nominal: '开',
   loading: '加载中',

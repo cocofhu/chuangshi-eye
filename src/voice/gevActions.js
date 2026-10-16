@@ -5,7 +5,7 @@ import {
 } from '../data/layerSnapshot.js';
 import { readLayerLifecycleSummary } from './layerSummary.js';
 import { SPEECH_BUILDERS, attachVoiceResult } from './speech.js';
-import { layerDisplayLabel } from '../ui/layerDisplayLabels.js';
+import { layerDisplayLabel } from '../data/layerDisplayLabels.js';
 import { resolveDeicticArgs } from './deixis.js';
 export { readLayerLifecycleSummary } from './layerSummary.js';
 import { defaultGeospatial } from '../search/defaults.js';

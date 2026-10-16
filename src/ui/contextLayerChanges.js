@@ -1,3 +1,5 @@
+import { layerDisplayLabel } from '../data/layerDisplayLabels.js';
+
 const LAYER_VISIBILITY_LABEL = Object.freeze({
   'military-awareness': '目标情境',
   'rocket-launches': '航天任务',
@@ -5,7 +7,9 @@ const LAYER_VISIBILITY_LABEL = Object.freeze({
 });
 
 function layerVisibilityFailure(change) {
-  const label = LAYER_VISIBILITY_LABEL[change.layerId] || change.layerId;
+  const label =
+    LAYER_VISIBILITY_LABEL[change.layerId] ||
+    layerDisplayLabel({ id: change.layerId });
   return `${label}未能干净${change.enabled ? '开启' : '关闭'}`;
 }
 
