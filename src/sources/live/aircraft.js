@@ -75,7 +75,7 @@ export function openSkySnapshot(
   payload,
   {
     source = 'OpenSky Network',
-    coverage = 'worldwide upstream snapshot',
+    coverage = '全球上游快照',
     now = Date.now(),
     stale = false,
   } = {},
@@ -108,7 +108,7 @@ export function readsbSnapshot(
   {
     observedAtMs,
     source = 'adsb.lol',
-    coverage = 'military upstream snapshot',
+    coverage = '军用上游快照',
     now = Date.now(),
     stale = false,
   } = {},

@@ -14,7 +14,7 @@ export function createScenePlaybackAdapter(director, defaultShotDurationSec) {
       director._renderSceneSelect();
       director._renderShotList();
       director._updateStatus(
-        `Running ${index + 1}/${total}: ${scene.title} / ${shot.title}`,
+        `正在播放 ${index + 1}/${total}：${scene.title} / ${shot.title}`,
       );
       director._logEvent('shot_start', {
         sceneId: scene.id,
@@ -40,7 +40,7 @@ export function createScenePlaybackAdapter(director, defaultShotDurationSec) {
         !result.refused.length &&
         !(await director._applyDataPacks(scene, shot, token))
       )
-        throw new Error('Data packs unavailable');
+        throw new Error('数据包不可用');
       return result;
     },
     travel({ scene, shot, token }) {
@@ -71,7 +71,7 @@ export function createScenePlaybackAdapter(director, defaultShotDurationSec) {
     },
     complete() {
       director._setProgress(1);
-      director._updateStatus('Scene run complete');
+      director._updateStatus('场景播放完成');
       director._logEvent('scene_run_complete', {});
     },
   };

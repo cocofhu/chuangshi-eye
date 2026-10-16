@@ -15,7 +15,7 @@ export function createVoiceControl({ reset = false } = {}) {
         <div class="gev-voice-kicker">语音</div>
         <div id="gev-voice-status">关</div>
         <div class="gev-voice-cost">
-          <button id="gev-voice-tier" class="gev-voice-tier-btn" type="button" aria-pressed="false" title="语音模型档位 — 下次会话生效">STD</button>
+          <button id="gev-voice-tier" class="gev-voice-tier-btn" type="button" aria-pressed="false" title="语音模型档位 — 下次会话生效">标准</button>
           <span id="gev-voice-cost-value" class="gev-voice-cost-value" data-level="ok" title="估计会话费用">~$0.00</span>
         </div>
       </div>

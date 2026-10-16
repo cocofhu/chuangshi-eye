@@ -88,7 +88,7 @@ export function createMilitaryFeed(source) {
   feed._lastError = null;
   feed._activeUpdateControllers = new Set();
   feed._lastStatus = null;
-  feed._lastSource = source?.label || 'Aircraft';
+  feed._lastSource = source?.label || '军用航空器';
   feed._trackingRefreshEpoch = 0;
   feed._lastTrackingRefreshOutcome = {
     epoch: 0,

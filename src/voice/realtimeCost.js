@@ -48,7 +48,7 @@ export class RealtimeCost {
     const pendingTier = resolveVoiceModel(this.voiceTier).tier;
     const isMini = pendingTier === 'mini';
     if (this.ui?.tierButton) {
-      this.ui.tierButton.textContent = isMini ? 'MINI' : 'STD';
+      this.ui.tierButton.textContent = isMini ? '轻量' : '标准';
       this.ui.tierButton.setAttribute(
         'aria-pressed',
         isMini ? 'true' : 'false',

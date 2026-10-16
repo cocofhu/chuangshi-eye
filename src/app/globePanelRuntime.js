@@ -17,6 +17,17 @@ export function panelRuntime(config) {
   const say = (text) => {
     if (status.isConnected) status.textContent = text;
   };
+  const PANEL_ERROR = {
+    'The request failed': '请求失败',
+    'The tool failed; try again later': '工具未能完成，请稍后再试',
+    'The request was aborted': '请求已取消',
+  };
+  const paintedPanelError = (value, fallback = '详情未识别') => {
+    const text = String(value ?? '').trim();
+    if (PANEL_ERROR[text]) return PANEL_ERROR[text];
+    if (/[\u4e00-\u9fff]/.test(text)) return text;
+    return fallback;
+  };
   let blocked = null;
   document.addEventListener('securitypolicyviolation', (event) => {
     blocked = `${event.effectiveDirective} 拦截了 ${event.blockedURI || '一项资源'}`;
@@ -49,7 +60,9 @@ export function panelRuntime(config) {
         arguments: { ...args, key: config.panelKey },
       });
       if (result?.isError || !result?.structuredContent)
-        throw new Error(result?.content?.[0]?.text || 'The request failed');
+        throw new Error(
+          paintedPanelError(result?.content?.[0]?.text, '请求失败'),
+        );
       return result.structuredContent;
     } finally {
       calls -= 1;
@@ -121,7 +134,7 @@ export function panelRuntime(config) {
       result,
       new Promise((_, reject) => {
         const abort = () =>
-          reject(new DOMException('The request was aborted', 'AbortError'));
+          reject(new DOMException('请求已取消', 'AbortError'));
         if (init.signal.aborted) abort();
         init.signal.addEventListener('abort', abort, { once: true });
       }),
@@ -569,7 +582,9 @@ export function panelRuntime(config) {
     started = true;
     say('正在加载创世之眼…');
     startApp(url, view).catch((error) =>
-      say(`创世之眼无法在此加载：${error?.message || error}。`),
+      say(
+        `创世之眼无法在此加载：${paintedPanelError(error?.message || error)}。`,
+      ),
     );
     setTimeout(() => {
       if (!ready)
@@ -655,7 +670,7 @@ export function panelRuntime(config) {
     (error) =>
       say(
         '此客户端未接受创世之眼面板' +
-          (error?.message ? `：${error.message}` : '。'),
+          (error?.message ? `：${paintedPanelError(error.message)}` : '。'),
       ),
   );
 }

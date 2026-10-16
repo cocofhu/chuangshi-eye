@@ -1769,7 +1769,7 @@ export class SceneDirector {
     // Initialize telemetry accumulator for this run
     this._activeRun = {
       recipeId: `project-${PROJECT_VERSION}`,
-      title: 'Editable Scene Run',
+      title: '场景播放记录',
       startedAt: new Date().toISOString(),
       estimatedDurationSec,
       scenesRun: queue.length,

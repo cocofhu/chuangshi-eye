@@ -5,7 +5,7 @@ const xyz = (p) => Cesium.Cartesian3.fromDegrees(...p);
 /** Render a bounded geometry pack in owned batches; no asynchronous entity geometry or update loop. */
 export function renderPackGeometry({ asset, pack }, handle) {
   if (!['application/json', 'application/geo+json'].includes(asset.mimeType))
-    throw new Error('Expected GeoJSON');
+    throw new Error('需要 GeoJSON');
   const features = decodePackGeoJSON(asset.bytes);
   const polygons = [];
   let lines;

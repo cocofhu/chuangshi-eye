@@ -50,7 +50,7 @@ const FULL_INFO = {
 
 test('military stats name the feed until the server names its provider, not a fallback', () => {
   const stats = militaryFlightsLayer.getStats();
-  assert.equal(stats.source, 'Military aircraft');
+  assert.equal(stats.source, '军用航空器');
   assert.equal(stats.fallback, false);
 });
 

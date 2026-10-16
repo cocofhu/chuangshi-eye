@@ -46,7 +46,7 @@ export async function fetchCmrPages({
     if (cursor) init.headers = { [CMR_SEARCH_AFTER]: cursor };
     const response = await fetchImpl(url, init);
     if (!response?.ok)
-      throw new Error(`CMR 请求失败（HTTP ${response?.status ?? 'error'}）`);
+      throw new Error(`CMR 请求失败（HTTP ${response?.status ?? '未知'}）`);
     const page = parseCmrUmm(await response.json(), product);
     granules.push(...page.granules);
     hits = Math.max(hits, page.hits);

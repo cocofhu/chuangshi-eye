@@ -57,7 +57,7 @@ export function createVesselLayer({ source, services, options = {} } = {}) {
     parts.lifecycle.methods,
     parts.ingestion.methods,
   );
-  layer.source = source?.label || 'Vessels';
+  layer.source = source?.label || '实时船舶';
   Object.assign(layer, {
     applyVesselFocusDeemphasis: parts.rendering.applyVesselFocusDeemphasis,
     buildVesselCard: parts.cards.buildVesselCard,

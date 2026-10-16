@@ -879,7 +879,7 @@ export function createRecentImageryPanel({
           height,
         }),
       );
-      if (!response?.ok) throw new Error(`HTTP ${response?.status ?? 'error'}`);
+      if (!response?.ok) throw new Error(`HTTP ${response?.status ?? '未知'}`);
       const blob = await response.blob();
       if (destroyed) return false;
       const href = createObjectUrl(blob);
